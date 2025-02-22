@@ -42,10 +42,10 @@ const BenefitsSection = () => {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="relative group"
+                className="relative group flex flex-col"
               >
                 <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-blue-400 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
-                <div className="relative px-6 py-8 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex flex-col items-center">
+                <div className="relative px-6 py-8 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex flex-col items-center flex-grow">
                   <div className="h-12 w-12 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
                     {benefit.icon}
                   </div>

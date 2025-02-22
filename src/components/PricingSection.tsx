@@ -59,42 +59,41 @@ const PricingSection = () => {
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative rounded-2xl ${
-                plan.popular
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white'
-              } shadow-xl`}
+              className={`relative rounded-2xl ${plan.popular
+                ? 'bg-blue-600 text-white'
+                : 'bg-white'
+                } shadow-xl`}
             >
               {plan.popular && (
-                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2">
+                <div className="z-10 absolute top-0 right-0 -translate-y-1/2 translate-x-1/2">
                   <span className="inline-flex items-center px-4 py-1 rounded-full text-sm font-semibold bg-yellow-400 text-gray-900">
                     Most Popular
                   </span>
                 </div>
               )}
-              <div className="p-8">
-                <h3 className="text-2xl font-bold">{plan.name}</h3>
-                <p className="mt-4 text-sm opacity-90">{plan.description}</p>
-                <div className="mt-6">
-                  <span className="text-4xl font-bold">${plan.price}</span>
-                  <span className="text-lg ml-2">/month</span>
+              <div className="h-full p-8 flex flex-col justify-between">
+                <div className="flex flex-col items-start gap-4">
+                  <h3 className="text-2xl font-bold">{plan.name}</h3>
+                  <p className="w-full text-sm opacity-90 h-10 flex items-center">{plan.description}</p>
+                  <div>
+                    <span className="text-4xl font-bold">${plan.price}</span>
+                    <span className="text-lg ml-2">/month</span>
+                  </div>
+                  <ul className="space-y-4">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center">
+                        <Check className={`h-5 w-5 ${plan.popular ? 'text-white' : 'text-blue-600'
+                          } mr-3`} />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="mt-8 space-y-4">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center">
-                      <Check className={`h-5 w-5 ${
-                        plan.popular ? 'text-white' : 'text-blue-600'
-                      } mr-3`} />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
                 <button
-                  className={`mt-8 w-full py-3 px-6 rounded-lg flex items-center justify-center ${
-                    plan.popular
-                      ? 'bg-white text-blue-600 hover:bg-blue-50'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
-                  } transition-colors duration-200`}
+                  className={`mt-6 w-full py-3 px-6 rounded-lg flex items-center justify-center ${plan.popular
+                    ? 'bg-white text-blue-600 hover:bg-blue-50'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    } transition-colors duration-200`}
                 >
                   Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { startTransition } from 'react';
 import { Star } from 'lucide-react';
 
 const TestimonialsSection = () => {
@@ -7,19 +7,22 @@ const TestimonialsSection = () => {
       quote: "Slates has transformed how we manage our sports programming. Our customer satisfaction is up 40% and revenue has increased significantly.",
       author: "Sarah Johnson",
       role: "Owner, The Sports Bar NYC",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80"
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80",
+      stars: 4
     },
     {
       quote: "The data-driven insights have helped us make better decisions about which games to show. Our customers love that we always have the most exciting games on.",
       author: "Michael Chen",
       role: "Manager, Victory Sports Lounge",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&h=100&q=80"
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&h=100&q=80",
+      stars: 5
     },
     {
       quote: "We've seen a 30% increase in average customer spend during game nights since implementing Slates. The ROI has been incredible.",
       author: "David Martinez",
       role: "Owner, Champions Sports Bar",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80"
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&h=100&q=80",
+      stars: 5
     }
   ];
 
@@ -39,21 +42,23 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="relative bg-white p-8 rounded-2xl shadow-lg"
+              className="relative bg-gray-50 p-8 rounded-2xl shadow-xl flex flex-col justify-between"
             >
-              <div className="absolute -top-4 flex justify-center w-full">
-                <div className="flex space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-8 w-8 text-yellow-400 fill-current"
-                    />
-                  ))}
+              <div className="">
+                <div className="flex justify-center w-full">
+                  <div className="flex space-x-1">
+                    {[...Array(testimonial.stars)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-8 w-8 text-yellow-400 fill-current"
+                      />
+                    ))}
+                  </div>
                 </div>
+                <blockquote className="mt-8">
+                  <p className="text-lg text-gray-600 italic">"{testimonial.quote}"</p>
+                </blockquote>
               </div>
-              <blockquote className="mt-8">
-                <p className="text-lg text-gray-600 italic">"{testimonial.quote}"</p>
-              </blockquote>
               <div className="mt-6 flex items-center">
                 <img
                   className="h-12 w-12 rounded-full object-cover"
