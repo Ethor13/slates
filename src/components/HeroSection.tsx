@@ -1,5 +1,4 @@
-import React from 'react';
-import { BarChart3, ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 
 const HeroSection = () => {
   return (
