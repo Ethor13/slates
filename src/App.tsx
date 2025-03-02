@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AuthForm from './components/Auth/AuthForm';
-import ProtectedRoute from './components/ProtectedRoute';
-import Dashboard from './components/Dashboard';
-import LandingPage from './components/LandingPage';
+import ProtectedRoute from './components/User/ProtectedRoute';
+import Dashboard from './components/User/Dashboard';
+import LandingPage from './components/Landing/LandingPage';
 
 function App() {
   return (

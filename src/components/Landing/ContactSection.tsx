@@ -24,7 +24,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-white">
+    <section id="contact" className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
@@ -73,7 +73,7 @@ const ContactSection = () => {
           </div>
 
           <div>
-            <form onSubmit={handleSubmit} className="bg-gray-50 p-8 rounded-2xl">
+            <form onSubmit={handleSubmit} className="bg-gray-50 p-8 rounded-2xl shadow-xl">
               <div className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700">

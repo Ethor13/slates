@@ -1,4 +1,4 @@
-import Nav from './Nav';
+import Nav from '../General/Nav';
 import HeroSection from './HeroSection';
 import TechnologySection from './TechnologySection';
 import BenefitsSection from './BenefitsSection';
@@ -6,19 +6,19 @@ import PricingSection from './PricingSection';
 import TestimonialsSection from './TestimonialsSection';
 import DemoSection from './DemoSection';
 import ContactSection from './ContactSection';
-import Footer from './Footer';
+import Footer from '../General/Footer';
 
 const LandingPage = () => {
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white">
             <Nav />
-            <main>
+            <main className="">
                 <HeroSection />
                 <TechnologySection />
                 <BenefitsSection />
-                <PricingSection />
-                <TestimonialsSection />
                 <DemoSection />
+                <TestimonialsSection />
+                <PricingSection />
                 <ContactSection />
             </main>
 

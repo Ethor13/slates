@@ -1,4 +1,3 @@
-import React from 'react';
 import { BarChart3, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 const Footer = () => {
