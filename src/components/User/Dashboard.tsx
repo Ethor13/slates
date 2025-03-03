@@ -8,7 +8,7 @@ import {
     FavoriteTeams, 
     SavePreferencesButton 
 } from './Preferences';
-import Nav from '../General/Nav';
+import Nav from '../Nav/Nav';
 
 interface UserPreferences {
     zipcode: string;

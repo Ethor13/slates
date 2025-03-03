@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import Nav from '../General/Nav';
+import Nav from '../Nav/Nav';
 
 type AuthMode = 'signin' | 'signup';
 

@@ -1,4 +1,4 @@
-import Nav from '../General/Nav';
+import Nav from '../Nav/Nav';
 import HeroSection from './HeroSection';
 import TechnologySection from './TechnologySection';
 import BenefitsSection from './BenefitsSection';
@@ -10,7 +10,7 @@ import Footer from '../General/Footer';
 
 const LandingPage = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-100 to-white">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
             <Nav />
             <main className="">
                 <HeroSection />
