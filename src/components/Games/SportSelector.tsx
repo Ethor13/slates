@@ -1,0 +1,228 @@
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+
+interface SportSelectorProps {
+  props: {
+    selectedSports: string[];
+    setSelectedSports: (callback: (prev: string[]) => string[]) => void;
+    selectedDate: Date;
+    setSelectedDate: (date: Date) => void;
+    sortBy: string;
+    setSortBy: (sort: string) => void;
+  }
+}
+
+interface ChevronButtonProps {
+  onClick: () => void;
+  direction: "left" | "right";
+  blocked?: boolean;
+}
+
+interface SortOption {
+  value: string;
+  label: string;
+}
+
+const addDays = (date: Date, days: number): Date => {
+  const newDate = new Date(date);
+  newDate.setDate(newDate.getDate() + days);
+  return newDate;
+};
+
+const getDateString = (date: Date): string => {
+  return date.toLocaleDateString("en-CA").slice(0, 10);
+};
+
+const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
+  const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, sortBy, setSortBy } = props;
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const today = getDateString(new Date());
+  const sortOptions: SortOption[] = [
+    { value: 'time', label: 'Time' },
+    { value: 'score', label: 'Slate Score' }
+  ];
+
+  const [displayedDates, setDisplayedDates] = useState<Date[]>([
+    addDays(selectedDate, -2),
+    addDays(selectedDate, -1),
+    selectedDate,
+    addDays(selectedDate, 1),
+    addDays(selectedDate, 2),
+  ]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSportChange = useCallback(
+    (sport: string) => {
+      setSelectedSports(
+        (prev) =>
+          prev.includes(sport)
+            ? prev.filter((item) => item !== sport) // remove sport if already selected
+            : [...prev, sport] // add sport if not selected
+      );
+    },
+    [setSelectedSports]
+  );
+
+  const handleDateChange = useCallback(
+    (date: Date) => {
+      if (getDateString(date) < today) return;
+      if (getDateString(date) === getDateString(selectedDate)) return;
+      
+      setSelectedDate(date);
+      // change display dates so date is in the middle
+      setDisplayedDates([
+        addDays(date, -2),
+        addDays(date, -1),
+        date,
+        addDays(date, 1),
+        addDays(date, 2),
+      ]);
+    },
+    [setSelectedDate, today, selectedDate]
+  );
+
+  const shiftDaysLeft = useCallback(() => {
+    setDisplayedDates((prevDates) => {
+      if (getDateString(prevDates[2]) !== today) {
+        const newDates = prevDates.map((date) => addDays(date, -1));
+        setSelectedDate(newDates[2]);
+        return newDates;
+      }
+      return prevDates;
+    });
+  }, [setDisplayedDates, today, setSelectedDate]);
+
+  const shiftDaysRight = useCallback(() => {
+    setDisplayedDates((prevDates) => {
+      const newDates = prevDates.map((date) => addDays(date, 1));
+      setSelectedDate(newDates[2]);
+      return newDates;
+    });
+  }, [setDisplayedDates, setSelectedDate]);
+
+  return (
+    <div className="flex flex-col items-center gap-4 mb-4">
+      <div>
+        <div className="flex flex-row items-center justify-center">
+          <ChevronButton
+            onClick={shiftDaysLeft}
+            direction="left"
+            blocked={getDateString(displayedDates[2]) === today}
+          />
+          
+          {displayedDates.map((date, index) => {
+            const isActive = getDateString(date) === getDateString(new Date(selectedDate));
+            const isToday = getDateString(date) === today;
+            const isBlocked = getDateString(date) < today;
+            const marginRight = index !== 4 ? "mr-4" : "";
+            
+            return (
+              <button
+                key={index}
+                className={`w-20 h-12 bg-transparent border-none cursor-pointer text-base font-medium flex flex-col justify-center items-center ${marginRight} 
+                  ${isActive ? "text-blue-600 font-bold" : "text-black"}
+                  ${isToday ? "text-blue-600" : ""}
+                  ${isBlocked ? "text-gray-400 cursor-not-allowed" : "hover:text-blue-600"}
+                `}
+                onClick={() => handleDateChange(date)}
+              >
+                <div className="text-sm">
+                  {new Date(date).toLocaleDateString("en-US", { weekday: "short" })}
+                </div>
+                <div className="text-sm">
+                  {new Date(date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </div>
+              </button>
+            );
+          })}
+          
+          <ChevronButton onClick={shiftDaysRight} direction="right" />
+        </div>
+      </div>
+
+      <div className="flex flex-row justify-center gap-8">
+        <button
+          className={`w-32 h-32 p-0.5 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col justify-center items-center gap-2 transition-colors
+            ${selectedSports.includes("nba") 
+              ? "border-2 border-blue-600 text-blue-600 bg-blue-50" 
+              : "hover:border-blue-600 hover:border-3"}`}
+          onClick={() => handleSportChange("nba")}
+        >
+          <img src="/i/leaguelogos/nba.png" alt="" className="w-16 h-16" />
+          <span className="font-bold">NBA</span>
+        </button>
+        
+        <button
+          className={`w-32 h-32 p-0.5 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col justify-center items-center gap-2 transition-colors
+            ${selectedSports.includes("ncaambb")
+              ? "border-2 border-blue-600 text-blue-600 bg-blue-50"
+              : "hover:border-blue-600 hover:border-3"}`}
+          onClick={() => handleSportChange("ncaambb")}
+        >
+          <img src="/i/leaguelogos/ncaambb.png" alt="" className="w-16 h-16" />
+          <span className="font-bold">NCAA Men's Basketball</span>
+        </button>
+      </div>
+
+      <div className="w-full max-w-[50rem] flex justify-end items-center relative">
+        <p className="font-sans text-base">Sorted by:&nbsp;</p>
+        <div className="relative" ref={dropdownRef}>
+          <button 
+            className="bg-transparent border-none font-bold cursor-pointer flex items-center text-base gap-0.5 text-blue-600"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            {sortOptions.find(option => option.value === sortBy)?.label}
+            <ChevronDown 
+              className={`text-black transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+              size={16}
+            />
+          </button>
+          
+          {isDropdownOpen && (
+            <ul className="absolute right-4 bg-white border border-gray-400 rounded-lg mt-1 list-none shadow-md z-50 text-right py-2 px-2 flex flex-col gap-2">
+              {sortOptions.map((option) => (
+                <li
+                  key={option.value}
+                  className="cursor-pointer hover:text-blue-600 hover:font-bold"
+                  onClick={() => {
+                    setSortBy(option.value);
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  {option.label}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ChevronButton: React.FC<ChevronButtonProps> = ({ onClick, direction, blocked }) => (
+  <button 
+    className={`bg-transparent border-none cursor-pointer w-12 h-12 flex justify-center items-center 
+      ${blocked ? "text-gray-400 cursor-not-allowed" : "text-black hover:text-blue-600"}`}
+    onClick={onClick}
+  >
+    {direction === "left" ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
+  </button>
+);
+
+export default SportSelector;

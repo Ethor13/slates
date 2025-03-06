@@ -8,7 +8,14 @@
     "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit --watch"
+    "typecheck": "tsc --noEmit --watch",
+    "emulators": "firebase emulators:start",
+    "emulators:persist": "firebase emulators:start --import=./emulator-data --export-on-exit=./emulator-data",
+    "emulators:dev": "concurrently \"npm run dev\" \"npm run emulators\"",
+    "emulators:dev:persist": "concurrently \"npm run dev\" \"npm run emulators:persist\"",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "firebase": "^11.3.1",
@@ -23,6 +30,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
+    "concurrently": "^8.2.2",
     "eslint": "^9.9.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
