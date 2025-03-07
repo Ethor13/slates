@@ -25,3 +25,14 @@ export const getInterestLevel = (score: number): InterestLevel => {
     if (score >= 0) return { label: "Low Interest", className: "low-interest", rating };
     return { label: "Unknown", className: "unknown-interest", rating };
 };
+
+export const getDateString = (date: Date): string => {
+  return date.toLocaleDateString("en-CA").slice(0, 10);
+};
+
+export const addDays = (date: Date, days: number): Date => {
+  const newDate = new Date(date);
+  newDate.setDate(newDate.getDate() + days);
+  return newDate;
+};
+

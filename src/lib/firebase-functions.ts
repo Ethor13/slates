@@ -26,7 +26,7 @@ interface UserData {
 
 interface ScheduleRequest {
   date: string;
-  sport: string;
+  sports: string[];
 }
 
 interface ScheduleResponse {

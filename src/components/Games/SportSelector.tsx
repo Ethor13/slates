@@ -1,37 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-
-interface SportSelectorProps {
-  props: {
-    selectedSports: string[];
-    setSelectedSports: (callback: (prev: string[]) => string[]) => void;
-    selectedDate: Date;
-    setSelectedDate: (date: Date) => void;
-    sortBy: string;
-    setSortBy: (sort: string) => void;
-  }
-}
-
-interface ChevronButtonProps {
-  onClick: () => void;
-  direction: "left" | "right";
-  blocked?: boolean;
-}
-
-interface SortOption {
-  value: string;
-  label: string;
-}
-
-const addDays = (date: Date, days: number): Date => {
-  const newDate = new Date(date);
-  newDate.setDate(newDate.getDate() + days);
-  return newDate;
-};
-
-const getDateString = (date: Date): string => {
-  return date.toLocaleDateString("en-CA").slice(0, 10);
-};
+import { Sport, Sort, SportSelectorProps, ChevronButtonProps } from "./types";
+import { addDays, getDateString } from "../../helpers";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, sortBy, setSortBy } = props;
@@ -39,10 +9,6 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const today = getDateString(new Date());
-  const sortOptions: SortOption[] = [
-    { value: 'time', label: 'Time' },
-    { value: 'score', label: 'Slate Score' }
-  ];
 
   const [displayedDates, setDisplayedDates] = useState<Date[]>([
     addDays(selectedDate, -2),
@@ -64,7 +30,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   }, []);
 
   const handleSportChange = useCallback(
-    (sport: string) => {
+    (sport: Sport) => {
       setSelectedSports(
         (prev) =>
           prev.includes(sport)
@@ -79,7 +45,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
     (date: Date) => {
       if (getDateString(date) < today) return;
       if (getDateString(date) === getDateString(selectedDate)) return;
-      
+
       setSelectedDate(date);
       // change display dates so date is in the middle
       setDisplayedDates([
@@ -89,6 +55,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         addDays(date, 1),
         addDays(date, 2),
       ]);
+
+      props.fetchGamesData();
     },
     [setSelectedDate, today, selectedDate]
   );
@@ -121,13 +89,13 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
             direction="left"
             blocked={getDateString(displayedDates[2]) === today}
           />
-          
+
           {displayedDates.map((date, index) => {
             const isActive = getDateString(date) === getDateString(new Date(selectedDate));
             const isToday = getDateString(date) === today;
             const isBlocked = getDateString(date) < today;
             const marginRight = index !== 4 ? "mr-4" : "";
-            
+
             return (
               <button
                 key={index}
@@ -150,7 +118,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
               </button>
             );
           })}
-          
+
           <ChevronButton onClick={shiftDaysRight} direction="right" />
         </div>
       </div>
@@ -158,21 +126,21 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       <div className="flex flex-row justify-center gap-8">
         <button
           className={`w-32 h-32 p-0.5 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col justify-center items-center gap-2 transition-colors
-            ${selectedSports.includes("nba") 
-              ? "border-2 border-blue-600 text-blue-600 bg-blue-50" 
+            ${selectedSports.includes(Sport.NBA)
+              ? "border-2 border-blue-600 text-blue-600 bg-blue-50"
               : "hover:border-blue-600 hover:border-3"}`}
-          onClick={() => handleSportChange("nba")}
+          onClick={() => handleSportChange(Sport.NBA)}
         >
           <img src="/i/leaguelogos/nba.png" alt="" className="w-16 h-16" />
           <span className="font-bold">NBA</span>
         </button>
-        
+
         <button
           className={`w-32 h-32 p-0.5 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col justify-center items-center gap-2 transition-colors
-            ${selectedSports.includes("ncaambb")
+            ${selectedSports.includes(Sport.NCAAMBB)
               ? "border-2 border-blue-600 text-blue-600 bg-blue-50"
               : "hover:border-blue-600 hover:border-3"}`}
-          onClick={() => handleSportChange("ncaambb")}
+          onClick={() => handleSportChange(Sport.NCAAMBB)}
         >
           <img src="/i/leaguelogos/ncaambb.png" alt="" className="w-16 h-16" />
           <span className="font-bold">NCAA Men's Basketball</span>
@@ -182,29 +150,29 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       <div className="w-full max-w-[50rem] flex justify-end items-center relative">
         <p className="font-sans text-base">Sorted by:&nbsp;</p>
         <div className="relative" ref={dropdownRef}>
-          <button 
+          <button
             className="bg-transparent border-none font-bold cursor-pointer flex items-center text-base gap-0.5 text-blue-600"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            {sortOptions.find(option => option.value === sortBy)?.label}
-            <ChevronDown 
-              className={`text-black transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+            {sortBy}
+            <ChevronDown
+              className={`text-black transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
               size={16}
             />
           </button>
-          
+
           {isDropdownOpen && (
             <ul className="absolute right-4 bg-white border border-gray-400 rounded-lg mt-1 list-none shadow-md z-50 text-right py-2 px-2 flex flex-col gap-2">
-              {sortOptions.map((option) => (
+              {Object.entries(Sort).map(([key, value]) => (
                 <li
-                  key={option.value}
+                  key={key}
                   className="cursor-pointer hover:text-blue-600 hover:font-bold"
                   onClick={() => {
-                    setSortBy(option.value);
+                    setSortBy(value);
                     setIsDropdownOpen(false);
                   }}
                 >
-                  {option.label}
+                  {value}
                 </li>
               ))}
             </ul>
@@ -216,7 +184,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 };
 
 const ChevronButton: React.FC<ChevronButtonProps> = ({ onClick, direction, blocked }) => (
-  <button 
+  <button
     className={`bg-transparent border-none cursor-pointer w-12 h-12 flex justify-center items-center 
       ${blocked ? "text-gray-400 cursor-not-allowed" : "text-black hover:text-blue-600"}`}
     onClick={onClick}

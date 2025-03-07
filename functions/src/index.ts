@@ -19,9 +19,14 @@ admin.initializeApp();
 const db = admin.firestore();
 db.settings({ ignoreUndefinedProperties: true });
 
+enum Sport {
+    NBA = 'nba',
+    NCAAMBB = 'ncaambb',
+}
+
 interface ScheduleRequest {
   date: string;
-  sport: string;
+  sports: Sport[];
 }
 
 interface ScheduleResponse {
@@ -33,23 +38,27 @@ export const schedule = onCall<ScheduleRequest, Promise<ScheduleResponse>>(async
     // Parse date and sport parameters from the request
     // Check query parameters first, then request body for POST requests
     const date = request.data.date;
-    const sport = request.data.sport;
+    const sports = request.data.sports;
 
     // Validate parameters
     if (!date) {
       throw new Error("Missing required parameter: date");
     }
 
-    if (!sport) {
+    if (!sports) {
       throw new Error("Missing required parameter: sport");
     }
 
-    // Check if data was updated within the last hour
-    const sportRef = db.collection("schedule").doc(date).collection("sports").doc(sport);
-    const metadataSnapshot = await sportRef.get();
+    console.log("Fetching schedule for date:", date, "and sports:", sports);
 
-    if (metadataSnapshot.exists) {
-      if (needsUpdate(metadataSnapshot.data()?.lastUpdated?.toDate(), 1)) {
+    const sportsData: ScheduleResponse[] = [];
+    for (const sport of sports) {
+      // Check if data was updated within the last hour
+      const sportRef = db.collection("schedule").doc(date).collection("sports").doc(sport);
+      const metadataSnapshot = await sportRef.get();
+
+      const lastUpdated = metadataSnapshot.data()?.lastUpdated?.toDate();
+      if (!metadataSnapshot.exists || needsUpdate(lastUpdated, 1)) {
         // TODO: make this a callable function (non-exportable) and add a lock mechanism so we only ever update once at a time
         // Considerations: if we get caught at a lock, then when we get released, don't scrape again
         const batch = db.batch();
@@ -60,11 +69,12 @@ export const schedule = onCall<ScheduleRequest, Promise<ScheduleResponse>>(async
 
         await batch.commit();
       }
+
+      const scheduleSnapshot = await sportRef.collection("games").get();
+      sportsData.push(combine_maps(scheduleSnapshot.docs.map(doc => ({ [doc.id]: doc.data() }))));
     }
 
-    const scheduleSnapshot = await sportRef.collection("games").get();
-    return combine_maps(scheduleSnapshot.docs.map(doc => ({ [doc.id]: doc.data() })));
-
+    return combine_maps(sportsData);
   } catch (error: unknown) {
     throw new Error(error instanceof Error ? error.message : String(error));
   }
