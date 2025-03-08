@@ -32,6 +32,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
   const handleSportChange = useCallback(
     (sport: Sport) => {
+      // Clear existing games data first by calling setSelectedSports
+      // The useEffect in parent component will handle the loading state and data fetching
       setSelectedSports(
         (prev) =>
           prev.includes(sport)
@@ -46,9 +48,11 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
     (date: Date) => {
       if (getDateString(date) < today) return;
       if (getDateString(date) === getDateString(selectedDate)) return;
-
+      
+      // Update the date which will trigger the useEffect in parent component
       setSelectedDate(date);
-      // change display dates so date is in the middle
+      
+      // Update displayed dates so date is in the middle
       setDisplayedDates([
         addDays(date, -2),
         addDays(date, -1),
@@ -56,8 +60,9 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         addDays(date, 1),
         addDays(date, 2),
       ]);
-
-      props.fetchGamesData();
+      
+      // We don't need to explicitly call fetchGamesData here
+      // as the useEffect in parent component will handle it
     },
     [setSelectedDate, today, selectedDate]
   );
@@ -66,6 +71,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
     setDisplayedDates((prevDates) => {
       if (getDateString(prevDates[2]) !== today) {
         const newDates = prevDates.map((date) => addDays(date, -1));
+        // Update selected date which will trigger the useEffect in parent component
         setSelectedDate(newDates[2]);
         return newDates;
       }
@@ -76,6 +82,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const shiftDaysRight = useCallback(() => {
     setDisplayedDates((prevDates) => {
       const newDates = prevDates.map((date) => addDays(date, 1));
+      // Update selected date which will trigger the useEffect in parent component
       setSelectedDate(newDates[2]);
       return newDates;
     });

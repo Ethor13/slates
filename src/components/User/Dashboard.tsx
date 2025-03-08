@@ -93,6 +93,7 @@ const Dashboard = () => {
     const fetchGamesData = async () => {
         if (!currentUser) return;
         
+        // Set loading state before starting the fetch
         setGamesLoading(true);
         setGamesError(null);
         
@@ -101,7 +102,6 @@ const Dashboard = () => {
             // If sports are selected, use them, otherwise default to all available sports
             const sports = selectedSports.length > 0 ? selectedSports : Object.values(Sport);
             const result = await scheduleFunction({ date: formattedDate, sports });
-
             if (result.data) {
                 setGames(result.data);
             } else {
@@ -115,9 +115,18 @@ const Dashboard = () => {
         }
     };
 
-    // Fetch games when selected date or sports change
+    // Clear games data and set loading state first, then fetch new data when selections change
     useEffect(() => {
-        fetchGamesData();
+        // Clear previous games data immediately to prevent showing old data
+        setGames({});
+        setGamesLoading(true);
+        
+        // Use a small timeout to allow React to render the loading state before fetching
+        const fetchTimer = setTimeout(() => {
+            fetchGamesData();
+        }, 10);
+        
+        return () => clearTimeout(fetchTimer);
     }, [currentUser, selectedDate, selectedSports]);
 
     // Handle zipcode input change
