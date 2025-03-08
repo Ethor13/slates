@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import Nav from '../Nav/Nav';
+import Nav from '../Nav';
 
 type AuthMode = 'signin' | 'signup';
 
@@ -32,13 +32,12 @@ export default function AuthForm() {
             if (mode === 'signup') {
                 await signUp(email, password);
                 navigate('/dashboard');
-                // Show success message for email verification if needed
             } else {
                 await signIn(email, password);
                 navigate('/dashboard');
             }
         } catch (err) {
-            if (mode == 'signup') {
+            if (mode === 'signup') {
                 setError('An error occurred during sign up. Please try again.');
             } else {
                 setError('An error occurred during sign in. Please try again.');

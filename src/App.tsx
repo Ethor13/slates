@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import AuthForm from './components/Auth/AuthForm';
 import ProtectedRoute from './components/User/ProtectedRoute';
 import Dashboard from './components/User/Dashboard';
+import Settings from './components/User/Settings';
 import LandingPage from './components/Landing/LandingPage';
 
 function App() {
@@ -17,7 +18,15 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }
