@@ -1,3 +1,4 @@
+import { logger } from "firebase-functions";
 import fetch from "node-fetch";
 
 interface Config {

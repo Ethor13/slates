@@ -38,9 +38,15 @@ interface Broadcast {
     };
 }
 
+interface Notes {
+    type: string;
+    headline: string;
+}
+
 interface Competition {
     competitors: Team[];
     geoBroadcasts: Broadcast[];
+    notes: Notes[];
 }
 
 interface Link {
@@ -79,6 +85,7 @@ interface GameData {
             type: string;
         };
     };
+    notes: Notes[];
 }
 
 interface ParsedGame {
@@ -114,7 +121,7 @@ function parseEvents(events: ScheduleResponse): ParsedGame[] {
                     shortName: team.team.shortDisplayName,
                     abbreviation: team.team.abbreviation,
                     logo: team.team.logo,
-                    record: team.records.find((record) => record.type === "total")?.summary || "",
+                    record: team.records?.find((record) => record.type === "total")?.summary || "",
                 },
             }))
         );
@@ -123,7 +130,7 @@ function parseEvents(events: ScheduleResponse): ParsedGame[] {
             home: teamData.home,
             away: teamData.away,
             date: event.date,
-            link: event.links.find((link) => link.text === "Gamecast")?.href || "",
+            link: event.links?.find((link) => link.text === "Gamecast")?.href || "",
             broadcasts: combine_maps(
                 event.competitions[0].geoBroadcasts.map((broadcast) => ({
                     [broadcast.media.shortName]: {
@@ -132,6 +139,7 @@ function parseEvents(events: ScheduleResponse): ParsedGame[] {
                     },
                 }))
             ),
+            notes: event.competitions[0].notes
         };
 
         return { id: event.id, data: eventData };
@@ -144,11 +152,17 @@ export async function updateScheduleInFirestore(db: Firestore, batch: WriteBatch
         const parsedSchedule = parseEvents(rawSchedule);
 
         const gamesRef = db.collection("schedule").doc(date).collection("sports").doc(sport).collection("games");
+
+        // Create a temp document to force Firestore to commit the batch
+        const tempDocRef = gamesRef.doc("temp");
+        batch.set(tempDocRef, {}); // Add an empty document
+        batch.delete(tempDocRef);  // Immediately delete it
+
         for (const game of parsedSchedule) {
             batch.set(gamesRef.doc(game.id), game.data, { merge: true });
         }
     } catch (error) {
-        console.error("Error:", error instanceof Error ? error.message : String(error));
+        console.error(error);
         throw error;
     }
 }

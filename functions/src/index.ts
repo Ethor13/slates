@@ -12,7 +12,9 @@ import * as admin from "firebase-admin";
 // import { scrapeGameMetrics } from "./scrapers/scrape_game_metrics.js";
 import { updateScheduleInFirestore } from "./scrapers/scrape_schedule";
 import { updateGameMetrics } from "./scrapers/scrape_game_metrics";
+import { scoreSportsGames } from "./scrapers/calculate_slate_scores";
 import { combine_maps, needsUpdate } from "./helpers";
+import { logger } from "firebase-functions";
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
@@ -29,11 +31,7 @@ interface ScheduleRequest {
   sports: Sport[];
 }
 
-interface ScheduleResponse {
-  [x: string]: admin.firestore.DocumentData;
-}
-
-export const schedule = onCall<ScheduleRequest, Promise<ScheduleResponse>>(async (request) => {
+export const schedule = onCall<ScheduleRequest>(async (request) => {
   try {
     // Parse date and sport parameters from the request
     // Check query parameters first, then request body for POST requests
@@ -46,36 +44,55 @@ export const schedule = onCall<ScheduleRequest, Promise<ScheduleResponse>>(async
     }
 
     if (!sports) {
-      throw new Error("Missing required parameter: sport");
+      throw new Error("Missing required parameter: sports");
     }
 
     console.log("Fetching schedule for date:", date, "and sports:", sports);
 
-    const sportsData: ScheduleResponse[] = [];
+    const sportsData = [];
     for (const sport of sports) {
       // Check if data was updated within the last hour
       const sportRef = db.collection("schedule").doc(date).collection("sports").doc(sport);
       const metadataSnapshot = await sportRef.get();
 
-      const lastUpdated = metadataSnapshot.data()?.lastUpdated?.toDate();
-      if (!metadataSnapshot.exists || needsUpdate(lastUpdated, 1)) {
+      const lastUpdated = metadataSnapshot.exists ? metadataSnapshot.data()?.lastUpdated?.toDate() : null;
+      if (!lastUpdated || needsUpdate(lastUpdated, 1)) {
         // TODO: make this a callable function (non-exportable) and add a lock mechanism so we only ever update once at a time
         // Considerations: if we get caught at a lock, then when we get released, don't scrape again
-        const batch = db.batch();
+        const batch1 = db.batch();
 
-        await updateScheduleInFirestore(db, batch, date, sport);
-        await updateGameMetrics(db, batch, date, sport);
-        batch.set(sportRef, { lastUpdated: FieldValue.serverTimestamp() }, { merge: true });
+        await updateScheduleInFirestore(db, batch1, date, sport).catch((error) => {
+          logger.error("Error updating schedule in Firestore:", error);
+          throw new Error("Error updating schedule in Firestore");
+        });
 
-        await batch.commit();
+        await updateGameMetrics(db, batch1, date, sport).catch((error) => {
+          logger.error("Error updating game metrics in Firestore:", error);
+          throw new Error("Error updating game metrics in Firestore");
+        });
+
+        await batch1.commit();
+
+        const batch2 = db.batch();
+
+        await scoreSportsGames(db, batch2, date, sport).catch((error) => {
+          logger.error("Error scoring games in Firestore:", error);
+          throw new Error("Error scoring games in Firestore");
+        });
+
+        batch2.set(sportRef, { lastUpdated: FieldValue.serverTimestamp() }, { merge: true });
+
+        await batch2.commit();
       }
 
       const scheduleSnapshot = await sportRef.collection("games").get();
       sportsData.push(combine_maps(scheduleSnapshot.docs.map(doc => ({ [doc.id]: doc.data() }))));
     }
 
-    return combine_maps(sportsData);
-  } catch (error: unknown) {
-    throw new Error(error instanceof Error ? error.message : String(error));
+    const combined = combine_maps(sportsData);
+    return combined;
+  } catch (error) {
+    console.error("Error fetching schedule:", error);
+    throw error;
   }
 });

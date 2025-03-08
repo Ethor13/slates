@@ -1,5 +1,6 @@
 import { Firestore, WriteBatch } from "firebase-admin/firestore";
 import { combine_maps, mappify, scrapeUrl } from "../helpers";
+import { logger } from "firebase-functions";
 
 interface SportConfig {
     sports: {
@@ -177,7 +178,7 @@ function parsePowerIndex(PIData: PowerIndexResponse): ParsedData<TeamData>[] {
             powerIndexes: combine_maps(
                 team.categories.map((statCategory) => ({
                     [statCategory.name]: mappify(
-                        PIData.categories.find((category) => category.name === statCategory.name)!.names,
+                        PIData.categories?.find((category) => category.name === statCategory.name)!.names,
                         statCategory.values
                     ),
                 }))
@@ -222,7 +223,7 @@ function parseMatchupQuality(MQData: MatchupQualityResponse): ParsedData<GameDat
             home: TeamData.home,
             away: TeamData.away,
             date: event.date,
-            link: event.competitions[0].links.find((link) => link.text === "Gamecast")!.href,
+            link: event.competitions[0].links?.find((link) => link.text === "Gamecast")!.href,
             broadcasts: combine_maps(
                 event.competitions[0].geoBroadcasts.map((broadcast) => ({
                     [broadcast.media.shortName]: {
@@ -263,7 +264,7 @@ export async function updateGameMetrics(db: Firestore, batch: WriteBatch, date: 
             }
         }
     } catch (error) {
-        console.error("Error:", error instanceof Error ? error.message : String(error));
-        throw error;
+        logger.error("Error updating game metrics (INSIDE SCRAPE GAME METRICS):", error);
+        throw new Error(`Error updating game metrics: ${error}`);
     }
 }

@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { Sport, Sort, SportSelectorProps, ChevronButtonProps } from "./types";
 import { addDays, getDateString } from "../../helpers";
+import ProxiedImage from "../General/ProxiedImage";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, sortBy, setSortBy } = props;
@@ -80,6 +81,18 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
     });
   }, [setDisplayedDates, setSelectedDate]);
 
+  // Function to get display name for each sport
+  const getSportDisplayName = (sport: Sport): string => {
+    switch (sport) {
+      case Sport.NBA:
+        return "NBA";
+      case Sport.NCAAMBB:
+        return "NCAA Men's Basketball";
+      default:
+        return sport;
+    }
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 mb-4">
       <div>
@@ -92,7 +105,6 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
           {displayedDates.map((date, index) => {
             const isActive = getDateString(date) === getDateString(new Date(selectedDate));
-            const isToday = getDateString(date) === today;
             const isBlocked = getDateString(date) < today;
             const marginRight = index !== 4 ? "mr-4" : "";
 
@@ -101,7 +113,6 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                 key={index}
                 className={`w-20 h-12 bg-transparent border-none cursor-pointer text-base font-medium flex flex-col justify-center items-center ${marginRight} 
                   ${isActive ? "text-blue-600 font-bold" : "text-black"}
-                  ${isToday ? "text-blue-600" : ""}
                   ${isBlocked ? "text-gray-400 cursor-not-allowed" : "hover:text-blue-600"}
                 `}
                 onClick={() => handleDateChange(date)}
@@ -124,27 +135,25 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       </div>
 
       <div className="flex flex-row justify-center gap-8">
-        <button
-          className={`w-32 h-32 p-0.5 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col justify-center items-center gap-2 transition-colors
-            ${selectedSports.includes(Sport.NBA)
-              ? "border-2 border-blue-600 text-blue-600 bg-blue-50"
-              : "hover:border-blue-600 hover:border-3"}`}
-          onClick={() => handleSportChange(Sport.NBA)}
-        >
-          <img src="/i/leaguelogos/nba.png" alt="" className="w-16 h-16" />
-          <span className="font-bold">NBA</span>
-        </button>
-
-        <button
-          className={`w-32 h-32 p-0.5 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col justify-center items-center gap-2 transition-colors
-            ${selectedSports.includes(Sport.NCAAMBB)
-              ? "border-2 border-blue-600 text-blue-600 bg-blue-50"
-              : "hover:border-blue-600 hover:border-3"}`}
-          onClick={() => handleSportChange(Sport.NCAAMBB)}
-        >
-          <img src="/i/leaguelogos/ncaambb.png" alt="" className="w-16 h-16" />
-          <span className="font-bold">NCAA Men's Basketball</span>
-        </button>
+        {Object.values(Sport).map((sport) => (
+          <button
+            key={sport}
+            className={`w-32 h-auto px-0.5 py-3 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col items-center gap-2 transition-colors
+              ${selectedSports.includes(sport)
+                ? "border-2 border-blue-600 text-blue-600 bg-blue-50"
+                : "hover:border-blue-600 hover:border-3"}`}
+            onClick={() => handleSportChange(sport)}
+          >
+            <ProxiedImage
+              className={`w-16 h-16 flex-col items-center justify-self-start`}
+              src={`i/leaguelogos/${sport}.png`}
+              alt={`${sport} logo`}
+            />
+            <div className="grow flex flex-col justify-center">
+              <span className="font-bold leading-none">{getSportDisplayName(sport)}</span>
+            </div>
+          </button>
+        ))}
       </div>
 
       <div className="w-full max-w-[50rem] flex justify-end items-center relative">
@@ -162,7 +171,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
           </button>
 
           {isDropdownOpen && (
-            <ul className="absolute right-4 bg-white border border-gray-400 rounded-lg mt-1 list-none shadow-md z-50 text-right py-2 px-2 flex flex-col gap-2">
+            <ul className="absolute right-4 bg-white border border-gray-400 rounded-lg mt-1 list-none shadow-md z-50 py-2 px-2 flex flex-col gap-2 items-end w-[7rem]">
               {Object.entries(Sort).map(([key, value]) => (
                 <li
                   key={key}

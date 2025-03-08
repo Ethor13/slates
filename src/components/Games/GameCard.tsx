@@ -1,6 +1,7 @@
 import React from "react";
 import { getInterestLevel, formatGameTime } from "../../helpers";
 import { GameCardProps, TeamInfoProps, BroadcastsProps } from "./types";
+import ProxiedImage from "../General/ProxiedImage";
 
 // First item is class for border, second is class for background
 const interestLevelClasses: Record<string, string[]> = {
@@ -30,10 +31,10 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team }) => {
             )}
           </div>
         </div>
-        <img 
+        <ProxiedImage 
           className={`w-16 h-16 flex-col items-center ${homeAway === "home" ? "order-first" : ""}`} 
-          src={team.logo.split(".com")[1]} 
-          alt="" 
+          src={team.logo || "/i/teamlogos/tbd.png"} 
+          alt={`${team.shortName} logo`} 
         />
       </div>
     </div>
@@ -69,15 +70,18 @@ const GameCard: React.FC<GameCardProps> = ({ game, showGameTime }) => {
   const interestLevel = getInterestLevel(game.slateScore);
 
   return (
-    <div className={`border-l-4 bg-white rounded-lg shadow-md h-40 w-[50rem] justify-around items-center relative ${interestLevelClasses[interestLevel.className][0]}`}>
+    <div className={`border-l-4 bg-white rounded-lg shadow-all 0 w-[50rem] justify-around items-center relative ${interestLevelClasses[interestLevel.className][0]}`}>
       <div className={`w-[calc(50rem-4px)] h-full rounded-lg text-base font-semibold flex flex-col justify-center items-center gap-4 absolute z-10 ${interestLevelClasses[interestLevel.className][1]}`}>
         <div className="text-2xl w-20 flex justify-center items-center mr-[calc(50rem-5rem)]">
           {interestLevel.rating}
         </div>
       </div>
       <div className="w-[calc(50rem-5rem)] h-40 ml-20 bg-white rounded-lg flex flex-row items-center relative z-10">
-        <div className="h-full flex flex-col gap-4 flex-grow">
-          <div className="flex-grow flex flex-row items-center justify-center gap-8 py-5 text-center relative">
+        <div className="h-full flex flex-col flex-grow">
+          <div className="w-full text-center text-xs font-medium text-gray-700 mt-1">
+            {game.notes[0]?.headline}
+          </div>
+          <div className="flex-grow flex flex-row items-center justify-center gap-8 pb-4 text-center relative">
             <TeamInfo homeAway="away" team={game.away} />
             <div className="flex flex-col items-center">
               <div className="w-8 h-8 text-2xl">@</div>
@@ -88,7 +92,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, showGameTime }) => {
               )}
             </div>
             <TeamInfo homeAway="home" team={game.home} />
-            <div className="absolute bottom-[-0.5rem] w-[90%] border-b border-gray-200"></div>
+            <div className="absolute bottom-[0.5rem] w-[90%] border-b border-gray-200"></div>
           </div>
           <Broadcasts broadcasts={game.broadcasts} />
         </div>
