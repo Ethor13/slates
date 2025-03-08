@@ -14,7 +14,7 @@ const ZipcodeInput: React.FC<ZipcodeInputProps> = ({ zipcode, onChange, error })
 
     return (
         <div>
-            <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">Zipcode</label>
+            <label htmlFor="zipcode" className="block text-sm font-medium">Zipcode</label>
             <div className="mt-1">
                 <input
                     type="text"

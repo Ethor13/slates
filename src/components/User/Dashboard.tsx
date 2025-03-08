@@ -211,8 +211,6 @@ const Dashboard = () => {
                 <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                     {/* Games Section */}
                     <div className="bg-white shadow rounded-lg mb-6 p-4">
-                        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Today's Games</h3>
-                        
                         <SportSelector props={{
                             selectedSports,
                             setSelectedSports,

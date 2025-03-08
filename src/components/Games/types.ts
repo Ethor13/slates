@@ -37,6 +37,7 @@ export interface GameCardProps {
 export interface TeamInfoProps {
   homeAway: "home" | "away";
   team: Team;
+  opponent?: Team;
 }
 
 export interface BroadcastsProps {

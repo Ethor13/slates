@@ -15,7 +15,7 @@ const availableTeams = [
 const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }) => {
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700">Favorite Teams</label>
+            <label className="block text-sm font-medium">Favorite Teams</label>
             <p className="text-sm text-gray-500 mb-2">Select all that apply</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {availableTeams.map(team => (
@@ -28,7 +28,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
                             onChange={() => onToggle(team)}
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
-                        <label htmlFor={`team-${team}`} className="ml-3 text-sm text-gray-700">
+                        <label htmlFor={`team-${team}`} className="ml-3 text-sm">
                             {team}
                         </label>
                     </div>

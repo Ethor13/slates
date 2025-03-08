@@ -118,9 +118,9 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
             return (
               <button
                 key={index}
-                className={`w-20 h-12 bg-transparent border-none cursor-pointer text-base font-medium flex flex-col justify-center items-center ${marginRight} 
-                  ${isActive ? "text-blue-600 font-bold" : "text-black"}
-                  ${isBlocked ? "text-gray-400 cursor-not-allowed" : "hover:text-blue-600"}
+                className={`w-20 h-12 bg-transparent border-none text-base flex flex-col justify-center items-center ${marginRight} 
+                  ${isBlocked ? "text-gray-400 cursor-not-allowed" : "hover:text-blue-600 cursor-pointer"}
+                  ${isActive ? "text-blue-600 font-bold" : "font-[500]"}
                 `}
                 onClick={() => handleDateChange(date)}
               >
@@ -145,10 +145,10 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         {Object.values(Sport).map((sport) => (
           <button
             key={sport}
-            className={`w-32 h-auto px-0.5 py-3 cursor-pointer box-border border border-gray-400 rounded-3xl flex flex-col items-center gap-2 transition-colors
+            className={`w-32 h-auto px-0.5 py-3 cursor-pointer box-border border rounded-3xl flex flex-col items-center gap-2 transition-colors
               ${selectedSports.includes(sport)
                 ? "border-2 border-blue-600 text-blue-600 bg-blue-50"
-                : "hover:border-blue-600 hover:border-3"}`}
+                : "border-gray-400 hover:border-blue-600 hover:border-3"}`}
             onClick={() => handleSportChange(sport)}
           >
             <ProxiedImage
@@ -172,7 +172,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
           >
             {sortBy}
             <ChevronDown
-              className={`text-black transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+              className={`text-gray-700 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
               size={16}
             />
           </button>
@@ -201,8 +201,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
 const ChevronButton: React.FC<ChevronButtonProps> = ({ onClick, direction, blocked }) => (
   <button
-    className={`bg-transparent border-none cursor-pointer w-12 h-12 flex justify-center items-center 
-      ${blocked ? "text-gray-400 cursor-not-allowed" : "text-black hover:text-blue-600"}`}
+    className={`bg-transparent border-none w-12 h-12 flex justify-center items-center 
+      ${blocked ? "text-gray-400 cursor-not-allowed" : "hover:text-blue-600 cursor-pointer"}`}
     onClick={onClick}
   >
     {direction === "left" ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}

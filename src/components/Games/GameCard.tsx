@@ -12,7 +12,10 @@ const interestLevelClasses: Record<string, string[]> = {
   "unknown-interest": ["border-gray-500", "bg-gray-300 text-gray-500"]
 };
 
-const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team }) => {
+const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team, opponent }) => {
+  const isTBD = team.shortName === "TBD";
+  const isOpponentTBD = opponent?.shortName === "TBD";
+  
   return (
     <div className={`flex-1 flex flex-col ${homeAway === "away" ? "" : ""}`}>
       <div className={`flex flex-row items-center gap-4 ${
@@ -23,8 +26,8 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team }) => {
         <div className="flex-grow">
           <div className="text-2xl font-bold">{team.shortName}</div>
           <div className="flex flex-col justify-right">
-            <span className="text-sm">({team.record})</span>
-            {team.matchupQualities && (
+            {!isTBD && <span className="text-sm">({team.record})</span>}
+            {!isTBD && !isOpponentTBD && team.matchupQualities && (
               <span className="text-sm">
                 {team.matchupQualities.teampredwinpct.toFixed(0)}%
               </span>
@@ -78,11 +81,11 @@ const GameCard: React.FC<GameCardProps> = ({ game, showGameTime }) => {
       </div>
       <div className="w-[calc(50rem-5rem)] h-40 ml-20 bg-white rounded-lg flex flex-row items-center relative z-10">
         <div className="h-full flex flex-col flex-grow">
-          <div className="w-full text-center text-xs font-medium text-gray-700 mt-1">
+          <div className="w-full text-center text-xs font-medium mt-1">
             {game.notes[0]?.headline}
           </div>
           <div className="flex-grow flex flex-row items-center justify-center gap-8 pb-4 text-center relative">
-            <TeamInfo homeAway="away" team={game.away} />
+            <TeamInfo homeAway="away" team={game.away} opponent={game.home} />
             <div className="flex flex-col items-center">
               <div className="w-8 h-8 text-2xl">@</div>
               {showGameTime && (
@@ -91,7 +94,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, showGameTime }) => {
                 </div>
               )}
             </div>
-            <TeamInfo homeAway="home" team={game.home} />
+            <TeamInfo homeAway="home" team={game.home} opponent={game.away} />
             <div className="absolute bottom-[0.5rem] w-[90%] border-b border-gray-200"></div>
           </div>
           <Broadcasts broadcasts={game.broadcasts} />

@@ -21,7 +21,7 @@ const HeroSection = () => {
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
-              <button className="flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+              <button className="flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-lg bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
                 Watch Demo
               </button>
             </div>

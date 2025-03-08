@@ -14,7 +14,7 @@ const availableTvProviders = [
 const TvProviders: React.FC<TvProvidersProps> = ({ selectedProviders, onToggle }) => {
     return (
         <div>
-            <label className="block text-sm font-medium text-gray-700">TV Providers</label>
+            <label className="block text-sm font-medium">TV Providers</label>
             <p className="text-sm text-gray-500 mb-2">Select all that apply</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {availableTvProviders.map(provider => (
@@ -27,7 +27,7 @@ const TvProviders: React.FC<TvProvidersProps> = ({ selectedProviders, onToggle }
                             onChange={() => onToggle(provider)}
                             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
-                        <label htmlFor={`provider-${provider}`} className="ml-3 text-sm text-gray-700">
+                        <label htmlFor={`provider-${provider}`} className="ml-3 text-sm">
                             {provider}
                         </label>
                     </div>
