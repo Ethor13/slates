@@ -8,12 +8,11 @@
  */
 import { onCall } from "firebase-functions/v2/https";
 import { FieldValue } from "firebase-admin/firestore";
-import * as admin from "firebase-admin";
-// import { scrapeGameMetrics } from "./scrapers/scrape_game_metrics.js";
-import { updateScheduleInFirestore } from "./scrapers/scrape_schedule";
-import { updateGameMetrics } from "./scrapers/scrape_game_metrics";
-import { scoreSportsGames } from "./scrapers/calculate_slate_scores";
-import { combine_maps, needsUpdate } from "./helpers";
+import admin from "firebase-admin";
+import { updateScheduleInFirestore } from "./scrapers/scrape_schedule.js";
+import { updateGameMetrics } from "./scrapers/scrape_game_metrics.js";
+import { scoreSportsGames } from "./scrapers/calculate_slate_scores.js";
+import { combine_maps, needsUpdate } from "./helpers.js";
 import { logger } from "firebase-functions";
 
 // Initialize Firebase Admin SDK
@@ -22,8 +21,8 @@ const db = admin.firestore();
 db.settings({ ignoreUndefinedProperties: true });
 
 enum Sport {
-    NBA = 'nba',
-    NCAAMBB = 'ncaambb',
+  NBA = "nba",
+  NCAAMBB = "ncaambb",
 }
 
 interface ScheduleRequest {
@@ -57,16 +56,16 @@ export const schedule = onCall<ScheduleRequest>(async (request) => {
 
       const lastUpdated = metadataSnapshot.exists ? metadataSnapshot.data()?.lastUpdated?.toDate() : null;
       if (!lastUpdated || needsUpdate(lastUpdated, 1)) {
-        // TODO: make this a callable function (non-exportable) and add a lock mechanism so we only ever update once at a time
-        // Considerations: if we get caught at a lock, then when we get released, don't scrape again
+        // TODO: make this a callable function (non-exportable) and add a lock mechanism so we only ever update once
+        // at a time. Considerations: if we get caught at a lock, then when we get released, don't scrape again
         const batch1 = db.batch();
 
-        await updateScheduleInFirestore(db, batch1, date, sport).catch((error) => {
+        await updateScheduleInFirestore(db, batch1, date, sport).catch((error: any) => {
           logger.error("Error updating schedule in Firestore:", error);
           throw new Error("Error updating schedule in Firestore");
         });
 
-        await updateGameMetrics(db, batch1, date, sport).catch((error) => {
+        await updateGameMetrics(db, batch1, date, sport).catch((error: any) => {
           logger.error("Error updating game metrics in Firestore:", error);
           throw new Error("Error updating game metrics in Firestore");
         });
@@ -75,7 +74,7 @@ export const schedule = onCall<ScheduleRequest>(async (request) => {
 
         const batch2 = db.batch();
 
-        await scoreSportsGames(db, batch2, date, sport).catch((error) => {
+        await scoreSportsGames(db, batch2, date, sport).catch((error: any) => {
           logger.error("Error scoring games in Firestore:", error);
           throw new Error("Error scoring games in Firestore");
         });
