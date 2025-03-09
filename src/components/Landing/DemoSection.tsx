@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { BarChart3, Trophy, Users, ArrowUp, ArrowDown } from 'lucide-react';
+import { useState } from 'react';
 
 const DemoSection = () => {
-  const [selectedGame, setSelectedGame] = useState(null);
+  const [selectedGame, setSelectedGame] = useState<any>(null);
 
   const games = [
     {
@@ -122,7 +121,7 @@ const DemoSection = () => {
                           {key.replace(/([A-Z])/g, ' $1').trim()}
                         </span>
                         <span className="text-sm font-medium text-gray-900">
-                          {value}/100
+                          {value as number}/100
                         </span>
                       </div>
                       <div className="h-2 bg-gray-200 rounded-full">
@@ -139,7 +138,7 @@ const DemoSection = () => {
                     Key Factors
                   </h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedGame.factors.map((factor, index) => (
+                    {selectedGame.factors.map((factor: string, index: number) => (
                       <span
                         key={index}
                         className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"

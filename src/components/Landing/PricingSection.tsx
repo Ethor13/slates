@@ -1,4 +1,3 @@
-import React from 'react';
 import { Check, ArrowRight } from 'lucide-react';
 
 const PricingSection = () => {

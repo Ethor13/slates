@@ -1,4 +1,3 @@
-import React, { startTransition } from 'react';
 import { Star } from 'lucide-react';
 
 const TestimonialsSection = () => {

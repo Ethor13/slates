@@ -18,8 +18,5 @@ export default defineConfig({
         assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     }
-  },
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+  }
 })

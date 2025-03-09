@@ -1,4 +1,3 @@
-import React from 'react';
 import { DollarSign, Users, TrendingUp, CheckCircle2, ArrowRight } from 'lucide-react';
 
 const BenefitsSection = () => {
