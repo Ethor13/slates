@@ -3,6 +3,39 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../lib/firebase';
 import { proxyImageFunction } from '../../lib/firebase-functions';
 
+const CACHE_NAME = 'image-cache';
+const URL_CACHE_NAME = 'firebase-url-cache';
+
+/**
+ * Try to get cached Firebase URL
+ */
+const getCachedFirebaseUrl = async (cacheKey: string): Promise<string | null> => {
+  try {
+    const cache = await caches.open(URL_CACHE_NAME);
+    const response = await cache.match(cacheKey);
+    if (response) {
+      const data = await response.json();
+      return data.url;
+    }
+  } catch (error) {
+    console.warn('Error reading from URL cache:', error);
+  }
+  return null;
+};
+
+/**
+ * Cache Firebase URL
+ */
+const cacheFirebaseUrl = async (cacheKey: string, url: string): Promise<void> => {
+  try {
+    const cache = await caches.open(URL_CACHE_NAME);
+    const response = new Response(JSON.stringify({ url }));
+    await cache.put(cacheKey, response);
+  } catch (error) {
+    console.warn('Error writing to URL cache:', error);
+  }
+};
+
 /**
  * Proxies an image through Firebase Storage using a Cloud Function,
  * storing it if it doesn't exist
@@ -13,6 +46,12 @@ export const getProxiedImageUrl = async (imageUrl: string): Promise<string> => {
   if (!imageUrl) return '';
   
   try {
+    // Try to get the URL from browser cache first
+    const cachedUrl = await getCachedFirebaseUrl(imageUrl);
+    if (cachedUrl) {
+      return cachedUrl;
+    }
+
     // Create a hash/path for the image based on the URL
     // Use just the path part after the domain for storage path
     const urlParts = imageUrl.split('.com/');
@@ -25,6 +64,8 @@ export const getProxiedImageUrl = async (imageUrl: string): Promise<string> => {
     try {
       // Try to get the download URL for the image if it already exists
       const url = await getDownloadURL(storageRef);
+      // Cache the Firebase URL
+      await cacheFirebaseUrl(imageUrl, url);
       return url;
     } catch (error) {
       console.log('Image not found in cache, calling cloud function...');
@@ -35,6 +76,8 @@ export const getProxiedImageUrl = async (imageUrl: string): Promise<string> => {
         storagePath
       });
       
+      // Cache the Firebase URL
+      await cacheFirebaseUrl(imageUrl, result.data.url);
       return result.data.url;
     }
   } catch (error) {
@@ -65,9 +108,27 @@ const ProxiedImage: React.FC<ProxiedImageProps> = ({ src, alt, className, ...res
 
       setIsLoading(true);
       try {
-        // Try to get the image from the proxy
+        // Try to get the image from the cache first
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse = await cache.match(src);
+        
+        if (cachedResponse) {
+          const blob = await cachedResponse.blob();
+          setImageSrc(URL.createObjectURL(blob));
+          setIsLoading(false);
+          return;
+        }
+
+        // If not in cache, get the proxied URL
         const proxiedUrl = await getProxiedImageUrl(src);
-        setImageSrc(proxiedUrl);
+        
+        // Fetch and cache the actual image
+        const response = await fetch(proxiedUrl);
+        const responseClone = response.clone();
+        await cache.put(src, responseClone);
+        
+        const blob = await response.blob();
+        setImageSrc(URL.createObjectURL(blob));
       } catch (err) {
         console.error('Error loading proxied image:', err);
         setError(true);

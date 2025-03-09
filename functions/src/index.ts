@@ -8,6 +8,7 @@
  */
 import { onCall } from "firebase-functions/v2/https";
 import { FieldValue } from "firebase-admin/firestore";
+import { getDownloadURL } from "firebase-admin/storage";
 import admin from "firebase-admin";
 import { updateScheduleInFirestore } from "./scrapers/scrape_schedule.js";
 import { updateGameMetrics } from "./scrapers/scrape_game_metrics.js";
@@ -16,10 +17,9 @@ import { combine_maps, needsUpdate } from "./helpers.js";
 import { logger } from "firebase-functions";
 import fetch from "node-fetch";
 
-// Initialize Firebase Admin SDK
 admin.initializeApp();
+const storage = admin.storage().bucket();
 const db = admin.firestore();
-const bucket = admin.storage().bucket();
 db.settings({ ignoreUndefinedProperties: true });
 
 enum Sport {
@@ -51,7 +51,7 @@ export const proxyImage = onCall<ProxyImageRequest>(async (request) => {
     }
     
     // Check if file already exists in storage
-    const file = bucket.file(storagePath);
+    const file = storage.file(storagePath);
     const [exists] = await file.exists();
     
     if (!exists) {
@@ -83,10 +83,7 @@ export const proxyImage = onCall<ProxyImageRequest>(async (request) => {
     }
     
     // Get the download URL
-    const [url] = await file.getSignedUrl({
-      action: "read",
-      expires: Date.now() + 31536000000, // URL valid for a year
-    });
+    const url = await getDownloadURL(file);
     
     return { url };
   } catch (error) {

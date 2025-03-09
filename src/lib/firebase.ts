@@ -16,7 +16,7 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
+export const storage = getStorage(app, "slates-59840.firebasestorage.app");
 
 // Connect to emulators in development environment
 if (import.meta.env.DEV) {

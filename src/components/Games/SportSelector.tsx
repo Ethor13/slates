@@ -60,9 +60,6 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         addDays(date, 1),
         addDays(date, 2),
       ]);
-      
-      // We don't need to explicitly call fetchGamesData here
-      // as the useEffect in parent component will handle it
     },
     [setSelectedDate, today, selectedDate]
   );

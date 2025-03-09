@@ -26,7 +26,7 @@ const Dashboard = () => {
     const [gamesError, setGamesError] = useState<any | null>(null);
     
     // Game state for SportSelector and GamesList
-    const [selectedSports, setSelectedSports] = useState<Sport[]>([]);
+    const [selectedSports, setSelectedSports] = useState<Sport[]>(Object.values(Sport));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [sortBy, setSortBy] = useState<Sort>(Sort.SCORE);
 
@@ -58,12 +58,7 @@ const Dashboard = () => {
     useEffect(() => {
         setGames({});
         setGamesLoading(true);
-        
-        const fetchTimer = setTimeout(() => {
-            fetchGamesData();
-        }, 10);
-        
-        return () => clearTimeout(fetchTimer);
+        fetchGamesData();
     }, [currentUser, selectedDate, selectedSports]);
 
     return (
