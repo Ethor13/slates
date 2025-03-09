@@ -33,8 +33,18 @@ interface ScheduleResponse {
   [x: string]: DocumentData;
 }
 
+interface ProxyImageRequest {
+  imageUrl: string;
+  storagePath: string;
+}
+
+interface ProxyImageResponse {
+  url: string;
+}
+
 // Export callable functions
 export const getUserDataFunction = httpsCallable<void, UserData>(functions, 'getUserData');
 export const scheduleFunction = httpsCallable<ScheduleRequest, ScheduleResponse>(functions, 'schedule');
+export const proxyImageFunction = httpsCallable<ProxyImageRequest, ProxyImageResponse>(functions, 'proxyImage');
 
 // Add more function exports as needed

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../lib/firebase';
+import { proxyImageFunction } from '../../lib/firebase-functions';
 
 /**
- * Proxies an image through Firebase Storage, storing it if it doesn't exist
+ * Proxies an image through Firebase Storage using a Cloud Function,
+ * storing it if it doesn't exist
  * @param imageUrl Full URL of the original image
  * @returns Promise resolving to the Firebase Storage URL
  */
@@ -15,29 +17,25 @@ export const getProxiedImageUrl = async (imageUrl: string): Promise<string> => {
     // Use just the path part after the domain for storage path
     const urlParts = imageUrl.split('.com/');
     const imgPath = urlParts.length > 1 ? urlParts[1] : imageUrl;
+    const storagePath = `logos/${imgPath}`;
     
     // Create reference to the image in Firebase Storage
-    const storageRef = ref(storage, `logos/${imgPath}`);
+    const storageRef = ref(storage, storagePath);
     
     try {
       // Try to get the download URL for the image if it already exists
       const url = await getDownloadURL(storageRef);
       return url;
     } catch (error) {
-      console.log('Image not found in cache, downloading and storing...');
+      console.log('Image not found in cache, calling cloud function...');
       
-      // Download the image from the original URL
-      const response = await fetch(imageUrl);
-      if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
+      // Use the cloud function to download and store the image
+      const result = await proxyImageFunction({
+        imageUrl,
+        storagePath
+      });
       
-      const imageBlob = await response.blob();
-      
-      // Upload to Firebase Storage
-      await uploadBytesResumable(storageRef, imageBlob);
-      
-      // Get the URL for the newly uploaded image
-      const url = await getDownloadURL(storageRef);
-      return url;
+      return result.data.url;
     }
   } catch (error) {
     console.error('Error processing image:', error);

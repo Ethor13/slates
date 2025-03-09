@@ -14,10 +14,12 @@ import { updateGameMetrics } from "./scrapers/scrape_game_metrics.js";
 import { scoreSportsGames } from "./scrapers/calculate_slate_scores.js";
 import { combine_maps, needsUpdate } from "./helpers.js";
 import { logger } from "firebase-functions";
+import fetch from "node-fetch";
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
 const db = admin.firestore();
+const bucket = admin.storage().bucket();
 db.settings({ ignoreUndefinedProperties: true });
 
 enum Sport {
@@ -29,6 +31,69 @@ interface ScheduleRequest {
   date: string;
   sports: Sport[];
 }
+
+interface ProxyImageRequest {
+  imageUrl: string;
+  storagePath: string;
+}
+
+// New function to proxy images through Firebase Storage
+export const proxyImage = onCall<ProxyImageRequest>(async (request) => {
+  try {
+    const { imageUrl, storagePath } = request.data;
+    
+    if (!imageUrl) {
+      throw new Error("Missing required parameter: imageUrl");
+    }
+    
+    if (!storagePath) {
+      throw new Error("Missing required parameter: storagePath");
+    }
+    
+    // Check if file already exists in storage
+    const file = bucket.file(storagePath);
+    const [exists] = await file.exists();
+    
+    if (!exists) {
+      logger.log("Image not found in storage, downloading:", imageUrl);
+      
+      // Download the image
+      const response = await fetch(imageUrl);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+      }
+      
+      // Get the image as a buffer
+      const imageBuffer = await response.buffer();
+      
+      // Upload to Firebase Storage
+      await file.save(imageBuffer, {
+        contentType: response.headers.get("content-type") || "image/png",
+        public: true,
+        metadata: {
+          originalUrl: imageUrl,
+          cacheControl: "public, max-age=31536000" // Cache for a year
+        }
+      });
+      
+      logger.log("Image successfully uploaded to:", storagePath);
+    } else {
+      logger.log("Image already exists in storage:", storagePath);
+    }
+    
+    // Get the download URL
+    const [url] = await file.getSignedUrl({
+      action: "read",
+      expires: Date.now() + 31536000000, // URL valid for a year
+    });
+    
+    return { url };
+  } catch (error) {
+    logger.error("Error proxying image:", error);
+    throw new Error(`Error proxying image: ${error instanceof Error ? error.message : String(error)}`);
+  }
+});
 
 export const schedule = onCall<ScheduleRequest>(async (request) => {
   try {
