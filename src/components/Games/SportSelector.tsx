@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { Sport, Sort, SportSelectorProps, ChevronButtonProps } from "./types";
 import { addDays, getDateString } from "../../helpers";
-import ProxiedImage from "../General/ProxiedImage";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, sortBy, setSortBy } = props;
@@ -148,7 +147,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                 : "border-gray-400 hover:border-blue-600 hover:border-3"}`}
             onClick={() => handleSportChange(sport)}
           >
-            <ProxiedImage
+            <img
               className={`w-16 h-16 flex-col items-center justify-self-start`}
               src={`i/leaguelogos/${sport}.png`}
               alt={`${sport} logo`}

@@ -36,3 +36,7 @@ export const addDays = (date: Date, days: number): Date => {
   return newDate;
 };
 
+export const getInternalImageUrl = (src: string): string => {
+  if (!src) throw new Error('Image source is required');
+  return src.split(".com/").at(-1) as string;
+}

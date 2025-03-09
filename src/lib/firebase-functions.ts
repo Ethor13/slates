@@ -12,18 +12,6 @@ if (import.meta.env.DEV) {
   console.log('Connected to Firebase Functions emulator');
 }
 
-// Typed wrapper for the getUserData function
-interface UserData {
-  uid: string;
-  name: string;
-  email: string;
-  preferences: {
-    favoriteTeams: string[];
-    provider: string;
-    zipcode: string;
-  };
-}
-
 interface ScheduleRequest {
   date: string;
   sports: string[];
@@ -33,18 +21,12 @@ interface ScheduleResponse {
   [x: string]: DocumentData;
 }
 
-interface ProxyImageRequest {
-  imageUrl: string;
-  storagePath: string;
-}
-
-interface ProxyImageResponse {
-  url: string;
+interface ApiRequest {
+  src: string;
 }
 
 // Export callable functions
-export const getUserDataFunction = httpsCallable<void, UserData>(functions, 'getUserData');
 export const scheduleFunction = httpsCallable<ScheduleRequest, ScheduleResponse>(functions, 'schedule');
-export const proxyImageFunction = httpsCallable<ProxyImageRequest, ProxyImageResponse>(functions, 'proxyImage');
+export const api = httpsCallable<ApiRequest>(functions, 'api');
 
 // Add more function exports as needed

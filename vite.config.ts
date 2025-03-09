@@ -5,18 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: { 
     watch: { usePolling: true },
-    headers: {
-      // Add cache headers for images and static assets
-      'Cache-Control': 'public, max-age=31536000, immutable',
-    },
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        // Add hash to chunk names for better caching
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+    proxy: {
+      // Redirect /i requests to the Firebase Functions emulator
+      '/i': {
+        target: 'http://localhost:5001/slates-59840/us-central1/serveImage',
+        changeOrigin: true,
       }
-    }
+    },
   }
 })

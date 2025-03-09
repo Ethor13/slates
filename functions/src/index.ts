@@ -6,9 +6,8 @@
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
-import { onCall } from "firebase-functions/v2/https";
+import { onCall, onRequest } from "firebase-functions/v2/https";
 import { FieldValue } from "firebase-admin/firestore";
-import { getDownloadURL } from "firebase-admin/storage";
 import admin from "firebase-admin";
 import { updateScheduleInFirestore } from "./scrapers/scrape_schedule.js";
 import { updateGameMetrics } from "./scrapers/scrape_game_metrics.js";
@@ -22,6 +21,8 @@ const storage = admin.storage().bucket();
 const db = admin.firestore();
 db.settings({ ignoreUndefinedProperties: true });
 
+const ESPN_CDN = "https://a.espncdn.com/";
+
 enum Sport {
   NBA = "nba",
   NCAAMBB = "ncaambb",
@@ -32,33 +33,28 @@ interface ScheduleRequest {
   sports: Sport[];
 }
 
-interface ProxyImageRequest {
-  imageUrl: string;
-  storagePath: string;
-}
-
-// New function to proxy images through Firebase Storage
-export const proxyImage = onCall<ProxyImageRequest>(async (request) => {
+// Image serving function at root /api endpoint
+export const serveImage = onRequest({
+  cors: true
+}, async (req, res) => {
   try {
-    const { imageUrl, storagePath } = request.data;
+    // Get the path from the URL
+    const imagePath = req.path.slice(1); // Remove the leading slash
     
-    if (!imageUrl) {
-      throw new Error("Missing required parameter: imageUrl");
+    if (!imagePath) {
+      res.status(400).send("Missing image path");
+      return;
     }
     
-    if (!storagePath) {
-      throw new Error("Missing required parameter: storagePath");
-    }
-    
-    // Check if file already exists in storage
-    const file = storage.file(storagePath);
+    // Check if file exists in storage
+    const file = storage.file(imagePath);
     const [exists] = await file.exists();
     
     if (!exists) {
-      logger.log("Image not found in storage, downloading:", imageUrl);
+      logger.log("Image not found in storage, downloading:", imagePath);
       
       // Download the image
-      const response = await fetch(imageUrl);
+      const response = await fetch(ESPN_CDN + imagePath);
       
       if (!response.ok) {
         throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
@@ -69,26 +65,57 @@ export const proxyImage = onCall<ProxyImageRequest>(async (request) => {
       
       // Upload to Firebase Storage
       await file.save(imageBuffer, {
-        contentType: response.headers.get("content-type") || "image/png",
         public: true,
         metadata: {
-          originalUrl: imageUrl,
-          cacheControl: "public, max-age=31536000" // Cache for a year
+          cacheControl: "public, max-age=31536000, immutable", // Cache for a year
+          contentType: response.headers.get("content-type") || "image/png"
         }
       });
-      
-      logger.log("Image successfully uploaded to:", storagePath);
-    } else {
-      logger.log("Image already exists in storage:", storagePath);
     }
     
-    // Get the download URL
-    const url = await getDownloadURL(file);
+    // Get file metadata to use for response headers
+    const [metadata] = await file.getMetadata();
     
-    return { url };
+    // Set more complete cache control headers
+    res.set({
+      'Cache-Control': metadata.cacheControl || 'public, max-age=31536000, immutable',
+      'Content-Type': metadata.contentType || 'image/png',
+      'ETag': metadata.etag || metadata.generation,
+      'Last-Modified': metadata.updated
+    });
+    
+    // Handle conditional requests (If-None-Match, If-Modified-Since)
+    const ifNoneMatch = req.headers['if-none-match'];
+    const ifModifiedSince = req.headers['if-modified-since'];
+    
+    if (ifNoneMatch && metadata.etag && ifNoneMatch === metadata.etag) {
+      res.status(304).end();
+      return;
+    }
+    
+    if (ifModifiedSince && metadata.updated) {
+      const modifiedSince = new Date(ifModifiedSince);
+      const lastModified = new Date(metadata.updated);
+      if (modifiedSince >= lastModified) {
+        res.status(304).end();
+        return;
+      }
+    }
+    
+    // Stream the file content
+    const fileStream = file.createReadStream();
+    
+    // Handle stream errors
+    fileStream.on('error', (error) => {
+      logger.error(`Error streaming image: ${error}`);
+      res.status(500).send(`Error streaming image: ${error.message}`);
+    });
+    
+    // Pipe the file to the response
+    fileStream.pipe(res);
   } catch (error) {
-    logger.error("Error proxying image:", error);
-    throw new Error(`Error proxying image: ${error instanceof Error ? error.message : String(error)}`);
+    logger.error(`Error serving image: ${error}`);
+    res.status(500).send(`Error serving image: ${error instanceof Error ? error.message : String(error)}`);
   }
 });
 
