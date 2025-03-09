@@ -68,15 +68,15 @@ export const serveImage = onRequest({
 
     // Set cache control headers
     res.set({
-      'Cache-Control': metadata.cacheControl || 'public, max-age=31536000, immutable',
-      'Content-Type': metadata.contentType || 'image/png',
+      "Cache-Control": metadata.cacheControl || "public, max-age=31536000, immutable",
+      "Content-Type": metadata.contentType || "image/png",
     });
 
     // Stream the file content
     const fileStream = file.createReadStream();
 
     // Handle stream errors
-    fileStream.on('error', (error) => {
+    fileStream.on("error", (error) => {
       logger.error(`Error streaming image: ${error}`);
       res.status(500).send(`Error streaming image: ${error.message}`);
     });
@@ -93,7 +93,7 @@ export const schedule = onRequest(
   { cors: true },
   async (req, res) => {
     try {
-      if (req.method !== 'GET') {
+      if (req.method !== "GET") {
         res.status(405).json({ error: "Method not allowed" });
         return;
       }
@@ -112,7 +112,7 @@ export const schedule = onRequest(
       let minLastUpdated = new Date();
 
       // Get all supported sports
-      const sports = ['nba', 'ncaambb'];
+      const sports = ["nba", "ncaambb"];
       const sportsData = [];
 
       for (const sport of sports) {
@@ -165,7 +165,7 @@ export const schedule = onRequest(
       const secondsSinceUpdate = Math.floor((Date.now() - minLastUpdated.getTime()) / 1000);
       const maxAge = Math.max(3600 - secondsSinceUpdate, 60); // Cache for up to an hour, minimum 60 seconds
 
-      res.set('Cache-Control', `public, max-age=${maxAge}`).json(combined);
+      res.set("Cache-Control", `public, max-age=${maxAge}`).json(combined);
       return;
     } catch (error) {
       console.error("Error fetching schedule:", error);
