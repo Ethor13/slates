@@ -40,16 +40,13 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
             : [...prev, sport] // add sport if not selected
       );
     },
-    [setSelectedSports]
+    []
   );
 
   const handleDateChange = useCallback(
     (date: Date) => {
       if (getDateString(date) < today) return;
       if (getDateString(date) === getDateString(selectedDate)) return;
-      
-      // Update the date which will trigger the useEffect in parent component
-      setSelectedDate(date);
       
       // Update displayed dates so date is in the middle
       setDisplayedDates([
@@ -59,8 +56,11 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         addDays(date, 1),
         addDays(date, 2),
       ]);
+      
+      // Update the date which will trigger the useEffect in parent component
+      setSelectedDate(date);
     },
-    [setSelectedDate, today, selectedDate]
+    [selectedDate]
   );
 
   const shiftDaysLeft = useCallback(() => {
@@ -73,7 +73,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       }
       return prevDates;
     });
-  }, [setDisplayedDates, today, setSelectedDate]);
+  }, []);
 
   const shiftDaysRight = useCallback(() => {
     setDisplayedDates((prevDates) => {
@@ -82,7 +82,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       setSelectedDate(newDates[2]);
       return newDates;
     });
-  }, [setDisplayedDates, setSelectedDate]);
+  }, []);
 
   // Function to get display name for each sport
   const getSportDisplayName = (sport: Sport): string => {

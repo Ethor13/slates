@@ -20,34 +20,29 @@ interface ScheduleResponse {
 
 const Dashboard = () => {
     const { currentUser } = useAuth();
+    const [allGames, setAllGames] = useState<ScheduleResponse>({});
     const [games, setGames] = useState<ScheduleResponse>({});
     const [gamesLoading, setGamesLoading] = useState<boolean>(false);
     const [gamesError, setGamesError] = useState<any | null>(null);
-    
+
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sport[]>(Object.values(Sport));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [sortBy, setSortBy] = useState<Sort>(Sort.SCORE);
 
     // Fetch games data using Cloud Functions
-    const fetchGamesData = async () => {
+    const fetchAllGamesOnDate = async () => {
         if (!currentUser) return;
-        
+
         setGamesLoading(true);
         setGamesError(null);
 
-        if (selectedSports.length === 0) {
-            setGamesLoading(false);
-            setGames({});
-            return;
-        }
-        
         try {
             const formattedDate = selectedDate.toLocaleDateString('en-CA').replace(/-/g, '');
-            const url = "/schedule?date=" + formattedDate + "&sports=" + selectedSports.sort().join(',');
-            const result = await fetch(url)
+            const url = "/schedule?date=" + formattedDate;
+            const result = await fetch(url);
             const jsonResult = await result.json();
-            setGames(jsonResult);
+            setAllGames(jsonResult);
         } catch (error) {
             console.error('Error calling Cloud Function:', error);
             setGamesError(error);
@@ -56,12 +51,26 @@ const Dashboard = () => {
         }
     };
 
-    // Clear games data and set loading state first, then fetch new data when selections change
-    useEffect(() => {
-        setGames({});
+    const setDisplayedGames = () => {
         setGamesLoading(true);
-        fetchGamesData();
-    }, [currentUser, selectedDate, selectedSports]);
+        setGamesError(null);
+        try {
+            const filteredGames = Object.values(selectedSports).reduce((acc, sport) => ({
+                ...acc,
+                ...allGames[sport]
+            }), {} as ScheduleResponse);
+
+            setGames(filteredGames);
+        } catch (error) {
+            console.error('Error setting displayed games:', error);
+            setGamesError(error);
+        } finally {
+            setGamesLoading(false);
+        }
+    }
+
+    useEffect(() => { fetchAllGamesOnDate(); }, [currentUser, selectedDate]);
+    useEffect(() => { setDisplayedGames(); }, [allGames, selectedSports]);
 
     return (
         <div className="min-h-screen bg-white">
@@ -75,10 +84,9 @@ const Dashboard = () => {
                             selectedDate,
                             setSelectedDate,
                             sortBy,
-                            setSortBy,
-                            fetchGamesData,
+                            setSortBy
                         }} />
-                        
+
                         {gamesLoading ? (
                             <div className="flex justify-center py-8">
                                 <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -88,7 +96,7 @@ const Dashboard = () => {
                                 Error loading games: {gamesError.message || 'Unknown error'}
                             </div>
                         ) : (
-                            <GamesList 
+                            <GamesList
                                 games={games}
                                 sortBy={sortBy}
                             />

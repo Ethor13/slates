@@ -61,7 +61,6 @@ export interface SportSelectorProps {
     setSelectedDate: (date: Date) => void;
     sortBy: Sort;
     setSortBy: (sort: Sort) => void;
-    fetchGamesData: () => Promise<void>;
   }
 }
 

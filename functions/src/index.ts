@@ -12,7 +12,7 @@ import admin from "firebase-admin";
 import { updateScheduleInFirestore } from "./scrapers/scrape_schedule.js";
 import { updateGameMetrics } from "./scrapers/scrape_game_metrics.js";
 import { scoreSportsGames } from "./scrapers/calculate_slate_scores.js";
-import { combine_maps, needsUpdate } from "./helpers.js";
+import { combine_maps, needsUpdate, mappify } from "./helpers.js";
 import { logger } from "firebase-functions";
 import fetch from "node-fetch";
 
@@ -97,27 +97,24 @@ export const schedule = onRequest(
         res.status(405).json({ error: "Method not allowed" });
         return;
       }
-      
-      const date = req.query.date as string;
-      const sports = (req.query.sports as string)?.split(',') || [];
 
-      // Validate parameters
+      const date = req.query.date as string;
+
+      // Validate date parameter
       if (!date) {
         res.status(400).json({ error: "Missing required parameter: date" });
         return;
       }
 
-      if (!sports || !Array.isArray(sports)) {
-        res.status(400).json({ error: "Missing or invalid parameter: sports" });
-        return;
-      }
+      console.log("Fetching schedule for date:", date);
 
-      console.log("Fetching schedule for date:", date, "and sports:", sports);
-
-      // Initialize with current time instead of FieldValue
+      // Initialize with current time
       let minLastUpdated = new Date();
 
+      // Get all supported sports
+      const sports = ['nba', 'ncaambb'];
       const sportsData = [];
+
       for (const sport of sports) {
         // Check if data was updated within the last hour
         const sportRef = db.collection("schedule").doc(date).collection("sports").doc(sport);
@@ -151,9 +148,6 @@ export const schedule = onRequest(
           batch2.set(sportRef, { lastUpdated: FieldValue.serverTimestamp() }, { merge: true });
 
           await batch2.commit();
-          
-          // We just updated this sport, so we'll use current time for it
-          // minLastUpdated remains unchanged since it's already set to current time
         } else if (lastUpdated) {
           // If this sport's data is older than our current minimum, update minLastUpdated
           if (lastUpdated < minLastUpdated) {
@@ -162,24 +156,21 @@ export const schedule = onRequest(
         }
 
         const scheduleSnapshot = await sportRef.collection("games").get();
-        sportsData.push(combine_maps(scheduleSnapshot.docs.map(doc => ({ [doc.id]: doc.data() }))));
+        sportsData.push(combine_maps(scheduleSnapshot.docs.map(doc => ({ [doc.id]: { ...doc.data(), sport } }))));
       }
 
-      const combined = combine_maps(sportsData);
+      const combined = mappify(sports, sportsData);
 
-      // Set cache headers, Cache for an hour
-      // Calculate remaining cache time based on oldest last update time
+      // Set cache headers based on oldest last update time
       const secondsSinceUpdate = Math.floor((Date.now() - minLastUpdated.getTime()) / 1000);
-      
-      // 60 minutes (3600 seconds) minus time since last update, minimum 60 seconds
-      const maxAge = Math.max(3600 - secondsSinceUpdate, 60);
-      
+      const maxAge = Math.max(3600 - secondsSinceUpdate, 60); // Cache for up to an hour, minimum 60 seconds
+
       res.set('Cache-Control', `public, max-age=${maxAge}`).json(combined);
       return;
     } catch (error) {
       console.error("Error fetching schedule:", error);
-      res.status(500).json({ 
-        error: error instanceof Error ? error.message : "An unknown error occurred" 
+      res.status(500).json({
+        error: error instanceof Error ? error.message : "An unknown error occurred"
       });
       return;
     }
