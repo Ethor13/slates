@@ -1,5 +1,4 @@
-import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions';
-import { DocumentData } from 'firebase/firestore';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { app } from './firebase';
 
 // Initialize Firebase Functions
@@ -11,22 +10,3 @@ if (import.meta.env.DEV) {
   connectFunctionsEmulator(functions, 'localhost', 5001);
   console.log('Connected to Firebase Functions emulator');
 }
-
-interface ScheduleRequest {
-  date: string;
-  sports: string[];
-}
-
-interface ScheduleResponse {
-  [x: string]: DocumentData;
-}
-
-interface ApiRequest {
-  src: string;
-}
-
-// Export callable functions
-export const scheduleFunction = httpsCallable<ScheduleRequest, ScheduleResponse>(functions, 'schedule');
-export const api = httpsCallable<ApiRequest>(functions, 'api');
-
-// Add more function exports as needed

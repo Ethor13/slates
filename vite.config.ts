@@ -10,6 +10,10 @@ export default defineConfig({
       '/i': {
         target: 'http://localhost:5001/slates-59840/us-central1/serveImage',
         changeOrigin: true,
+      },
+      '/schedule': {
+        target: 'http://localhost:5001/slates-59840/us-central1/schedule',
+        changeOrigin: true,
       }
     },
   }

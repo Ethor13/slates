@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { scheduleFunction } from '../../lib/firebase-functions';
 import Nav from '../Nav';
 import GamesList from '../Games/GamesList';
 import SportSelector from '../Games/SportSelector';
@@ -36,16 +35,19 @@ const Dashboard = () => {
         
         setGamesLoading(true);
         setGamesError(null);
+
+        if (selectedSports.length === 0) {
+            setGamesLoading(false);
+            setGames({});
+            return;
+        }
         
         try {
             const formattedDate = selectedDate.toLocaleDateString('en-CA').replace(/-/g, '');
-            const sports = selectedSports.length > 0 ? selectedSports : Object.values(Sport);
-            const result = await scheduleFunction({ date: formattedDate, sports });
-            if (result.data) {
-                setGames(result.data);
-            } else {
-                setGames({});
-            }
+            const url = "/schedule?date=" + formattedDate + "&sports=" + selectedSports.sort().join(',');
+            const result = await fetch(url)
+            const jsonResult = await result.json();
+            setGames(jsonResult);
         } catch (error) {
             console.error('Error calling Cloud Function:', error);
             setGamesError(error);
