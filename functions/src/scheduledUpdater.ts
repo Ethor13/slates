@@ -100,7 +100,7 @@ async function updateGamesData(date: string): Promise<GamesData> {
 
       await updateGameMetrics(date, sport).then((gameMetrics) => {
         // gameMetrics = metricName -> gameId -> gameMetric
-        Object.entries(gameMetrics).forEach(([metricName, games]) => {
+        Object.entries(gameMetrics).forEach(([_, games]) => {
           Object.entries(games).forEach(([gameId, gameMetric]) => {
             res[sport][gameId] = {
               ...res[sport][gameId],

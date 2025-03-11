@@ -63,7 +63,7 @@ function calculateWinPercentage(record: string): number {
     const [wins, losses] = record.split("-").map(Number);
     return wins / (wins + losses);
   } catch (error) {
-    logger.error("Error calculating win percentage from record:", record);
+    logger.error("Error calculating win percentage from record:", error);
     throw new Error("Invalid record format");
   }
 }

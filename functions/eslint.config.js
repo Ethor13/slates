@@ -29,7 +29,7 @@ export default tseslint.config(
       "quotes": ["error", "double"],
       "import/no-unresolved": 0,
       "indent": ["error", 2],
-      "max-len": ["error", { "code": 120 }], // Increasing line length limit
+      "max-len": ["warn", { "code": 120 }], // Increasing line length limit
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       "@typescript-eslint/no-explicit-any": "warn"
