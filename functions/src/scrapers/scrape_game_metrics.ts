@@ -1,19 +1,20 @@
-import { Firestore, WriteBatch } from "firebase-admin/firestore";
 import { combine_maps, mappify, scrapeUrl } from "../helpers.js";
 import { logger } from "firebase-functions";
+import { GamesMetric, Metrics, ParsedTeams, GameMetric, GamesMetrics, Metric, TeamMetric } from "../types.js";
+
+interface MetricConfig {
+  [metricUrl: string]: (date: string | null) => string;
+}
 
 interface SportConfig {
     sports: {
-        [key: string]: {
-            powerIndex: (date: string) => string;
-            matchupQuality: (date: string) => string;
-        };
+        [sport: string]: {
+          team: MetricConfig;
+          game: MetricConfig;
+        }
     };
     parsers: {
-        [key: string]: {
-            parser: (arg0: any) => ParsedData<any>[];
-            result: "teams" | "games";
-        };
+        [parser: string]: (data: any) => Metric;
     };
     statNameMapper: {
         [key: string]: string;
@@ -97,60 +98,28 @@ interface MatchupQualityResponse {
     events: Event[];
 }
 
-// Parsed data interfaces
-interface TeamData {
-    name: string;
-    shortName: string;
-    abbreviation: string;
-    divisionName: string;
-    conferenceName: string;
-    logo: string;
-    powerIndexes?: Record<string, Record<string, number>>;
-    matchupQualities?: Record<string, number>;
-}
-
-interface GameData {
-    home: Partial<TeamData>;
-    away: Partial<TeamData>;
-    date: string;
-    link: string;
-    broadcasts: {
-        [key: string]: {
-            market: string;
-            type: string;
-        };
-    };
-}
-
-interface ParsedData<T> {
-    id: string;
-    data: T;
-}
-
 const CONFIG: SportConfig = {
   sports: {
     nba: {
-      // eslint-disable-next-line max-len, @typescript-eslint/no-unused-vars
-      powerIndex: (date: string) => "https://site.web.api.espn.com/apis/fitt/v3/sports/basketball/nba/powerindex?limit=1000",
-      // eslint-disable-next-line max-len
-      matchupQuality: (date: string) => `https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/dailypowerindex?limit=1000&dates=${date}`,
+      team: {
+        powerIndex: (_date: string | null) => "https://site.web.api.espn.com/apis/fitt/v3/sports/basketball/nba/powerindex?limit=1000",
+      },
+      game: {
+        matchupQuality: (date: string | null) => `https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/dailypowerindex?limit=1000&dates=${date}`,
+      }
     },
     ncaambb: {
-      // eslint-disable-next-line max-len, @typescript-eslint/no-unused-vars
-      powerIndex: (date: string) => "https://site.web.api.espn.com/apis/fitt/v3/sports/basketball/mens-college-basketball/powerindex?limit=1000",
-      // eslint-disable-next-line max-len
-      matchupQuality: (date: string) => `https://site.web.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/dailypowerindex?limit=1000&groups=50&dates=${date}`,
+      team: {
+        powerIndex: (_date: string | null) => "https://site.web.api.espn.com/apis/fitt/v3/sports/basketball/mens-college-basketball/powerindex?limit=1000",
+      },
+      game: {
+        matchupQuality: (date: string | null) => `https://site.web.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/dailypowerindex?limit=1000&groups=50&dates=${date}`,
+      }
     },
   },
   parsers: {
-    powerIndex: {
-      parser: parsePowerIndex,
-      result: "teams",
-    },
-    matchupQuality: {
-      parser: parseMatchupQuality,
-      result: "games",
-    },
+    powerIndex: parsePowerIndex,
+    matchupQuality: parseMatchupQuality,
   },
   statNameMapper: {
     matchupquality: "matchupquality",
@@ -170,27 +139,31 @@ const CONFIG: SportConfig = {
  * @param PIData - ESPN API power index response
  * @returns Array of parsed power index data
  */
-function parsePowerIndex(PIData: PowerIndexResponse): ParsedData<TeamData>[] {
-  return PIData.teams.map((team) => {
-    const teamData: TeamData = {
-      name: team.team.displayName,
-      shortName: team.team.shortDisplayName,
-      abbreviation: team.team.abbreviation,
-      divisionName: team.team.group.shortName,
-      conferenceName: team.team.group.parent.shortName,
-      logo: team.team.logos[0].href,
-      powerIndexes: combine_maps(
-        team.categories.map((statCategory) => ({
-          [statCategory.name]: mappify(
-                        PIData.categories?.find((category) => category.name === statCategory.name)!.names,
-                        statCategory.values,
-          ),
-        })),
-      ),
+function parsePowerIndex(PIData: PowerIndexResponse): TeamMetric {
+  return combine_maps(PIData.teams.map((team) => {
+    const teamData: TeamMetric = {
+      info: {
+        name: team.team.displayName,
+        shortName: team.team.shortDisplayName,
+        abbreviation: team.team.abbreviation,
+        divisionName: team.team.group.shortName,
+        conferenceName: team.team.group.parent.shortName,
+        logo: team.team.logos[0].href,
+      },
+      metrics: {
+        powerIndexes: combine_maps(
+          team.categories.map((statCategory) => ({
+            [statCategory.name]: mappify(
+                          PIData.categories?.find((category) => category.name === statCategory.name)!.names,
+                          statCategory.values,
+            ),
+          })),
+        ),
+      },
     };
 
-    return { id: team.team.id, data: teamData };
-  });
+    return { [team.team.id]: teamData };
+  }));
 }
 
 /**
@@ -198,9 +171,9 @@ function parsePowerIndex(PIData: PowerIndexResponse): ParsedData<TeamData>[] {
  * @param MQData - ESPN API matchup quality response
  * @returns Array of parsed matchup quality data
  */
-function parseMatchupQuality(MQData: MatchupQualityResponse): ParsedData<GameData>[] {
-  return MQData.events.map((event) => {
-    const matchupQualities = combine_maps(
+function parseMatchupQuality(MQData: MatchupQualityResponse): GamesMetric {
+  return combine_maps(MQData.events.map((event) => {
+    const matchupQualities: GamesMetric = combine_maps(
       event.competitions[0].powerIndexes?.map((teamPowerIndexes) => ({
         [teamPowerIndexes.id]: combine_maps(
           teamPowerIndexes.stats.map((stat) => ({
@@ -210,65 +183,68 @@ function parseMatchupQuality(MQData: MatchupQualityResponse): ParsedData<GameDat
       })) || [],
     );
 
-    const TeamData = combine_maps<Record<string, Partial<TeamData>>>(
+    const gameData = combine_maps<GameMetric>(
       event.competitions[0].competitors.map((team) => ({
         [team.homeAway]: {
-          id: team.team.id,
-          name: team.team.displayName,
-          shortName: team.team.shortDisplayName,
-          abbreviation: team.team.abbreviation,
-          logo: team.team.logos?.[0].href,
           matchupQualities: matchupQualities?.[team.team.id],
         },
       })),
     );
 
-    const gameData: GameData = {
-      home: TeamData.home,
-      away: TeamData.away,
-      date: event.date,
-      link: event.competitions[0].links?.find((link) => link.text === "Gamecast")!.href,
-      broadcasts: combine_maps(
-        event.competitions[0].geoBroadcasts.map((broadcast) => ({
-          [broadcast.media.shortName]: {
-            market: broadcast.market.type,
-            type: broadcast.type.shortName,
-          },
-        })),
-      ),
-    };
+    return { [event.id]: gameData };
+  }));
+}
 
-    return { id: event.id, data: gameData };
-  });
+async function updateMetrics(config: MetricConfig, date: string | null): Promise<Metrics> {
+  try {
+    const allParsedMetrics: Metrics = {};
+    for (const [metricName, getMetricUrl] of Object.entries(config)) {
+      const rawMetrics = await scrapeUrl(getMetricUrl(date));
+      const parsedMetrics = CONFIG.parsers[metricName](rawMetrics);
+      allParsedMetrics[metricName] = parsedMetrics;
+    }
+
+    return allParsedMetrics;
+  } catch (error) {
+    logger.error("Error updating metrics:", error);
+    throw new Error(`Error updating metrics: ${error}`);
+  }
 }
 
 /**
  * Scrape and update game metrics in Firestore
- * @param db - Firestore database instance
  * @param date - Date string in YYYYMMDD format
  * @param sport - Sport identifier (nba, ncaambb)
  */
-export async function updateGameMetrics(db: Firestore, batch: WriteBatch, date: string, sport: string): Promise<void> {
+export async function updateGameMetrics(date: string, sport: string): Promise<GamesMetrics> {
   try {
-    const sport_config = CONFIG.sports[sport];
-    const sportRef = db.collection("schedule").doc(date).collection("sports").doc(sport);
-
-    for (const [metricTypeAny, getMetricUrl] of Object.entries(sport_config)) {
-      const metricType = metricTypeAny as keyof SportConfig["sports"][string];
-      const parser = CONFIG.parsers[metricType].parser;
-      const collectionName = CONFIG.parsers[metricType].result;
-
-      // Fetch and parse data
-      const rawMetrics = await scrapeUrl(getMetricUrl(date));
-      const parsedMetrics = parser(rawMetrics);
-
-      for (const item of parsedMetrics) {
-        const itemRef = sportRef.collection(collectionName).doc(item.id);
-        batch.set(itemRef, item.data, { merge: true });
-      }
-    }
+    const sport_game_config = CONFIG.sports[sport].game;
+    return await updateMetrics(sport_game_config, date);
   } catch (error) {
-    logger.error("Error updating game metrics (INSIDE SCRAPE GAME METRICS):", error);
+    logger.error("Error updating game metrics:", error);
     throw new Error(`Error updating game metrics: ${error}`);
+  }
+}
+
+export async function updateTeamMetrics(sport: string): Promise<ParsedTeams> {
+  try {
+    const sport_team_config = CONFIG.sports[sport].team;
+    const teamMetrics = await updateMetrics(sport_team_config, null);
+
+    const res: ParsedTeams = {};
+    Object.entries(teamMetrics).forEach(([_, teams]) => {
+      Object.entries(teams).forEach(([teamId, teamMetric]) => {
+        if (!res[teamId]) {
+          res[teamId] = { info: {}, metrics: {} };
+        }
+        res[teamId].info = { ...res[teamId].info, ...teamMetric.info };
+        res[teamId].metrics = { ...res[teamId].metrics, ...teamMetric.metrics };
+      });
+    });
+
+    return res;
+  } catch (error) {
+    logger.error("Error updating team metrics:", error);
+    throw new Error(`Error updating team metrics: ${error}`);
   }
 }

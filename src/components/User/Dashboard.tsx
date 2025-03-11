@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { storage } from '../../lib/firebase';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../Nav';
 import GamesList from '../Games/GamesList';
 import SportSelector from '../Games/SportSelector';
 
-enum Sport {
+enum Sports {
     NBA = 'nba',
     NCAAMBB = 'ncaambb',
 }
@@ -14,9 +16,7 @@ enum Sort {
     SCORE = 'Slate Score',
 }
 
-interface ScheduleResponse {
-    [x: string]: any;
-}
+type ScheduleResponse = Record<string, any>;
 
 const Dashboard = () => {
     const { currentUser } = useAuth();
@@ -26,32 +26,39 @@ const Dashboard = () => {
     const [gamesError, setGamesError] = useState<any | null>(null);
 
     // Game state for SportSelector and GamesList
-    const [selectedSports, setSelectedSports] = useState<Sport[]>(Object.values(Sport));
+    const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [sortBy, setSortBy] = useState<Sort>(Sort.SCORE);
 
     // Fetch games data using Cloud Functions
-    const fetchAllGamesOnDate = async () => {
+    const fetchAllGamesOnDate = useCallback(async () => {
         if (!currentUser) return;
 
         setGamesLoading(true);
         setGamesError(null);
 
         try {
-            const formattedDate = selectedDate.toLocaleDateString('en-CA').replace(/-/g, '');
-            const url = "/schedule?date=" + formattedDate;
-            const result = await fetch(url);
-            const jsonResult = await result.json();
-            setAllGames(jsonResult);
+            const date = selectedDate.toLocaleDateString('en-CA').replace(/-/g, '');
+            const scheduleRef = ref(storage, `sports/all/schedule/${date}.json`);
+            const downloadUrl = await getDownloadURL(scheduleRef)
+            const res = await fetch(downloadUrl);
+
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const games = await res.json();
+
+            setAllGames(games);
         } catch (error) {
-            console.error('Error calling Cloud Function:', error);
+            console.error('Error getting games', error);
             setGamesError(error);
         } finally {
             setGamesLoading(false);
         }
-    };
+    }, [currentUser, selectedDate]);
 
-    const setDisplayedGames = () => {
+    const setDisplayedGames = useCallback(() => {
         setGamesLoading(true);
         setGamesError(null);
         try {
@@ -67,10 +74,10 @@ const Dashboard = () => {
         } finally {
             setGamesLoading(false);
         }
-    }
+    }, [allGames, selectedSports]);
 
-    useEffect(() => { fetchAllGamesOnDate(); }, [currentUser, selectedDate]);
-    useEffect(() => { setDisplayedGames(); }, [allGames, selectedSports]);
+    useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
+    useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
     return (
         <div className="min-h-screen bg-white">

@@ -38,8 +38,10 @@ export default function AuthForm() {
             }
         } catch (err) {
             if (mode === 'signup') {
+                console.log("Signup Error:", err);
                 setError('An error occurred during sign up. Please try again.');
             } else {
+                console.log("Sign-in Error:", err);
                 setError('An error occurred during sign in. Please try again.');
             }
         } finally {
@@ -54,6 +56,7 @@ export default function AuthForm() {
             await signInWithGoogle();
             navigate('/dashboard');
         } catch (err) {
+            console.log("Google Sign-in Error:", err);
             setError('An error occurred during Google sign in. Please try again.');
         } finally {
             setLoading(false);

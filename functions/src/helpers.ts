@@ -93,4 +93,18 @@ function needsUpdate(metricsLastUpdated: Date, hours: number): boolean {
   return metricsLastUpdated < updateThreshold;
 }
 
-export { scrapeUrl, getTodayString, mappify, combine_maps, deepMerge, needsUpdate, formatGameTime };
+function datesToUpdate(size: number): string[] {
+  const dates = [];
+  const today = new Date();
+
+  for (let i = 0; i < size; i++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() + i);
+    // get the date in US PST timezone. This is the last "servicable area"
+    dates.push(date.toLocaleDateString("en-CA", {timeZone: "America/Los_Angeles"}).replace(/-/g, ""));
+  }
+
+  return dates;
+}
+
+export { scrapeUrl, getTodayString, mappify, combine_maps, deepMerge, needsUpdate, formatGameTime, datesToUpdate };

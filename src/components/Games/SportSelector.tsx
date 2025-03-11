@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-import { Sport, Sort, SportSelectorProps, ChevronButtonProps } from "./types";
+import { Sports, Sort, SportSelectorProps, ChevronButtonProps } from "./types";
 import { addDays, getDateString } from "../../helpers";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
@@ -30,7 +30,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   }, []);
 
   const handleSportChange = useCallback(
-    (sport: Sport) => {
+    (sport: Sports) => {
       // Clear existing games data first by calling setSelectedSports
       // The useEffect in parent component will handle the loading state and data fetching
       setSelectedSports(
@@ -40,7 +40,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
             : [...prev, sport] // add sport if not selected
       );
     },
-    []
+    [setSelectedSports]
   );
 
   const handleDateChange = useCallback(
@@ -60,7 +60,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       // Update the date which will trigger the useEffect in parent component
       setSelectedDate(date);
     },
-    [selectedDate]
+    [setSelectedDate, selectedDate, today]
   );
 
   const shiftDaysLeft = useCallback(() => {
@@ -73,7 +73,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       }
       return prevDates;
     });
-  }, []);
+  }, [setSelectedDate, today]);
 
   const shiftDaysRight = useCallback(() => {
     setDisplayedDates((prevDates) => {
@@ -82,14 +82,14 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       setSelectedDate(newDates[2]);
       return newDates;
     });
-  }, []);
+  }, [setSelectedDate]);
 
   // Function to get display name for each sport
-  const getSportDisplayName = (sport: Sport): string => {
+  const getSportDisplayName = (sport: Sports): string => {
     switch (sport) {
-      case Sport.NBA:
+      case Sports.NBA:
         return "NBA";
-      case Sport.NCAAMBB:
+      case Sports.NCAAMBB:
         return "NCAA Men's Basketball";
       default:
         return sport;
@@ -138,7 +138,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       </div>
 
       <div className="flex flex-row justify-center gap-8">
-        {Object.values(Sport).map((sport) => (
+        {Object.values(Sports).map((sport) => (
           <button
             key={sport}
             className={`w-32 h-auto px-0.5 py-3 cursor-pointer box-border border rounded-3xl flex flex-col items-center gap-2 transition-colors

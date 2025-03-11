@@ -5,7 +5,7 @@ export enum Sort {
     SCORE = 'Slate Score',
 }
 
-export enum Sport {
+export enum Sports {
     NBA = 'nba',
     NCAAMBB = 'ncaambb',
 }
@@ -55,8 +55,8 @@ export interface GamesListProps {
 
 export interface SportSelectorProps {
   props: {
-    selectedSports: Sport[];
-    setSelectedSports: (callback: (prev: Sport[]) => Sport[]) => void;
+    selectedSports: Sports[];
+    setSelectedSports: (callback: (prev: Sports[]) => Sports[]) => void;
     selectedDate: Date;
     setSelectedDate: (date: Date) => void;
     sortBy: Sort;

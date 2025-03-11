@@ -12,10 +12,6 @@
         "function": "serveImage"
       },
       {
-        "source": "/schedule",
-        "function": "schedule"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }

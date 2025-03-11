@@ -5,7 +5,7 @@ import { formatGameTime } from "../../helpers";
 import { GamesListProps, ScheduleResponse, Sort } from "./types";
 
 const split_by_time = (games: ScheduleResponse) => {
-  let games_by_time: Record<string, Record<string, DocumentData>> = {};
+  const games_by_time: Record<string, Record<string, DocumentData>> = {};
   
   Object.entries(games).forEach(([gameId, game]) => {
     if (!(game.date in games_by_time)) {
