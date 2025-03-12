@@ -1,0 +1,2 @@
+- Paypal Navbar
+- Github Settings/Sidebar

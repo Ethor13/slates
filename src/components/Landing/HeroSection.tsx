@@ -17,11 +17,11 @@ const HeroSection = () => {
               advanced sports game ranking algorithm.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <button className="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
+              <button className="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-slate-deep hover:bg-slate-medium md:py-4 md:text-lg md:px-10">
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </button>
-              <button className="flex items-center justify-center px-8 py-3 border border-gray-300 text-base font-medium rounded-lg bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+              <button className="flex items-center justify-center px-8 py-3 border border-slate-light text-base font-medium rounded-lg bg-white hover:bg-slate-light/10 md:py-4 md:text-lg md:px-10">
                 Watch Demo
               </button>
             </div>
@@ -40,7 +40,7 @@ const HeroSection = () => {
               <div className="flex items-center">
                 <div className="flex -space-x-2">
                   {[...Array(5)].map((_, i) => (
-                    <div key={i} className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center border-2 border-white">
+                    <div key={i} className="h-8 w-8 rounded-full bg-slate-medium flex items-center justify-center border-2 border-white">
                       <Star className="h-4 w-4 text-white" />
                     </div>
                   ))}
@@ -53,11 +53,14 @@ const HeroSection = () => {
             </div>
           </div>
           <div className="relative">
-            <div className="absolute inset-0 bg-blue-100 rounded-3xl transform rotate-3" />
+            <div className="absolute inset-0 bg-slate-light/20 rounded-3xl transform rotate-3" />
             <div className="relative bg-white p-8 rounded-3xl shadow-xl">
               <div className="flex items-center justify-between mb-8">
-                <h3 className="text-lg font-semibold text-gray-900">Tonight's Top Games</h3>
-                <span className="text-sm text-blue-600">Live Rankings</span>
+                <div className="flex items-center">
+                  <img src="/assets/logos/slates.svg" alt="Slates Logo" className="h-6 w-6 mr-2" />
+                  <h3 className="text-lg font-semibold text-gray-900">Tonight's Top Games</h3>
+                </div>
+                <span className="text-sm text-slate-medium">Live Rankings</span>
               </div>
               {[
                 {
@@ -79,19 +82,19 @@ const HeroSection = () => {
                   factors: ["Historic Rivalry"]
                 }
               ].map((game, index) => (
-                <div key={index} className="mb-4 p-4 bg-gray-50 rounded-lg">
+                <div key={index} className="mb-4 p-4 bg-slate-light/10 rounded-lg">
                   <div className="flex justify-between items-center">
                     <div>
                       <h4 className="font-medium text-gray-900">{game.teams}</h4>
                       <p className="text-sm text-gray-500">{game.time}</p>
                     </div>
-                    <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
+                    <div className="h-10 w-10 rounded-full bg-slate-deep flex items-center justify-center">
                       <span className="text-white font-semibold">{game.score}</span>
                     </div>
                   </div>
                   <div className="mt-2 flex gap-2">
                     {game.factors.map((factor, i) => (
-                      <span key={i} className="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded-full">
+                      <span key={i} className="text-xs px-2 py-1 bg-slate-medium/20 text-slate-deep rounded-full">
                         {factor}
                       </span>
                     ))}

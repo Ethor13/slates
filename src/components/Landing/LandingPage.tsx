@@ -10,7 +10,8 @@ import Footer from '../General/Footer';
 
 const LandingPage = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+        // <div className="min-h-screen bg-gradient-to-br from-white to-slate-deep">
+        <div className="min-h-screen bg-slate-light/30">
             <Nav />
             <main className="">
                 <HeroSection />
@@ -21,7 +22,6 @@ const LandingPage = () => {
                 <PricingSection />
                 <ContactSection />
             </main>
-
             <Footer />
         </div>
     );

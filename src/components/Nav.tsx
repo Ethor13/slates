@@ -1,32 +1,46 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
 
 const Nav = () => {
-    const location = useLocation();
     const { currentUser, logout } = useAuth();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const isAuthPage = location.pathname === '/auth';
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Handle clicks outside the menu to close it
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsDropdownOpen(false);
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false);
             }
         };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+        // Prevent scrolling when menu is open
+        const handleBodyScroll = () => {
+            document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
+            return () => {
+                document.body.style.overflow = 'auto';
+            };
+        };
+
+        if (isMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+            handleBodyScroll();
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.body.style.overflow = 'auto';
+        };
+    }, [isMenuOpen]);
 
     // Function to handle smooth scrolling on landing page
     const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
         e.preventDefault();
         const element = document.getElementById(sectionId);
         if (element) {
-            element.scrollIntoView({ 
+            element.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
             });
@@ -34,92 +48,149 @@ const Nav = () => {
     };
 
     return (
-        <nav className="fixed top-0 w-full backdrop-blur-sm z-50 bg-blue-600">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16 items-center">
-                    <div className="flex items-center">
-                        <Link to="/" className="text-xl font-bold text-white">Slates</Link>
-                    </div>
-                    
-                    {!isAuthPage && (
-                        <div className="hidden md:flex items-center space-x-8">
+        <>
+            <nav className="fixed top-0 w-full backdrop-blur-sm z-40 bg-white border-b">
+                <div className="mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex flex-row gap-4 h-[5rem] items-center">
+                        <div className="flex items-center space-x-2">
+                            <Link to="/">
+                                <img src="/assets/logos/slates.svg" alt="Slates Logo" className="h-12 w-12" />
+                            </Link>
+                        </div>
+                        <div className="hidden md:flex flex-row items-center justify-between w-full">
                             {!currentUser ? (
                                 <>
-                                    <a 
-                                        href="#technology" 
-                                        className="text-white hover:text-blue-200"
-                                        onClick={(e) => scrollToSection(e, 'technology')}
-                                    >Technology</a>
-                                    <a 
-                                        href="#benefits" 
-                                        className="text-white hover:text-blue-200"
-                                        onClick={(e) => scrollToSection(e, 'benefits')}
-                                    >Benefits</a>
-                                    <a 
-                                        href="#demo" 
-                                        className="text-white hover:text-blue-200"
-                                        onClick={(e) => scrollToSection(e, 'demo')}
-                                    >Live Demo</a>
-                                    <a 
-                                        href="#pricing" 
-                                        className="text-white hover:text-blue-200"
-                                        onClick={(e) => scrollToSection(e, 'pricing')}
-                                    >Pricing</a>
-                                    <Link
-                                        to="/auth"
-                                        className="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition"
-                                    >
-                                        Sign In
-                                    </Link>
+                                    <div className='hidden md:flex items-center space-x-2'>
+                                        <a
+                                            href="#technology"
+                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            onClick={(e) => scrollToSection(e, 'technology')}
+                                        >Technology</a>
+                                        <a
+                                            href="#benefits"
+                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            onClick={(e) => scrollToSection(e, 'benefits')}
+                                        >Benefits</a>
+                                        <a
+                                            href="#demo"
+                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            onClick={(e) => scrollToSection(e, 'demo')}
+                                        >Live Demo</a>
+                                        <a
+                                            href="#pricing"
+                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            onClick={(e) => scrollToSection(e, 'pricing')}
+                                        >Pricing</a>
+                                    </div>
+                                    <div className="flex space-x-4">
+                                        <Link
+                                            to="/auth?mode=signin"
+                                            className="border-2 font-semibold border-slate-deep text-slate-deep px-6 py-2 rounded-full hover:bg-slate-light hover:border-slate-light hover:text-white transition-all duration-200"
+                                        >
+                                            Sign In
+                                        </Link>
+                                        <Link
+                                            to="/auth?mode=signup"
+                                            className="border-2 font-semibold border-slate-deep bg-slate-deep text-white px-6 py-2 rounded-full hover:bg-slate-medium hover:border-slate-medium transition-colors duration-200"
+                                        >
+                                            Sign Up
+                                        </Link>
+                                    </div>
                                 </>
                             ) : (
-                                <div className="flex items-center space-x-4 relative" ref={dropdownRef}>
-                                    <div 
-                                        className="flex items-center space-x-2 text-white cursor-pointer select-none"
-                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                        onMouseEnter={() => setIsDropdownOpen(true)}
-                                    >
-                                        <span>{currentUser.email}</span>
-                                        <ChevronDown className={`h-4 w-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                                <>
+                                    <div className="flex-1">
+                                        {/* Left side space holder when user is logged in */}
                                     </div>
-                                    
-                                    {isDropdownOpen && (
-                                        <div 
-                                            className="absolute right-0 top-12 w-48 py-2 bg-white rounded-lg shadow-lg z-50"
-                                            onMouseLeave={() => setIsDropdownOpen(false)}
+                                    <div className="flex justify-end">
+                                        <div
+                                            className="flex items-center space-x-2 text-black font-semibold cursor-pointer select-none hover:bg-slate-light/20 px-3 py-2 rounded-full transition-colors duration-200"
+                                            onClick={() => setIsMenuOpen(true)}
                                         >
-                                            <Link 
-                                                to="/dashboard" 
-                                                className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                                onClick={() => setIsDropdownOpen(false)}
-                                            >
-                                                Dashboard
-                                            </Link>
-                                            <Link 
-                                                to="/settings" 
-                                                className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                                onClick={() => setIsDropdownOpen(false)}
-                                            >
-                                                User Settings
-                                            </Link>
-                                            <button
-                                                onClick={() => {
-                                                    logout();
-                                                    setIsDropdownOpen(false);
-                                                }}
-                                                className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                            >
-                                                Logout
-                                            </button>
+                                            <span>{currentUser.email}</span>
+                                            <ChevronDown className="h-4 w-4" />
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                </>
                             )}
                         </div>
-                    )}
+                    </div>
+                </div>
+            </nav>
+
+            {/* Side menu overlay - always rendered but conditionally visible for animation */}
+            <div className={`fixed inset-0 z-50 overflow-hidden pointer-events-none transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0'}`}>
+                {/* Backdrop with filter effect */}
+                <div
+                    className={`fixed inset-0 bg-black/50 ${isMenuOpen ? 'visible' : 'hidden'}`}
+                    onClick={() => setIsMenuOpen(false)}
+                ></div>
+
+                {/* Side panel */}
+                <div
+                    ref={menuRef}
+                    className={`fixed inset-y-0 right-0 max-w-xs w-full bg-white transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                >
+                    <div className="h-full flex flex-col overflow-y-auto py-6 px-4">
+                        <div className="ml-2 flex items-center justify-between">
+                            <h2 className="text-lg font-medium">Account Menu</h2>
+                            <button
+                                type="button"
+                                className="rounded-md text-gray-400 hover:text-slate-deep focus:outline-none transition-colors duration-200"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <X className="h-6 w-6" />
+                            </button>
+                        </div>
+
+                        <div className="ml-2 border-b border-gray-200 py-4">
+                            <div className="text-sm text-gray-500">Signed in as:</div>
+                            <div className='flex items-center space-x-2 mt-2'>
+                                <Mail className="h-4 w-4 text-slate-deep" />
+                                {/* add elipses if email surpasses a certain length */}
+                                <div className="text-md font-medium text-slate-deep">{currentUser?.email}</div>
+
+                            </div>
+                        </div>
+
+                        <nav className="flex flex-col mt-2">
+                            <Link
+                                to="/dashboard"
+                                className="px-2 py-2 pb-2 block font-semibold hover:bg-opacity-20 text-slate-deep hover:bg-slate-light rounded-md transition-colors duration-200"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <div className="flex items-center">
+                                    <GalleryVertical className="h-4 w-4 text-slate-deep inline-block mr-2" />
+                                    <p>Dashboard</p>
+                                </div>
+                            </Link>
+                            <Link
+                                to="/settings"
+                                className="px-2 py-2 block font-semibold text-slate-deep hover:bg-slate-light hover:bg-opacity-20 rounded-md transition-colors duration-200"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <div className="flex items-center">
+                                    <Settings className="h-4 w-4 text-slate-deep inline-block mr-2" />
+                                    <p>User Settings</p>
+                                </div>
+                            </Link>
+                            <button
+                                onClick={() => {
+                                    logout();
+                                    setIsMenuOpen(false);
+                                }}
+                                className="px-2 py-2 w-full text-left font-semibold text-slate-deep hover:bg-slate-light hover:bg-opacity-20 rounded-md transition-colors duration-200"
+                            >
+                                <div className="flex items-center">
+                                    <LogOut className="h-4 w-4 text-slate-deep inline-block mr-2" />
+                                    <p>Logout</p>
+                                </div>
+                            </button>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </>
     );
 };
 
