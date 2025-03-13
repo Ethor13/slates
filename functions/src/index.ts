@@ -14,6 +14,12 @@ import fetch from "node-fetch";
 import { updateDatesData } from "./scheduledUpdater.js";
 
 admin.initializeApp();
+const db = admin.firestore();
+// ignore null values
+db.settings({
+  ignoreUndefinedProperties: true,
+  timestampsInSnapshots: true,
+});
 const storage = admin.storage();
 
 const ESPN_CDN = "https://a.espncdn.com/";
@@ -90,7 +96,7 @@ export const scheduledUpdate = onSchedule(
   { schedule: "every 1 hours" },
   async () => {
     try {
-      await updateDatesData(storage, UPDATE_SIZE);
+      await updateDatesData(db, UPDATE_SIZE);
       logger.info("Scheduled update completed successfully");
     } catch (error) {
       logger.error("Error in scheduled update:", error);
@@ -104,7 +110,7 @@ export const requestUpdate = onRequest(
   { cors: true },
   async (req, res) => {
     try {
-      await updateDatesData(storage, UPDATE_SIZE);
+      await updateDatesData(db, UPDATE_SIZE);
       res.status(200).send("Update completed successfully");
     } catch (error) {
       logger.error("Error in request update:", error);

@@ -6,7 +6,7 @@
  *
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
-import { Storage } from "firebase-admin/storage";
+import { Firestore } from "firebase-admin/firestore";
 import { updateScheduleInFirestore } from "./scrapers/scrape_schedule.js";
 import { updateGameMetrics, updateTeamMetrics } from "./scrapers/scrape_game_metrics.js";
 import { scoreSportsGames } from "./scrapers/calculate_slate_scores.js";
@@ -14,7 +14,7 @@ import { logger } from "firebase-functions";
 import { Sports, GamesData, TeamsData } from "./types.js";
 import { datesToUpdate } from "./helpers.js";
 
-export const updateDatesData = async (storage: Storage, updateSize: number) => {
+export const updateDatesData = async (db: Firestore, updateSize: number) => {
   try {
     const dates = datesToUpdate(updateSize);
 
@@ -24,13 +24,8 @@ export const updateDatesData = async (storage: Storage, updateSize: number) => {
 
     // Write teams data
     for (const sport of Object.values(Sports)) {
-      const sportTeamsFile = storage.bucket().file(`sports/${sport}/teams.json`);
-      sportTeamsFile.save(JSON.stringify(teamsData[sport]), {
-        metadata: {
-          contentType: "application/json",
-          cacheControl: "public, max-age=900",
-        },
-      });
+      const sportTeamsRef = db.collection("sports").doc(sport);
+      await sportTeamsRef.set({ teams: teamsData[sport] }, { merge: true });
     }
 
     logger.log("Teams data update completed");
@@ -38,7 +33,7 @@ export const updateDatesData = async (storage: Storage, updateSize: number) => {
     // Create promises for each sport query
     const dateQueries = dates.map(async (date) => {
       logger.log(`Schedule update started for date ${date}`);
-      await updateDateData(storage, date, teamsData);
+      await updateDateData(db, date, teamsData);
       logger.log(`Schedule update completed for date ${date}`);
     });
 
@@ -50,7 +45,7 @@ export const updateDatesData = async (storage: Storage, updateSize: number) => {
   }
 }
 
-const updateDateData = async (storage: Storage, date: string, teamsData: TeamsData) => {
+const updateDateData = async (db: Firestore, date: string, teamsData: TeamsData) => {
   try {
     // gamesData = sport -> gameId -> ParsedGame (w/ gameMetrics)
     const gamesData = await updateGamesData(date);
@@ -58,27 +53,14 @@ const updateDateData = async (storage: Storage, date: string, teamsData: TeamsDa
     await calculateScores(gamesData, teamsData);
 
     for (const sport of Object.values(Sports)) {
-      const sportGamesFile = storage.bucket().file(`sports/${sport}/schedule/${date}.json`);
-
-      // Write games data to storage
-      await sportGamesFile.save(JSON.stringify(gamesData[sport]), {
-        metadata: {
-          contentType: "application/json",
-          cacheControl: "public, max-age=900",
-        },
-      });
+      const sportTeamsRef = db.collection("sports").doc(sport).collection("schedule").doc(date);
+      await sportTeamsRef.set(gamesData[sport]);
     }
 
     // TODO: do one or the other, but try both for now
     // Write games data to Firestore
-    const allGamesFile = storage.bucket().file(`sports/all/schedule/${date}.json`);
-
-    await allGamesFile.save(JSON.stringify(gamesData), {
-      metadata: {
-        contentType: "application/json",
-        cacheControl: "public, max-age=900",
-      },
-    });
+    const allGamesRef = db.collection("sports").doc("all").collection("schedule").doc(date);
+    await allGamesRef.set(gamesData);
   } catch (error) {
     logger.error("Error in scheduled update:", error);
     throw error;

@@ -1,5 +1,5 @@
-import { storage } from '../../lib/firebase';
-import { ref, getDownloadURL } from 'firebase/storage';
+import { db } from '../../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../Nav';
@@ -39,15 +39,12 @@ const Dashboard = () => {
 
         try {
             const date = selectedDate.toLocaleDateString('en-CA').replace(/-/g, '');
-            const scheduleRef = ref(storage, `sports/all/schedule/${date}.json`);
-            const downloadUrl = await getDownloadURL(scheduleRef)
-            const res = await fetch(downloadUrl);
-
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
+            const scheduleRef = doc(db, 'sports/all/schedule', date);
+            const scheduleSnapshot = await getDoc(scheduleRef);
+            if (!scheduleSnapshot.exists()) {
+                throw new Error('No schedule found for the selected date');
             }
-
-            const games = await res.json();
+            const games = scheduleSnapshot.data() as ScheduleResponse;
 
             setAllGames(games);
         } catch (error) {

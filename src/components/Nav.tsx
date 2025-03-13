@@ -87,7 +87,7 @@ const Nav = () => {
                                             to="/auth?mode=signin"
                                             className="border-2 font-semibold border-slate-deep text-slate-deep px-6 py-2 rounded-full hover:bg-slate-light hover:border-slate-light hover:text-white transition-all duration-200"
                                         >
-                                            Sign In
+                                            Log In
                                         </Link>
                                         <Link
                                             to="/auth?mode=signup"

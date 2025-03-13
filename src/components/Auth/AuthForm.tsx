@@ -47,10 +47,10 @@ export default function AuthForm() {
         } catch (err) {
             if (mode === 'signup') {
                 console.log("Signup Error:", err);
-                setError('An error occurred during sign up. Please try again.');
+                setError('An error occurred during Sign Up. Please try again.');
             } else {
                 console.log("Sign-in Error:", err);
-                setError('An error occurred during sign in. Please try again.');
+                setError('An error occurred during Log In. Please try again.');
             }
         } finally {
             setLoading(false);
@@ -65,7 +65,7 @@ export default function AuthForm() {
             navigate('/dashboard');
         } catch (err) {
             console.log("Google Sign-in Error:", err);
-            setError('An error occurred during Google sign in. Please try again.');
+            setError('An error occurred during Google Log In. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -97,7 +97,7 @@ export default function AuthForm() {
                         </Link>
                     </div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        {mode === 'signin' ? 'Sign into your account' : 'Create your account'}
+                        {mode === 'signin' ? 'Log in to your account' : 'Create your account'}
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-600">
                         {mode === 'signin' ? "Don't have an account? " : "Already have an account? "}
@@ -106,7 +106,7 @@ export default function AuthForm() {
                             onClick={() => handleSetMode(mode === 'signin' ? 'signup' : 'signin')}
                             className="font-medium text-slate-deep hover:text-slate-medium"
                         >
-                            {mode === 'signin' ? 'Sign up' : 'Sign in'}
+                            {mode === 'signin' ? 'Sign up' : 'Log in'}
                         </button>
                     </p>
                 </div>
@@ -187,7 +187,7 @@ export default function AuthForm() {
                                             Processing...
                                         </span>
                                     ) : (
-                                        mode === 'signin' ? 'Sign In' : 'Sign Up'
+                                        mode === 'signin' ? 'Log in' : 'Sign Up'
                                     )}
                                 </button>
                             </div>
@@ -209,7 +209,7 @@ export default function AuthForm() {
                                     className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-full bg-white hover:bg-slate-light hover:border-slate-medium transition-colors duration-200"
                                 >
                                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" className="w-5 h-5 mr-2" />
-                                    Sign in with Google
+                                    Continue with Google
                                 </button>
                             </div>
                         </div>
