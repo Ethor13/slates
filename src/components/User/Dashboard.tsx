@@ -2,6 +2,7 @@ import { db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { ArrowUp } from 'lucide-react';
 import Nav from '../Nav';
 import GamesList from '../Games/GamesList';
 import SportSelector from '../Games/SportSelector';
@@ -24,6 +25,7 @@ const Dashboard = () => {
     const [games, setGames] = useState<ScheduleResponse>({});
     const [gamesLoading, setGamesLoading] = useState<boolean>(false);
     const [gamesError, setGamesError] = useState<any | null>(null);
+    const [showScrollToTop, setShowScrollToTop] = useState<boolean>(false);
 
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
@@ -73,11 +75,30 @@ const Dashboard = () => {
         }
     }, [allGames, selectedSports]);
 
+    // Handle scroll event to show/hide scroll-to-top button
+    useEffect(() => {
+        const handleScroll = () => {
+            // Show button when user scrolls down 300px
+            setShowScrollToTop(window.scrollY > 300);
+        };
+        
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Scroll to top function
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
     useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white relative">
             <Nav />
             <div className="min-h-screen bg-gray-50 pt-16">
                 <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -108,6 +129,13 @@ const Dashboard = () => {
                     </div>
                 </main>
             </div>
+            <button 
+                onClick={scrollToTop}
+                className={`fixed top-24 right-8 bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${showScrollToTop ? 'opacity-100' : 'opacity-0'}`}
+                aria-label="Scroll to top"
+            >
+                <ArrowUp className="h-6 w-6" />
+            </button>
         </div>
     );
 }
