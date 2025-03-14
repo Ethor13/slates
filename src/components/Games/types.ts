@@ -61,7 +61,7 @@ export interface SportSelectorProps {
     setSelectedDate: (date: Date) => void;
     sortBy: Sort;
     setSortBy: (sort: Sort) => void;
-  }
+  };
 }
 
 export interface ChevronButtonProps {

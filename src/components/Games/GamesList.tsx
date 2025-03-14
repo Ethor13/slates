@@ -78,7 +78,7 @@ const GamesList: React.FC<GamesListProps> = ({ sortBy, games }) => {
   }, [games, sortBy]);
 
   return (
-    <div className="flex flex-col justify-center gap-4 items-center">
+    <div className={`flex flex-col justify-center gap-4 items-center`}>
       {renderedGames}
     </div>
   );

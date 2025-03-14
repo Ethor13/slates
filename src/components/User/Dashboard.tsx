@@ -81,7 +81,7 @@ const Dashboard = () => {
             // Show button when user scrolls down 300px
             setShowScrollToTop(window.scrollY > 300);
         };
-        
+
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -100,36 +100,44 @@ const Dashboard = () => {
     return (
         <div className="min-h-screen bg-white relative">
             <Nav />
-            <div className="min-h-screen bg-gray-50 pt-16">
-                <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <div className="bg-white shadow rounded-lg mb-6 p-4">
-                        <SportSelector props={{
-                            selectedSports,
-                            setSelectedSports,
-                            selectedDate,
-                            setSelectedDate,
-                            sortBy,
-                            setSortBy
-                        }} />
-
-                        {gamesLoading ? (
-                            <div className="flex justify-center py-8">
-                                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-                            </div>
-                        ) : gamesError ? (
-                            <div className="text-center p-4 mt-8 text-lg bg-red-100 text-red-600 rounded-lg">
-                                Error loading games: {gamesError.message || 'Unknown error'}
-                            </div>
-                        ) : (
-                            <GamesList
-                                games={games}
-                                sortBy={sortBy}
+            <div className="min-h-screen bg-gray-50 pt-20">
+                <main className="mx-auto pt-8">
+                    <div className="flex flex-row">
+                        {/* Left sidebar with fixed width */}
+                        <div>
+                            <SportSelector
+                                props={{
+                                    selectedSports,
+                                    setSelectedSports,
+                                    selectedDate,
+                                    setSelectedDate,
+                                    sortBy,
+                                    setSortBy
+                                }}
                             />
-                        )}
+                        </div>
+
+                        {/* Main content area that takes remaining space and centers content */}
+                        <div className="w-full flex justify-center">
+                            {gamesLoading ? (
+                                <div className="flex justify-center py-8">
+                                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+                                </div>
+                            ) : gamesError ? (
+                                <div className="text-center p-4 mt-8 text-lg bg-red-100 text-red-600 rounded-lg">
+                                    Error loading games: {gamesError.message || 'Unknown error'}
+                                </div>
+                            ) : (
+                                <GamesList
+                                    games={games}
+                                    sortBy={sortBy}
+                                />
+                            )}
+                        </div>
                     </div>
                 </main>
             </div>
-            <button 
+            <button
                 onClick={scrollToTop}
                 className={`fixed top-24 right-8 bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${showScrollToTop ? 'opacity-100' : 'opacity-0'}`}
                 aria-label="Scroll to top"
