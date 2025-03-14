@@ -50,7 +50,9 @@ export interface ScheduleResponse {
 
 export interface GamesListProps {
   sortBy: Sort;
+  setSortBy: (sort: Sort) => void;
   games: ScheduleResponse;
+  selectedDate: Date;
 }
 
 export interface SportSelectorProps {
@@ -59,8 +61,6 @@ export interface SportSelectorProps {
     setSelectedSports: (callback: (prev: Sports[]) => Sports[]) => void;
     selectedDate: Date;
     setSelectedDate: (date: Date) => void;
-    sortBy: Sort;
-    setSortBy: (sort: Sort) => void;
   };
 }
 

@@ -1,25 +1,12 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-import { Sports, Sort, SportSelectorProps, ChevronButtonProps } from "./types";
+import React, { useState, useCallback } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Sports, SportSelectorProps, ChevronButtonProps } from "./types";
 import { getDateString } from "../../helpers";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
-  const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, sortBy, setSortBy } = props;
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { selectedSports, setSelectedSports, selectedDate, setSelectedDate } = props;
   const today = getDateString(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleSportChange = useCallback(
     (sport: Sports) => {
@@ -115,7 +102,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const currentMonthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
-    <div className={`flex flex-col p-4 ml-20 bg-white rounded-lg shadow-sm w-[20vw]`}>
+    <div className={`flex flex-col p-4 bg-white shadow-md w-full h-full`}>
       {/* Selected date display */}
       <div className="bg-blue-50 p-2 rounded-lg mb-6 text-center">
         <p className="text-sm text-gray-600">Selected Date:</p>
@@ -177,40 +164,6 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
           })}
         </div>
       </div>
-
-      {/* Sort selector */}
-      <div className="w-full flex justify-between items-center relative mb-6">
-        <p className="font-sans text-sm">Sort games by:</p>
-        <div className="relative" ref={dropdownRef}>
-          <button
-            className="bg-transparent border-none font-bold cursor-pointer flex items-center text-sm gap-0.5 text-blue-600"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          >
-            {sortBy}
-            <ChevronDown
-              className={`text-gray-700 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-              size={16}
-            />
-          </button>
-          {isDropdownOpen && (
-            <ul className="absolute right-0 bg-white border border-gray-300 rounded-lg mt-1 list-none shadow-md z-50 py-2 px-2 flex flex-col gap-2 w-[7rem]">
-              {Object.entries(Sort).map(([key, value]) => (
-                <li
-                  key={key}
-                  className="cursor-pointer hover:text-blue-600 hover:font-bold"
-                  onClick={() => {
-                    setSortBy(value);
-                    setIsDropdownOpen(false);
-                  }}
-                >
-                  {value}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-
 
       {/* Sports selector */}
       <h2 className="text-lg font-semibold mb-3">Select Sports</h2>
