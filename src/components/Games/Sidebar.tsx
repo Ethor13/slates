@@ -103,85 +103,91 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const currentMonthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
-    <div className={`flex flex-col p-4 bg-white shadow-md w-full h-full gap-4`}>
-      {/* Calendar month selector */}
-      <div className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold">Date</h2>
-        <div>
-          <div className="flex flex-row items-center justify-between mb-4">
-            <ChevronButton
-              onClick={() => changeMonth(-1)}
-              direction="left"
-              blocked={currentMonth.getFullYear() === new Date().getFullYear() &&
-                currentMonth.getMonth() === new Date().getMonth()}
-            />
-            <span className="font-bold">{currentMonthName}</span>
-            <ChevronButton onClick={() => changeMonth(1)} direction="right" />
-          </div>
+    <div className="fixed left-0 top-20 bottom-0 w-[20vw]">
+      <div className="flex flex-col h-full bg-white shadow-md top-4 bottom-0">
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-4 flex flex-col gap-4">
+            {/* Calendar month selector */}
+            <div className="flex flex-col gap-4 mt-4">
+              <h2 className="text-lg font-semibold">Date</h2>
+              <div>
+                <div className="flex flex-row items-center justify-between mb-4">
+                  <ChevronButton
+                    onClick={() => changeMonth(-1)}
+                    direction="left"
+                    blocked={currentMonth.getFullYear() === new Date().getFullYear() &&
+                      currentMonth.getMonth() === new Date().getMonth()}
+                  />
+                  <span className="font-bold">{currentMonthName}</span>
+                  <ChevronButton onClick={() => changeMonth(1)} direction="right" />
+                </div>
 
-          {/* Calendar grid */}
-          <div className="grid grid-cols-7 gap-1 text-center">
-            {/* Week day headers */}
-            {weekDays.map(day => (
-              <div key={day} className="text-xs font-semibold text-gray-500 py-1">
-                {day}
+                {/* Calendar grid */}
+                <div className="grid grid-cols-7 gap-1 text-center">
+                  {/* Week day headers */}
+                  {weekDays.map(day => (
+                    <div key={day} className="text-xs font-semibold text-gray-500 py-1">
+                      {day}
+                    </div>
+                  ))}
+
+                  {/* Calendar days */}
+                  {calendarDays.map((day, index) => {
+                    const dateStr = getDateString(day.date);
+                    const isToday = dateStr === today;
+                    const isSelected = dateStr === getDateString(selectedDate);
+                    const isPastDate = dateStr < today;
+
+                    return (
+                      <button
+                        key={index}
+                        className={`p-1 rounded-full text-xs h-7 w-7 flex items-center justify-center
+                      ${!day.isCurrentMonth ? "text-gray-300" : isPastDate ? "text-gray-400" : ""}
+                      ${isSelected ? "bg-blue-600 text-white" : ""}
+                      ${isToday && !isSelected ? "border border-blue-600" : ""}
+                      ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
+                      ${!day.isCurrentMonth ? "opacity-0" : ""}
+                      ${!isPastDate && day.isCurrentMonth ? "hover:bg-blue-100" : ""}`}
+                        onClick={() => day.isCurrentMonth && !isPastDate && handleDateChange(day.date)}
+                        disabled={isPastDate || !day.isCurrentMonth}
+                      >
+                        {day.date.getDate()}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            ))}
+            </div>
 
-            {/* Calendar days */}
-            {calendarDays.map((day, index) => {
-              const dateStr = getDateString(day.date);
-              const isToday = dateStr === today;
-              const isSelected = dateStr === getDateString(selectedDate);
-              const isPastDate = dateStr < today;
+            <div className="w-full border-b border-gray-200"></div>
 
-              return (
-                <button
-                  key={index}
-                  className={`p-1 rounded-full text-xs h-7 w-7 flex items-center justify-center
-                  ${!day.isCurrentMonth ? "text-gray-300" : isPastDate ? "text-gray-400" : ""}
-                  ${isSelected ? "bg-blue-600 text-white" : ""}
-                  ${isToday && !isSelected ? "border border-blue-600" : ""}
-                  ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
-                  ${!day.isCurrentMonth ? "opacity-0" : ""}
-                  ${!isPastDate && day.isCurrentMonth ? "hover:bg-blue-100" : ""}`}
-                  onClick={() => day.isCurrentMonth && !isPastDate && handleDateChange(day.date)}
-                  disabled={isPastDate || !day.isCurrentMonth}
-                >
-                  {day.date.getDate()}
-                </button>
-              );
-            })}
+            <div className="flex flex-col gap-4 mb-4">
+              {/* Sports selector */}
+              <h2 className="text-lg font-semibold">Sports</h2>
+              <div className="flex flex-col gap-2">
+                {Object.values(Sports).map((sport) => (
+                  <button
+                    key={sport}
+                    className={`p-1 cursor-pointer box-border border-2 rounded-lg flex items-center gap-2 transition-colors
+                    ${selectedSports.includes(sport)
+                        ? "border-blue-600 bg-blue-50 text-blue-600"
+                        : "border-gray-300 hover:bg-blue-50"}`}
+                    onClick={() => handleSportChange(sport)}
+                  >
+                    <img
+                      className="w-8 h-8"
+                      src={`i/leaguelogos/${sport}.png`}
+                      alt={`${sport} logo`}
+                    />
+                    <span className="font-medium">{getSportDisplayName(sport)}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="w-full border-b border-gray-200"></div>
-
-      <div className="flex flex-col gap-4">
-      {/* Sports selector */}
-      <h2 className="text-lg font-semibold">Sports</h2>
-      <div className="flex flex-col gap-2">
-        {Object.values(Sports).map((sport) => (
-          <button
-            key={sport}
-            className={`p-1 cursor-pointer box-border border-2 rounded-lg flex items-center gap-2 transition-colors
-              ${selectedSports.includes(sport)
-                ? "border-blue-600 bg-blue-50 text-blue-600"
-                : "border-gray-300 hover:bg-blue-50"}`}
-            onClick={() => handleSportChange(sport)}
-          >
-            <img
-              className="w-8 h-8"
-              src={`i/leaguelogos/${sport}.png`}
-              alt={`${sport} logo`}
-            />
-            <span className="font-medium">{getSportDisplayName(sport)}</span>
-          </button>
-        ))}
-      </div>
     </div>
-</div>
   );
 };
 

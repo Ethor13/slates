@@ -101,23 +101,20 @@ const Dashboard = () => {
         <div className="min-h-screen bg-white relative">
             <Nav />
             <div className="min-h-screen bg-gray-50 pt-20">
-                <main className="mx-auto pt-8">
+                <main className="mx-auto">
                     <div className="flex flex-row h-full">
                         {/* Left sidebar with fixed width */}
-                        <div className="fixed top-20 bottom-0 h-full w-[20vw] bg-gray-">
-                            <Sidebar
-                                props={{
-                                    selectedSports,
-                                    setSelectedSports,
-                                    selectedDate,
-                                    setSelectedDate,
-                                    setGamesLoading
-                                }}
-                            />
-                        </div>
-
+                        <Sidebar
+                            props={{
+                                selectedSports,
+                                setSelectedSports,
+                                selectedDate,
+                                setSelectedDate,
+                                setGamesLoading
+                            }}
+                        />
                         {/* Main content area that takes remaining space and centers content */}
-                        <div className="w-full flex justify-center ml-[20vw]">
+                        <div className="w-full flex justify-center ml-[20vw] overflow-y-visible">
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>

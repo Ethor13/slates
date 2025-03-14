@@ -92,7 +92,7 @@ const GamesList: React.FC<GamesListProps> = ({ sortBy, games, setSortBy, selecte
   }, []);
 
   return (
-    <div className={`flex flex-col justify-center gap-4 items-center`}>
+    <div className={`flex flex-col justify-center gap-4 items-center pt-8`}>
       <div className="flex flex-row justify-between items-center w-full">
         {/* Selected date display */}
         <div className="text-center">

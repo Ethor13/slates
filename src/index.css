@@ -19,7 +19,7 @@ html {
   scrollbar-width: none;  /* Firefox */
 }
 
-/* Ensure content can still be scrolled */
+/* ure content can still be scrolled */
 html, body {
   overflow-y: auto;
 }
