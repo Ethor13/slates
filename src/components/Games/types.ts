@@ -61,6 +61,7 @@ export interface SportSelectorProps {
     setSelectedSports: (callback: (prev: Sports[]) => Sports[]) => void;
     selectedDate: Date;
     setSelectedDate: (date: Date) => void;
+    setGamesLoading: (loading: boolean) => void;
   };
 }
 

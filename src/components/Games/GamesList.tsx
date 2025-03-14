@@ -25,7 +25,7 @@ const renderGames = (games: ScheduleResponse, sortBy: Sort) => {
         .sort(([timeA, _], [timeB, __]) => new Date(timeA).getTime() - new Date(timeB).getTime())
         .map(([gameTime, games]) => (
           <div key={gameTime} className="flex flex-col gap-4">
-            <h2 className="m-0 text-2xl">{formatGameTime(gameTime)}</h2>
+            <h2 className="text-2xl font-semibold">{formatGameTime(gameTime)}</h2>
             {Object.entries(games)
               .sort(([_, game1], [__, game2]) => game2.slateScore - game1.slateScore)
               .map(([gameId, game]) => (
@@ -73,8 +73,8 @@ const GamesList: React.FC<GamesListProps> = ({ sortBy, games, setSortBy, selecte
     }
     else {
       setRenderedGames(
-        <div className="text-center p-4 mt-8 text-lg bg-gray-100 text-gray-600 rounded-lg">
-          No games scheduled
+        <div key="no-games" className="w-[50rem] text-center text-lg text-gray-600">
+          No games scheduled for the selected sports
         </div>
       );
     }
@@ -93,41 +93,56 @@ const GamesList: React.FC<GamesListProps> = ({ sortBy, games, setSortBy, selecte
 
   return (
     <div className={`flex flex-col justify-center gap-4 items-center`}>
-      <div className="self-end">
+      <div className="flex flex-row justify-between items-center w-full">
+        {/* Selected date display */}
+        <div className="text-center">
+          <p className="text-md font-bold">
+            {selectedDate.toLocaleDateString("en-CA", {
+              month: 'long',
+              weekday: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            })}
+          </p>
+        </div>
+
         {/* Sort selector */}
-        <div className="w-full flex justify-between items-center relative">
-          <p className="font-sans text-md">Sort By:&nbsp;</p>
-          <div className="relative" ref={dropdownRef}>
-            <button
-              className="bg-transparent border-none font-bold cursor-pointer flex items-center text-md gap-0.5 text-slate-deep"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              {sortBy}
-              <ChevronDown
-                className={`text-gray-700 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-                size={16}
-              />
-            </button>
-            {isDropdownOpen && (
-              <ul className="absolute right-0 bg-white border border-gray-300 list-none shadow-md z-50 flex flex-col w-28">
-                {Object.entries(Sort).map(([key, value]) => (
-                  <li
-                    key={key}
-                    className="cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right"
-                    onClick={() => {
-                      setSortBy(value);
-                      setIsDropdownOpen(false);
-                    }}
-                  >
-                    {value}
-                  </li>
-                ))}
-              </ul>
-            )}
+        <div>
+          <div className="w-full flex justify-between items-center relative">
+            <p className="font-sans text-md">Sort By:&nbsp;</p>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className="bg-transparent border-none font-bold cursor-pointer flex items-center text-md gap-0.5"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                {sortBy}
+                <ChevronDown
+                  className={`text-gray-700 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                  size={16}
+                />
+              </button>
+              {isDropdownOpen && (
+                <ul className="absolute right-0 bg-white border border-gray-300 list-none shadow-md z-50 flex flex-col w-28">
+                  {Object.entries(Sort).map(([key, value]) => (
+                    <li
+                      key={key}
+                      className="cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right"
+                      onClick={() => {
+                        setSortBy(value);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {value}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <div>
+      {/* Games */}
+      <div className="flex flex-col gap-4 w-full">
         {renderedGames}
       </div>
     </div>

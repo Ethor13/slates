@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { ArrowUp } from 'lucide-react';
 import Nav from '../Nav';
 import GamesList from '../Games/GamesList';
-import SportSelector from '../Games/SportSelector';
+import Sidebar from '../Games/Sidebar';
 
 enum Sports {
     NBA = 'nba',
@@ -105,12 +105,13 @@ const Dashboard = () => {
                     <div className="flex flex-row h-full">
                         {/* Left sidebar with fixed width */}
                         <div className="fixed top-20 bottom-0 h-full w-[20vw] bg-gray-">
-                            <SportSelector
+                            <Sidebar
                                 props={{
                                     selectedSports,
                                     setSelectedSports,
                                     selectedDate,
                                     setSelectedDate,
+                                    setGamesLoading
                                 }}
                             />
                         </div>
