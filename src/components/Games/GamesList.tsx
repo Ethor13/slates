@@ -6,14 +6,14 @@ import { GamesListProps, ScheduleResponse, Sort } from "./types";
 
 const split_by_time = (games: ScheduleResponse) => {
   const games_by_time: Record<string, Record<string, DocumentData>> = {};
-  
+
   Object.entries(games).forEach(([gameId, game]) => {
     if (!(game.date in games_by_time)) {
       games_by_time[game.date] = {};
     }
     games_by_time[game.date][gameId] = game;
   });
-  
+
   return games_by_time;
 };
 
@@ -50,11 +50,25 @@ const renderGames = (games: ScheduleResponse, sortBy: Sort) => {
 
 const GamesList: React.FC<GamesListProps> = ({ sortBy, games }) => {
   const [renderedGames, setRenderedGames] = useState<React.ReactNode | null>(null);
+  const [hasBeenRendered, setHasBeenRendered] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(games).length && !hasBeenRendered) {
+      setHasBeenRendered(true);
+    }
+  }, [games]);
 
   useEffect(() => {
     if (Object.keys(games).length) {
       setRenderedGames(renderGames(games, sortBy));
-    } else {
+    } else if (!hasBeenRendered) {
+      setRenderedGames(
+        <div className="flex justify-center py-8">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+        </div>
+      );
+    }
+    else {
       setRenderedGames(
         <div className="text-center p-4 mt-8 text-lg bg-gray-100 text-gray-600 rounded-lg">
           No games scheduled
