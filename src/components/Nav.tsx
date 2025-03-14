@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { ChevronDown, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
+import { Menu, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
 
 const Nav = () => {
     const { currentUser, logout } = useAuth();
@@ -108,7 +108,7 @@ const Nav = () => {
                                             onClick={() => setIsMenuOpen(true)}
                                         >
                                             <span>{currentUser.email}</span>
-                                            <ChevronDown className="h-4 w-4" />
+                                            <Menu className="h-4 w-4" />
                                         </div>
                                     </div>
                                 </>
