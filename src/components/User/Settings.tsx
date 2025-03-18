@@ -21,11 +21,15 @@ const Settings = () => {
     const [loading, setLoading] = useState(false);
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
     const [zipcodeError, setZipcodeError] = useState<string | null>(null);
+    const [providersLoading, setProvidersLoading] = useState(false);
+    const [availableProviders, setAvailableProviders] = useState<Record<string, any>>({});
     const [preferences, setPreferences] = useState<UserPreferences>({
         zipcode: '',
         tvProviders: [],
         favoriteTeams: []
     });
+
+    const isValidZipcode = (zipcode: string) => zipcode.length === 5;
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -43,6 +47,11 @@ const Settings = () => {
                         tvProviders: userData.tvProviders || [],
                         favoriteTeams: userData.favoriteTeams || []
                     });
+                    
+                    // If user already has a valid zipcode, fetch providers
+                    if (isValidZipcode(userData.zipcode || '')) {
+                        fetchProviders(userData.zipcode);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -53,20 +62,50 @@ const Settings = () => {
         fetchUserData();
     }, [currentUser]);
 
+    const fetchProviders = async (zipcode: string) => {
+        if (!isValidZipcode(zipcode)) return;
+        
+        setProvidersLoading(true);
+        try {
+            // This is an HTTP-only function, not a Callable function
+            const response = await fetch(`/service-providers?zipcode=${zipcode}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const providersData = await response.json();
+            setAvailableProviders(providersData || {});
+        } catch (error) {
+            console.error('Error fetching TV providers:', error);
+            setAvailableProviders({});
+        } finally {
+            setProvidersLoading(false);
+        }
+    };
+
     const handleZipcodeChange = (zipcode: string) => {
         if (zipcodeError) setZipcodeError(null);
         setPreferences(prev => ({
             ...prev,
             zipcode
         }));
+        
+        // If zipcode becomes valid, fetch providers
+        if (isValidZipcode(zipcode)) {
+            fetchProviders(zipcode);
+        } else {
+            // Clear providers if zipcode is invalid
+            setAvailableProviders({});
+        }
     };
 
-    const handleTvProviderToggle = (provider: string) => {
+    const handleTvProviderToggle = (providerId: string) => {
         setPreferences(prev => ({
             ...prev,
-            tvProviders: prev.tvProviders.includes(provider) 
-                ? prev.tvProviders.filter(p => p !== provider)
-                : [...prev.tvProviders, provider]
+            tvProviders: prev.tvProviders.includes(providerId) 
+                ? prev.tvProviders.filter(p => p !== providerId)
+                : [...prev.tvProviders, providerId]
         }));
     };
 
@@ -82,7 +121,7 @@ const Settings = () => {
     const savePreferences = async () => {
         if (!currentUser) return;
         
-        if (!preferences.zipcode || preferences.zipcode.length !== 5) {
+        if (!preferences.zipcode || !isValidZipcode(preferences.zipcode)) {
             setZipcodeError('Please enter a valid 5-digit zipcode');
             return;
         }
@@ -125,7 +164,10 @@ const Settings = () => {
                                     
                                     <TvProviders 
                                         selectedProviders={preferences.tvProviders} 
-                                        onToggle={handleTvProviderToggle} 
+                                        onToggle={handleTvProviderToggle}
+                                        availableProviders={availableProviders}
+                                        loading={providersLoading}
+                                        hasValidZipcode={isValidZipcode(preferences.zipcode)}
                                     />
                                     
                                     <FavoriteTeams 

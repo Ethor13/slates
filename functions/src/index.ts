@@ -12,6 +12,7 @@ import admin from "firebase-admin";
 import { logger } from "firebase-functions";
 import fetch from "node-fetch";
 import { updateDatesData } from "./scheduledUpdater.js";
+import { getProviders } from "./channel-scraper/service_providers.js";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -115,6 +116,25 @@ export const requestUpdate = onRequest(
     } catch (error) {
       logger.error("Error in request update:", error);
       res.status(500).send("Error in request update: " + error);
+    }
+  }
+);
+
+export const serviceProviders = onRequest(
+  { cors: true },
+  async (req, res) => {
+    const zipcode = req.query.zipcode as string;
+    if (!zipcode) {
+      res.status(400).send("Missing zipcode");
+      return;
+    }
+
+    try {
+      const providers = await getProviders(zipcode);
+      res.status(200).json(providers);
+    } catch (error) {
+      logger.error("Error fetching service providers:", error);
+      res.status(500).send("Error fetching service providers: " + error);
     }
   }
 );

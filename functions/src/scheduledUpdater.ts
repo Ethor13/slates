@@ -52,15 +52,32 @@ const updateDateData = async (db: Firestore, date: string, teamsData: TeamsData)
     // add slateScore to gamesData
     await calculateScores(gamesData, teamsData);
 
+    const batch = db.batch();
+
     for (const sport of Object.values(Sports)) {
       const sportTeamsRef = db.collection("sports").doc(sport).collection("schedule").doc(date);
-      await sportTeamsRef.set(gamesData[sport]);
+      batch.set(sportTeamsRef, gamesData[sport]);
     }
 
     // TODO: do one or the other, but try both for now
     // Write games data to Firestore
     const allGamesRef = db.collection("sports").doc("all").collection("schedule").doc(date);
-    await allGamesRef.set(gamesData);
+    batch.set(allGamesRef, gamesData);
+
+    // Add networks to networks master list
+    // need to manually add a mapper item on firestore
+    // mapper = {
+    //   key: string,
+    //   values: string[]  
+    // }[]
+    const networksRef = db.collection("broadcasting").doc("networks");
+    Object.values(Sports).forEach((sport) => {
+      Object.values(gamesData[sport]).forEach((game) => {
+        batch.set(networksRef, game.broadcasts, { merge: true });
+      });
+    });
+
+    await batch.commit();
   } catch (error) {
     logger.error("Error in scheduled update:", error);
     throw error;

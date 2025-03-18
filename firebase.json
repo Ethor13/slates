@@ -12,6 +12,10 @@
         "function": "serveImage"
       },
       {
+        "source": "/service-providers/**",
+        "function": "serveImage"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
