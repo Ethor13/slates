@@ -38,7 +38,7 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
             className={`scroll-mt-20 py-6 border-b border-gray-200`}
         >
             <div className="flex items-center mb-4">
-                <div className="mr-3 p-2 rounded-full bg-blue-100 text-blue-600">
+                <div className="mr-3 p-2 rounded-full bg-slate-light/20 text-slate-deep">
                     {icon}
                 </div>
                 <div>
@@ -233,11 +233,11 @@ const Settings = () => {
             <div className="pt-20 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="mt-6">
-                        <div className="flex flex-col md:flex-row gap-8">
-                            {/* Sidebar Navigation */}
-                            <div className="md:w-64 flex-shrink-0">
-                                <div className="bg-white rounded-lg shadow overflow-hidden sticky top-20">
-                                    <nav className="flex flex-col py-2">
+                        <div className="relative">
+                            {/* Sidebar Navigation - Fixed on left */}
+                            <div className="fixed left-0 top-20 bottom-0 w-64 z-10">
+                                <div className="h-full bg-white rounded-r-lg shadow overflow-hidden py-2">
+                                    <nav className="flex flex-col h-full overflow-y-auto">
                                         {settingsSections.map((section) => (
                                             <button
                                                 key={section.id}
@@ -246,7 +246,7 @@ const Settings = () => {
                                                     section.disabled 
                                                         ? 'text-gray-400 cursor-not-allowed' 
                                                         : activeSection === section.id
-                                                            ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
+                                                            ? 'bg-slate-light/20 text-slate-deep border-l-4 border-slate-deep'
                                                             : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
                                                 }`}
                                                 disabled={section.disabled}
@@ -268,14 +268,14 @@ const Settings = () => {
                                 </div>
                             </div>
 
-                            {/* Main Content */}
-                            <div className="flex-1">
+                            {/* Main Content - with left margin to accommodate fixed sidebar */}
+                            <div className="ml-64 pl-8">
                                 {loading ? (
-                                    <div className="bg-white rounded-lg shadow p-6 flex justify-center py-12">
+                                    <div className="p-6 flex justify-center py-12">
                                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
                                     </div>
                                 ) : (
-                                    <div className="bg-white rounded-lg shadow px-6" ref={sectionsRef}>
+                                    <div className="px-6" ref={sectionsRef}>
                                         <SettingsSection
                                             id="account" 
                                             title="Account" 
