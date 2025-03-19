@@ -29,7 +29,7 @@ const TvProviders: React.FC<TvProvidersProps> = ({
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                 </div>
             ) : hasValidZipcode && Object.keys(availableProviders).length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-1 gap-2">
                     {Object.entries(availableProviders).sort(([, a], [, b]) => {
                         if (a.name < b.name) return -1;
                         if (a.name > b.name) return 1;

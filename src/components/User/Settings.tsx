@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, act } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -9,12 +9,49 @@ import {
     FavoriteTeams, 
     SavePreferencesButton 
 } from './Preferences';
+import { MapPin, Tv, Star, User, Bell, Shield, HelpCircle } from 'lucide-react';
 
 interface UserPreferences {
     zipcode: string;
     tvProviders: string[];
     favoriteTeams: Record<string, string>[];
 }
+
+interface SettingsSectionProps {
+    id: string;
+    title: string;
+    description: string;
+    icon: JSX.Element;
+    children: React.ReactNode;
+}
+
+const SettingsSection: React.FC<SettingsSectionProps> = ({ 
+    id, 
+    title, 
+    description, 
+    icon, 
+    children 
+}) => {
+    return (
+        <section 
+            id={id} 
+            className={`scroll-mt-20 py-6 border-b border-gray-200`}
+        >
+            <div className="flex items-center mb-4">
+                <div className="mr-3 p-2 rounded-full bg-blue-100 text-blue-600">
+                    {icon}
+                </div>
+                <div>
+                    <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+                    <p className="tddext-sm text-gray-500">{description}</p>
+                </div>
+            </div>
+            <div className="pl-12">
+                {children}
+            </div>
+        </section>
+    );
+};
 
 const Settings = () => {
     const { currentUser } = useAuth();
@@ -23,11 +60,24 @@ const Settings = () => {
     const [zipcodeError, setZipcodeError] = useState<string | null>(null);
     const [providersLoading, setProvidersLoading] = useState(false);
     const [availableProviders, setAvailableProviders] = useState<Record<string, any>>({});
+    const [activeSection, setActiveSection] = useState('location');
+    const sectionsRef = useRef<HTMLDivElement>(null);
+    
     const [preferences, setPreferences] = useState<UserPreferences>({
         zipcode: '',
         tvProviders: [],
         favoriteTeams: []
     });
+
+    const settingsSections = [
+        { id: 'account', title: 'Account', description: 'Manage your account information', icon: <User size={20} /> },
+        { id: 'location', title: 'Location', description: 'Set your location for regional sports', icon: <MapPin size={20} /> },
+        { id: 'providers', title: 'TV Providers', description: 'Choose your TV providers for channel recommendations', icon: <Tv size={20} /> },
+        { id: 'teams', title: 'Favorite Teams', description: 'Select your favorite teams to prioritize their games', icon: <Star size={20} /> },
+        { id: 'notifications', title: 'Notifications', description: 'Configure how you receive notifications', icon: <Bell size={20} />, disabled: true },
+        { id: 'privacy', title: 'Privacy', description: 'Control your privacy settings', icon: <Shield size={20} />, disabled: true },
+        { id: 'help', title: 'Help & Support', description: 'Get assistance with Slates', icon: <HelpCircle size={20} />, disabled: true }
+    ];
 
     const isValidZipcode = (zipcode: string) => zipcode.length === 5;
 
@@ -61,6 +111,40 @@ const Settings = () => {
         };
         fetchUserData();
     }, [currentUser]);
+
+    useEffect(() => {
+        // Setup intersection observer for section scrolling
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setActiveSection(entry.target.id);
+                    }
+                });
+            },
+            { rootMargin: '-100px 0px -80% 0px' }
+        );
+
+        // Observe all section elements
+        if (sectionsRef.current) {
+            const sectionElements = sectionsRef.current.querySelectorAll('section');
+            sectionElements.forEach((section) => {
+                observer.observe(section);
+            });
+        }
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [loading]);
+
+    const scrollToSection = (sectionId: string) => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+            setActiveSection(sectionId);
+        }
+    };
 
     const fetchProviders = async (zipcode: string) => {
         if (!isValidZipcode(zipcode)) return;
@@ -144,51 +228,117 @@ const Settings = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-gray-50">
             <Nav />
-            <div className="min-h-screen bg-gray-50 pt-16">
-                <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <div className="bg-white shadow rounded-lg">
-                        <div className="px-4 py-5 sm:p-6">
-                            <h3 className="text-lg leading-6 font-medium text-gray-900">Account Settings</h3>
-                            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                                Update your preferences to get personalized sports programming recommendations
-                            </p>
-                            
-                            {loading ? (
-                                <div className="flex justify-center py-8">
-                                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+            <div className="pt-20 pb-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="mt-6">
+                        <div className="flex flex-col md:flex-row gap-8">
+                            {/* Sidebar Navigation */}
+                            <div className="md:w-64 flex-shrink-0">
+                                <div className="bg-white rounded-lg shadow overflow-hidden sticky top-20">
+                                    <nav className="flex flex-col py-2">
+                                        {settingsSections.map((section) => (
+                                            <button
+                                                key={section.id}
+                                                onClick={() => !section.disabled && scrollToSection(section.id)}
+                                                className={`flex items-center px-4 py-3 text-left transition-colors ${
+                                                    section.disabled 
+                                                        ? 'text-gray-400 cursor-not-allowed' 
+                                                        : activeSection === section.id
+                                                            ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
+                                                            : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
+                                                }`}
+                                                disabled={section.disabled}
+                                            >
+                                                <div className="mr-3">
+                                                    {section.icon}
+                                                </div>
+                                                <div>
+                                                    <div className="font-medium">{section.title}</div>
+                                                </div>
+                                                {section.disabled && (
+                                                    <span className="ml-auto text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">
+                                                        Coming Soon
+                                                    </span>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </nav>
                                 </div>
-                            ) : (
-                                <div className="space-y-8">
-                                    <ZipcodeInput 
-                                        zipcode={preferences.zipcode} 
-                                        onChange={handleZipcodeChange}
-                                        error={zipcodeError}
-                                    />
-                                    
-                                    <TvProviders 
-                                        selectedProviders={preferences.tvProviders} 
-                                        onToggle={handleTvProviderToggle}
-                                        availableProviders={availableProviders}
-                                        loading={providersLoading}
-                                        hasValidZipcode={isValidZipcode(preferences.zipcode)}
-                                    />
-                                    
-                                    <FavoriteTeams 
-                                        selectedTeams={preferences.favoriteTeams} 
-                                        onToggle={handleTeamToggle} 
-                                    />
-                                    
-                                    <SavePreferencesButton 
-                                        onSave={savePreferences} 
-                                        saveStatus={saveStatus} 
-                                    />
-                                </div>
-                            )}
+                            </div>
+
+                            {/* Main Content */}
+                            <div className="flex-1">
+                                {loading ? (
+                                    <div className="bg-white rounded-lg shadow p-6 flex justify-center py-12">
+                                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                                    </div>
+                                ) : (
+                                    <div className="bg-white rounded-lg shadow px-6" ref={sectionsRef}>
+                                        <SettingsSection
+                                            id="account" 
+                                            title="Account" 
+                                            description="Manage your account information"
+                                            icon={<User size={20} />}
+                                        >
+                                            <div className='text-lg'>
+                                                {currentUser?.email}
+                                            </div>
+                                        </SettingsSection>
+
+                                        <SettingsSection 
+                                            id="location" 
+                                            title="Location" 
+                                            description="Set your location for regional sports information"
+                                            icon={<MapPin size={20} />}
+                                        >
+                                            <ZipcodeInput 
+                                                zipcode={preferences.zipcode} 
+                                                onChange={handleZipcodeChange}
+                                                error={zipcodeError}
+                                            />
+                                        </SettingsSection>
+                                        
+                                        <SettingsSection 
+                                            id="providers" 
+                                            title="TV Providers" 
+                                            description="Select your TV providers to see available channels"
+                                            icon={<Tv size={20} />}
+                                        >
+                                            <TvProviders 
+                                                selectedProviders={preferences.tvProviders} 
+                                                onToggle={handleTvProviderToggle}
+                                                availableProviders={availableProviders}
+                                                loading={providersLoading}
+                                                hasValidZipcode={isValidZipcode(preferences.zipcode)}
+                                            />
+                                        </SettingsSection>
+                                        
+                                        <SettingsSection 
+                                            id="teams" 
+                                            title="Favorite Teams" 
+                                            description="Select your favorite teams to get personalized recommendations"
+                                            icon={<Star size={20} />}
+                                        >
+                                            <FavoriteTeams 
+                                                selectedTeams={preferences.favoriteTeams} 
+                                                onToggle={handleTeamToggle} 
+                                            />
+                                        </SettingsSection>
+
+                                        <div className='py-6'>
+                                            <SavePreferencesButton 
+                                                onSave={savePreferences} 
+                                                saveStatus={saveStatus} 
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </main>
+                </div>
             </div>
         </div>
     );
