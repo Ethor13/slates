@@ -75,6 +75,11 @@ const Settings = () => {
             }
             
             const providersData = await response.json();
+            
+            setPreferences(prev => ({
+                ...prev,
+                tvProviders: [] 
+            }));
             setAvailableProviders(providersData || {});
         } catch (error) {
             console.error('Error fetching TV providers:', error);
@@ -128,7 +133,7 @@ const Settings = () => {
         setSaveStatus('saving');
         try {
             const userDocRef = doc(db, 'users', currentUser.uid);
-            await setDoc(userDocRef, preferences, { merge: true });
+            await setDoc(userDocRef, preferences);
             setSaveStatus('success');
             setTimeout(() => setSaveStatus('idle'), 3000);
         } catch (error) {
@@ -155,7 +160,7 @@ const Settings = () => {
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
                                 </div>
                             ) : (
-                                <div className="mt-6 space-y-8">
+                                <div className="space-y-8">
                                     <ZipcodeInput 
                                         zipcode={preferences.zipcode} 
                                         onChange={handleZipcodeChange}

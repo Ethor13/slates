@@ -10,7 +10,7 @@ const SavePreferencesButton: React.FC<SavePreferencesButtonProps> = ({
     saveStatus 
 }) => {
     return (
-        <div className="pt-5">
+        <div>
             <div className="flex justify-end">
                 <button
                     type="button"

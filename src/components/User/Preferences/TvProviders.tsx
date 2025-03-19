@@ -8,29 +8,33 @@ interface TvProvidersProps {
     hasValidZipcode: boolean;
 }
 
-const TvProviders: React.FC<TvProvidersProps> = ({ 
-    selectedProviders, 
-    onToggle, 
-    availableProviders, 
-    loading, 
-    hasValidZipcode 
+const TvProviders: React.FC<TvProvidersProps> = ({
+    selectedProviders,
+    onToggle,
+    availableProviders,
+    loading,
+    hasValidZipcode
 }) => {
     return (
         <div>
             <label className="block text-sm font-medium">TV Providers</label>
             <p className="text-sm text-gray-500 mb-2">
-                {!hasValidZipcode 
-                    ? "Enter a valid zipcode to see providers in your area" 
+                {!hasValidZipcode
+                    ? "Enter a valid zipcode to see providers in your area"
                     : "Select your TV providers"}
             </p>
-            
+
             {loading ? (
                 <div className="flex justify-center py-4">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                 </div>
             ) : hasValidZipcode && Object.keys(availableProviders).length > 0 ? (
-                <div className="flex flex-col gap-2">
-                    {Object.entries(availableProviders).map(([providerId, provider]) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {Object.entries(availableProviders).sort(([, a], [, b]) => {
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    }).map(([providerId, provider]) => (
                         <div key={providerId} className="flex items-center">
                             <input
                                 id={`provider-${providerId}`}
