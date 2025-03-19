@@ -13,7 +13,7 @@ import {
 interface UserPreferences {
     zipcode: string;
     tvProviders: string[];
-    favoriteTeams: string[];
+    favoriteTeams: Record<string, string>[];
 }
 
 const Settings = () => {
@@ -109,11 +109,11 @@ const Settings = () => {
         }));
     };
 
-    const handleTeamToggle = (team: string) => {
+    const handleTeamToggle = (team: Record<string, string>) => {
         setPreferences(prev => ({
             ...prev,
-            favoriteTeams: prev.favoriteTeams.includes(team)
-                ? prev.favoriteTeams.filter(t => t !== team)
+            favoriteTeams: prev.favoriteTeams.map(favoriteTeam => favoriteTeam.id).includes(team.id)
+                ? prev.favoriteTeams.filter(t => t.id !== team.id)
                 : [...prev.favoriteTeams, team]
         }));
     };

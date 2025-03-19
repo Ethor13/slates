@@ -148,7 +148,7 @@ function parsePowerIndex(PIData: PowerIndexResponse): TeamMetric {
         abbreviation: team.team.abbreviation,
         divisionName: team.team.group.shortName,
         conferenceName: team.team.group.parent.shortName,
-        logo: team.team.logos[0].href,
+        logo: team.team.logos[0].href?.split(".com/").at(-1) as string,
       },
       metrics: {
         powerIndexes: combine_maps(

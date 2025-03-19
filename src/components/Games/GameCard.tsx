@@ -1,5 +1,5 @@
 import React from "react";
-import { getInterestLevel, formatGameTime, getInternalImageUrl } from "../../helpers";
+import { getInterestLevel, formatGameTime } from "../../helpers";
 import { GameCardProps, TeamInfoProps, BroadcastsProps } from "./types";
 
 // First item is class for border, second is class for background
@@ -35,7 +35,7 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team, opponent }) => {
         </div>
         <img 
           className={`w-16 h-16 flex-col items-center ${homeAway === "home" ? "order-first" : ""}`} 
-          src={getInternalImageUrl(team.logo || "/i/teamlogos/tbd.png")} 
+          src={team.logo || "i/teamlogos/tbd.png"} 
           alt={`${team.shortName} logo`} 
           loading="lazy"
         />
