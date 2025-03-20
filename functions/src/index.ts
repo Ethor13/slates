@@ -120,6 +120,7 @@ export const requestUpdate = onRequest(
   }
 );
 
+// http://127.0.0.1:5001/slates-59840/us-central1/serviceProviders?zipcode=02145
 export const serviceProviders = onRequest(
   { cors: true },
   async (req, res) => {

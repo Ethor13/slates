@@ -6,21 +6,21 @@ const SERVICE_PROVIDER_URL = "https://backend.tvguide.com/tvschedules/tvguide/se
 // const CHANNELS_URL = "https://backend.tvguide.com/tvschedules/tvguide/serviceprovider/{}/sources/web";
 
 export const getProviders = async (zipcode: string) => {
-    const url = SERVICE_PROVIDER_URL.replace("{}", zipcode);
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error(`Error fetching service providers: ${response.statusText}`);
+  const url = SERVICE_PROVIDER_URL.replace("{}", zipcode);
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Error fetching service providers: ${response.statusText}`);
+  }
+  const data = await response.json();
+
+  const providers = combine_maps(data.data.items.map((provider: any) => ({
+    [provider.id]: {
+      name: provider.name,
+      type: provider.type,
     }
-    const data = await response.json();
+  })));
 
-    const providers = combine_maps(data.data.items.map((provider: any) => ({
-        [provider.id]: {
-            name: provider.name,
-            type: provider.type,
-        }
-    })));
-
-    return providers;
+  return providers;
 }
 
 // const getProviderChannels = async (providerId: string) => {

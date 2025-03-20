@@ -12,8 +12,8 @@
         "function": "serveImage"
       },
       {
-        "source": "/service-providers/**",
-        "function": "serveImage"
+        "source": "/service-providers",
+        "function": "serviceProviders"
       },
       {
         "source": "**",
