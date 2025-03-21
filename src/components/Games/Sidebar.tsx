@@ -175,11 +175,12 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                         : "border-gray-300 hover:bg-blue-50"}`}
                     onClick={() => handleSportChange(sport)}
                   >
-                    <FirebaseImg
-                      className="w-8 h-8"
-                      src={`i/leaguelogos/${sport}.png`}
-                      alt={`${sport} logo`}
-                    />
+                    <div className="w-8 h-8">
+                      <FirebaseImg
+                        src={`i/leaguelogos/${sport}.png`}
+                        alt={`${sport} logo`}
+                      />
+                    </div>
                     <span className="font-medium">{getSportDisplayName(sport)}</span>
                   </button>
                 ))}

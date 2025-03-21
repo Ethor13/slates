@@ -34,12 +34,13 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team, opponent }) => {
             )}
           </div>
         </div>
-        <FirebaseImg 
-          className={`w-16 h-16 flex-col items-center ${homeAway === "home" ? "order-first" : ""}`} 
-          src={team.logo || "i/teamlogos/tbd.png"} 
-          alt={`${team.shortName} logo`} 
-          loading="lazy"
-        />
+        <div className={`w-16 h-16 ${homeAway === "home" ? "order-first" : ""}`}>
+          <FirebaseImg 
+            src={team.logo || "i/teamlogos/tbd.png"} 
+            alt={`${team.shortName} logo`} 
+            loading="lazy"
+          />
+        </div>
       </div>
     </div>
   );

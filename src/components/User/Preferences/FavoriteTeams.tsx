@@ -117,13 +117,12 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
                             <div className="flex flex-wrap gap-2">
                                 {teams.map(team => (
                                     <div key={`${team.sport}-${team.id}`} className="border border-gray-700 text-gray-700 text-sm px-1.5 py-0.5 rounded-full flex items-center">
-                                        {team.logo && (
+                                        <div className="w-5 h-5 mr-1.5 object-contain">
                                             <FirebaseImg
                                                 src={team.logo}
                                                 alt={`${team.name} logo`}
-                                                className="w-5 h-5 mr-1.5 object-contain"
                                             />
-                                        )}
+                                        </div>
                                         {team.name}
                                         <X
                                             className="w-3 h-3 text-gray-700 hover:cursor-pointer ml-1.5 hover:text-red-500"
@@ -184,14 +183,13 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
                                                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                                     />
                                                     <label htmlFor={`${team.sport}-${team.id}`} className="ml-3 text-sm cursor-pointer flex-1 flex items-center">
-                                                        {team.logo && (
+                                                        <div className="w-5 h-5 mr-2 object-contain">
                                                             <FirebaseImg
                                                                 src={team.logo}
                                                                 alt={`${team.name} logo`}
-                                                                className="w-5 h-5 mr-2 object-contain"
                                                                 loading="lazy"
                                                             />
-                                                        )}
+                                                        </div>
                                                         {team.name}
                                                     </label>
                                                 </div>

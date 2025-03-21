@@ -4,14 +4,10 @@ service firebase.storage {
   match /b/{bucket}/o {
     // Allow public read access to images
     match /i/{imageSegment=**} {
-      allow read: if request.auth != null;
+      allow read: if true;
       allow write: if false;
     }
-    
-    match /sports/{allPaths=**} {
-      allow read: if request.auth != null;
-      allow write: if false;
-    }
+
     
     // Require authentication for all other paths
     match /{allPaths=**} {
