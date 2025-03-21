@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 import { logger } from "firebase-functions";
 import { Storage } from "firebase-admin/storage";
 import { Firestore } from "firebase-admin/firestore";
+import axios from "axios";
 
 const ESPN_CDN = "https://a.espncdn.com/";
 
@@ -17,21 +18,24 @@ const downloadImage = async (storage: Storage, imagePath: string) => {
       logger.log("Image not found in storage, downloading:", imagePath);
 
       // Download the image
-      const response = await fetch(ESPN_CDN + imagePath);
+      const response = await axios.get(ESPN_CDN + imagePath, {
+        responseType: "arraybuffer",
+        headers: { "User-Agent": "Mozilla/5.0" },
+      });
 
-      if (!response.ok) {
+      if (response.status < 200 || response.status >= 300) {
         throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
       }
 
       // Get the image as a buffer
-      const imageBuffer = await response.buffer();
+      const imageBuffer = Buffer.from(response.data);
 
       // Upload to Firebase Storage
       await file.save(imageBuffer, {
         public: true,
         metadata: {
           cacheControl: "public, max-age=31536000, immutable", // Cache for a year
-          contentType: response.headers.get("content-type") || "image/png"
+          contentType: response.headers["content-type"] || "image/png"
         }
       });
     }
@@ -45,6 +49,8 @@ type NestedRecord = Record<string, any>;
 
 export const downloadImages = async (db: Firestore, storage: Storage) => {
   try {
+    fetch("https://a.espncdn.com")
+
     const teamsRef = db.collection("sports");
     const teamsSnapshot = await teamsRef.get();
     if (teamsSnapshot.empty) {
@@ -52,17 +58,16 @@ export const downloadImages = async (db: Firestore, storage: Storage) => {
       return;
     }
 
-    teamsSnapshot.docs.forEach(async (sport) => {
-        if (sport.id === "all") return; // Skip the "all" document
+    for (const sport of teamsSnapshot.docs) {
+      if (sport.id === "all") continue; // Skip the "all" document
+      logger.log("Processing sport:", sport.id);
 
-        const teams: NestedRecord = sport.data().teams;
+      const teams: NestedRecord = sport.data().teams;
 
-        const downloadPromises = Object.values(teams).map((team: NestedRecord) => {
-            downloadImage(storage, team.info.logo as string);
-        });
-
-        await Promise.all(downloadPromises);
-    });
+      for (const team of Object.values(teams)) {
+        await downloadImage(storage, (team as NestedRecord).info.logo as string);
+      }
+    }
 
     logger.log("All images downloaded successfully");
   } catch (error) {
