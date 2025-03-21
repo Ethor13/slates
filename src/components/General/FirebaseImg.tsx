@@ -7,7 +7,8 @@ export const FirebaseImg: React.FC<{src: string, className?: string, alt?: strin
 
   useEffect(() => {
     const fetchLogo = async () => {
-        const imageRef = ref(storage, src);
+        const srcAdjusted = src.replace(/\/scoreboard/g, '');
+        const imageRef = ref(storage, srcAdjusted);
         const downloadUrl = await getDownloadURL(imageRef);
         setImageSrc(downloadUrl);
     };

@@ -7,11 +7,6 @@ export default defineConfig({
   server: { 
     watch: { usePolling: true },
     proxy: {
-      // Redirect /i requests to the Firebase Functions emulator
-      '/i': {
-        target: 'http://localhost:5001/slates-59840/us-central1/serveImage',
-        changeOrigin: true,
-      },
       '/service-providers': {
         target: 'http://localhost:5001/slates-59840/us-central1/serviceProviders',
         changeOrigin: true,

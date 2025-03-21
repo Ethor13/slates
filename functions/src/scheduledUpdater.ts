@@ -7,9 +7,9 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 import { Firestore } from "firebase-admin/firestore";
-import { updateScheduleInFirestore } from "./scrapers/scrape_schedule.js";
-import { updateGameMetrics, updateTeamMetrics } from "./scrapers/scrape_game_metrics.js";
-import { scoreSportsGames } from "./scrapers/calculate_slate_scores.js";
+import { updateScheduleInFirestore } from "./sports-scrapers/scrape_schedule.js";
+import { updateGameMetrics, updateTeamMetrics } from "./sports-scrapers/scrape_game_metrics.js";
+import { scoreSportsGames } from "./sports-scrapers/calculate_slate_scores.js";
 import { logger } from "firebase-functions";
 import { Sports, GamesData, TeamsData } from "./types.js";
 import { datesToUpdate } from "./helpers.js";

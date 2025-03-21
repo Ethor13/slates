@@ -8,10 +8,6 @@
     ],
     "rewrites": [
       {
-        "source": "/i/**",
-        "function": "serveImage"
-      },
-      {
         "source": "/service-providers",
         "function": "serviceProviders"
       },
