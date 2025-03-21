@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { Menu, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
 
 const Nav = () => {

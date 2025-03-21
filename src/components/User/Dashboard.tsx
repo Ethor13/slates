@@ -3,7 +3,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { ArrowUp } from 'lucide-react';
-import Nav from '../Nav';
+import Nav from '../General/Nav';
 import GamesList from '../Games/GamesList';
 import Sidebar from '../Games/Sidebar';
 

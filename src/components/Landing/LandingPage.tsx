@@ -1,4 +1,4 @@
-import Nav from '../Nav';
+import Nav from '../General/Nav';
 import HeroSection from './HeroSection';
 import TechnologySection from './TechnologySection';
 import BenefitsSection from './BenefitsSection';

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { Search, X } from 'lucide-react';
+import { FirebaseImg } from '../../General/FirebaseImg';
 
 interface FavoriteTeamsProps {
     selectedTeams: Record<string, string>[];
@@ -117,7 +118,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
                                 {teams.map(team => (
                                     <div key={`${team.sport}-${team.id}`} className="border border-gray-700 text-gray-700 text-sm px-1.5 py-0.5 rounded-full flex items-center">
                                         {team.logo && (
-                                            <img
+                                            <FirebaseImg
                                                 src={team.logo}
                                                 alt={`${team.name} logo`}
                                                 className="w-5 h-5 mr-1.5 object-contain"
@@ -184,7 +185,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
                                                     />
                                                     <label htmlFor={`${team.sport}-${team.id}`} className="ml-3 text-sm cursor-pointer flex-1 flex items-center">
                                                         {team.logo && (
-                                                            <img
+                                                            <FirebaseImg
                                                                 src={team.logo}
                                                                 alt={`${team.name} logo`}
                                                                 className="w-5 h-5 mr-2 object-contain"

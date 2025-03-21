@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, act } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import Nav from '../Nav';
+import Nav from '../General/Nav';
 import { 
     ZipcodeInput, 
     TvProviders, 
