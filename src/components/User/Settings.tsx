@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef, act } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { db } from '../../lib/firebase';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
 import Nav from '../General/Nav';
 import { 
     ZipcodeInput, 
@@ -10,12 +8,6 @@ import {
     SavePreferencesButton 
 } from './Preferences';
 import { MapPin, Tv, Star, User, Bell, Shield, HelpCircle } from 'lucide-react';
-
-interface UserPreferences {
-    zipcode: string;
-    tvProviders: string[];
-    favoriteTeams: Record<string, string>[];
-}
 
 interface SettingsSectionProps {
     id: string;
@@ -54,8 +46,7 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
 };
 
 const Settings = () => {
-    const { currentUser } = useAuth();
-    const [loading, setLoading] = useState(false);
+    const { currentUser, userPreferences, preferencesLoading, updateUserPreferences } = useAuth();
     const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
     const [zipcodeError, setZipcodeError] = useState<string | null>(null);
     const [providersLoading, setProvidersLoading] = useState(false);
@@ -63,54 +54,13 @@ const Settings = () => {
     const [activeSection, setActiveSection] = useState('location');
     const sectionsRef = useRef<HTMLDivElement>(null);
     
-    const [preferences, setPreferences] = useState<UserPreferences>({
-        zipcode: '',
-        tvProviders: [],
-        favoriteTeams: []
-    });
+    // Local copy of preferences that will be updated as the user makes changes
+    const [localPreferences, setLocalPreferences] = useState({ ...userPreferences });
 
-    const settingsSections = [
-        { id: 'account', title: 'Account', description: 'Manage your account information', icon: <User size={20} /> },
-        { id: 'location', title: 'Location', description: 'Set your location for regional sports', icon: <MapPin size={20} /> },
-        { id: 'providers', title: 'TV Providers', description: 'Choose your TV providers for channel recommendations', icon: <Tv size={20} /> },
-        { id: 'teams', title: 'Favorite Teams', description: 'Select your favorite teams to prioritize their games', icon: <Star size={20} /> },
-        { id: 'notifications', title: 'Notifications', description: 'Configure how you receive notifications', icon: <Bell size={20} />, disabled: true },
-        { id: 'privacy', title: 'Privacy', description: 'Control your privacy settings', icon: <Shield size={20} />, disabled: true },
-        { id: 'help', title: 'Help & Support', description: 'Get assistance with Slates', icon: <HelpCircle size={20} />, disabled: true }
-    ];
-
-    const isValidZipcode = (zipcode: string) => zipcode.length === 5;
-
+    // Update local preferences when userPreferences from context changes
     useEffect(() => {
-        const fetchUserData = async () => {
-            if (!currentUser) return;
-            
-            setLoading(true);
-            try {
-                const userDocRef = doc(db, 'users', currentUser.uid);
-                const userDoc = await getDoc(userDocRef);
-                
-                if (userDoc.exists()) {
-                    const userData = userDoc.data() as UserPreferences;
-                    setPreferences({
-                        zipcode: userData.zipcode || '',
-                        tvProviders: userData.tvProviders || [],
-                        favoriteTeams: userData.favoriteTeams || []
-                    });
-                    
-                    // If user already has a valid zipcode, fetch providers
-                    if (isValidZipcode(userData.zipcode || '')) {
-                        fetchProviders(userData.zipcode);
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchUserData();
-    }, [currentUser]);
+        setLocalPreferences({ ...userPreferences });
+    }, [userPreferences]);
 
     useEffect(() => {
         // Setup intersection observer for section scrolling
@@ -136,7 +86,14 @@ const Settings = () => {
         return () => {
             observer.disconnect();
         };
-    }, [loading]);
+    }, [preferencesLoading]);
+
+    // If the user has a valid zipcode, fetch providers on component mount
+    useEffect(() => {
+        if (isValidZipcode(userPreferences.zipcode)) {
+            fetchProviders(userPreferences.zipcode);
+        }
+    }, [userPreferences.zipcode]);
 
     const scrollToSection = (sectionId: string) => {
         const section = document.getElementById(sectionId);
@@ -145,6 +102,8 @@ const Settings = () => {
             setActiveSection(sectionId);
         }
     };
+
+    const isValidZipcode = (zipcode: string) => zipcode.length === 5;
 
     const fetchProviders = async (zipcode: string) => {
         if (!isValidZipcode(zipcode)) return;
@@ -171,7 +130,7 @@ const Settings = () => {
 
     const handleZipcodeChange = (zipcode: string) => {
         if (zipcodeError) setZipcodeError(null);
-        setPreferences(prev => ({
+        setLocalPreferences(prev => ({
             ...prev,
             zipcode
         }));
@@ -179,7 +138,7 @@ const Settings = () => {
         // If zipcode becomes valid, fetch providers
         if (isValidZipcode(zipcode)) {
             fetchProviders(zipcode);
-            setPreferences(prev => ({
+            setLocalPreferences(prev => ({
                 ...prev,
                 tvProviders: [] 
             }));
@@ -190,7 +149,7 @@ const Settings = () => {
     };
 
     const handleTvProviderToggle = (providerId: string) => {
-        setPreferences(prev => ({
+        setLocalPreferences(prev => ({
             ...prev,
             tvProviders: prev.tvProviders.includes(providerId) 
                 ? prev.tvProviders.filter(p => p !== providerId)
@@ -199,7 +158,7 @@ const Settings = () => {
     };
 
     const handleTeamToggle = (team: Record<string, string>) => {
-        setPreferences(prev => ({
+        setLocalPreferences(prev => ({
             ...prev,
             favoriteTeams: prev.favoriteTeams.map(favoriteTeam => favoriteTeam.id).includes(team.id)
                 ? prev.favoriteTeams.filter(t => t.id !== team.id)
@@ -210,14 +169,14 @@ const Settings = () => {
     const savePreferences = async () => {
         if (!currentUser) return;
         
-        if (!preferences.zipcode || !isValidZipcode(preferences.zipcode)) {
+        if (!localPreferences.zipcode || !isValidZipcode(localPreferences.zipcode)) {
             setZipcodeError('Please enter a valid 5-digit zipcode');
             return;
         }
+        
         setSaveStatus('saving');
         try {
-            const userDocRef = doc(db, 'users', currentUser.uid);
-            await setDoc(userDocRef, preferences);
+            await updateUserPreferences(localPreferences);
             setSaveStatus('success');
             setTimeout(() => setSaveStatus('idle'), 3000);
         } catch (error) {
@@ -226,6 +185,16 @@ const Settings = () => {
             setTimeout(() => setSaveStatus('idle'), 3000);
         }
     };
+
+    const settingsSections = [
+        { id: 'account', title: 'Account', description: 'Manage your account information', icon: <User size={20} /> },
+        { id: 'location', title: 'Location', description: 'Set your location for regional sports', icon: <MapPin size={20} /> },
+        { id: 'providers', title: 'TV Providers', description: 'Choose your TV providers for channel recommendations', icon: <Tv size={20} /> },
+        { id: 'teams', title: 'Favorite Teams', description: 'Select your favorite teams to prioritize their games', icon: <Star size={20} /> },
+        { id: 'notifications', title: 'Notifications', description: 'Configure how you receive notifications', icon: <Bell size={20} />, disabled: true },
+        { id: 'privacy', title: 'Privacy', description: 'Control your privacy settings', icon: <Shield size={20} />, disabled: true },
+        { id: 'help', title: 'Help & Support', description: 'Get assistance with Slates', icon: <HelpCircle size={20} />, disabled: true }
+    ];
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -267,10 +236,9 @@ const Settings = () => {
                                     </nav>
                                 </div>
                             </div>
-
                             {/* Main Content - with left margin to accommodate fixed sidebar */}
                             <div className="ml-64 pl-8">
-                                {loading ? (
+                                {preferencesLoading ? (
                                     <div className="p-6 flex justify-center py-12">
                                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
                                     </div>
@@ -294,7 +262,7 @@ const Settings = () => {
                                             icon={<MapPin size={20} />}
                                         >
                                             <ZipcodeInput 
-                                                zipcode={preferences.zipcode} 
+                                                zipcode={localPreferences.zipcode} 
                                                 onChange={handleZipcodeChange}
                                                 error={zipcodeError}
                                             />
@@ -307,11 +275,11 @@ const Settings = () => {
                                             icon={<Tv size={20} />}
                                         >
                                             <TvProviders 
-                                                selectedProviders={preferences.tvProviders} 
+                                                selectedProviders={localPreferences.tvProviders} 
                                                 onToggle={handleTvProviderToggle}
                                                 availableProviders={availableProviders}
                                                 loading={providersLoading}
-                                                hasValidZipcode={isValidZipcode(preferences.zipcode)}
+                                                hasValidZipcode={isValidZipcode(localPreferences.zipcode)}
                                             />
                                         </SettingsSection>
                                         
@@ -322,7 +290,7 @@ const Settings = () => {
                                             icon={<Star size={20} />}
                                         >
                                             <FavoriteTeams 
-                                                selectedTeams={preferences.favoriteTeams} 
+                                                selectedTeams={localPreferences.favoriteTeams} 
                                                 onToggle={handleTeamToggle} 
                                             />
                                         </SettingsSection>
