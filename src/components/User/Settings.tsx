@@ -160,10 +160,6 @@ const Settings = () => {
             
             const providersData = await response.json();
             
-            setPreferences(prev => ({
-                ...prev,
-                tvProviders: [] 
-            }));
             setAvailableProviders(providersData || {});
         } catch (error) {
             console.error('Error fetching TV providers:', error);
@@ -183,6 +179,10 @@ const Settings = () => {
         // If zipcode becomes valid, fetch providers
         if (isValidZipcode(zipcode)) {
             fetchProviders(zipcode);
+            setPreferences(prev => ({
+                ...prev,
+                tvProviders: [] 
+            }));
         } else {
             // Clear providers if zipcode is invalid
             setAvailableProviders({});

@@ -18,6 +18,7 @@ export const FirebaseImg: React.FC<{src: string, className?: string, alt?: strin
         if (cachedData) {
           const { url } = JSON.parse(cachedData);
           setImageSrc(url);
+          return;
         }
         
         // Fetch from Firebase if not in cache or expired
