@@ -16,16 +16,8 @@ export const FirebaseImg: React.FC<{src: string, className?: string, alt?: strin
         const cachedData = localStorage.getItem(cacheKey);
         
         if (cachedData) {
-          const { url, expiry } = JSON.parse(cachedData);
-          
-          // Check if the cached URL is still valid
-          if (expiry > Date.now()) {
-            setImageSrc(url);
-            return;
-          } else {
-            // Clear expired cache
-            localStorage.removeItem(cacheKey);
-          }
+          const { url } = JSON.parse(cachedData);
+          setImageSrc(url);
         }
         
         // Fetch from Firebase if not in cache or expired
@@ -33,16 +25,9 @@ export const FirebaseImg: React.FC<{src: string, className?: string, alt?: strin
         const downloadUrl = await getDownloadURL(imageRef);
         setImageSrc(downloadUrl);
         
-        // Cache the URL with 30-day expiration
-        const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
-        const expiryTime = Date.now() + thirtyDaysInMs;
-        
         localStorage.setItem(
           cacheKey, 
-          JSON.stringify({ 
-            url: downloadUrl, 
-            expiry: expiryTime 
-          })
+          JSON.stringify({ url: downloadUrl })
         );
       } catch (error) {
         console.error("Error fetching image:", error);
