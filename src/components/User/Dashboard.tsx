@@ -6,6 +6,7 @@ import { ArrowUp } from 'lucide-react';
 import Nav from '../General/Nav';
 import GamesList from '../Games/GamesList';
 import Sidebar from '../Games/Sidebar';
+import GameCardPrototypes from '../Games/Prototypes/GameCardPrototypes';
 
 enum Sports {
     NBA = 'nba',
@@ -124,7 +125,13 @@ const Dashboard = () => {
                                     Error loading games: {gamesError.message || 'Unknown error'}
                                 </div>
                             ) : (
-                                <GamesList
+                                // <GamesList
+                                //     games={games}
+                                //     sortBy={sortBy}
+                                //     setSortBy={setSortBy}
+                                //     selectedDate={selectedDate}
+                                // />
+                                <GameCardPrototypes
                                     games={games}
                                     sortBy={sortBy}
                                     setSortBy={setSortBy}
