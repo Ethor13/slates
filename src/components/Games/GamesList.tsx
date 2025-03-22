@@ -26,11 +26,13 @@ const renderGames = (games: ScheduleResponse, sortBy: Sort) => {
         .map(([gameTime, games]) => (
           <div key={gameTime} className="flex flex-col gap-4">
             <h2 className="text-2xl font-semibold">{formatGameTime(gameTime)}</h2>
-            {Object.entries(games)
-              .sort(([_, game1], [__, game2]) => game2.slateScore - game1.slateScore)
-              .map(([gameId, game]) => (
-                <GameCard key={gameId} game={game} showGameTime={false} />
-              ))}
+            <div className="flex flex-col gap-4">
+              {Object.entries(games)
+                .sort(([_, game1], [__, game2]) => game2.slateScore - game1.slateScore)
+                .map(([gameId, game]) => (
+                  <GameCard key={gameId} game={game} showGameTime={false} />
+                ))}
+            </div>
           </div>
         ))
     );
@@ -92,7 +94,7 @@ const GamesList: React.FC<GamesListProps> = ({ sortBy, games, setSortBy, selecte
   }, []);
 
   return (
-    <div className={`flex flex-col justify-center gap-4 items-center pt-8`}>
+    <div className={`flex flex-col justify-center gap-4 items-center pt-8 mb-8`}>
       <div className="flex flex-row justify-between items-center w-full">
         {/* Selected date display */}
         <div className="text-center">

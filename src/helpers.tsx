@@ -1,3 +1,5 @@
+import { Star } from "lucide-react";
+
 export const formatGameTime = (timeString: string): string => {
     const date = new Date(timeString);
     return date.toLocaleString("en-US", {
@@ -11,19 +13,20 @@ export const formatGameTime = (timeString: string): string => {
     });
 };
 
-interface InterestLevel {
-    label: string;
+export interface InterestLevel {
     className: string;
-    rating: string;
+    rating: string | JSX.Element;
 }
 
-export const getInterestLevel = (score: number): InterestLevel => {
+export const getInterestLevel = (score: number, isFavoriteGame: boolean): InterestLevel => {
+    if (isFavoriteGame) return { className: "favorite", rating: <Star className="text-yellow-500" /> };
+
     const rating = score >= 0 ? (100 * score).toFixed(0) : "?";
-    if (score >= 0.8) return { label: "Must Watch", className: "must-watch", rating };
-    if (score >= 0.6) return { label: "High Interest", className: "high-interest", rating };
-    if (score >= 0.4) return { label: "Decent", className: "decent", rating };
-    if (score >= 0) return { label: "Low Interest", className: "low-interest", rating };
-    return { label: "Unknown", className: "unknown-interest", rating };
+    if (score >= 0.8) return { className: "must-watch", rating };
+    if (score >= 0.6) return { className: "high-interest", rating };
+    if (score >= 0.4) return { className: "decent", rating };
+    if (score >= 0) return { className: "low-interest", rating };
+    return { className: "unknown-interest", rating };
 };
 
 export const getDateString = (date: Date): string => {
