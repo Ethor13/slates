@@ -11,7 +11,7 @@ import { onRequest } from "firebase-functions/v2/https";
 import admin from "firebase-admin";
 import { logger } from "firebase-functions";
 import { updateDatesData } from "./scheduledUpdater.js";
-import { getProviders } from "./channel-scraper/service_providers.js";
+import { getProviders, getChannels } from "./channel-scraper/service_providers.js";
 import { downloadImages } from "./sports-scrapers/scrape_images.js";
 
 admin.initializeApp();
@@ -82,6 +82,26 @@ export const serviceProviders = onRequest(
     } catch (error) {
       logger.error("Error fetching service providers:", error);
       res.status(500).send("Error fetching service providers: " + error);
+    }
+  }
+);
+
+// http://127.0.0.1:5001/slates-59840/us-central1/channels?providerId=9166050680
+export const channels = onRequest(
+  { cors: true },
+  async (req, res) => {
+    const providerId = req.query.providerId as string;
+    if (!providerId) {
+      res.status(400).send("Missing providerId");
+      return;
+    }
+
+    try {
+      const channels = await getChannels(providerId);
+      res.status(200).json(channels);
+    } catch (error) {
+      logger.error("Error fetching provider Channels:", error);
+      res.status(500).send("Error fetching provider Channels: " + error);
     }
   }
 );

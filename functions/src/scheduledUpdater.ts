@@ -70,7 +70,7 @@ const updateDateData = async (db: Firestore, date: string, teamsData: TeamsData)
     //   key: string,
     //   values: string[]  
     // }[]
-    const networksRef = db.collection("broadcasting").doc("networks");
+    const networksRef = db.collection("broadcasting").doc("espnNetworks");
     Object.values(Sports).forEach((sport) => {
       Object.values(gamesData[sport]).forEach((game) => {
         batch.set(networksRef, game.broadcasts, { merge: true });
