@@ -12,6 +12,10 @@
         "function": "serviceProviders"
       },
       {
+        "source": "/channels",
+        "function": "channels"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

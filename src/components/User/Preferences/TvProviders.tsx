@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface TvProvidersProps {
-    selectedProviders: string[];
-    onToggle: (provider: string) => void;
+    selectedProviders: Record<string, string>; // Changed from string[] to Record<string, string>
+    onToggle: (providerId: string, providerName: string) => void; // Updated to include provider name
     availableProviders: Record<string, any>;
     loading: boolean;
     hasValidZipcode: boolean;
@@ -40,8 +40,8 @@ const TvProviders: React.FC<TvProvidersProps> = ({
                                 id={`provider-${providerId}`}
                                 name={`provider-${providerId}`}
                                 type="checkbox"
-                                checked={selectedProviders.includes(providerId)}
-                                onChange={() => onToggle(providerId)}
+                                checked={Object.keys(selectedProviders).includes(providerId)}
+                                onChange={() => onToggle(providerId, provider.name)}
                                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                             />
                             <label htmlFor={`provider-${providerId}`} className="ml-3 text-sm">

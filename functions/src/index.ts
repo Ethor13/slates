@@ -98,6 +98,10 @@ export const channels = onRequest(
 
     try {
       const channels = await getChannels(providerId);
+      // add cache control headers for up to 1 month
+      res.set("Cache-Control", "public, max-age=2592000");
+      // set content type to application/json
+      res.set("Content-Type", "application/json");
       res.status(200).json(channels);
     } catch (error) {
       logger.error("Error fetching provider Channels:", error);

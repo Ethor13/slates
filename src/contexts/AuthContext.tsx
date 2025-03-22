@@ -13,10 +13,25 @@ import { auth, db } from '../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 // Define UserPreferences interface
-export interface UserPreferences {
+interface UserPreferences {
     zipcode: string;
-    tvProviders: string[];
+    tvProviders: Record<string, string>; // Changed from string[] to Record<string, string>
     favoriteTeams: Record<string, string>[];
+}
+
+export interface Channel {
+    number: string;
+    logo: string;
+    names: {
+        commonName: string;
+        fullName?: string;
+        name?: string;
+        networkName?: string;
+    }
+}
+
+export interface Provider {
+    [channelId: string]: Channel;
 }
 
 interface AuthContextType {
@@ -24,6 +39,7 @@ interface AuthContextType {
     loading: boolean;
     userPreferences: UserPreferences;
     preferencesLoading: boolean;
+    tvChannels: Record<string, Provider>;
     signIn: (email: string, password: string) => Promise<void>;
     signUp: (email: string, password: string) => Promise<void>;
     signInWithGoogle: () => Promise<void>;
@@ -44,7 +60,7 @@ export const useAuth = () => {
 
 const getDefaultPreferences = (): UserPreferences => ({
     zipcode: '',
-    tvProviders: [],
+    tvProviders: {},
     favoriteTeams: []
 });
 
@@ -53,6 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
     const [preferencesLoading, setPreferencesLoading] = useState(true);
     const [userPreferences, setUserPreferences] = useState<UserPreferences>(getDefaultPreferences());
+    const [tvChannels, setTvChannels] = useState<Record<string, Provider>>({});
 
     // Listen for auth state changes
     useEffect(() => {
@@ -64,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return unsubscribe;
     }, []);
 
-    // Listen for user preferences changes
+    // Listen for user changes
     useEffect(() => {
         const setupPreferencesListener = async () => {
             if (!currentUser) {
@@ -94,6 +111,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setupPreferencesListener();
     }, [currentUser]);
 
+    // Listen for provider changes
+    useEffect(() => {
+        const providersChannels: Record<string, any> = {};
+
+        // get provider TV channels
+        Object.keys(userPreferences.tvProviders).forEach(async (providerId) => {
+            try {
+                const response = await fetch(`/channels?providerId=${providerId}`);
+                const channels = await response.json();
+                providersChannels[providerId] = channels;
+            } catch (error) {
+                console.error('Error fetching TV channels:', error);
+            }
+        });
+        setTvChannels(providersChannels);
+    }, [userPreferences.tvProviders]);
+
     const signIn = async (email: string, password: string) => {
         await signInWithEmailAndPassword(auth, email, password);
     };
@@ -117,7 +151,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const updateUserPreferences = async (preferences: Partial<UserPreferences>) => {
         if (!currentUser) throw new Error('No user is signed in');
-        
+
         try {
             const newPreferences = { ...userPreferences, ...preferences };
             setUserPreferences(newPreferences);
@@ -133,6 +167,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentUser,
         loading,
         userPreferences,
+        tvChannels,
         preferencesLoading,
         signIn,
         signUp,

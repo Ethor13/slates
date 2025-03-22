@@ -11,6 +11,10 @@ export default defineConfig({
         target: 'http://localhost:5001/slates-59840/us-central1/serviceProviders',
         changeOrigin: true,
       },
+      '/channels': {
+        target: 'http://localhost:5001/slates-59840/us-central1/channels',
+        changeOrigin: true,
+      },
     },
   },
   build: {

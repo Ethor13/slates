@@ -140,7 +140,7 @@ const Settings = () => {
             fetchProviders(zipcode);
             setLocalPreferences(prev => ({
                 ...prev,
-                tvProviders: [] 
+                tvProviders: {} // Changed from [] to {} for map structure
             }));
         } else {
             // Clear providers if zipcode is invalid
@@ -148,13 +148,23 @@ const Settings = () => {
         }
     };
 
-    const handleTvProviderToggle = (providerId: string) => {
-        setLocalPreferences(prev => ({
-            ...prev,
-            tvProviders: prev.tvProviders.includes(providerId) 
-                ? prev.tvProviders.filter(p => p !== providerId)
-                : [...prev.tvProviders, providerId]
-        }));
+    const handleTvProviderToggle = (providerId: string, providerName: string) => {
+        setLocalPreferences(prev => {
+            const newProviders = { ...prev.tvProviders };
+            
+            if (providerId in newProviders) {
+                // Remove provider if it already exists
+                delete newProviders[providerId];
+            } else {
+                // Add provider with name if it doesn't exist
+                newProviders[providerId] = providerName;
+            }
+            
+            return {
+                ...prev,
+                tvProviders: newProviders
+            };
+        });
     };
 
     const handleTeamToggle = (team: Record<string, string>) => {

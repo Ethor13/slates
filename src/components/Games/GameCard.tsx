@@ -1,7 +1,7 @@
 import React from "react";
 import { getInterestLevel, formatGameTime } from "../../helpers";
 import { GameCardProps, TeamInfoProps, BroadcastsProps } from "./types";
-import { useAuth } from '../../contexts/AuthContext';
+import { Provider, useAuth } from '../../contexts/AuthContext';
 import { FirebaseImg } from "../General/FirebaseImg";
 
 // First item is class for border, second is class for background
@@ -9,7 +9,7 @@ const interestLevelClasses: Record<string, string[]> = {
   "favorite": ["border-yellow-500", "bg-yellow-100 text-yellow-800"],
   "must-watch": ["border-green-500", "bg-green-100 text-green-800"],
   "high-interest": ["border-blue-500", "bg-blue-100 text-blue-800"],
-  "decent": ["border-purple-500", "bg-purple-100 text-purple-800"],
+  "decent": ["border-orange-500", "bg-orange-100 text-orange-800"],
   "low-interest": ["border-red-500", "bg-red-100 text-red-800"],
   "unknown-interest": ["border-gray-500", "bg-gray-300 text-gray-500"]
 };
@@ -47,7 +47,32 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team, opponent }) => {
   );
 };
 
+const mapBroadcastToChannel = (broadcast: string, tvChannels: Record<string, Provider>) => {
+  const mappedChannels: Record<string, string>[] = [];
+  Object.entries(tvChannels).forEach(([providerId, provider]) => {
+    Object.entries(provider).forEach(([channelId, channel]) => {
+      if (channel.names.commonName === broadcast) {
+        mappedChannels.push({
+          providerId,
+          channelId,
+          name: broadcast,
+          number: channel.number,
+          logo: channel.logo,
+        });
+      }
+    });
+  });
+
+  if (mappedChannels.length === 0) {
+    return [{ channelId: broadcast, name: broadcast }];
+  } else {
+    return mappedChannels;
+  }
+}
+
 const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts }) => {
+  const { tvChannels } = useAuth();
+
   if (!Object.keys(broadcasts).length) {
     return (
       <div className="flex flex-row flex-wrap justify-center gap-2 mb-2 text-xs text-gray-600">
@@ -58,15 +83,20 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts }) => {
 
   return (
     <div className="flex flex-row flex-wrap justify-center gap-2 mb-2 text-xs text-gray-600">
-      {Object.keys(broadcasts).map((broadcast, index) => (
-        <span
-          key={index}
-          id={index.toString()}
-          className="w-fit text-center font-bold bg-gray-100 py-1 px-3 border border-gray-300 rounded-full"
-        >
-          {broadcast}
-        </span>
-      ))}
+      {Object.keys(broadcasts).map(broadcast => {
+        const mappedChannels = mapBroadcastToChannel(broadcast, tvChannels);
+        return mappedChannels.map(channel => (
+          <span
+            key={channel.channelId}
+            id={channel.channelId}
+            className="w-fit text-center font-bold bg-gray-100 py-1 px-3 border border-gray-300 rounded-full"
+          >
+            {channel.number ? `${channel.name}: ${channel.number}` : channel.name}
+          </span>
+        )
+        )
+      }
+      )}
     </div>
   );
 };
