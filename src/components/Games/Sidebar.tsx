@@ -1,15 +1,13 @@
 import React, { useState, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Tv } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Sports, SportSelectorProps, ChevronButtonProps } from "./types";
 import { getDateString } from "../../helpers";
 import { FirebaseImg } from "../General/FirebaseImg";
-import { useAuth } from "../../contexts/AuthContext";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, setGamesLoading } = props;
   const today = getDateString(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
-  const { userPreferences } = useAuth();
 
   const handleSportChange = useCallback(
     (sport: Sports) => {
@@ -159,40 +157,6 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     );
                   })}
                 </div>
-              </div>
-            </div>
-
-            <div className="w-full border-b border-gray-200"></div>
-
-            {/* TV Providers section */}
-            <div className="flex flex-col gap-4">
-              <div>
-                <h2 className="text-lg font-semibold">TV Providers</h2>
-                {/* subtitle that says to change tv providers in the settings */}
-                <p className="text-sm text-gray-500 mb-2">
-                  TV providers can be changed in User Settings
-                </p>
-              </div>
-              <div className="flex flex-col gap-2">
-                {Object.keys(userPreferences.tvProviders).length > 0 ? (
-                  <div className="grid grid-cols-1">
-                    {Object.entries(userPreferences.tvProviders).map(([providerId, providerName]) => (
-                      <div 
-                        key={providerId}
-                        className="flex items-center rounded-lg"
-                      >
-                        <div className="flex-shrink-0 mr-3 p-1.5">
-                          <Tv size={16} className="text-blue-600" />
-                        </div>
-                        <span className="text-sm font-medium text-gray-700">{providerName}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-gray-500 italic bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    No TV providers selected. Go to Settings to add providers.
-                  </p>
-                )}
               </div>
             </div>
 

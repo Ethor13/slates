@@ -1,16 +1,7 @@
 import React from "react";
+import { useMemo } from "react";
 import { Provider } from '../../../contexts/AuthContext';
 import { useAuth } from '../../../contexts/AuthContext';
-
-interface BroadcastChannelProps {
-  text: string;
-}
-
-const BroadcastChannel: React.FC<BroadcastChannelProps> = ({ text }) => (
-  <span className="text-xs bg-gray-100 py-0.5 px-2 border border-gray-200 rounded-full whitespace-nowrap overflow-hidden text-ellipsis">
-    {text}
-  </span>
-);
 
 // Helper function to map broadcast to channel for a specific provider
 const mapBroadcastToChannelForProvider = (broadcast: string, provider: Provider) => {
@@ -38,61 +29,97 @@ export interface BroadcastsProps {
 const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels }) => {
   const { userPreferences } = useAuth();
 
-  // Get broadcast channels grouped by provider
-  const broadcastsByProvider = React.useMemo(() => {
-    if (!Object.keys(broadcasts).length) return new Map();
+  // Create a mapping of broadcasts to display in table format
+  const tableData = useMemo(() => {
+    // Get list of all broadcast names
+    const broadcastNames = Object.keys(broadcasts);
+    if (broadcastNames.length === 0) return { providers: [], broadcasts: [] };
     
-    const providerBroadcasts = new Map<string, Array<{ key: string; text: string }>>();
+    // Get list of providers with their IDs and names
+    const providers = Object.entries(userPreferences.tvProviders)
+      .map(([providerId, providerName]) => ({
+        id: providerId,
+        name: providerName,
+        provider: tvChannels[providerId]
+      }))
+      .filter(item => item.provider); // Only include providers that exist in tvChannels
     
-    // Only process providers that the user has selected
-    Object.keys(userPreferences.tvProviders).forEach(providerId => {
-      const provider = tvChannels[providerId];
-      if (!provider) return;
+    // Create the channel mapping for each provider and broadcast
+    const providerChannels = providers.map(providerInfo => {
+      const { id, name, provider } = providerInfo;
+      const channels: Record<string, string> = {};
       
-      const channelsForProvider: Array<{ key: string; text: string }> = [];
-      
-      Object.keys(broadcasts).forEach(broadcast => {
+      // For each broadcast, find the matching channel if any
+      broadcastNames.forEach(broadcast => {
         const mappedChannels = mapBroadcastToChannelForProvider(broadcast, provider);
-        channelsForProvider.push(
-          ...mappedChannels.map(channel => ({
-            key: channel.channelId,
-            text: channel.number ? `${channel.name}: ${channel.number}` : channel.name
-          }))
-        );
+        if (mappedChannels.length > 0) {
+          // Use the first channel number if there are multiple matches
+          channels[broadcast] = mappedChannels[0].number || '';
+        } else {
+          channels[broadcast] = '';
+        }
       });
       
-      if (channelsForProvider.length > 0) {
-        providerBroadcasts.set(providerId, channelsForProvider);
-      }
+      return {
+        providerId: id,
+        providerName: name,
+        channels
+      };
     });
     
-    return providerBroadcasts;
+    return {
+      broadcasts: broadcastNames,
+      providers: providerChannels
+    };
   }, [broadcasts, tvChannels, userPreferences.tvProviders]);
 
+  // If no broadcasts or providers, show empty state
+  if (tableData.broadcasts.length === 0 || tableData.providers.length === 0) {
+    return <span className="text-xs text-gray-500 italic">No Broadcasts</span>;
+  }
+
   return (
-    <div className="w-full overflow-hidden">
-      {broadcastsByProvider.size > 0 ? (
-        Array.from(broadcastsByProvider.entries()).map(([providerId, channels]) => (
-          <div key={providerId} className="flex flex-wrap items-center gap-1 mb-1">
-            <span className="text-sm font-medium text-gray-600 truncate">
-              {userPreferences.tvProviders[providerId]}:
-            </span>
-            <div className="flex flex-wrap gap-1">
-              {channels.slice(0, 2).map((channel: { key: string; text: string }) => (
-                <BroadcastChannel
-                  key={channel.key}
-                  text={channel.text}
-                />
+    <div className="w-full overflow-x-auto">
+      <table className="border-collapse text-sm">
+        <thead>
+          <tr>
+            {/* Provider Text */}
+            <th className="text-center pr-2 font-medium text-gray-600 border-b border-gray-200">Provider</th>
+            {/* Channels */}
+            {tableData.broadcasts.map(broadcast => (
+              <th 
+                key={broadcast} 
+                className="text-center px-2 font-medium text-gray-600 border-b border-l border-gray-200 max-w-[10rem] overflow-hidden text-ellipsis whitespace-nowrap"
+              >
+                {broadcast}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tableData.providers.map(provider => (
+            <tr key={provider.providerId}>
+                {/* Provider Names */}
+              <td className="text-center pr-2 font-normal text-gray-600 border-t border-r border-gray-200 whitespace-nowrap">
+                {provider.providerName.split(' - ')[0]}
+              </td>
+              {/* Channel Numbers */}
+              {tableData.broadcasts.map(broadcast => (
+                <td 
+                  key={`${provider.providerId}-${broadcast}`} 
+                  className="text-center border-l border-t border-gray-200"
+                >
+                  {provider.channels[broadcast] ? (
+                    <span className="text-sm">
+                      {provider.channels[broadcast]}
+                    </span>
+                  ) : ''}
+                </td>
               ))}
-              {channels.length > 2 && (
-                <span className="text-xs text-gray-500">+{channels.length - 2}</span>
-              )}
-            </div>
-          </div>
-        ))
-      ) : (
-        <span className="text-xs text-gray-500 italic">No Broadcasts</span>
-      )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
