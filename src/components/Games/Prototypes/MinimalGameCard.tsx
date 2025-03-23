@@ -8,12 +8,12 @@ import { formatGameTime } from "../../../helpers";
 
 // Interest level styling (now only using the background colors)
 const interestLevelClasses: Record<string, string[]> = {
-    "favorite": ["", "bg-yellow-100 text-yellow-800"],
-    "must-watch": ["", "bg-green-100 text-green-800"],
-    "high-interest": ["", "bg-blue-100 text-blue-800"],
-    "decent": ["", "bg-orange-100 text-orange-800"],
-    "low-interest": ["", "bg-red-100 text-red-800"],
-    "unknown-interest": ["", "bg-gray-300 text-gray-500"]
+    "favorite": ["", "border-2 border-yellow-500 bg-yellow-100 text-yellow-500"],
+    "must-watch": ["", "border-2 border-green-500 bg-green-100 text-green-500"],
+    "high-interest": ["", "border-2 border-blue-500 bg-blue-100 text-blue-500"],
+    "decent": ["", "border-2 border-orange-500 bg-orange-100 text-orange-500"],
+    "low-interest": ["", "border-2 border-red-500 bg-red-100 text-red-500"],
+    "unknown-interest": ["", "border-2 border-gray-500 bg-gray-300 text-gray-500"]
 };
 
 const RefinedGameCard: React.FC<GameCardProps> = ({ game, showGameTime }) => {
