@@ -19,7 +19,7 @@ const renderGames = (
     );
 };
 
-const GameCardPrototypes: React.FC<GamesListProps> = ({
+const MinimalGamesList: React.FC<GamesListProps> = ({
     sortBy,
     setSortBy,
     games,
@@ -78,4 +78,4 @@ const GameCardPrototypes: React.FC<GamesListProps> = ({
     );
 };
 
-export default GameCardPrototypes;
+export default MinimalGamesList;

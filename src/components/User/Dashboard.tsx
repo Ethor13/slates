@@ -6,7 +6,7 @@ import { ArrowUp } from 'lucide-react';
 import Nav from '../General/Nav';
 import GamesList from '../Games/GamesList';
 import Sidebar from '../Games/Sidebar';
-import GameCardPrototypes from '../Games/Prototypes/GameCardPrototypes';
+import MinimalGamesList from '../Games/Prototypes/MinimalGamesList';
 
 enum Sports {
     NBA = 'nba',
@@ -131,7 +131,7 @@ const Dashboard = () => {
                                 //     setSortBy={setSortBy}
                                 //     selectedDate={selectedDate}
                                 // />
-                                <GameCardPrototypes
+                                <MinimalGamesList
                                     games={games}
                                     sortBy={sortBy}
                                     setSortBy={setSortBy}
