@@ -20,7 +20,7 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ team, opponent, isAway }) => {
             <div className="font-bold truncate">{team.shortName}</div>
             {!isTBD && (
               <div className="text-xs text-gray-600 truncate">
-                <span>({team.record})</span>
+                <span>{team.record}</span>
                 {team.matchupQualities && !isOpponentTBD && (
                   <span className="ml-1">• {team.matchupQualities.teampredwinpct.toFixed(0)}%</span>
                 )}
@@ -51,7 +51,7 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ team, opponent, isAway }) => {
                 {team.matchupQualities && !isOpponentTBD && (
                   <span className="mr-1">{team.matchupQualities.teampredwinpct.toFixed(0)}% •</span>
                 )}
-                <span>({team.record})</span>
+                <span>{team.record}</span>
               </div>
             )}
           </div>

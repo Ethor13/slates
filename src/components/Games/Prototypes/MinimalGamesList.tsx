@@ -3,6 +3,8 @@ import { GamesListProps, ScheduleResponse, Sort } from '../types';
 import RefinedGameCard from './MinimalGameCard';
 import { formatGameTime } from '../../../helpers';
 import { ChevronDown } from 'lucide-react';
+import { BroadcastsHeader } from './Broadcasts';
+import { useAuth } from '../../../contexts/AuthContext';
 
 // Helper function to split games by hour
 const split_by_time = (games: ScheduleResponse) => {
@@ -94,6 +96,7 @@ const MinimalGamesList: React.FC<GamesListProps> = ({
     games,
     selectedDate
 }) => {
+    const { tvChannels } = useAuth();
     const [renderedGames, setRenderedGames] = useState<React.ReactNode | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -112,7 +115,8 @@ const MinimalGamesList: React.FC<GamesListProps> = ({
 
     return (
         <div className="flex flex-col w-full pt-8 mx-10">
-            <div className="flex justify-between items-center w-full">
+            {/* Header section with date and sort */}
+            <div className="flex justify-between items-center w-full mb-6">
                 {/* Selected date display */}
                 <div>
                     <p className="text-md font-bold">
@@ -160,8 +164,13 @@ const MinimalGamesList: React.FC<GamesListProps> = ({
                     </div>
                 </div>
             </div>
-
-            {/* Games */}
+            
+            {/* Broadcasts header - shows TV providers as column headers */}
+            <div className="hidden xl:block">
+                <BroadcastsHeader tvChannels={tvChannels} />
+            </div>
+            
+            {/* Games list */}
             <div className="w-full">
                 {renderedGames}
             </div>
