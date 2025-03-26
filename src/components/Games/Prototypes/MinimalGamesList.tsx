@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GamesListProps, ScheduleResponse, Sort } from '../types';
 import RefinedGameCard from './MinimalGameCard';
 import { formatGameTime } from '../../../helpers';
+import { ChevronDown } from 'lucide-react';
 
 // Helper function to split games by hour
 const split_by_time = (games: ScheduleResponse) => {
@@ -94,6 +95,8 @@ const MinimalGamesList: React.FC<GamesListProps> = ({
     selectedDate
 }) => {
     const [renderedGames, setRenderedGames] = useState<React.ReactNode | null>(null);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (Object.keys(games).length) {
@@ -124,16 +127,36 @@ const MinimalGamesList: React.FC<GamesListProps> = ({
 
                 {/* Sort selector */}
                 <div>
-                    <div className="flex items-center">
+                    <div className="w-full flex justify-between items-center relative">
                         <p className="font-sans text-md">Sort By:&nbsp;</p>
-                        <button
-                            className="bg-transparent border-none font-bold cursor-pointer text-md"
-                            onClick={() => {
-                                setSortBy(sortBy === Sort.SCORE ? Sort.TIME : Sort.SCORE);
-                            }}
-                        >
-                            {sortBy}
-                        </button>
+                        <div className="relative" ref={dropdownRef}>
+                            <button
+                                className="bg-transparent border-none font-bold cursor-pointer flex items-center text-md gap-0.5"
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            >
+                                {sortBy}
+                                <ChevronDown
+                                    className={`text-gray-700 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                                    size={16}
+                                />
+                            </button>
+                            {isDropdownOpen && (
+                                <ul className="absolute right-0 bg-white border border-gray-300 list-none shadow-md z-50 flex flex-col w-28">
+                                    {Object.entries(Sort).map(([key, value]) => (
+                                        <li
+                                            key={key}
+                                            className="cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right"
+                                            onClick={() => {
+                                                setSortBy(value);
+                                                setIsDropdownOpen(false);
+                                            }}
+                                        >
+                                            {value}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
