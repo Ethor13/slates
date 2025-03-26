@@ -31,7 +31,6 @@ export interface Team {
 
 export interface GameCardProps {
   game: DocumentData;
-  showGameTime: boolean;
 }
 
 export interface TeamInfoProps {

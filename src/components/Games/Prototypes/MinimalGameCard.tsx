@@ -16,16 +16,12 @@ const interestLevelClasses: Record<string, string[]> = {
     "unknown-interest": ["", "border-2 border-gray-500 bg-gray-300 text-gray-500"]
 };
 
-const RefinedGameCard: React.FC<GameCardProps> = ({ game, showGameTime }) => {
-    const { userPreferences, tvChannels } = useAuth();
-    const favoriteTeams = userPreferences.favoriteTeams || [];
-    const isFavoriteGame = favoriteTeams.some(favoriteTeam =>
-        game.sport === favoriteTeam.sport && [game.home.id, game.away.id].includes(favoriteTeam.id)
-    );
-    const interestLevel = getInterestLevel(game.slateScore, isFavoriteGame);
+const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
+    const { tvChannels } = useAuth();
+    const interestLevel = getInterestLevel(game.slateScore, game.isFavorite);
 
     return (
-        <div className={`${isFavoriteGame ? "order-[-1]" : ""} w-full max-w-screen-xl mx-auto py-2 border-b border-gray-200 last:border-b-0`}>
+        <div className="w-full max-w-screen-xl mx-auto py-2">
 
             {/* Game Notes */}
             {/* {game.notes && game.notes[0]?.headline && (
@@ -54,7 +50,7 @@ const RefinedGameCard: React.FC<GameCardProps> = ({ game, showGameTime }) => {
                     <div className="col-span-1 flex justify-center">
                         <div className="w-full text-center px-2">
                             <div className="text-lg font-medium">@</div>
-                            {showGameTime && <div className="text-xs truncate">{formatGameTime(game.date)}</div>}
+                                <div className="text-xs truncate">{formatGameTime(game.date)}</div>
                         </div>
                     </div>
 

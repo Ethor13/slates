@@ -20,8 +20,19 @@ enum Sort {
 
 type ScheduleResponse = Record<string, any>;
 
+// mark games as favorites
+const markFavoriteTeams = (games: ScheduleResponse, favoriteTeams: Record<string, string>[]) => {
+    const markedGames = { ...games };
+    Object.keys(markedGames).forEach((sport) => {
+        Object.entries(markedGames[sport]).forEach(([_, game]: [string, any]) => {
+            game.isFavorite = favoriteTeams.some((team) => (game.sport === team.sport) && (team.id === game.home.id || team.id === game.away.id));
+        });
+    });
+    return markedGames;
+}
+
 const Dashboard = () => {
-    const { currentUser } = useAuth();
+    const { currentUser, userPreferences } = useAuth();
     const [allGames, setAllGames] = useState<ScheduleResponse>({});
     const [games, setGames] = useState<ScheduleResponse>({});
     const [gamesLoading, setGamesLoading] = useState<boolean>(false);
@@ -49,7 +60,7 @@ const Dashboard = () => {
             }
             const games = scheduleSnapshot.data() as ScheduleResponse;
 
-            setAllGames(games);
+            setAllGames(markFavoriteTeams(games, userPreferences.favoriteTeams));
         } catch (error) {
             console.error('Error getting games', error);
             setGamesError(error);
@@ -144,7 +155,7 @@ const Dashboard = () => {
             </div>
             <button
                 onClick={scrollToTop}
-                className={`fixed top-24 right-8 bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${showScrollToTop ? 'opacity-100' : 'opacity-0'}`}
+                className={`fixed top-24 right-8 bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
                 aria-label="Scroll to top"
             >
                 <ArrowUp className="h-6 w-6" />
