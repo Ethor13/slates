@@ -1,0 +1,325 @@
+{
+    "Spectrum Sports Net": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Spectrum SportsNet"
+    },
+    "FanDuel SN North": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "^FanDuel Sports Network North"
+    },
+    "FS1": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "Fox Sports 1"
+    },
+    "ESPN+": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "ESPN": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "^ESPN$"
+    },
+    "Space City Home Network": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Space City Home Network"
+    },
+    "FanDuel SN SW": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Fanduel Sports Network Southwest"
+    },
+    "FanDuel SN OH": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "FanDuel Sports Network Ohio"
+    },
+    "Arizona's Family 3TV": {
+        "market": "Home",
+        "type": "TV",
+        "notes": "This mapping is kinda confusing, double check later",
+        "tvGuideName": "Arizona's Family Sports and Entertainment"
+    },
+    "FanDuel SN OK": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Fanduel Sports Network Oklahoma"
+    },
+    "AZ Family Sports Net": {
+        "market": "Home",
+        "type": "TV",
+        "notes": "Not sure what actually gets mapped to this... cross-check with Arizona's Family 3TV",
+        "tvGuideName": null
+    },
+    "KENS 5": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KENS-DT San Antonio, Texas (CBS)"
+    },
+    "FanDuel SN SE": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "FanDuel Sports Network Southeast"
+    },
+    "FanDuel SN WI": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Fanduel Sports Network Wisconsin"
+    },
+    "TNT": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "^TNT$"
+    },
+    "CHSN": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Chicago Sports Network"
+    },
+    "FloSports": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "TBS": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "^tbs$"
+    },
+    "NBC Sports Phil +": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "^NBC$"
+    },
+    "MNMT": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Monumental Sports Network"
+    },
+    "NBA League Pass": {
+        "market": "Away",
+        "type": "Subscription Package",
+        "tvGuideName": null
+    },
+    "TSN": {
+        "market": "Home",
+        "type": "TV",
+        "notes": "This maps to TSN4, but unsure if it's guaranteed that basketball is on TSN4",
+        "tvGuideName": "^TSN 4"
+    },
+    "TV-20 Detroit": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WMYD-DT Detroit, Mich. (IND)"
+    },
+    "FOX": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "(FOX)$"
+    },
+    "NBA TV": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "NBA TV"
+    },
+    "FanDuel SN FL": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "FanDuel Sports Network Florida"
+    },
+    "FanDuel SN Sun": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "FanDuel Sports Network Sun"
+    },
+    "NBC Sports Phil": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "NBC Sports Philadelphia"
+    },
+    "Altitude Sports": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Altitude Sports"
+    },
+    "Pelicans.com": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Sportsnet": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "^Sportsnet One"
+    },
+    "Mavs.com": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "KTLA": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KTLA-DT Los Angeles, Calif. (CW)"
+    },
+    "FanDuel SN SoCal": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "FanDuel Sports Network SoCal"
+    },
+    "ClipperVision": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Max": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "YES": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Yankees Entertainment and Sports Network"
+    },
+    "NBC Sports CA": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "NBC Sports California"
+    },
+    "Spectrum Sports Net +": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "MNMT2": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "FanDuel SN IN": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "FanDuel Sports Network Indiana"
+    },
+    "BlazerVision": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "KFAA-TV": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KFAA-DT Decatur, Texas (IND)"
+    },
+    "FanDuel SN DET": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "FanDuel Sports Network Detroit"
+    },
+    "CBS": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "(CBS)$"
+    },
+    "FanDuel SN North Extra": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "ESPNU": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "^ESPNU$"
+    },
+    "truTV": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "^truTV"
+    },
+    "NBC Sports BA": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "NBC Sports Bay Area"
+    },
+    "KJZZ-TV": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KJZZ-DT Salt Lake City, Utah (IND)"
+    },
+    "GCSEN": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Suns Live": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Jazz+": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "ESPN2": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "^ESPN2$"
+    },
+    "NBC Sports BO": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "NBC Sports Boston"
+    },
+    "FanDuel SN DET Ext": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": null
+    },
+    "KUNP 16": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KUNP-DT La Grande, Ore. (Rip City Network)"
+    },
+    "CHSN+": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "ERADM": {
+        "market": "National",
+        "type": "Radio",
+        "tvGuideName": null
+    },
+    "MSG": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "MSG"
+    },
+    "WFAA Channel 8": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WFAA-DT Dallas, Texas (ABC)"
+    },
+    "KTVD-TV (My20)": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KTVD-DT Denver, Colo. (MyNet)"
+    },
+    "KATU 2.2": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "KATU-DT Portland, Ore. (ABC)"
+    },
+    "WLNY": {
+        "type": "TV",
+        "market": "National",
+        "tvGuideName": "WLNY-DT Riverhead, N.Y. (IND)"
+    }
+}

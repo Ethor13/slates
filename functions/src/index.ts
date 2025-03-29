@@ -109,3 +109,50 @@ export const channels = onRequest(
     }
   }
 );
+
+// // http://127.0.0.1:5001/slates-59840/us-central1/getEspnNetworks
+// export const getEspnNetworks = onRequest(
+//   { cors: true },
+//   async (req, res) => {
+//     try {
+//       const networks = await db
+//         .collection("broadcasting")
+//         .doc("espnNetworks")
+//         .get();
+
+//       res.status(200).json(networks.data());
+//     } catch (error) {
+//       logger.error("Error fetching ESPN networks:", error);
+//       res.status(500).send("Error fetching ESPN networks: " + error);
+//     }
+//   }
+// );
+
+// // http://127.0.0.1:5001/slates-59840/us-central1/getRandomQuery
+// export const getRandomQuery = onRequest(
+//   { cors: true },
+//   async (req, res) => {
+//     try {
+//       // go through each date in sports/all/schedule/$date and find the game that has tv network = "AZ Family Sports Net"
+//       const snapshot = await db
+//         .collection("sports")
+//         .doc("all")
+//         .collection("schedule")
+//         .get();
+//       const dates = snapshot.docs.map((doc) => doc.data());
+//       const filteredGames = dates.map((date) => {
+//         const tmp = Object.values(date).map((sport: string) => {
+//           return Object.values(Object.values(sport)).filter((game: any) => {
+//             return Object.keys(game.broadcasts || {}).includes("FanDuel SN DET Ext");
+//           });
+//         });
+//         console.log(tmp);
+//         return tmp;
+//       });
+//       res.status(200).json(filteredGames);
+//     } catch (error) {
+//       logger.error("Error fetching ESPN networks:", error);
+//       res.status(500).send("Error fetching ESPN networks: " + error);
+//     }
+//   }
+// );
