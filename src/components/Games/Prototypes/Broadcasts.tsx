@@ -2,29 +2,52 @@ import React from "react";
 import { useMemo } from "react";
 import { Provider } from '../../../contexts/AuthContext';
 import { useAuth } from '../../../contexts/AuthContext';
+import broadcastMapper from './broadcastMapper.json';
 
 // Helper function to map broadcast to channel for a specific provider
 const mapBroadcastToChannelForProvider = (broadcast: string, provider: Provider) => {
   const mappedChannels: Record<string, any>[] = [];
 
-  Object.entries(provider).forEach(([channelId, channel]) => {
-    const broadcastName = broadcast.toLowerCase();
-    const channelName = channel.names.commonName.toLowerCase();
+  // Find the broadcast in the mapper
+  const mapperEntry = Object.entries(broadcastMapper).find(([key]) => key.toLowerCase() === broadcast.toLowerCase());
 
-    const commonNameMatch = broadcastName === channelName;
-    const hdMatch = channelName === `${broadcastName} hd`;
-    if (commonNameMatch || hdMatch) {
-      mappedChannels.push({
-        channelId,
-        name: broadcast,
-        number: channel.number,
-        logo: channel.logo,
+  if (mapperEntry) {
+    const regexPattern = mapperEntry[1].tvGuideName;
+
+    // Skip if tvGuideName is null
+    if (regexPattern) {
+      // Use the tvGuideName as a regex pattern to match channel names
+      Object.entries(provider).forEach(([channelId, channel]) => {
+        let channelName = channel.names.fullName.replace(/ HD$/i, '');
+        try {
+          const regex = new RegExp(regexPattern, 'i');
+          if (regex.test(channelName)) {
+            mappedChannels.push({
+              channelId,
+              name: broadcast,
+              number: channel.number,
+              logo: channel.logo,
+            });
+          }
+        } catch (e) {
+          // If regex is invalid, just do a simple includes check
+          if (channelName.toLowerCase().includes(regexPattern.toLowerCase())) {
+            mappedChannels.push({
+              channelId,
+              name: broadcast,
+              number: channel.number,
+              logo: channel.logo,
+            });
+          }
+        }
       });
     } else {
-      // eventually map using broadcastMapper.json
-      return;
+      console.log(`Skipping broadcast ${broadcast} mapping due to null tvGuideName`);
     }
-  });
+  } else {
+    // Eventually log this to firebase
+    console.error(`Broadcast "${broadcast}" not found in mapper.`);
+  }
 
   return mappedChannels;
 }
@@ -63,7 +86,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
       providers.forEach(({ id, provider }) => {
         const mappedChannels = mapBroadcastToChannelForProvider(broadcastName, provider);
         // Use the first channel number if there are multiple matches
-        channelsForBroadcast[id] = mappedChannels.length > 0 ? (mappedChannels[0].number || '') : '';
+        channelsForBroadcast[id] = mappedChannels.length > 0 ? [...new Set(mappedChannels.map(channel => channel.number))].join(', ') : '';
       });
 
       return {

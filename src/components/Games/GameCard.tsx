@@ -51,7 +51,7 @@ const mapBroadcastToChannel = (broadcast: string, tvChannels: Record<string, Pro
   const mappedChannels: Record<string, string>[] = [];
   Object.entries(tvChannels).forEach(([providerId, provider]) => {
     Object.entries(provider).forEach(([channelId, channel]) => {
-      if (channel.names.commonName === broadcast) {
+      if (channel.names.fullName === broadcast) {
         mappedChannels.push({
           providerId,
           channelId,

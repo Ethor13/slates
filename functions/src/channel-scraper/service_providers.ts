@@ -41,8 +41,7 @@ export const getChannels = async (providerId: string) => {
       names: {
         name: channel.name,
         fullName: channel.fullName,
-        networkName: channel.networkName,
-        commonName: channel.fullName.endsWith(")") ? channel.fullName.split("(")[1].split(")")[0] : channel.fullName,
+        networkName: channel.networkName
       },
       number: channel.number,
       logo: channel.logo,

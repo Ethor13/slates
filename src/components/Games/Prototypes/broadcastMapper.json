@@ -74,7 +74,7 @@
     "TNT": {
         "market": "National",
         "type": "TV",
-        "tvGuideName": "^TNT$"
+        "tvGuideName": "^TNT"
     },
     "CHSN": {
         "market": "Home",
@@ -89,7 +89,7 @@
     "TBS": {
         "market": "National",
         "type": "TV",
-        "tvGuideName": "^tbs$"
+        "tvGuideName": "^tbs"
     },
     "NBC Sports Phil +": {
         "market": "Home",

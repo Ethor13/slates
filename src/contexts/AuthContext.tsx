@@ -23,8 +23,7 @@ export interface Channel {
     number: string;
     logo: string;
     names: {
-        commonName: string;
-        fullName?: string;
+        fullName: string;
         name?: string;
         networkName?: string;
     }
