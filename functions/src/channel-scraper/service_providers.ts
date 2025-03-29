@@ -27,27 +27,27 @@ export const getProviders = async (zipcode: string) => {
 }
 
 export const getChannels = async (providerId: string) => {
-    const url = CHANNELS_URL.replace("{}", providerId);
-    const response = await axios.get(url, {
-      headers: { "User-Agent": "Mozilla/5.0" },
-    });
+  const url = CHANNELS_URL.replace("{}", providerId);
+  const response = await axios.get(url, {
+    headers: { "User-Agent": "Mozilla/5.0" },
+  });
 
-    if (response.status < 200 || response.status >= 300) {
-        throw new Error(`Error fetching channels for provider ${providerId}: ${response.statusText}`);
+  if (response.status < 200 || response.status >= 300) {
+    throw new Error(`Error fetching channels for provider ${providerId}: ${response.statusText}`);
+  }
+
+  const channels = combine_maps(response.data.data.items.map((channel: any) => ({
+    [channel.sourceId]: {
+      names: {
+        name: channel.name,
+        fullName: channel.fullName,
+        networkName: channel.networkName,
+        commonName: channel.fullName.endsWith(")") ? channel.fullName.split("(")[1].split(")")[0] : channel.fullName,
+      },
+      number: channel.number,
+      logo: channel.logo,
     }
+  })));
 
-    const channels = combine_maps(response.data.data.items.map((channel: any) => ({
-        [channel.sourceId]: {
-            names: {
-                name: channel.name,
-                fullName: channel.fullName,
-                networkName: channel.networkName,
-                commonName: channel.fullName.endsWith(")") ? channel.fullName.split("(")[1].split(")")[0] : channel.fullName,
-            },
-            number: channel.number,
-            logo: channel.logo,
-        }
-    })));
-
-    return channels;
+  return channels;
 }

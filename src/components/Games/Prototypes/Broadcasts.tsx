@@ -8,7 +8,12 @@ const mapBroadcastToChannelForProvider = (broadcast: string, provider: Provider)
   const mappedChannels: Record<string, any>[] = [];
 
   Object.entries(provider).forEach(([channelId, channel]) => {
-    if (channel.names.commonName === broadcast) {
+    const lowercaseBroadcast = broadcast.toLowerCase();
+    const lowercaseChannelName = channel.names.commonName.toLowerCase();
+
+    const commonNameMatch = lowercaseBroadcast === lowercaseChannelName;
+    const hdMatch = lowercaseChannelName === `${lowercaseBroadcast} hd`;
+    if (commonNameMatch || hdMatch) {
       mappedChannels.push({
         channelId,
         name: broadcast,
