@@ -4,7 +4,6 @@ import RefinedGameCard from './MinimalGameCard';
 import { formatGameTime } from '../../../helpers';
 import { ChevronDown } from 'lucide-react';
 import { BroadcastsHeader } from './Broadcasts';
-import { useAuth } from '../../../contexts/AuthContext';
 
 // Helper function to split games by hour
 const split_by_time = (games: ScheduleResponse) => {
@@ -96,7 +95,6 @@ const MinimalGamesList: React.FC<GamesListProps> = ({
     games,
     selectedDate
 }) => {
-    const { tvChannels } = useAuth();
     const [renderedGames, setRenderedGames] = useState<React.ReactNode | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -167,7 +165,7 @@ const MinimalGamesList: React.FC<GamesListProps> = ({
             
             {/* Broadcasts header - shows TV providers as column headers */}
             <div className="hidden xl:block">
-                <BroadcastsHeader tvChannels={tvChannels} />
+                <BroadcastsHeader/>
             </div>
             
             {/* Games list */}

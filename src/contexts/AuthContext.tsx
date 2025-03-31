@@ -87,6 +87,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const setupPreferencesListener = async () => {
             if (!currentUser) {
                 setUserPreferences(getDefaultPreferences());
+                setPreferencesLoading(false);
                 return;
             }
 
@@ -114,19 +115,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Listen for provider changes
     useEffect(() => {
-        const providersChannels: Record<string, any> = {};
-
-        // get provider TV channels
-        Object.keys(userPreferences.tvProviders).forEach(async (providerId) => {
+        const fetchProviderChannels = async () => {
+            const providersChannels: Record<string, any> = {};
+            const providerIds = Object.keys(userPreferences.tvProviders);
+            
+            if (providerIds.length === 0) {
+                setTvChannels({});
+                return;
+            }
+            
             try {
-                const response = await fetch(`/channels?providerId=${providerId}`);
-                const channels = await response.json();
-                providersChannels[providerId] = channels;
+                // Use Promise.all to fetch all channels in parallel
+                await Promise.all(
+                    providerIds.map(async (providerId) => {
+                        try {
+                            const response = await fetch(`/channels?providerId=${providerId}`);
+                            const channels = await response.json();
+                            providersChannels[providerId] = channels;
+                        } catch (error) {
+                            console.error(`Error fetching TV channels for provider ${providerId}:`, error);
+                        }
+                    })
+                );
+                
+                setTvChannels(providersChannels);
             } catch (error) {
                 console.error('Error fetching TV channels:', error);
             }
-        });
-        setTvChannels(providersChannels);
+        };
+
+        fetchProviderChannels();
     }, [userPreferences.tvProviders]);
 
     const signIn = async (email: string, password: string) => {

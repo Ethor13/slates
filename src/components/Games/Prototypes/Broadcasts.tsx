@@ -1,5 +1,4 @@
-import React from "react";
-import { useMemo } from "react";
+import React, { useEffect } from "react";
 import { Provider } from '../../../contexts/AuthContext';
 import { useAuth } from '../../../contexts/AuthContext';
 import broadcastMapper from './broadcastMapper.json';
@@ -54,20 +53,25 @@ const mapBroadcastToChannelForProvider = (broadcast: string, provider: Provider)
 
 export interface BroadcastsProps {
   broadcasts: Record<string, any>;
-  tvChannels: Record<string, Provider>;
   gameId?: string; // Optional game ID to identify the row
 }
 
 // Component for displaying broadcast information in a table layout
 // Now designed for a single game's broadcasts
-const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId }) => {
-  const { userPreferences } = useAuth();
+const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
+  const { userPreferences, tvChannels } = useAuth();
+  const [broadcastChannels, setBroadcastChannels] = React.useState<any[]>([]);
+  const [nonTvChannels, setnonTvChannels] = React.useState<any[]>([]);
+  const [initialized, setInitialized] = React.useState(false);
 
   // Create a mapping of broadcasts to display in table format
-  const broadcastChannels = useMemo(() => {
+  useEffect(() => {
     // Get list of all broadcast names
     const broadcastNames = Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type === "TV").map(([broadcastName, _]) => broadcastName);
-    if (broadcastNames.length === 0) return [];
+    if (broadcastNames.length === 0) {
+      setBroadcastChannels([]);
+      return;
+    }
 
     // Get list of providers with their IDs and names
     const providers = Object.entries(userPreferences.tvProviders)
@@ -99,16 +103,22 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
 
     // Filter broadcasts if showOnlyAvailableBroadcasts is enabled
     if (userPreferences.showOnlyAvailableBroadcasts) {
-      return allBroadcasts.filter(broadcast => broadcast.hasAnyChannels);
+      setBroadcastChannels(allBroadcasts.filter(broadcast => broadcast.hasAnyChannels));
+    } else {
+      setBroadcastChannels(allBroadcasts);
     }
-
-    return allBroadcasts;
   }, [broadcasts, tvChannels, userPreferences.tvProviders, userPreferences.showOnlyAvailableBroadcasts]);
 
-  const nonTvChannels = useMemo(() => {
+  useEffect(() => {
     // Get list of all broadcast names
-    return Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type !== "TV").map(([broadcastName, _]) => broadcastName);
+    setnonTvChannels(Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type !== "TV").map(([broadcastName, _]) => broadcastName));
   }, [broadcasts]);
+
+  useEffect(() => {
+    if (tvChannels.length) {
+      setInitialized(true);
+    }
+  }, [tvChannels]);
 
   return (
     <div className="w-full h-full divide-x flex flex-row">
@@ -139,7 +149,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
             </div>
           </div>
         )) :
-          <div className={`text-sm text-center italic text-gray-600 min-w-[${(1 + Object.keys(userPreferences.tvProviders).length) * 10}rem]`}>No broadcasts available</div>
+          <div className={`text-sm text-center italic text-gray-600 min-w-[${(1 + Object.keys(userPreferences.tvProviders).length) * 10}rem]`}>{initialized ? "No broadcasts available" : ""}</div>
         }
       </div>
       <div className="flex flex-col items-center justify-center">
@@ -159,12 +169,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
   );
 };
 
-// New component that renders the TV provider headers once at the top of the games list
-export interface BroadcastsHeaderProps {
-  tvChannels?: Record<string, Provider>;
-}
-
-export const BroadcastsHeader: React.FC<BroadcastsHeaderProps> = () => {
+export const BroadcastsHeader: React.FC = () => {
   const { userPreferences } = useAuth();
 
   // If no providers, don't show the header
