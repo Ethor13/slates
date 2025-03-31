@@ -17,6 +17,7 @@ interface UserPreferences {
     zipcode: string;
     tvProviders: Record<string, string>; // Changed from string[] to Record<string, string>
     favoriteTeams: Record<string, string>[];
+    showOnlyAvailableBroadcasts: boolean;
 }
 
 export interface Channel {
@@ -60,7 +61,8 @@ export const useAuth = () => {
 const getDefaultPreferences = (): UserPreferences => ({
     zipcode: '',
     tvProviders: {},
-    favoriteTeams: []
+    favoriteTeams: [],
+    showOnlyAvailableBroadcasts: true
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

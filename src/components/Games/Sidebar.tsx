@@ -1,11 +1,13 @@
 import React, { useState, useCallback } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { Sports, SportSelectorProps, ChevronButtonProps } from "./types";
 import { getDateString } from "../../helpers";
 import { FirebaseImg } from "../General/FirebaseImg";
+import { useAuth } from "../../contexts/AuthContext";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, setGamesLoading } = props;
+  const { userPreferences, updateUserPreferences } = useAuth();
   const today = getDateString(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
 
@@ -35,6 +37,10 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const changeMonth = useCallback((direction: number) => {
     setCurrentMonth(prevMonth => new Date(prevMonth.getFullYear(), prevMonth.getMonth() + direction, 1));
   }, []);
+
+  const toggleShowOnlyAvailableBroadcasts = useCallback(() => {
+    updateUserPreferences({ showOnlyAvailableBroadcasts: !userPreferences.showOnlyAvailableBroadcasts });
+  }, [userPreferences.showOnlyAvailableBroadcasts, updateUserPreferences]);
 
   // Generate calendar days for the current month view
   const generateCalendarDays = useCallback(() => {
@@ -157,6 +163,27 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     );
                   })}
                 </div>
+              </div>
+            </div>
+
+            <div className="w-full border-b border-gray-200"></div>
+
+            {/* Broadcast settings section */}
+            <div className="flex flex-col gap-4 mb-4">
+              <h2 className="text-lg font-semibold">Broadcast Settings</h2>
+              <div className="flex flex-row items-center gap-1">
+                <button
+                  onClick={toggleShowOnlyAvailableBroadcasts}
+                  className="flex items-center gap-2 cursor-pointer p-1 rounded-md"
+                >
+                  <div className={`w-5 h-5 flex items-center justify-center rounded border ${userPreferences.showOnlyAvailableBroadcasts
+                      ? 'bg-blue-600 border-blue-600'
+                      : 'border-gray-300'
+                    }`}>
+                    {userPreferences.showOnlyAvailableBroadcasts && (<Check size={14} className="text-white" />)}
+                  </div>
+                </button>
+                <span className="text-sm">Only show available broadcasts</span>
               </div>
             </div>
 

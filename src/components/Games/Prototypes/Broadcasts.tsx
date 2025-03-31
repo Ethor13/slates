@@ -79,7 +79,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
       .filter(item => item.provider); // Only include providers that exist in tvChannels
 
     // Create broadcast rows with channel numbers for each provider
-    return broadcastNames.map(broadcastName => {
+    const allBroadcasts = broadcastNames.map(broadcastName => {
       const channelsForBroadcast: Record<string, string> = {};
 
       // Find channel number for each provider
@@ -91,26 +91,31 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
 
       return {
         broadcastName,
-        channels: channelsForBroadcast
+        channels: channelsForBroadcast,
+        // Track if this broadcast has any channels across all providers
+        hasAnyChannels: Object.values(channelsForBroadcast).some(channel => channel !== '')
       };
     });
-  }, [broadcasts, tvChannels, userPreferences.tvProviders]);
+
+    // Filter broadcasts if showOnlyAvailableBroadcasts is enabled
+    if (userPreferences.showOnlyAvailableBroadcasts) {
+      return allBroadcasts.filter(broadcast => broadcast.hasAnyChannels);
+    }
+
+    return allBroadcasts;
+  }, [broadcasts, tvChannels, userPreferences.tvProviders, userPreferences.showOnlyAvailableBroadcasts]);
 
   const nonTvChannels = useMemo(() => {
     // Get list of all broadcast names
     return Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type !== "TV").map(([broadcastName, _]) => broadcastName);
   }, [broadcasts]);
 
-
-  // If no broadcasts, show empty state
-  if (broadcastChannels.length === 0) {
-    return <span className="text-xs text-gray-500 italic">No Broadcasts</span>;
-  }
+  console.log(broadcastChannels);
 
   return (
     <div className="w-full h-full divide-x flex flex-row">
       <div className="flex flex-col justify-center">
-        {broadcastChannels.map((broadcast) => (
+        {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
           <div
             key={`${gameId}-${broadcast.broadcastName}`}
             className="flex flex-row text-sm"
@@ -135,17 +140,22 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
               ))}
             </div>
           </div>
-        ))}
+        )) :
+          <div className={`text-sm text-center italic text-gray-600 min-w-[${(1 + Object.keys(userPreferences.tvProviders).length) * 10}rem]`}>No broadcasts available</div>
+        }
       </div>
       <div className="flex flex-col items-center justify-center">
-        {nonTvChannels.map((broadcast) => (
+        {nonTvChannels.length ? nonTvChannels.map((broadcast) => (
           <div
             key={`${gameId}-${broadcast}`}
             className="text-sm w-[10rem] text-center"
           >
             {broadcast}
           </div>
-        ))}
+        )) :
+
+          <div className={`text-sm text-center italic text-gray-600 min-w-[10rem]`}>No streams available</div>
+        }
       </div>
     </div>
   );
