@@ -110,8 +110,6 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, tvChannels, gameId 
     return Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type !== "TV").map(([broadcastName, _]) => broadcastName);
   }, [broadcasts]);
 
-  console.log(broadcastChannels);
-
   return (
     <div className="w-full h-full divide-x flex flex-row">
       <div className="flex flex-col justify-center">

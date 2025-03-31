@@ -42,7 +42,7 @@ const renderGames = (
                     .map(([gameTime, timeGames]) => (
                         <div key={gameTime} className="flex flex-col w-full">
                             <h2 className="text-md font-medium">{formatGameTime(gameTime)}</h2>
-                            <div className="pl-8 flex flex-col w-full divide-y divide-gray-200">
+                            <div className="flex flex-col w-full divide-y divide-gray-200">
                                 {Object.entries(timeGames)
                                     // First sort by exact time
                                     .sort(([_, game1], [__, game2]) => new Date(game1.date).getTime() - new Date(game2.date).getTime())
