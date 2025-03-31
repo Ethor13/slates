@@ -115,7 +115,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
   }, [broadcasts]);
 
   useEffect(() => {
-    if (tvChannels.length) {
+    if (Object.keys(tvChannels).length) {
       setInitialized(true);
     }
   }, [tvChannels]);
