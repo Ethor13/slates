@@ -1,7 +1,6 @@
 import React from "react";
 import { getInterestLevel } from "../../../helpers";
 import { GameCardProps } from "../types";
-import { useAuth } from '../../../contexts/AuthContext';
 import Broadcasts from "./Broadcasts";
 import TeamInfo from "./TeamInfo";
 import { formatGameTime } from "../../../helpers";
@@ -17,11 +16,10 @@ const interestLevelClasses: Record<string, string[]> = {
 };
 
 const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
-    const { tvChannels } = useAuth();
     const interestLevel = getInterestLevel(game.slateScore, game.isFavorite);
 
     return (
-        <div className="w-full py-2">
+        <div className="w-full py-1">
 
             {/* Game Notes */}
             {/* {game.notes && game.notes[0]?.headline && (
@@ -61,7 +59,7 @@ const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
 
                     {/* Broadcasts component - fixed proportion */}
                     <div className="col-span-5 h-full hidden xl:block">
-                        <Broadcasts broadcasts={game.broadcasts} tvChannels={tvChannels} />
+                        <Broadcasts broadcasts={game.broadcasts} />
                     </div>
                 </div>
             </div>

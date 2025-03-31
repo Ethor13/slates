@@ -4,6 +4,13 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    "min-w-[10rem]",
+    "min-w-[20rem]",
+    "min-w-[30rem]",
+    "min-w-[40rem]",
+    "min-w-[50rem]",
+  ],
   theme: {
     extend: {
       boxShadow: {
