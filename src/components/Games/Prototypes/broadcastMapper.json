@@ -120,7 +120,7 @@
     "FOX": {
         "market": "National",
         "type": "TV",
-        "tvGuideName": "(FOX)$"
+        "tvGuideName": "\\(FOX\\)$"
     },
     "NBA TV": {
         "market": "National",
@@ -225,7 +225,7 @@
     "CBS": {
         "market": "National",
         "type": "TV",
-        "tvGuideName": "(CBS)$"
+        "tvGuideName": "\\(CBS\\)$"
     },
     "FanDuel SN North Extra": {
         "market": "Home",

@@ -21,7 +21,7 @@ const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
     const interestLevel = getInterestLevel(game.slateScore, game.isFavorite);
 
     return (
-        <div className="w-full max-w-screen-xl mx-auto py-2">
+        <div className="w-full py-2">
 
             {/* Game Notes */}
             {/* {game.notes && game.notes[0]?.headline && (
@@ -40,7 +40,7 @@ const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
                 </div>
 
                 {/* Teams and Game Status - controlled width proportions */}
-                <div className="grid grid-cols-10 w-full gap-2 items-center">
+                <div className="grid grid-cols-10 w-full items-center">
                     {/* Away Team - fixed proportion */}
                     <div className="col-span-2">
                         <TeamInfo team={game.away} opponent={game.home} isAway={true} />
@@ -60,7 +60,7 @@ const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
                     </div>
 
                     {/* Broadcasts component - fixed proportion */}
-                    <div className="col-span-5 hidden xl:block">
+                    <div className="col-span-5 h-full hidden xl:block">
                         <Broadcasts broadcasts={game.broadcasts} tvChannels={tvChannels} />
                     </div>
                 </div>
