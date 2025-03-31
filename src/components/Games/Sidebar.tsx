@@ -169,12 +169,12 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
             <div className="w-full border-b border-gray-200"></div>
 
             {/* Broadcast settings section */}
-            <div className="flex flex-col gap-4 mb-4">
+            <div className="flex flex-col gap-4">
               <h2 className="text-lg font-semibold">Broadcast Settings</h2>
               <div className="flex flex-row items-center gap-1">
                 <button
                   onClick={toggleShowOnlyAvailableBroadcasts}
-                  className="flex items-center gap-2 cursor-pointer p-1 rounded-md"
+                  className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
                 >
                   <div className={`w-5 h-5 flex items-center justify-center rounded border ${userPreferences.showOnlyAvailableBroadcasts
                       ? 'bg-blue-600 border-blue-600'
@@ -189,7 +189,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
             <div className="w-full border-b border-gray-200"></div>
 
-            <div className="flex flex-col gap-4 mb-4">
+            <div className="flex flex-col gap-4">
               {/* Sports selector */}
               <h2 className="text-lg font-semibold">Sports</h2>
               <div className="flex flex-col gap-2">
