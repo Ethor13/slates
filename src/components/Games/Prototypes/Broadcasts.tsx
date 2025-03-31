@@ -181,7 +181,7 @@ export const BroadcastsHeader: React.FC = () => {
     <div className="pl-[4rem] grid grid-cols-10 w-full border-b border-gray-200">
       <div className="col-span-5"></div>
       <div className="col-span-5 flex items-center">
-        <div className="w-[10rem] pr-2 font-medium text-right text-black">
+        <div className="min-w-[10rem] pr-2 font-medium text-right text-black">
           Broadcast
         </div>
         <div className="divide-x flex flex-row">
