@@ -127,9 +127,9 @@ export const initializeTeams = onRequest(
 
     const allDates = await db.collection("sports").doc(sport).collection("schedule").get();
     const teamData: Record<string, any> = {};
-    let teamIds = new Set<string>();
+    const teamIds = new Set<string>();
     for (const date of allDates.docs) {
-      for (const [_, game] of Object.entries(date.data())) {
+      for (const game of Object.values(date.data())) {
         for (const team of [game.home, game.away]) {
           if (!teamIds.has(team.id)) {
             teamIds.add(team.id);
