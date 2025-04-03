@@ -5,3 +5,11 @@
 - Summary Views
     - color month day picker by quality on a certain day
     - show a pulse view that shows when good games are being played throughout the day
+
+- Add new Sports
+    - For each sport
+        - find all the mentions of ncaambb (or some other sport) and add the new sport in all those places
+        - request Teams update using the cloud function
+        - download all the images using the cloud function
+        - make sure teams are getting extracted correctly
+        - add the league logo

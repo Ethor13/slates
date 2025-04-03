@@ -8,6 +8,7 @@ export enum Sort {
 export enum Sports {
     NBA = 'nba',
     NCAAMBB = 'ncaambb',
+    MLB = 'mlb',
 }
 
 export interface Game {

@@ -110,6 +110,50 @@ export const channels = onRequest(
   }
 );
 
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=mlb&teams=30
+export const initializeTeams = onRequest(
+  { cors: true },
+  async (req, res) => {
+    // teams -> teamID -> "info" -> [abbreviation, logo, name, shortName]
+    // parse sport and teams from request
+    const sport = req.query.sport as string;
+    const teams = req.query.teams as unknown as number;
+
+    if (!sport || !teams) {
+      res.status(400).send("Missing sport or teams");
+      return;
+    }
+
+    const allDates = await db.collection("sports").doc(sport).collection("schedule").get();
+    const teamData: Record<string, any> = {};
+    let teamIds = new Set<string>();
+    for (const date of allDates.docs) {
+      for (const [_, game] of Object.entries(date.data())) {
+        for (const team of [game.home, game.away]) {
+          if (!teamIds.has(team.id)) {
+            teamIds.add(team.id);
+            teamData[team.id] = {
+              info: {
+                abbreviation: team.abbreviation,
+                logo: team.logo.replace(/\/scoreboard/g, ""),
+                name: team.name,
+                shortName: team.shortName,
+              },
+              metrics: {}
+            }
+            if (teamIds.size >= teams) {
+              const teamsRef = db.collection("sports").doc(sport);
+              teamsRef.set({ teams: teamData }, { merge: true });
+              res.status(200).send("Initialized Teams successfully");
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+);
+
 // // http://127.0.0.1:5001/slates-59840/us-central1/getEspnNetworks
 // export const getEspnNetworks = onRequest(
 //   { cors: true },

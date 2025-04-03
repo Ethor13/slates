@@ -100,6 +100,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         return "NBA";
       case Sports.NCAAMBB:
         return "NCAA Men's Basketball";
+      case Sports.MLB:
+        return "MLB";
       default:
         return sport;
     }
@@ -133,7 +135,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                 <div className="grid grid-cols-7 gap-1 text-center">
                   {/* Week day headers */}
                   {weekDays.map(day => (
-                    <div key={day} className="text-xs font-semibold text-gray-500 py-1">
+                    <div key={day} className="text-xs font-semibold text-gray-500 py-1 text-center">
                       {day}
                     </div>
                   ))}
@@ -146,20 +148,21 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     const isPastDate = dateStr < today;
 
                     return (
-                      <button
-                        key={index}
-                        className={`p-1 rounded-full text-xs h-7 w-7 flex items-center justify-center
-                      ${!day.isCurrentMonth ? "text-gray-300" : isPastDate ? "text-gray-400" : ""}
-                      ${isSelected ? "bg-blue-600 text-white" : ""}
-                      ${isToday && !isSelected ? "border border-blue-600" : ""}
-                      ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
-                      ${!day.isCurrentMonth ? "opacity-0" : ""}
-                      ${!isPastDate && day.isCurrentMonth ? "hover:bg-blue-100" : ""}`}
-                        onClick={() => day.isCurrentMonth && !isPastDate && handleDateChange(day.date)}
-                        disabled={isPastDate || !day.isCurrentMonth}
-                      >
-                        {day.date.getDate()}
-                      </button>
+                      <div key={index} className="w-full flex justify-center">
+                        <button
+                          className={`p-1 rounded-full text-xs h-7 w-7 flex items-center justify-center
+                          ${!day.isCurrentMonth ? "text-gray-300" : isPastDate ? "text-gray-400" : ""}
+                          ${isSelected ? "bg-blue-600 text-white" : ""}
+                          ${isToday && !isSelected ? "border border-blue-600" : ""}
+                          ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
+                          ${!day.isCurrentMonth ? "opacity-0" : ""}
+                          ${!isPastDate && day.isCurrentMonth ? "hover:bg-blue-100" : ""}`}
+                          onClick={() => day.isCurrentMonth && !isPastDate && handleDateChange(day.date)}
+                          disabled={isPastDate || !day.isCurrentMonth}
+                        >
+                          {day.date.getDate()}
+                        </button>
+                      </div>
                     );
                   })}
                 </div>
@@ -177,8 +180,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                   className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
                 >
                   <div className={`w-5 h-5 flex items-center justify-center rounded border ${userPreferences.showOnlyAvailableBroadcasts
-                      ? 'bg-blue-600 border-blue-600'
-                      : 'border-gray-300'
+                    ? 'bg-blue-600 border-blue-600'
+                    : 'border-gray-300'
                     }`}>
                     {userPreferences.showOnlyAvailableBroadcasts && (<Check size={14} className="text-white" />)}
                   </div>

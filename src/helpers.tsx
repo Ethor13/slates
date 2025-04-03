@@ -1,5 +1,11 @@
 import { Star } from "lucide-react";
 
+export enum Sports {
+    NBA = 'nba',
+    NCAAMBB = 'ncaambb',
+    MLB = 'mlb',
+}
+
 export const formatGameTime = (timeString: string): string => {
     const date = new Date(timeString);
     return date.toLocaleString("en-US", {

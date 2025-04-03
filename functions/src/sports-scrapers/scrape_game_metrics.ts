@@ -116,6 +116,10 @@ const CONFIG: SportConfig = {
         matchupQuality: (date: string | null) => `https://site.web.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/dailypowerindex?limit=1000&groups=50&dates=${date}`,
       }
     },
+    mlb: {
+      team: {},
+      game: {}
+    },
   },
   parsers: {
     powerIndex: parsePowerIndex,
@@ -214,7 +218,7 @@ async function updateMetrics(config: MetricConfig, date: string | null): Promise
 /**
  * Scrape and update game metrics in Firestore
  * @param date - Date string in YYYYMMDD format
- * @param sport - Sport identifier (nba, ncaambb)
+ * @param sport - Sport identifier
  */
 export async function updateGameMetrics(date: string, sport: string): Promise<GamesMetrics> {
   try {

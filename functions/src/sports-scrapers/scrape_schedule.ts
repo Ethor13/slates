@@ -84,6 +84,8 @@ const CONFIG: SportConfig = {
       `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${date}`,
     ncaambb: (date: string) =>
       `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?limit=1000&groups=50&dates=${date}`,
+    mlb: (date: string) =>
+      `https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=${date}`,
   },
 };
 
@@ -103,6 +105,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
           abbreviation: team.team.abbreviation,
           logo: team.team.logo?.split(".com/").at(-1) as string,
           record: team.records?.find((record) => record.type === "total")?.summary || "",
+          metrics: {},
         },
       })),
     );

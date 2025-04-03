@@ -7,11 +7,7 @@ import Nav from '../General/Nav';
 import GamesList from '../Games/GamesList';
 import Sidebar from '../Games/Sidebar';
 import MinimalGamesList from '../Games/Prototypes/MinimalGamesList';
-
-enum Sports {
-    NBA = 'nba',
-    NCAAMBB = 'ncaambb',
-}
+import { Sports } from '../../helpers';
 
 enum Sort {
     TIME = 'Time',

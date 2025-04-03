@@ -41,6 +41,7 @@ const CONFIG: ConfigType = {
         powerIndex: {
           nba: 3,
           ncaambb: 8,
+          mlb: 0,
         },
         spread: 50,
       },
@@ -50,6 +51,7 @@ const CONFIG: ConfigType = {
   sports: {
     nba: "allData",
     ncaambb: "allData",
+    mlb: "allData",
   },
 };
 
