@@ -1,7 +1,8 @@
 export enum Sports {
   NBA = "nba",
   NCAAMBB = "ncaambb",
-  MLB = "mlb"
+  MLB = "mlb",
+  NHL = "nhl",
 }
 
 // always have a stat/metric be a key

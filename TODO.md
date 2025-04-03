@@ -9,7 +9,7 @@
 - Add new Sports
     - For each sport
         - find all the mentions of ncaambb (or some other sport) and add the new sport in all those places
+        - do an initial schedule update using cloud function
         - request Teams update using the cloud function
         - download all the images using the cloud function
-        - make sure teams are getting extracted correctly
         - add the league logo

@@ -42,6 +42,7 @@ const CONFIG: ConfigType = {
           nba: 3,
           ncaambb: 8,
           mlb: 0,
+          nhl: 0,
         },
         spread: 50,
       },
@@ -52,6 +53,7 @@ const CONFIG: ConfigType = {
     nba: "allData",
     ncaambb: "allData",
     mlb: "allData",
+    nhl: "allData",
   },
 };
 

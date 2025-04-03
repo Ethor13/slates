@@ -111,6 +111,7 @@ export const channels = onRequest(
 );
 
 // http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=mlb&teams=30
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=nhl&teams=32
 export const initializeTeams = onRequest(
   { cors: true },
   async (req, res) => {

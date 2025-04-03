@@ -120,6 +120,10 @@ const CONFIG: SportConfig = {
       team: {},
       game: {}
     },
+    nhl: {
+      team: {},
+      game: {}
+    },
   },
   parsers: {
     powerIndex: parsePowerIndex,

@@ -86,6 +86,8 @@ const CONFIG: SportConfig = {
       `https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?limit=1000&groups=50&dates=${date}`,
     mlb: (date: string) =>
       `https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=${date}`,
+    nhl: (date: string) =>
+      `https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=${date}`,
   },
 };
 

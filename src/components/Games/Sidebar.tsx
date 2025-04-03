@@ -102,6 +102,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         return "NCAA Men's Basketball";
       case Sports.MLB:
         return "MLB";
+      case Sports.NHL:
+        return "NHL";
       default:
         return sport;
     }

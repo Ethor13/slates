@@ -4,6 +4,7 @@ export enum Sports {
     NBA = 'nba',
     NCAAMBB = 'ncaambb',
     MLB = 'mlb',
+    NHL = 'nhl',
 }
 
 export const formatGameTime = (timeString: string): string => {
