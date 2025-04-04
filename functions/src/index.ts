@@ -13,6 +13,7 @@ import { logger } from "firebase-functions";
 import { updateDatesData } from "./scheduledUpdater.js";
 import { getProviders, getChannels } from "./channel-scraper/service_providers.js";
 import { downloadImages } from "./sports-scrapers/scrape_images.js";
+import { combine_maps } from "./helpers.js";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -110,48 +111,46 @@ export const channels = onRequest(
   }
 );
 
-// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=mlb&teams=30
-// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=nhl&teams=32
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=baseball&league=mlb
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=basketball&league=nba
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=basketball&league=mens-college-basketball
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=hockey&league=nhl
 export const initializeTeams = onRequest(
   { cors: true },
   async (req, res) => {
     // teams -> teamID -> "info" -> [abbreviation, logo, name, shortName]
     // parse sport and teams from request
     const sport = req.query.sport as string;
-    const teams = req.query.teams as unknown as number;
+    const league = req.query.league as string;
 
-    if (!sport || !teams) {
-      res.status(400).send("Missing sport or teams");
+    if (!sport || !league) {
+      res.status(400).send("Missing sport or league");
       return;
     }
 
-    const allDates = await db.collection("sports").doc(sport).collection("schedule").get();
-    const teamData: Record<string, any> = {};
-    const teamIds = new Set<string>();
-    for (const date of allDates.docs) {
-      for (const game of Object.values(date.data())) {
-        for (const team of [game.home, game.away]) {
-          if (!teamIds.has(team.id)) {
-            teamIds.add(team.id);
-            teamData[team.id] = {
-              info: {
-                abbreviation: team.abbreviation,
-                logo: team.logo.replace(/\/scoreboard/g, ""),
-                name: team.name,
-                shortName: team.shortName,
-              },
-              metrics: {}
+    const rawTeams = await fetch(`https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/teams?limit=1000`);
+    const teamsJSON = await rawTeams.json();
+    const teams = teamsJSON.sports[0].leagues[0].teams.map((team: any) => team.team).map((team: any) => {
+      return {
+        [team.id]: {
+          info: {
+            abbreviation: team.abbreviation,
+            logo: team.logos[0].href.replace(/^.*\.com/g, ""),
+            name: team.displayName,
+            shortName: team.shortDisplayName,
+            colors: {
+              primary: team.color,
+              alternate: team.alternateColor,
             }
-            if (teamIds.size >= teams) {
-              const teamsRef = db.collection("sports").doc(sport);
-              teamsRef.set({ teams: teamData }, { merge: true });
-              res.status(200).send("Initialized Teams successfully");
-              return;
-            }
-          }
+          },
+          metrics: {},
         }
       }
-    }
+    });
+
+    const teamsRef = db.collection("sports").doc(league);
+    await teamsRef.set({ teams: combine_maps(teams) }, { merge: true });
+    res.status(200).send("Initialized Teams successfully");
   }
 );
 

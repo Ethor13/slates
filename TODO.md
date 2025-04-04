@@ -13,3 +13,6 @@
         - request Teams update using the cloud function
         - download all the images using the cloud function
         - add the league logo
+
+- Rendering issue on teams select menu in preferences
+    - random teams are being selected in the menu, (but not showing up in the selected teams list) - render error
