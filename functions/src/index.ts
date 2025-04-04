@@ -138,10 +138,10 @@ export const initializeTeams = onRequest(
             logo: team.logos[0].href.replace(/^.*\.com/g, ""),
             name: team.displayName,
             shortName: team.shortDisplayName,
-            colors: {
-              primary: team.color,
-              alternate: team.alternateColor,
-            }
+          },
+          colors: {
+            primary: team.color,
+            alternate: team.alternateColor,
           },
           metrics: {},
         }

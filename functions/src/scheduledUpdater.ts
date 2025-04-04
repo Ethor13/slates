@@ -11,7 +11,7 @@ import { updateScheduleInFirestore } from "./sports-scrapers/scrape_schedule.js"
 import { updateGameMetrics, updateTeamMetrics } from "./sports-scrapers/scrape_game_metrics.js";
 import { scoreSportsGames } from "./sports-scrapers/calculate_slate_scores.js";
 import { logger } from "firebase-functions";
-import { Sports, GamesData, TeamsData } from "./types.js";
+import { Sports, GamesData, TeamsData, ParsedTeams } from "./types.js";
 import { datesToUpdate } from "./helpers.js";
 
 export const updateDatesData = async (db: Firestore, updateSize: number) => {
@@ -25,7 +25,10 @@ export const updateDatesData = async (db: Firestore, updateSize: number) => {
     // Write teams data
     for (const sport of Object.values(Sports)) {
       const sportTeamsRef = db.collection("sports").doc(sport);
-      await sportTeamsRef.set({ teams: teamsData[sport] }, { merge: true });
+      if (Object.keys(teamsData[sport]).length > 0) {
+        await sportTeamsRef.set({ teams: teamsData[sport] }, { merge: true });
+      }
+      teamsData[sport] = (await sportTeamsRef.get()).data() as ParsedTeams;
     }
 
     logger.log("Teams data update completed");
@@ -51,6 +54,8 @@ const updateDateData = async (db: Firestore, date: string, teamsData: TeamsData)
     const gamesData = await updateGamesData(date);
     // add slateScore to gamesData
     await calculateScores(gamesData, teamsData);
+    // add colors to gamesData
+    await addColorsToGamesData(gamesData, teamsData);
 
     const batch = db.batch();
 
@@ -171,6 +176,28 @@ async function calculateScores(gamesData: GamesData, teamsData: TeamsData): Prom
     }
   } catch (error) {
     logger.error("Error updating scores:", error);
+    throw error;
+  }
+}
+
+function addColorsToGamesData(gamesData: GamesData, teamsData: TeamsData): void {
+  try {
+    const tbdColors = {
+      primary: "#000000",
+      alternate: "#000000"
+    }
+
+    for (const sport of Object.values(Sports)) {
+      Object.entries(gamesData[sport]).forEach(([gameId, game]) => {
+        const homeTeam = teamsData[sport].teams[game.home.id];
+        const awayTeam = teamsData[sport].teams[game.away.id];
+
+        gamesData[sport][gameId].home.colors = homeTeam?.colors || tbdColors;
+        gamesData[sport][gameId].away.colors = awayTeam?.colors || tbdColors;
+      });
+    }
+  } catch (error) {
+    logger.error("Error adding colors to games data:", error);
     throw error;
   }
 }
