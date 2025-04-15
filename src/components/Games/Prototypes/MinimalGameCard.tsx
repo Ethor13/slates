@@ -35,8 +35,8 @@ const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
                     {/* Game Status - fixed proportion */}
                     <div className="col-span-1 flex justify-center">
                         <div className="w-full text-center px-2">
-                            <div className="text-lg font-medium">@</div>
-                            <div className="text-xs truncate">{formatGameTime(game.date)}</div>
+                            <div className="text-sm font-medium uppercase">{game.sport}</div>
+                            <div className="text-sm truncate">{formatGameTime(game.date)}</div>
                         </div>
                     </div>
                     {/* Home Team - fixed proportion */}

@@ -187,7 +187,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     {userPreferences.showOnlyAvailableBroadcasts && (<Check size={14} className="text-white" />)}
                   </div>
                 </button>
-                <span className="text-sm">Only show available broadcasts</span>
+                <span className="text-md">Only show available broadcasts</span>
               </div>
             </div>
 
@@ -198,16 +198,21 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
               <h2 className="text-lg font-semibold">Sports</h2>
               <div className="flex flex-col gap-2">
                 {Object.values(Sports).map((sport) => (
-                  <button
-                    key={sport}
-                    className={`p-1 cursor-pointer box-border border-2 rounded-lg flex items-center gap-2 transition-colors
-                    ${selectedSports.includes(sport)
-                        ? "border-blue-600 bg-blue-50 text-blue-600"
-                        : "border-gray-300 hover:bg-blue-50"}`}
-                    onClick={() => handleSportChange(sport)}
-                  >
-                    <span className="font-medium">{getSportDisplayName(sport)}</span>
-                  </button>
+                  <div key={sport} className="flex flex-row items-center gap-1">
+                    <button
+                      onClick={() => handleSportChange(sport)}
+                      className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
+                    >
+                      <div className={`w-5 h-5 flex items-center justify-center rounded border ${
+                        selectedSports.includes(sport)
+                          ? 'bg-blue-600 border-blue-600'
+                          : 'border-gray-300'
+                      }`}>
+                        {selectedSports.includes(sport) && (<Check size={14} className="text-white" />)}
+                      </div>
+                    </button>
+                    <span className="text-md">{getSportDisplayName(sport)}</span>
+                  </div>
                 ))}
               </div>
             </div>
