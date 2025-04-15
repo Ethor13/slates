@@ -20,43 +20,29 @@ const RefinedGameCard: React.FC<GameCardProps> = ({ game }) => {
 
     return (
         <div className="w-full py-1">
-
-            {/* Game Notes */}
-            {/* {game.notes && game.notes[0]?.headline && (
-                <div className="">
-                    <div className="text-xs text-gray-600">
-                        {game.notes[0].headline}
-                    </div>
-                </div>
-            )} */}
-
             {/* Main card - always visible */}
             <div className="flex items-center w-full">
                 {/* Slate Score - fixed width */}
                 <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-semibold mr-4 ${interestLevelClasses[interestLevel.className][1]}`}>
                     {interestLevel.rating}
                 </div>
-
                 {/* Teams and Game Status - controlled width proportions */}
                 <div className="grid grid-cols-10 w-full items-center">
                     {/* Away Team - fixed proportion */}
-                    <div className="col-span-2">
+                    <div className="col-span-2 w-full">
                         <TeamInfo team={game.away} opponent={game.home} isAway={true} />
                     </div>
-
                     {/* Game Status - fixed proportion */}
                     <div className="col-span-1 flex justify-center">
                         <div className="w-full text-center px-2">
                             <div className="text-lg font-medium">@</div>
-                                <div className="text-xs truncate">{formatGameTime(game.date)}</div>
+                            <div className="text-xs truncate">{formatGameTime(game.date)}</div>
                         </div>
                     </div>
-
                     {/* Home Team - fixed proportion */}
                     <div className="col-span-2">
                         <TeamInfo team={game.home} opponent={game.away} isAway={false} />
                     </div>
-
                     {/* Broadcasts component - fixed proportion */}
                     <div className="col-span-5 h-full hidden xl:block">
                         <Broadcasts broadcasts={game.broadcasts} />

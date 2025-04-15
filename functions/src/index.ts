@@ -148,7 +148,8 @@ export const initializeTeams = onRequest(
       }
     });
 
-    const teamsRef = db.collection("sports").doc(league);
+    const leagueAdj = league == "mens-college-basketball" ? "ncaambb" : league;
+    const teamsRef = db.collection("sports").doc(leagueAdj);
     await teamsRef.set({ teams: combine_maps(teams) }, { merge: true });
     res.status(200).send("Initialized Teams successfully");
   }

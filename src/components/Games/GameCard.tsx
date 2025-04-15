@@ -2,7 +2,7 @@ import React from "react";
 import { getInterestLevel, formatGameTime } from "../../helpers";
 import { GameCardProps, TeamInfoProps, BroadcastsProps } from "./types";
 import { Provider, useAuth } from '../../contexts/AuthContext';
-import { FirebaseImg } from "../General/FirebaseImg";
+import { TeamColorBlock } from "../General/TeamColorBlock";
 
 // First item is class for border, second is class for background
 const interestLevelClasses: Record<string, string[]> = {
@@ -36,11 +36,7 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ homeAway, team, opponent }) => {
           </div>
         </div>
         <div className={`w-16 h-16 ${homeAway === "home" ? "order-first" : ""}`}>
-          <FirebaseImg
-            src={team.logo || "i/teamlogos/tbd.png"}
-            alt={`${team.shortName} logo`}
-            loading="lazy"
-          />
+          <TeamColorBlock colors={team.colors} direction="left" />
         </div>
       </div>
     </div>

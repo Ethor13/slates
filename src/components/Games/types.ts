@@ -23,11 +23,15 @@ export interface Game {
 }
 
 export interface Team {
+  id: string;
+  name: string;
   shortName: string;
-  record: string;
-  logo: string;
-  matchupQualities?: {
-    teampredwinpct: number;
+  record?: string;
+  logo?: string;
+  matchupQualities?: Record<string, number>;
+  colors: {
+    primary: string;
+    alternate: string;
   };
 }
 

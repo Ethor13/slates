@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { Sports, SportSelectorProps, ChevronButtonProps } from "./types";
 import { getDateString } from "../../helpers";
-import { FirebaseImg } from "../General/FirebaseImg";
 import { useAuth } from "../../contexts/AuthContext";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
@@ -207,12 +206,6 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                         : "border-gray-300 hover:bg-blue-50"}`}
                     onClick={() => handleSportChange(sport)}
                   >
-                    <div className="w-8 h-8">
-                      <FirebaseImg
-                        src={`i/leaguelogos/${sport}.png`}
-                        alt={`${sport} logo`}
-                      />
-                    </div>
                     <span className="font-medium">{getSportDisplayName(sport)}</span>
                   </button>
                 ))}
