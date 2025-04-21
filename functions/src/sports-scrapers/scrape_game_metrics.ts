@@ -1,101 +1,104 @@
 import { combine_maps, mappify, scrapeUrl } from "../helpers.js";
 import { logger } from "firebase-functions";
 import { GamesMetric, Metrics, ParsedTeams, GameMetric, GamesMetrics, Metric, TeamMetric } from "../types.js";
+import * as cheerio from 'cheerio';
 
 interface MetricConfig {
   [metricUrl: string]: (date: string | null) => string;
 }
 
+interface ParserConfig {
+  team: MetricConfig;
+  game: MetricConfig;
+  parsers: {
+    [parser: string]: (data: any) => Metric;
+  };
+}
+
 interface SportConfig {
-    sports: {
-        [sport: string]: {
-          team: MetricConfig;
-          game: MetricConfig;
-        }
-    };
-    parsers: {
-        [parser: string]: (data: any) => Metric;
-    };
-    statNameMapper: {
-        [key: string]: string;
-    };
+  sports: {
+    [sport: string]: ParserConfig
+  };
+  statNameMapper: {
+    [key: string]: string;
+  };
 }
 
 // Power Index interfaces
 interface TeamInfo {
-    id: string;
-    displayName: string;
-    shortDisplayName: string;
-    abbreviation: string;
-    logos: Array<{
-        href: string;
-    }>;
-    group: {
-        shortName: string;
-        parent: {
-            shortName: string;
-        };
+  id: string;
+  displayName: string;
+  shortDisplayName: string;
+  abbreviation: string;
+  logos: Array<{
+    href: string;
+  }>;
+  group: {
+    shortName: string;
+    parent: {
+      shortName: string;
     };
+  };
 }
 
 interface StatCategory {
-    name: string;
-    values: number[];
+  name: string;
+  values: number[];
 }
 
 interface TeamPowerIndex {
-    team: TeamInfo;
-    categories: StatCategory[];
+  team: TeamInfo;
+  categories: StatCategory[];
 }
 
 interface PowerIndexResponse {
-    teams: TeamPowerIndex[];
-    categories: Array<{
-        name: string;
-        names: string[];
-    }>;
+  teams: TeamPowerIndex[];
+  categories: Array<{
+    name: string;
+    names: string[];
+  }>;
 }
 
 // Matchup Quality interfaces
 interface TeamMatchupQuality {
-    id: string;
-    stats: Array<{
-        name: string;
-        value: number;
-    }>;
+  id: string;
+  stats: Array<{
+    name: string;
+    value: number;
+  }>;
 }
 
 interface Competition {
-    competitors: Array<{
-        team: TeamInfo;
-        homeAway: "home" | "away";
-    }>;
-    powerIndexes?: TeamMatchupQuality[];
-    geoBroadcasts: Array<{
-        media: {
-            shortName: string;
-        };
-        market: {
-            type: string;
-        };
-        type: {
-            shortName: string;
-        };
-    }>;
-    links: Array<{
-        text: string;
-        href: string;
-    }>;
+  competitors: Array<{
+    team: TeamInfo;
+    homeAway: "home" | "away";
+  }>;
+  powerIndexes?: TeamMatchupQuality[];
+  geoBroadcasts: Array<{
+    media: {
+      shortName: string;
+    };
+    market: {
+      type: string;
+    };
+    type: {
+      shortName: string;
+    };
+  }>;
+  links: Array<{
+    text: string;
+    href: string;
+  }>;
 }
 
 interface Event {
-    id: string;
-    date: string;
-    competitions: Competition[];
+  id: string;
+  date: string;
+  competitions: Competition[];
 }
 
 interface MatchupQualityResponse {
-    events: Event[];
+  events: Event[];
 }
 
 const CONFIG: SportConfig = {
@@ -106,7 +109,11 @@ const CONFIG: SportConfig = {
       },
       game: {
         matchupQuality: (date: string | null) => `https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/dailypowerindex?limit=1000&dates=${date}`,
-      }
+      },
+      parsers: {
+        powerIndex: parseBasketballPowerIndex,
+        matchupQuality: parseMatchupQuality,
+      },
     },
     ncaambb: {
       team: {
@@ -114,20 +121,26 @@ const CONFIG: SportConfig = {
       },
       game: {
         matchupQuality: (date: string | null) => `https://site.web.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/dailypowerindex?limit=1000&groups=50&dates=${date}`,
-      }
+      },
+      parsers: {
+        powerIndex: parseBasketballPowerIndex,
+        matchupQuality: parseMatchupQuality,
+      },
     },
     mlb: {
-      team: {},
-      game: {}
+      team: {
+        powerIndex: (_date: string | null) => "https://www.espn.com/mlb/stats/rpi",
+      },
+      game: {},
+      parsers: {
+        powerIndex: parseMLBPowerIndex,
+      },
     },
     nhl: {
       team: {},
-      game: {}
+      game: {},
+      parsers: {},
     },
-  },
-  parsers: {
-    powerIndex: parsePowerIndex,
-    matchupQuality: parseMatchupQuality,
   },
   statNameMapper: {
     matchupquality: "matchupquality",
@@ -147,7 +160,9 @@ const CONFIG: SportConfig = {
  * @param PIData - ESPN API power index response
  * @returns Array of parsed power index data
  */
-function parsePowerIndex(PIData: PowerIndexResponse): TeamMetric {
+function parseBasketballPowerIndex(rawPIData: string): TeamMetric {
+  const PIData = JSON.parse(rawPIData) as PowerIndexResponse;
+
   return combine_maps(PIData.teams.map((team) => {
     const teamData: TeamMetric = {
       info: {
@@ -162,8 +177,8 @@ function parsePowerIndex(PIData: PowerIndexResponse): TeamMetric {
         powerIndexes: combine_maps(
           team.categories.map((statCategory) => ({
             [statCategory.name]: mappify(
-                          PIData.categories?.find((category) => category.name === statCategory.name)!.names,
-                          statCategory.values,
+              PIData.categories?.find((category) => category.name === statCategory.name)!.names,
+              statCategory.values,
             ),
           })),
         ),
@@ -174,13 +189,52 @@ function parsePowerIndex(PIData: PowerIndexResponse): TeamMetric {
   }));
 }
 
+function parseMLBPowerIndex(rawHtml: string): TeamMetric {
+  const $ = cheerio.load(rawHtml);
+
+  // Select the table by id, then first child div, then first child div again
+  const table = $('#my-teams-table > div:first-child > div:first-child > table > tbody');
+
+  const trs = table.find('tr');
+
+  // get column names
+  const colNames = $(trs[1]).find('td').map((_, column) => {
+    return $(column).text();
+  }).get();
+
+  return combine_maps(trs.map((_, row) => {
+    // skip the first two rows
+    if ($(row).index() < 2) return;
+
+    // extract the text in each of the td elements and build a list
+    const values = $(row).find('td').map((_, column) => {
+      return $(column).text();
+    }).get();
+
+    const teamId = 0;
+
+    console.log("colNames", colNames);
+    console.log("values", values);
+
+    const teamData: TeamMetric = {
+      [teamId]: {
+        metrics: {
+          powerIndexes: mappify(colNames.slice(2), values.slice(2)),
+        },
+      },
+    };
+
+    return teamData;
+  }).get());
+}
+
 /**
  * Parse matchup quality data from ESPN API response
  * @param MQData - ESPN API matchup quality response
  * @returns Array of parsed matchup quality data
  */
 function parseMatchupQuality(MQData: MatchupQualityResponse): GamesMetric {
-  return combine_maps(MQData.events.map((event) => {
+  return combine_maps(MQData.events?.map((event) => {
     const matchupQualities: GamesMetric = combine_maps(
       event.competitions[0].powerIndexes?.map((teamPowerIndexes) => ({
         [teamPowerIndexes.id]: combine_maps(
@@ -200,15 +254,15 @@ function parseMatchupQuality(MQData: MatchupQualityResponse): GamesMetric {
     );
 
     return { [event.id]: gameData };
-  }));
+  }) || [{}]);
 }
 
-async function updateMetrics(config: MetricConfig, date: string | null): Promise<Metrics> {
+async function updateMetrics(config: MetricConfig, sport: string, date: string | null): Promise<Metrics> {
   try {
     const allParsedMetrics: Metrics = {};
     for (const [metricName, getMetricUrl] of Object.entries(config)) {
       const rawMetrics = await scrapeUrl(getMetricUrl(date));
-      const parsedMetrics = CONFIG.parsers[metricName](rawMetrics);
+      const parsedMetrics = CONFIG.sports[sport].parsers[metricName](rawMetrics);
       allParsedMetrics[metricName] = parsedMetrics;
     }
 
@@ -227,7 +281,7 @@ async function updateMetrics(config: MetricConfig, date: string | null): Promise
 export async function updateGameMetrics(date: string, sport: string): Promise<GamesMetrics> {
   try {
     const sport_game_config = CONFIG.sports[sport].game;
-    return await updateMetrics(sport_game_config, date);
+    return await updateMetrics(sport_game_config, sport, date);
   } catch (error) {
     logger.error("Error updating game metrics:", error);
     throw new Error(`Error updating game metrics: ${error}`);
@@ -237,7 +291,7 @@ export async function updateGameMetrics(date: string, sport: string): Promise<Ga
 export async function updateTeamMetrics(sport: string): Promise<ParsedTeams> {
   try {
     const sport_team_config = CONFIG.sports[sport].team;
-    const teamMetrics = await updateMetrics(sport_team_config, null);
+    const teamMetrics = await updateMetrics(sport_team_config, sport, null);
 
     const res: ParsedTeams = {};
     Object.entries(teamMetrics).forEach(([_, teams]) => {

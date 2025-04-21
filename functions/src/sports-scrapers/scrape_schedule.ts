@@ -135,7 +135,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
 
 export async function updateScheduleInFirestore(date: string, sport: string): Promise<ParsedGames> {
   try {
-    const rawSchedule = (await scrapeUrl(CONFIG.sports[sport](date))) as ScheduleResponse;
+    const rawSchedule = JSON.parse(await scrapeUrl(CONFIG.sports[sport](date))) as ScheduleResponse;
     const parsedSchedule = parseEvents(rawSchedule, sport);
     return parsedSchedule;
   } catch (error) {

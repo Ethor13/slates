@@ -21,15 +21,14 @@ const CONFIG: Config = {
  * @returns {Promise<Object>} Parsed ESPN configuration data
  * @throws {Error} If scraping or parsing fails
  */
-async function scrapeUrl(url: string): Promise<Record<string, any>> {
+async function scrapeUrl(url: string): Promise<string> {
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const json = await response.text();
-    return JSON.parse(json);
+    return await response.text();
   } catch (error) {
     throw new Error(`Scraping URL failed: ${error instanceof Error ? error.message : String(error)}`);
   }
