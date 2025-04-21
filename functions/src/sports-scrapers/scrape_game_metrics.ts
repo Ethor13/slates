@@ -211,10 +211,10 @@ function parseMLBPowerIndex(rawHtml: string): TeamMetric {
       return $(column).text();
     }).get();
 
-    const teamId = 0;
+    const teamUrl = $($(row).find('td')[1]).find('a').attr('href') as string;
+    const teamAbbreviation = teamUrl.split('/')[7];
 
-    console.log("colNames", colNames);
-    console.log("values", values);
+    const teamId = 0;
 
     const teamData: TeamMetric = {
       [teamId]: {
