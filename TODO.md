@@ -17,4 +17,4 @@
 - Rendering issue on teams select menu in preferences
     - random teams are being selected in the menu, (but not showing up in the selected teams list) - render error
 
-- Scrape MLB and NHL power indexes
+- Scrape NHL power indexes

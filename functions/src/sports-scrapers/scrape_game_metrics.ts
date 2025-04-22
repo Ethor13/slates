@@ -1,6 +1,7 @@
 import { combine_maps, mappify, scrapeUrl } from "../helpers.js";
 import { logger } from "firebase-functions";
 import { GamesMetric, Metrics, ParsedTeams, GameMetric, GamesMetrics, Metric, TeamMetric } from "../types.js";
+import sportsTeams from "../data/sportsTeams.json" with { type: "json" };
 import * as cheerio from 'cheerio';
 
 interface MetricConfig {
@@ -165,13 +166,9 @@ function parseBasketballPowerIndex(rawPIData: string): TeamMetric {
 
   return combine_maps(PIData.teams.map((team) => {
     const teamData: TeamMetric = {
-      info: {
-        name: team.team.displayName,
-        shortName: team.team.shortDisplayName,
-        abbreviation: team.team.abbreviation,
+      groups: {
         divisionName: team.team.group.shortName,
         conferenceName: team.team.group.parent.shortName,
-        logo: team.team.logos[0].href?.split(".com/").at(-1) as string,
       },
       metrics: {
         powerIndexes: combine_maps(
@@ -212,12 +209,17 @@ function parseMLBPowerIndex(rawHtml: string): TeamMetric {
     }).get();
 
     const teamUrl = $($(row).find('td')[1]).find('a').attr('href') as string;
-    const teamAbbreviation = teamUrl.split('/')[7];
+    const teamAbbreviation = teamUrl.split('/')[7].toUpperCase();
+    const teamId = Object.entries(sportsTeams['mlb'] as Record<any, any>).find(([_, team]) => team.abbreviation === teamAbbreviation);
 
-    const teamId = 0;
+    // assert teamId has exactly one match
+    if (!teamId) {
+      logger.error(`Team ID not found for abbreviation ${teamAbbreviation}`);
+      return;
+    }
 
     const teamData: TeamMetric = {
-      [teamId]: {
+      [teamId[0]]: {
         metrics: {
           powerIndexes: mappify(colNames.slice(2), values.slice(2)),
         },
@@ -297,10 +299,15 @@ export async function updateTeamMetrics(sport: string): Promise<ParsedTeams> {
     Object.entries(teamMetrics).forEach(([_, teams]) => {
       Object.entries(teams).forEach(([teamId, teamMetric]) => {
         if (!res[teamId]) {
-          res[teamId] = { info: {}, metrics: {} };
+          res[teamId] = {};
         }
-        res[teamId].info = { ...res[teamId].info, ...teamMetric.info };
-        res[teamId].metrics = { ...res[teamId].metrics, ...teamMetric.metrics };
+        Object.entries(teamMetric).forEach(([key, value]) => {
+          if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+            res[teamId][key] = { ...(res[teamId][key] || {}), ...value };
+          } else {
+            res[teamId][key] = value;
+          }
+        });
       });
     });
 

@@ -1,0 +1,3474 @@
+{
+    "mlb": {
+        "1": {
+            "name": "Baltimore Orioles",
+            "logo": "/i/teamlogos/mlb/500/bal.png",
+            "abbreviation": "BAL",
+            "shortName": "Orioles"
+        },
+        "2": {
+            "name": "Boston Red Sox",
+            "logo": "/i/teamlogos/mlb/500/bos.png",
+            "abbreviation": "BOS",
+            "shortName": "Red Sox"
+        },
+        "3": {
+            "name": "Los Angeles Angels",
+            "logo": "/i/teamlogos/mlb/500/laa.png",
+            "abbreviation": "LAA",
+            "shortName": "Angels"
+        },
+        "4": {
+            "name": "Chicago White Sox",
+            "logo": "/i/teamlogos/mlb/500/chw.png",
+            "abbreviation": "CHW",
+            "shortName": "White Sox"
+        },
+        "5": {
+            "name": "Cleveland Guardians",
+            "logo": "/i/teamlogos/mlb/500/cle.png",
+            "abbreviation": "CLE",
+            "shortName": "Guardians"
+        },
+        "6": {
+            "name": "Detroit Tigers",
+            "logo": "/i/teamlogos/mlb/500/det.png",
+            "abbreviation": "DET",
+            "shortName": "Tigers"
+        },
+        "7": {
+            "name": "Kansas City Royals",
+            "logo": "/i/teamlogos/mlb/500/kc.png",
+            "abbreviation": "KC",
+            "shortName": "Royals"
+        },
+        "8": {
+            "name": "Milwaukee Brewers",
+            "logo": "/i/teamlogos/mlb/500/mil.png",
+            "abbreviation": "MIL",
+            "shortName": "Brewers"
+        },
+        "9": {
+            "name": "Minnesota Twins",
+            "logo": "/i/teamlogos/mlb/500/min.png",
+            "abbreviation": "MIN",
+            "shortName": "Twins"
+        },
+        "10": {
+            "name": "New York Yankees",
+            "logo": "/i/teamlogos/mlb/500/nyy.png",
+            "abbreviation": "NYY",
+            "shortName": "Yankees"
+        },
+        "11": {
+            "name": "Athletics",
+            "logo": "/i/teamlogos/mlb/500/ath.png",
+            "abbreviation": "ATH",
+            "shortName": "Athletics"
+        },
+        "12": {
+            "name": "Seattle Mariners",
+            "logo": "/i/teamlogos/mlb/500/sea.png",
+            "abbreviation": "SEA",
+            "shortName": "Mariners"
+        },
+        "13": {
+            "name": "Texas Rangers",
+            "logo": "/i/teamlogos/mlb/500/tex.png",
+            "abbreviation": "TEX",
+            "shortName": "Rangers"
+        },
+        "14": {
+            "name": "Toronto Blue Jays",
+            "logo": "/i/teamlogos/mlb/500/tor.png",
+            "abbreviation": "TOR",
+            "shortName": "Blue Jays"
+        },
+        "15": {
+            "name": "Atlanta Braves",
+            "logo": "/i/teamlogos/mlb/500/atl.png",
+            "abbreviation": "ATL",
+            "shortName": "Braves"
+        },
+        "16": {
+            "name": "Chicago Cubs",
+            "logo": "/i/teamlogos/mlb/500/chc.png",
+            "abbreviation": "CHC",
+            "shortName": "Cubs"
+        },
+        "17": {
+            "name": "Cincinnati Reds",
+            "logo": "/i/teamlogos/mlb/500/cin.png",
+            "abbreviation": "CIN",
+            "shortName": "Reds"
+        },
+        "18": {
+            "name": "Houston Astros",
+            "logo": "/i/teamlogos/mlb/500/hou.png",
+            "abbreviation": "HOU",
+            "shortName": "Astros"
+        },
+        "19": {
+            "name": "Los Angeles Dodgers",
+            "logo": "/i/teamlogos/mlb/500/lad.png",
+            "abbreviation": "LAD",
+            "shortName": "Dodgers"
+        },
+        "20": {
+            "name": "Washington Nationals",
+            "logo": "/i/teamlogos/mlb/500/wsh.png",
+            "abbreviation": "WSH",
+            "shortName": "Nationals"
+        },
+        "21": {
+            "name": "New York Mets",
+            "logo": "/i/teamlogos/mlb/500/nym.png",
+            "abbreviation": "NYM",
+            "shortName": "Mets"
+        },
+        "22": {
+            "name": "Philadelphia Phillies",
+            "logo": "/i/teamlogos/mlb/500/phi.png",
+            "abbreviation": "PHI",
+            "shortName": "Phillies"
+        },
+        "23": {
+            "name": "Pittsburgh Pirates",
+            "logo": "/i/teamlogos/mlb/500/pit.png",
+            "abbreviation": "PIT",
+            "shortName": "Pirates"
+        },
+        "24": {
+            "name": "St. Louis Cardinals",
+            "logo": "/i/teamlogos/mlb/500/stl.png",
+            "abbreviation": "STL",
+            "shortName": "Cardinals"
+        },
+        "25": {
+            "name": "San Diego Padres",
+            "logo": "/i/teamlogos/mlb/500/sd.png",
+            "abbreviation": "SD",
+            "shortName": "Padres"
+        },
+        "26": {
+            "name": "San Francisco Giants",
+            "logo": "/i/teamlogos/mlb/500/sf.png",
+            "abbreviation": "SF",
+            "shortName": "Giants"
+        },
+        "27": {
+            "name": "Colorado Rockies",
+            "logo": "/i/teamlogos/mlb/500/col.png",
+            "abbreviation": "COL",
+            "shortName": "Rockies"
+        },
+        "28": {
+            "name": "Miami Marlins",
+            "logo": "/i/teamlogos/mlb/500/mia.png",
+            "abbreviation": "MIA",
+            "shortName": "Marlins"
+        },
+        "29": {
+            "name": "Arizona Diamondbacks",
+            "logo": "/i/teamlogos/mlb/500/ari.png",
+            "abbreviation": "ARI",
+            "shortName": "Diamondbacks"
+        },
+        "30": {
+            "name": "Tampa Bay Rays",
+            "logo": "/i/teamlogos/mlb/500/tb.png",
+            "abbreviation": "TB",
+            "shortName": "Rays"
+        }
+    },
+    "nba": {
+        "1": {
+            "name": "Atlanta Hawks",
+            "abbreviation": "ATL",
+            "shortName": "Hawks",
+            "logo": "i/teamlogos/nba/500/atl.png"
+        },
+        "2": {
+            "name": "Boston Celtics",
+            "abbreviation": "BOS",
+            "shortName": "Celtics",
+            "logo": "i/teamlogos/nba/500/bos.png"
+        },
+        "3": {
+            "name": "New Orleans Pelicans",
+            "abbreviation": "NO",
+            "shortName": "Pelicans",
+            "logo": "i/teamlogos/nba/500/no.png"
+        },
+        "4": {
+            "name": "Chicago Bulls",
+            "abbreviation": "CHI",
+            "shortName": "Bulls",
+            "logo": "i/teamlogos/nba/500/chi.png"
+        },
+        "5": {
+            "name": "Cleveland Cavaliers",
+            "abbreviation": "CLE",
+            "shortName": "Cavaliers",
+            "logo": "i/teamlogos/nba/500/cle.png"
+        },
+        "6": {
+            "name": "Dallas Mavericks",
+            "abbreviation": "DAL",
+            "shortName": "Mavericks",
+            "logo": "i/teamlogos/nba/500/dal.png"
+        },
+        "7": {
+            "name": "Denver Nuggets",
+            "abbreviation": "DEN",
+            "shortName": "Nuggets",
+            "logo": "i/teamlogos/nba/500/den.png"
+        },
+        "8": {
+            "name": "Detroit Pistons",
+            "abbreviation": "DET",
+            "shortName": "Pistons",
+            "logo": "i/teamlogos/nba/500/det.png"
+        },
+        "9": {
+            "name": "Golden State Warriors",
+            "abbreviation": "GS",
+            "shortName": "Warriors",
+            "logo": "i/teamlogos/nba/500/gs.png"
+        },
+        "10": {
+            "name": "Houston Rockets",
+            "abbreviation": "HOU",
+            "shortName": "Rockets",
+            "logo": "i/teamlogos/nba/500/hou.png"
+        },
+        "11": {
+            "name": "Indiana Pacers",
+            "abbreviation": "IND",
+            "shortName": "Pacers",
+            "logo": "i/teamlogos/nba/500/ind.png"
+        },
+        "12": {
+            "name": "LA Clippers",
+            "abbreviation": "LAC",
+            "shortName": "Clippers",
+            "logo": "i/teamlogos/nba/500/lac.png"
+        },
+        "13": {
+            "name": "Los Angeles Lakers",
+            "abbreviation": "LAL",
+            "shortName": "Lakers",
+            "logo": "i/teamlogos/nba/500/lal.png"
+        },
+        "14": {
+            "name": "Miami Heat",
+            "abbreviation": "MIA",
+            "shortName": "Heat",
+            "logo": "i/teamlogos/nba/500/mia.png"
+        },
+        "15": {
+            "name": "Milwaukee Bucks",
+            "abbreviation": "MIL",
+            "shortName": "Bucks",
+            "logo": "i/teamlogos/nba/500/mil.png"
+        },
+        "16": {
+            "name": "Minnesota Timberwolves",
+            "abbreviation": "MIN",
+            "shortName": "Timberwolves",
+            "logo": "i/teamlogos/nba/500/min.png"
+        },
+        "17": {
+            "name": "Brooklyn Nets",
+            "abbreviation": "BKN",
+            "shortName": "Nets",
+            "logo": "i/teamlogos/nba/500/bkn.png"
+        },
+        "18": {
+            "name": "New York Knicks",
+            "abbreviation": "NY",
+            "shortName": "Knicks",
+            "logo": "i/teamlogos/nba/500/ny.png"
+        },
+        "19": {
+            "name": "Orlando Magic",
+            "abbreviation": "ORL",
+            "shortName": "Magic",
+            "logo": "i/teamlogos/nba/500/orl.png"
+        },
+        "20": {
+            "name": "Philadelphia 76ers",
+            "abbreviation": "PHI",
+            "shortName": "76ers",
+            "logo": "i/teamlogos/nba/500/phi.png"
+        },
+        "21": {
+            "name": "Phoenix Suns",
+            "abbreviation": "PHX",
+            "shortName": "Suns",
+            "logo": "i/teamlogos/nba/500/phx.png"
+        },
+        "22": {
+            "name": "Portland Trail Blazers",
+            "abbreviation": "POR",
+            "shortName": "Trail Blazers",
+            "logo": "i/teamlogos/nba/500/por.png"
+        },
+        "23": {
+            "name": "Sacramento Kings",
+            "abbreviation": "SAC",
+            "shortName": "Kings",
+            "logo": "i/teamlogos/nba/500/sac.png"
+        },
+        "24": {
+            "name": "San Antonio Spurs",
+            "abbreviation": "SA",
+            "shortName": "Spurs",
+            "logo": "i/teamlogos/nba/500/sa.png"
+        },
+        "25": {
+            "name": "Oklahoma City Thunder",
+            "abbreviation": "OKC",
+            "shortName": "Thunder",
+            "logo": "i/teamlogos/nba/500/okc.png"
+        },
+        "26": {
+            "name": "Utah Jazz",
+            "abbreviation": "UTAH",
+            "shortName": "Jazz",
+            "logo": "i/teamlogos/nba/500/utah.png"
+        },
+        "27": {
+            "name": "Washington Wizards",
+            "abbreviation": "WSH",
+            "shortName": "Wizards",
+            "logo": "i/teamlogos/nba/500/wsh.png"
+        },
+        "28": {
+            "name": "Toronto Raptors",
+            "abbreviation": "TOR",
+            "shortName": "Raptors",
+            "logo": "i/teamlogos/nba/500/tor.png"
+        },
+        "29": {
+            "name": "Memphis Grizzlies",
+            "abbreviation": "MEM",
+            "shortName": "Grizzlies",
+            "logo": "i/teamlogos/nba/500/mem.png"
+        },
+        "30": {
+            "name": "Charlotte Hornets",
+            "abbreviation": "CHA",
+            "shortName": "Hornets",
+            "logo": "i/teamlogos/nba/500/cha.png"
+        }
+    },
+    "ncaambb": {
+        "2": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Auburn Tigers",
+            "abbreviation": "AUB",
+            "shortName": "Auburn",
+            "logo": "i/teamlogos/ncaa/500/2.png"
+        },
+        "5": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "UAB Blazers",
+            "abbreviation": "UAB",
+            "shortName": "UAB",
+            "logo": "i/teamlogos/ncaa/500/5.png"
+        },
+        "6": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "South Alabama Jaguars",
+            "abbreviation": "USA",
+            "shortName": "South Alabama",
+            "logo": "i/teamlogos/ncaa/500/6.png"
+        },
+        "8": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Arkansas Razorbacks",
+            "abbreviation": "ARK",
+            "shortName": "Arkansas",
+            "logo": "i/teamlogos/ncaa/500/8.png"
+        },
+        "9": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Arizona State Sun Devils",
+            "abbreviation": "ASU",
+            "shortName": "Arizona St",
+            "logo": "i/teamlogos/ncaa/500/9.png"
+        },
+        "12": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Arizona Wildcats",
+            "abbreviation": "ARIZ",
+            "shortName": "Arizona",
+            "logo": "i/teamlogos/ncaa/500/12.png"
+        },
+        "13": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "Cal Poly Mustangs",
+            "abbreviation": "CP",
+            "shortName": "Cal Poly",
+            "logo": "i/teamlogos/ncaa/500/13.png"
+        },
+        "16": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Sacramento State Hornets",
+            "abbreviation": "SAC",
+            "shortName": "Sacramento St",
+            "logo": "i/teamlogos/ncaa/500/16.png"
+        },
+        "21": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "San Diego State Aztecs",
+            "abbreviation": "SDSU",
+            "shortName": "San Diego St",
+            "logo": "i/teamlogos/ncaa/500/21.png"
+        },
+        "23": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "San José State Spartans",
+            "abbreviation": "SJSU",
+            "shortName": "San José St",
+            "logo": "i/teamlogos/ncaa/500/23.png"
+        },
+        "24": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Stanford Cardinal",
+            "abbreviation": "STAN",
+            "shortName": "Stanford",
+            "logo": "i/teamlogos/ncaa/500/24.png"
+        },
+        "25": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "California Golden Bears",
+            "abbreviation": "CAL",
+            "shortName": "California",
+            "logo": "i/teamlogos/ncaa/500/25.png"
+        },
+        "26": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "UCLA Bruins",
+            "abbreviation": "UCLA",
+            "shortName": "UCLA",
+            "logo": "i/teamlogos/ncaa/500/26.png"
+        },
+        "27": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "UC Riverside Highlanders",
+            "abbreviation": "UCR",
+            "shortName": "UC Riverside",
+            "logo": "i/teamlogos/ncaa/500/27.png"
+        },
+        "28": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "UC San Diego Tritons",
+            "abbreviation": "UCSD",
+            "shortName": "UC San Diego",
+            "logo": "i/teamlogos/ncaa/500/28.png"
+        },
+        "30": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "USC Trojans",
+            "abbreviation": "USC",
+            "shortName": "USC",
+            "logo": "i/teamlogos/ncaa/500/30.png"
+        },
+        "36": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "Colorado State Rams",
+            "abbreviation": "CSU",
+            "shortName": "Colorado St",
+            "logo": "i/teamlogos/ncaa/500/36.png"
+        },
+        "38": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Colorado Buffaloes",
+            "abbreviation": "COLO",
+            "shortName": "Colorado",
+            "logo": "i/teamlogos/ncaa/500/38.png"
+        },
+        "41": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "UConn Huskies",
+            "abbreviation": "CONN",
+            "shortName": "UConn",
+            "logo": "i/teamlogos/ncaa/500/41.png"
+        },
+        "43": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Yale Bulldogs",
+            "abbreviation": "YALE",
+            "shortName": "Yale",
+            "logo": "i/teamlogos/ncaa/500/43.png"
+        },
+        "44": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "American University Eagles",
+            "abbreviation": "AMER",
+            "shortName": "American",
+            "logo": "i/teamlogos/ncaa/500/44.png"
+        },
+        "45": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "George Washington Revolutionaries",
+            "abbreviation": "GW",
+            "shortName": "G Washington",
+            "logo": "i/teamlogos/ncaa/500/45.png"
+        },
+        "46": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Georgetown Hoyas",
+            "abbreviation": "GTWN",
+            "shortName": "Georgetown",
+            "logo": "i/teamlogos/ncaa/500/46.png"
+        },
+        "47": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "Howard Bison",
+            "abbreviation": "HOW",
+            "shortName": "Howard",
+            "logo": "i/teamlogos/ncaa/500/47.png"
+        },
+        "48": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Delaware Blue Hens",
+            "abbreviation": "DEL",
+            "shortName": "Delaware",
+            "logo": "i/teamlogos/ncaa/500/48.png"
+        },
+        "50": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Florida A&M Rattlers",
+            "abbreviation": "FAMU",
+            "shortName": "Florida A&M",
+            "logo": "i/teamlogos/ncaa/500/50.png"
+        },
+        "52": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Florida State Seminoles",
+            "abbreviation": "FSU",
+            "shortName": "Florida St",
+            "logo": "i/teamlogos/ncaa/500/52.png"
+        },
+        "55": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Jacksonville State Gamecocks",
+            "abbreviation": "JVST",
+            "shortName": "Jax State",
+            "logo": "i/teamlogos/ncaa/500/55.png"
+        },
+        "56": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Stetson Hatters",
+            "abbreviation": "STET",
+            "shortName": "Stetson",
+            "logo": "i/teamlogos/ncaa/500/56.png"
+        },
+        "57": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Florida Gators",
+            "abbreviation": "FLA",
+            "shortName": "Florida",
+            "logo": "i/teamlogos/ncaa/500/57.png"
+        },
+        "58": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "South Florida Bulls",
+            "abbreviation": "USF",
+            "shortName": "South Florida",
+            "logo": "i/teamlogos/ncaa/500/58.png"
+        },
+        "59": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Georgia Tech Yellow Jackets",
+            "abbreviation": "GT",
+            "shortName": "Georgia Tech",
+            "logo": "i/teamlogos/ncaa/500/59.png"
+        },
+        "61": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Georgia Bulldogs",
+            "abbreviation": "UGA",
+            "shortName": "Georgia",
+            "logo": "i/teamlogos/ncaa/500/61.png"
+        },
+        "62": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "Hawai'i Rainbow Warriors",
+            "abbreviation": "HAW",
+            "shortName": "Hawai’i",
+            "logo": "i/teamlogos/ncaa/500/62.png"
+        },
+        "66": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Iowa State Cyclones",
+            "abbreviation": "ISU",
+            "shortName": "Iowa State",
+            "logo": "i/teamlogos/ncaa/500/66.png"
+        },
+        "68": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "Boise State Broncos",
+            "abbreviation": "BOIS",
+            "shortName": "Boise St",
+            "logo": "i/teamlogos/ncaa/500/68.png"
+        },
+        "70": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Idaho Vandals",
+            "abbreviation": "IDHO",
+            "shortName": "Idaho",
+            "logo": "i/teamlogos/ncaa/500/70.png"
+        },
+        "71": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Bradley Braves",
+            "abbreviation": "BRAD",
+            "shortName": "Bradley",
+            "logo": "i/teamlogos/ncaa/500/71.png"
+        },
+        "77": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Northwestern Wildcats",
+            "abbreviation": "NU",
+            "shortName": "Northwestern",
+            "logo": "i/teamlogos/ncaa/500/77.png"
+        },
+        "79": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Southern Illinois Salukis",
+            "abbreviation": "SIU",
+            "shortName": "S Illinois",
+            "logo": "i/teamlogos/ncaa/500/79.png"
+        },
+        "82": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "UIC Flames",
+            "abbreviation": "UIC",
+            "shortName": "UIC",
+            "logo": "i/teamlogos/ncaa/500/82.png"
+        },
+        "84": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Indiana Hoosiers",
+            "abbreviation": "IU",
+            "shortName": "Indiana",
+            "logo": "i/teamlogos/ncaa/500/84.png"
+        },
+        "85": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "IU Indianapolis Jaguars",
+            "abbreviation": "IUIN",
+            "shortName": "IU Indy",
+            "logo": "i/teamlogos/ncaa/500/85.png"
+        },
+        "87": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Notre Dame Fighting Irish",
+            "abbreviation": "ND",
+            "shortName": "Notre Dame",
+            "logo": "i/teamlogos/ncaa/500/87.png"
+        },
+        "88": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Southern Indiana Screaming Eagles",
+            "logo": "i/teamlogos/ncaa/500/88.png",
+            "abbreviation": "USI",
+            "shortName": "So Indiana"
+        },
+        "91": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Bellarmine Knights",
+            "abbreviation": "BELL",
+            "shortName": "Bellarmine",
+            "logo": "i/teamlogos/ncaa/500/91.png"
+        },
+        "93": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Murray State Racers",
+            "abbreviation": "MUR",
+            "shortName": "Murray St",
+            "logo": "i/teamlogos/ncaa/500/93.png"
+        },
+        "94": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Northern Kentucky Norse",
+            "abbreviation": "NKU",
+            "shortName": "N Kentucky",
+            "logo": "i/teamlogos/ncaa/500/94.png"
+        },
+        "96": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Kentucky Wildcats",
+            "abbreviation": "UK",
+            "shortName": "Kentucky",
+            "logo": "i/teamlogos/ncaa/500/96.png"
+        },
+        "97": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Louisville Cardinals",
+            "abbreviation": "LOU",
+            "shortName": "Louisville",
+            "logo": "i/teamlogos/ncaa/500/97.png"
+        },
+        "98": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Western Kentucky Hilltoppers",
+            "abbreviation": "WKU",
+            "shortName": "Western KY",
+            "logo": "i/teamlogos/ncaa/500/98.png"
+        },
+        "99": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "LSU Tigers",
+            "abbreviation": "LSU",
+            "shortName": "LSU",
+            "logo": "i/teamlogos/ncaa/500/99.png"
+        },
+        "103": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Boston College Eagles",
+            "abbreviation": "BC",
+            "shortName": "Boston College",
+            "logo": "i/teamlogos/ncaa/500/103.png"
+        },
+        "104": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Boston University Terriers",
+            "abbreviation": "BU",
+            "shortName": "Boston U",
+            "logo": "i/teamlogos/ncaa/500/104.png"
+        },
+        "107": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Holy Cross Crusaders",
+            "abbreviation": "HC",
+            "shortName": "Holy Cross",
+            "logo": "i/teamlogos/ncaa/500/107.png"
+        },
+        "108": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Harvard Crimson",
+            "abbreviation": "HARV",
+            "shortName": "Harvard",
+            "logo": "i/teamlogos/ncaa/500/108.png"
+        },
+        "111": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Northeastern Huskies",
+            "abbreviation": "NE",
+            "shortName": "Northeastern",
+            "logo": "i/teamlogos/ncaa/500/111.png"
+        },
+        "113": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Massachusetts Minutemen",
+            "abbreviation": "MASS",
+            "shortName": "UMass",
+            "logo": "i/teamlogos/ncaa/500/113.png"
+        },
+        "116": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Mount St. Mary's Mountaineers",
+            "abbreviation": "MSM",
+            "shortName": "Mount St Marys",
+            "logo": "i/teamlogos/ncaa/500/116.png"
+        },
+        "119": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Towson Tigers",
+            "abbreviation": "TOW",
+            "shortName": "Towson",
+            "logo": "i/teamlogos/ncaa/500/119.png"
+        },
+        "120": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Maryland Terrapins",
+            "abbreviation": "MD",
+            "shortName": "Maryland",
+            "logo": "i/teamlogos/ncaa/500/120.png"
+        },
+        "127": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Michigan State Spartans",
+            "abbreviation": "MSU",
+            "shortName": "Michigan St",
+            "logo": "i/teamlogos/ncaa/500/127.png"
+        },
+        "130": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Michigan Wolverines",
+            "abbreviation": "MICH",
+            "shortName": "Michigan",
+            "logo": "i/teamlogos/ncaa/500/130.png"
+        },
+        "135": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Minnesota Golden Gophers",
+            "abbreviation": "MINN",
+            "shortName": "Minnesota",
+            "logo": "i/teamlogos/ncaa/500/135.png"
+        },
+        "139": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Saint Louis Billikens",
+            "abbreviation": "SLU",
+            "shortName": "Saint Louis",
+            "logo": "i/teamlogos/ncaa/500/139.png"
+        },
+        "140": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "Kansas City Roos",
+            "abbreviation": "KC",
+            "shortName": "Kansas City",
+            "logo": "i/teamlogos/ncaa/500/140.png"
+        },
+        "142": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Missouri Tigers",
+            "abbreviation": "MIZ",
+            "shortName": "Missouri",
+            "logo": "i/teamlogos/ncaa/500/142.png"
+        },
+        "145": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Ole Miss Rebels",
+            "abbreviation": "MISS",
+            "shortName": "Ole Miss",
+            "logo": "i/teamlogos/ncaa/500/145.png"
+        },
+        "147": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Montana State Bobcats",
+            "abbreviation": "MTST",
+            "shortName": "Montana St",
+            "logo": "i/teamlogos/ncaa/500/147.png"
+        },
+        "149": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Montana Grizzlies",
+            "abbreviation": "MONT",
+            "shortName": "Montana",
+            "logo": "i/teamlogos/ncaa/500/149.png"
+        },
+        "150": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Duke Blue Devils",
+            "abbreviation": "DUKE",
+            "shortName": "Duke",
+            "logo": "i/teamlogos/ncaa/500/150.png"
+        },
+        "151": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "East Carolina Pirates",
+            "abbreviation": "ECU",
+            "shortName": "East Carolina",
+            "logo": "i/teamlogos/ncaa/500/151.png"
+        },
+        "152": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "NC State Wolfpack",
+            "abbreviation": "NCSU",
+            "shortName": "NC State",
+            "logo": "i/teamlogos/ncaa/500/152.png"
+        },
+        "153": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "North Carolina Tar Heels",
+            "abbreviation": "UNC",
+            "shortName": "North Carolina",
+            "logo": "i/teamlogos/ncaa/500/153.png"
+        },
+        "154": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Wake Forest Demon Deacons",
+            "abbreviation": "WAKE",
+            "shortName": "Wake Forest",
+            "logo": "i/teamlogos/ncaa/500/154.png"
+        },
+        "155": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "North Dakota Fighting Hawks",
+            "abbreviation": "UND",
+            "shortName": "North Dakota",
+            "logo": "i/teamlogos/ncaa/500/155.png"
+        },
+        "156": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Creighton Bluejays",
+            "abbreviation": "CREI",
+            "shortName": "Creighton",
+            "logo": "i/teamlogos/ncaa/500/156.png"
+        },
+        "158": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Nebraska Cornhuskers",
+            "abbreviation": "NEB",
+            "shortName": "Nebraska",
+            "logo": "i/teamlogos/ncaa/500/158.png"
+        },
+        "159": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Dartmouth Big Green",
+            "abbreviation": "DART",
+            "shortName": "Dartmouth",
+            "logo": "i/teamlogos/ncaa/500/159.png"
+        },
+        "160": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "New Hampshire Wildcats",
+            "abbreviation": "UNH",
+            "shortName": "New Hampshire",
+            "logo": "i/teamlogos/ncaa/500/160.png"
+        },
+        "161": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Fairleigh Dickinson Knights",
+            "abbreviation": "FDU",
+            "shortName": "Fair Dickinson",
+            "logo": "i/teamlogos/ncaa/500/161.png"
+        },
+        "163": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Princeton Tigers",
+            "abbreviation": "PRIN",
+            "shortName": "Princeton",
+            "logo": "i/teamlogos/ncaa/500/163.png"
+        },
+        "164": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Rutgers Scarlet Knights",
+            "abbreviation": "RUTG",
+            "shortName": "Rutgers",
+            "logo": "i/teamlogos/ncaa/500/164.png"
+        },
+        "166": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "New Mexico State Aggies",
+            "abbreviation": "NMSU",
+            "shortName": "New Mexico St",
+            "logo": "i/teamlogos/ncaa/500/166.png"
+        },
+        "167": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "New Mexico Lobos",
+            "abbreviation": "UNM",
+            "shortName": "New Mexico",
+            "logo": "i/teamlogos/ncaa/500/167.png"
+        },
+        "171": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Columbia Lions",
+            "abbreviation": "COLU",
+            "shortName": "Columbia",
+            "logo": "i/teamlogos/ncaa/500/171.png"
+        },
+        "172": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Cornell Big Red",
+            "abbreviation": "COR",
+            "shortName": "Cornell",
+            "logo": "i/teamlogos/ncaa/500/172.png"
+        },
+        "179": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "St. Bonaventure Bonnies",
+            "abbreviation": "SBU",
+            "shortName": "St Bonaventure",
+            "logo": "i/teamlogos/ncaa/500/179.png"
+        },
+        "183": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Syracuse Orange",
+            "abbreviation": "SYR",
+            "shortName": "Syracuse",
+            "logo": "i/teamlogos/ncaa/500/183.png"
+        },
+        "189": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Bowling Green Falcons",
+            "abbreviation": "BGSU",
+            "shortName": "Bowling Green",
+            "logo": "i/teamlogos/ncaa/500/189.png"
+        },
+        "193": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Miami (OH) RedHawks",
+            "abbreviation": "M-OH",
+            "shortName": "Miami OH",
+            "logo": "i/teamlogos/ncaa/500/193.png"
+        },
+        "194": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Ohio State Buckeyes",
+            "abbreviation": "OSU",
+            "shortName": "Ohio State",
+            "logo": "i/teamlogos/ncaa/500/194.png"
+        },
+        "195": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Ohio Bobcats",
+            "abbreviation": "OHIO",
+            "shortName": "Ohio",
+            "logo": "i/teamlogos/ncaa/500/195.png"
+        },
+        "197": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Oklahoma State Cowboys",
+            "abbreviation": "OKST",
+            "shortName": "Oklahoma St",
+            "logo": "i/teamlogos/ncaa/500/197.png"
+        },
+        "198": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "Oral Roberts Golden Eagles",
+            "abbreviation": "ORU",
+            "shortName": "Oral Roberts",
+            "logo": "i/teamlogos/ncaa/500/198.png"
+        },
+        "201": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Oklahoma Sooners",
+            "abbreviation": "OU",
+            "shortName": "Oklahoma",
+            "logo": "i/teamlogos/ncaa/500/201.png"
+        },
+        "202": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Tulsa Golden Hurricane",
+            "abbreviation": "TLSA",
+            "shortName": "Tulsa",
+            "logo": "i/teamlogos/ncaa/500/202.png"
+        },
+        "204": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Oregon State Beavers",
+            "abbreviation": "ORST",
+            "shortName": "Oregon St",
+            "logo": "i/teamlogos/ncaa/500/204.png"
+        },
+        "213": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Penn State Nittany Lions",
+            "abbreviation": "PSU",
+            "shortName": "Penn State",
+            "logo": "i/teamlogos/ncaa/500/213.png"
+        },
+        "218": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Temple Owls",
+            "abbreviation": "TEM",
+            "shortName": "Temple",
+            "logo": "i/teamlogos/ncaa/500/218.png"
+        },
+        "219": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Pennsylvania Quakers",
+            "abbreviation": "PENN",
+            "shortName": "Penn",
+            "logo": "i/teamlogos/ncaa/500/219.png"
+        },
+        "221": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Pittsburgh Panthers",
+            "abbreviation": "PITT",
+            "shortName": "Pitt",
+            "logo": "i/teamlogos/ncaa/500/221.png"
+        },
+        "222": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Villanova Wildcats",
+            "abbreviation": "VILL",
+            "shortName": "Villanova",
+            "logo": "i/teamlogos/ncaa/500/222.png"
+        },
+        "225": {
+            "conferenceName": "Division I",
+            "divisionName": "Ivy",
+            "name": "Brown Bears",
+            "abbreviation": "BRWN",
+            "shortName": "Brown",
+            "logo": "i/teamlogos/ncaa/500/225.png"
+        },
+        "227": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Rhode Island Rams",
+            "abbreviation": "URI",
+            "shortName": "Rhode Island",
+            "logo": "i/teamlogos/ncaa/500/227.png"
+        },
+        "228": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Clemson Tigers",
+            "abbreviation": "CLEM",
+            "shortName": "Clemson",
+            "logo": "i/teamlogos/ncaa/500/228.png"
+        },
+        "231": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "Furman Paladins",
+            "abbreviation": "FUR",
+            "shortName": "Furman",
+            "logo": "i/teamlogos/ncaa/500/231.png"
+        },
+        "232": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Charleston Cougars",
+            "abbreviation": "COFC",
+            "shortName": "Charleston",
+            "logo": "i/teamlogos/ncaa/500/232.png"
+        },
+        "233": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "South Dakota Coyotes",
+            "abbreviation": "SDAK",
+            "shortName": "South Dakota",
+            "logo": "i/teamlogos/ncaa/500/233.png"
+        },
+        "235": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Memphis Tigers",
+            "abbreviation": "MEM",
+            "shortName": "Memphis",
+            "logo": "i/teamlogos/ncaa/500/235.png"
+        },
+        "236": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "Chattanooga Mocs",
+            "abbreviation": "UTC",
+            "shortName": "Chattanooga",
+            "logo": "i/teamlogos/ncaa/500/236.png"
+        },
+        "238": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Vanderbilt Commodores",
+            "abbreviation": "VAN",
+            "shortName": "Vanderbilt",
+            "logo": "i/teamlogos/ncaa/500/238.png"
+        },
+        "239": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Baylor Bears",
+            "abbreviation": "BAY",
+            "shortName": "Baylor",
+            "logo": "i/teamlogos/ncaa/500/239.png"
+        },
+        "242": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Rice Owls",
+            "abbreviation": "RICE",
+            "shortName": "Rice",
+            "logo": "i/teamlogos/ncaa/500/242.png"
+        },
+        "245": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Texas A&M Aggies",
+            "abbreviation": "TA&M",
+            "shortName": "Texas A&M",
+            "logo": "i/teamlogos/ncaa/500/245.png"
+        },
+        "248": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Houston Cougars",
+            "abbreviation": "HOU",
+            "shortName": "Houston",
+            "logo": "i/teamlogos/ncaa/500/248.png"
+        },
+        "249": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "North Texas Mean Green",
+            "abbreviation": "UNT",
+            "shortName": "North Texas",
+            "logo": "i/teamlogos/ncaa/500/249.png"
+        },
+        "250": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "UT Arlington Mavericks",
+            "abbreviation": "UTA",
+            "shortName": "UT Arlington",
+            "logo": "i/teamlogos/ncaa/500/250.png"
+        },
+        "251": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Texas Longhorns",
+            "abbreviation": "TEX",
+            "shortName": "Texas",
+            "logo": "i/teamlogos/ncaa/500/251.png"
+        },
+        "252": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "BYU Cougars",
+            "abbreviation": "BYU",
+            "shortName": "BYU",
+            "logo": "i/teamlogos/ncaa/500/252.png"
+        },
+        "253": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "Southern Utah Thunderbirds",
+            "abbreviation": "SUU",
+            "shortName": "Southern Utah",
+            "logo": "i/teamlogos/ncaa/500/253.png"
+        },
+        "254": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Utah Utes",
+            "abbreviation": "UTAH",
+            "shortName": "Utah",
+            "logo": "i/teamlogos/ncaa/500/254.png"
+        },
+        "256": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "James Madison Dukes",
+            "abbreviation": "JMU",
+            "shortName": "James Madison",
+            "logo": "i/teamlogos/ncaa/500/256.png"
+        },
+        "257": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Richmond Spiders",
+            "abbreviation": "RICH",
+            "shortName": "Richmond",
+            "logo": "i/teamlogos/ncaa/500/257.png"
+        },
+        "258": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Virginia Cavaliers",
+            "abbreviation": "UVA",
+            "shortName": "Virginia",
+            "logo": "i/teamlogos/ncaa/500/258.png"
+        },
+        "259": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Virginia Tech Hokies",
+            "abbreviation": "VT",
+            "shortName": "Virginia Tech",
+            "logo": "i/teamlogos/ncaa/500/259.png"
+        },
+        "261": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "Vermont Catamounts",
+            "abbreviation": "UVM",
+            "shortName": "Vermont",
+            "logo": "i/teamlogos/ncaa/500/261.png"
+        },
+        "264": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Washington Huskies",
+            "abbreviation": "WASH",
+            "shortName": "Washington",
+            "logo": "i/teamlogos/ncaa/500/264.png"
+        },
+        "265": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Washington State Cougars",
+            "abbreviation": "WSU",
+            "shortName": "Washington St",
+            "logo": "i/teamlogos/ncaa/500/265.png"
+        },
+        "269": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Marquette Golden Eagles",
+            "abbreviation": "MARQ",
+            "shortName": "Marquette",
+            "logo": "i/teamlogos/ncaa/500/269.png"
+        },
+        "270": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Milwaukee Panthers",
+            "abbreviation": "MILW",
+            "shortName": "Milwaukee",
+            "logo": "i/teamlogos/ncaa/500/270.png"
+        },
+        "275": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Wisconsin Badgers",
+            "abbreviation": "WIS",
+            "shortName": "Wisconsin",
+            "logo": "i/teamlogos/ncaa/500/275.png"
+        },
+        "276": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Marshall Thundering Herd",
+            "abbreviation": "MRSH",
+            "shortName": "Marshall",
+            "logo": "i/teamlogos/ncaa/500/276.png"
+        },
+        "277": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "West Virginia Mountaineers",
+            "abbreviation": "WVU",
+            "shortName": "West Virginia",
+            "logo": "i/teamlogos/ncaa/500/277.png"
+        },
+        "278": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "Fresno State Bulldogs",
+            "abbreviation": "FRES",
+            "shortName": "Fresno St",
+            "logo": "i/teamlogos/ncaa/500/278.png"
+        },
+        "279": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Pacific Tigers",
+            "abbreviation": "PAC",
+            "shortName": "Pacific",
+            "logo": "i/teamlogos/ncaa/500/279.png"
+        },
+        "282": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Indiana State Sycamores",
+            "abbreviation": "INST",
+            "shortName": "Indiana St",
+            "logo": "i/teamlogos/ncaa/500/282.png"
+        },
+        "284": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Stonehill Skyhawks",
+            "abbreviation": "STO",
+            "shortName": "Stonehill",
+            "logo": "i/teamlogos/ncaa/500/284.png"
+        },
+        "288": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Lipscomb Bisons",
+            "abbreviation": "LIP",
+            "shortName": "Lipscomb",
+            "logo": "i/teamlogos/ncaa/500/288.png"
+        },
+        "290": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Georgia Southern Eagles",
+            "abbreviation": "GASO",
+            "shortName": "GA Southern",
+            "logo": "i/teamlogos/ncaa/500/290.png"
+        },
+        "292": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "UT Rio Grande Valley Vaqueros",
+            "abbreviation": "RGV",
+            "shortName": "UT Rio Grande",
+            "logo": "i/teamlogos/ncaa/500/292.png"
+        },
+        "294": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Jacksonville Dolphins",
+            "abbreviation": "JAX",
+            "shortName": "Jacksonville",
+            "logo": "i/teamlogos/ncaa/500/294.png"
+        },
+        "295": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Old Dominion Monarchs",
+            "abbreviation": "ODU",
+            "shortName": "Old Dominion",
+            "logo": "i/teamlogos/ncaa/500/295.png"
+        },
+        "299": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "Long Beach State Beach",
+            "abbreviation": "LBSU",
+            "shortName": "Long Beach St",
+            "logo": "i/teamlogos/ncaa/500/299.png"
+        },
+        "300": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "UC Irvine Anteaters",
+            "abbreviation": "UCI",
+            "shortName": "UC Irvine",
+            "logo": "i/teamlogos/ncaa/500/300.png"
+        },
+        "301": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "San Diego Toreros",
+            "abbreviation": "USD",
+            "shortName": "San Diego",
+            "logo": "i/teamlogos/ncaa/500/301.png"
+        },
+        "302": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "UC Davis Aggies",
+            "abbreviation": "UCD",
+            "shortName": "UC Davis",
+            "logo": "i/teamlogos/ncaa/500/302.png"
+        },
+        "304": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Idaho State Bengals",
+            "abbreviation": "IDST",
+            "shortName": "Idaho St",
+            "logo": "i/teamlogos/ncaa/500/304.png"
+        },
+        "305": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "DePaul Blue Demons",
+            "abbreviation": "DEP",
+            "shortName": "DePaul",
+            "logo": "i/teamlogos/ncaa/500/305.png"
+        },
+        "309": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Louisiana Ragin' Cajuns",
+            "abbreviation": "UL",
+            "shortName": "Louisiana",
+            "logo": "i/teamlogos/ncaa/500/309.png"
+        },
+        "311": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "Maine Black Bears",
+            "abbreviation": "ME",
+            "shortName": "Maine",
+            "logo": "i/teamlogos/ncaa/500/311.png"
+        },
+        "314": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Iona Gaels",
+            "abbreviation": "IONA",
+            "shortName": "Iona",
+            "logo": "i/teamlogos/ncaa/500/314.png"
+        },
+        "315": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Niagara Purple Eagles",
+            "abbreviation": "NIA",
+            "shortName": "Niagara",
+            "logo": "i/teamlogos/ncaa/500/315.png"
+        },
+        "322": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Lafayette Leopards",
+            "abbreviation": "LAF",
+            "shortName": "Lafayette",
+            "logo": "i/teamlogos/ncaa/500/322.png"
+        },
+        "324": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Coastal Carolina Chanticleers",
+            "abbreviation": "CCU",
+            "shortName": "Coastal Car",
+            "logo": "i/teamlogos/ncaa/500/324.png"
+        },
+        "325": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Cleveland State Vikings",
+            "abbreviation": "CLE",
+            "shortName": "Cleveland St",
+            "logo": "i/teamlogos/ncaa/500/325.png"
+        },
+        "326": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Texas State Bobcats",
+            "abbreviation": "TXST",
+            "shortName": "Texas St",
+            "logo": "i/teamlogos/ncaa/500/326.png"
+        },
+        "328": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "Utah State Aggies",
+            "abbreviation": "USU",
+            "shortName": "Utah State",
+            "logo": "i/teamlogos/ncaa/500/328.png"
+        },
+        "331": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Eastern Washington Eagles",
+            "abbreviation": "EWU",
+            "shortName": "E Washington",
+            "logo": "i/teamlogos/ncaa/500/331.png"
+        },
+        "333": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Alabama Crimson Tide",
+            "abbreviation": "ALA",
+            "shortName": "Alabama",
+            "logo": "i/teamlogos/ncaa/500/333.png"
+        },
+        "338": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Kennesaw State Owls",
+            "abbreviation": "KENN",
+            "shortName": "Kennesaw St",
+            "logo": "i/teamlogos/ncaa/500/338.png"
+        },
+        "339": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Evansville Purple Aces",
+            "abbreviation": "EVAN",
+            "shortName": "Evansville",
+            "logo": "i/teamlogos/ncaa/500/339.png"
+        },
+        "344": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Mississippi State Bulldogs",
+            "abbreviation": "MSST",
+            "shortName": "Mississippi St",
+            "logo": "i/teamlogos/ncaa/500/344.png"
+        },
+        "349": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Army Black Knights",
+            "abbreviation": "ARMY",
+            "shortName": "Army",
+            "logo": "i/teamlogos/ncaa/500/349.png"
+        },
+        "350": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "UNC Wilmington Seahawks",
+            "abbreviation": "UNCW",
+            "shortName": "UNC Wilmington",
+            "logo": "i/teamlogos/ncaa/500/350.png"
+        },
+        "356": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Illinois Fighting Illini",
+            "abbreviation": "ILL",
+            "shortName": "Illinois",
+            "logo": "i/teamlogos/ncaa/500/356.png"
+        },
+        "357": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "Texas A&M-Corpus Christi Islanders",
+            "abbreviation": "AMCC",
+            "shortName": "Texas A&M-CC",
+            "logo": "i/teamlogos/ncaa/500/357.png"
+        },
+        "399": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "UAlbany Great Danes",
+            "abbreviation": "ALB",
+            "shortName": "UAlbany",
+            "logo": "i/teamlogos/ncaa/500/399.png"
+        },
+        "526": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Florida Gulf Coast Eagles",
+            "abbreviation": "FGCU",
+            "shortName": "FGCU",
+            "logo": "i/teamlogos/ncaa/500/526.png"
+        },
+        "2000": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "Abilene Christian Wildcats",
+            "abbreviation": "ACU",
+            "shortName": "Abilene Chrstn",
+            "logo": "i/teamlogos/ncaa/500/2000.png"
+        },
+        "2005": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "Air Force Falcons",
+            "abbreviation": "AFA",
+            "shortName": "Air Force",
+            "logo": "i/teamlogos/ncaa/500/2005.png"
+        },
+        "2006": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Akron Zips",
+            "abbreviation": "AKR",
+            "shortName": "Akron",
+            "logo": "i/teamlogos/ncaa/500/2006.png"
+        },
+        "2010": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Alabama A&M Bulldogs",
+            "abbreviation": "AAMU",
+            "shortName": "Alabama A&M",
+            "logo": "i/teamlogos/ncaa/500/2010.png"
+        },
+        "2011": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Alabama State Hornets",
+            "abbreviation": "ALST",
+            "shortName": "Alabama St",
+            "logo": "i/teamlogos/ncaa/500/2011.png"
+        },
+        "2016": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Alcorn State Braves",
+            "abbreviation": "ALCN",
+            "shortName": "Alcorn St",
+            "logo": "i/teamlogos/ncaa/500/2016.png"
+        },
+        "2026": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "App State Mountaineers",
+            "abbreviation": "APP",
+            "shortName": "App State",
+            "logo": "i/teamlogos/ncaa/500/2026.png"
+        },
+        "2029": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Arkansas-Pine Bluff Golden Lions",
+            "abbreviation": "UAPB",
+            "shortName": "AR-Pine Bluff",
+            "logo": "i/teamlogos/ncaa/500/2029.png"
+        },
+        "2031": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Little Rock Trojans",
+            "abbreviation": "LR",
+            "shortName": "Little Rock",
+            "logo": "i/teamlogos/ncaa/500/2031.png"
+        },
+        "2032": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Arkansas State Red Wolves",
+            "abbreviation": "ARST",
+            "shortName": "Arkansas St",
+            "logo": "i/teamlogos/ncaa/500/2032.png"
+        },
+        "2046": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Austin Peay Governors",
+            "abbreviation": "APSU",
+            "shortName": "Austin Peay",
+            "logo": "i/teamlogos/ncaa/500/2046.png"
+        },
+        "2050": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Ball State Cardinals",
+            "abbreviation": "BALL",
+            "shortName": "Ball State",
+            "logo": "i/teamlogos/ncaa/500/2050.png"
+        },
+        "2057": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Belmont Bruins",
+            "abbreviation": "BEL",
+            "shortName": "Belmont",
+            "logo": "i/teamlogos/ncaa/500/2057.png"
+        },
+        "2065": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Bethune-Cookman Wildcats",
+            "abbreviation": "BCU",
+            "shortName": "Bethune",
+            "logo": "i/teamlogos/ncaa/500/2065.png"
+        },
+        "2066": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "Binghamton Bearcats",
+            "abbreviation": "BING",
+            "shortName": "Binghamton",
+            "logo": "i/teamlogos/ncaa/500/2066.png"
+        },
+        "2083": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Bucknell Bison",
+            "abbreviation": "BUCK",
+            "shortName": "Bucknell",
+            "logo": "i/teamlogos/ncaa/500/2083.png"
+        },
+        "2084": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Buffalo Bulls",
+            "abbreviation": "BUF",
+            "shortName": "Buffalo",
+            "logo": "i/teamlogos/ncaa/500/2084.png"
+        },
+        "2086": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Butler Bulldogs",
+            "abbreviation": "BUT",
+            "shortName": "Butler",
+            "logo": "i/teamlogos/ncaa/500/2086.png"
+        },
+        "2097": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Campbell Fighting Camels",
+            "abbreviation": "CAM",
+            "shortName": "Campbell",
+            "logo": "i/teamlogos/ncaa/500/2097.png"
+        },
+        "2099": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Canisius Golden Griffins",
+            "abbreviation": "CAN",
+            "shortName": "Canisius",
+            "logo": "i/teamlogos/ncaa/500/2099.png"
+        },
+        "2110": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Central Arkansas Bears",
+            "abbreviation": "CARK",
+            "shortName": "C Arkansas",
+            "logo": "i/teamlogos/ncaa/500/2110.png"
+        },
+        "2115": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Central Connecticut Blue Devils",
+            "abbreviation": "CCSU",
+            "shortName": "C Connecticut",
+            "logo": "i/teamlogos/ncaa/500/2115.png"
+        },
+        "2116": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "UCF Knights",
+            "abbreviation": "UCF",
+            "shortName": "UCF",
+            "logo": "i/teamlogos/ncaa/500/2116.png"
+        },
+        "2117": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Central Michigan Chippewas",
+            "abbreviation": "CMU",
+            "shortName": "C Michigan",
+            "logo": "i/teamlogos/ncaa/500/2117.png"
+        },
+        "2127": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "Charleston Southern Buccaneers",
+            "abbreviation": "CHSO",
+            "shortName": "Charleston So",
+            "logo": "i/teamlogos/ncaa/500/2127.png"
+        },
+        "2130": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Chicago State Cougars",
+            "abbreviation": "CHST",
+            "shortName": "Chicago St",
+            "logo": "i/teamlogos/ncaa/500/2130.png"
+        },
+        "2132": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Cincinnati Bearcats",
+            "abbreviation": "CIN",
+            "shortName": "Cincinnati",
+            "logo": "i/teamlogos/ncaa/500/2132.png"
+        },
+        "2142": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Colgate Raiders",
+            "abbreviation": "COLG",
+            "shortName": "Colgate",
+            "logo": "i/teamlogos/ncaa/500/2142.png"
+        },
+        "2154": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "Coppin State Eagles",
+            "abbreviation": "COPP",
+            "shortName": "Coppin St",
+            "logo": "i/teamlogos/ncaa/500/2154.png"
+        },
+        "2166": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Davidson Wildcats",
+            "abbreviation": "DAV",
+            "shortName": "Davidson",
+            "logo": "i/teamlogos/ncaa/500/2166.png"
+        },
+        "2168": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Dayton Flyers",
+            "abbreviation": "DAY",
+            "shortName": "Dayton",
+            "logo": "i/teamlogos/ncaa/500/2168.png"
+        },
+        "2169": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "Delaware State Hornets",
+            "abbreviation": "DSU",
+            "shortName": "Delaware St",
+            "logo": "i/teamlogos/ncaa/500/2169.png"
+        },
+        "2172": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "Denver Pioneers",
+            "abbreviation": "DEN",
+            "shortName": "Denver",
+            "logo": "i/teamlogos/ncaa/500/2172.png"
+        },
+        "2174": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Detroit Mercy Titans",
+            "abbreviation": "DETM",
+            "shortName": "Detroit Mercy",
+            "logo": "i/teamlogos/ncaa/500/2174.png"
+        },
+        "2181": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Drake Bulldogs",
+            "abbreviation": "DRKE",
+            "shortName": "Drake",
+            "logo": "i/teamlogos/ncaa/500/2181.png"
+        },
+        "2182": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Drexel Dragons",
+            "abbreviation": "DREX",
+            "shortName": "Drexel",
+            "logo": "i/teamlogos/ncaa/500/2182.png"
+        },
+        "2184": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Duquesne Dukes",
+            "abbreviation": "DUQ",
+            "shortName": "Duquesne",
+            "logo": "i/teamlogos/ncaa/500/2184.png"
+        },
+        "2193": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "East Tennessee State Buccaneers",
+            "abbreviation": "ETSU",
+            "shortName": "ETSU",
+            "logo": "i/teamlogos/ncaa/500/2193.png"
+        },
+        "2197": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Eastern Illinois Panthers",
+            "abbreviation": "EIU",
+            "shortName": "E Illinois",
+            "logo": "i/teamlogos/ncaa/500/2197.png"
+        },
+        "2198": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Eastern Kentucky Colonels",
+            "abbreviation": "EKU",
+            "shortName": "E Kentucky",
+            "logo": "i/teamlogos/ncaa/500/2198.png"
+        },
+        "2199": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Eastern Michigan Eagles",
+            "abbreviation": "EMU",
+            "shortName": "E Michigan",
+            "logo": "i/teamlogos/ncaa/500/2199.png"
+        },
+        "2210": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Elon Phoenix",
+            "abbreviation": "ELON",
+            "shortName": "Elon",
+            "logo": "i/teamlogos/ncaa/500/2210.png"
+        },
+        "2217": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Fairfield Stags",
+            "abbreviation": "FAIR",
+            "shortName": "Fairfield",
+            "logo": "i/teamlogos/ncaa/500/2217.png"
+        },
+        "2226": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Florida Atlantic Owls",
+            "abbreviation": "FAU",
+            "shortName": "FAU",
+            "logo": "i/teamlogos/ncaa/500/2226.png"
+        },
+        "2229": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Florida International Panthers",
+            "abbreviation": "FIU",
+            "shortName": "FIU",
+            "logo": "i/teamlogos/ncaa/500/2229.png"
+        },
+        "2230": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Fordham Rams",
+            "abbreviation": "FOR",
+            "shortName": "Fordham",
+            "logo": "i/teamlogos/ncaa/500/2230.png"
+        },
+        "2239": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "Cal State Fullerton Titans",
+            "abbreviation": "CSUF",
+            "shortName": "Fullerton",
+            "logo": "i/teamlogos/ncaa/500/2239.png"
+        },
+        "2241": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "Gardner-Webb Runnin' Bulldogs",
+            "abbreviation": "GWEB",
+            "shortName": "Gardner-Webb",
+            "logo": "i/teamlogos/ncaa/500/2241.png"
+        },
+        "2244": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "George Mason Patriots",
+            "abbreviation": "GMU",
+            "shortName": "George Mason",
+            "logo": "i/teamlogos/ncaa/500/2244.png"
+        },
+        "2247": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Georgia State Panthers",
+            "abbreviation": "GAST",
+            "shortName": "Georgia St",
+            "logo": "i/teamlogos/ncaa/500/2247.png"
+        },
+        "2250": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Gonzaga Bulldogs",
+            "abbreviation": "GONZ",
+            "shortName": "Gonzaga",
+            "logo": "i/teamlogos/ncaa/500/2250.png"
+        },
+        "2253": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "Grand Canyon Lopes",
+            "abbreviation": "GCU",
+            "shortName": "Grand Canyon",
+            "logo": "i/teamlogos/ncaa/500/2253.png"
+        },
+        "2261": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Hampton Pirates",
+            "abbreviation": "HAMP",
+            "shortName": "Hampton",
+            "logo": "i/teamlogos/ncaa/500/2261.png"
+        },
+        "2272": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "High Point Panthers",
+            "abbreviation": "HPU",
+            "shortName": "High Point",
+            "logo": "i/teamlogos/ncaa/500/2272.png"
+        },
+        "2275": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Hofstra Pride",
+            "abbreviation": "HOF",
+            "shortName": "Hofstra",
+            "logo": "i/teamlogos/ncaa/500/2275.png"
+        },
+        "2277": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "Houston Christian Huskies",
+            "abbreviation": "HCU",
+            "shortName": "Hou Christian",
+            "logo": "i/teamlogos/ncaa/500/2277.png"
+        },
+        "2287": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Illinois State Redbirds",
+            "abbreviation": "ILST",
+            "shortName": "Illinois St",
+            "logo": "i/teamlogos/ncaa/500/2287.png"
+        },
+        "2294": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Iowa Hawkeyes",
+            "abbreviation": "IOWA",
+            "shortName": "Iowa",
+            "logo": "i/teamlogos/ncaa/500/2294.png"
+        },
+        "2296": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Jackson State Tigers",
+            "abbreviation": "JKST",
+            "shortName": "Jackson St",
+            "logo": "i/teamlogos/ncaa/500/2296.png"
+        },
+        "2305": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Kansas Jayhawks",
+            "abbreviation": "KU",
+            "shortName": "Kansas",
+            "logo": "i/teamlogos/ncaa/500/2305.png"
+        },
+        "2306": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Kansas State Wildcats",
+            "abbreviation": "KSU",
+            "shortName": "Kansas St",
+            "logo": "i/teamlogos/ncaa/500/2306.png"
+        },
+        "2309": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Kent State Golden Flashes",
+            "abbreviation": "KENT",
+            "shortName": "Kent State",
+            "logo": "i/teamlogos/ncaa/500/2309.png"
+        },
+        "2320": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "Lamar Cardinals",
+            "abbreviation": "LAM",
+            "shortName": "Lamar",
+            "logo": "i/teamlogos/ncaa/500/2320.png"
+        },
+        "2325": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "La Salle Explorers",
+            "abbreviation": "LAS",
+            "shortName": "La Salle",
+            "logo": "i/teamlogos/ncaa/500/2325.png"
+        },
+        "2329": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Lehigh Mountain Hawks",
+            "abbreviation": "LEH",
+            "shortName": "Lehigh",
+            "logo": "i/teamlogos/ncaa/500/2329.png"
+        },
+        "2330": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Le Moyne Dolphins",
+            "abbreviation": "LEM",
+            "shortName": "Le Moyne",
+            "logo": "i/teamlogos/ncaa/500/2330.png"
+        },
+        "2335": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Liberty Flames",
+            "abbreviation": "LIB",
+            "shortName": "Liberty",
+            "logo": "i/teamlogos/ncaa/500/2335.png"
+        },
+        "2344": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "Longwood Lancers",
+            "abbreviation": "LONG",
+            "shortName": "Longwood",
+            "logo": "i/teamlogos/ncaa/500/2344.png"
+        },
+        "2348": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Louisiana Tech Bulldogs",
+            "abbreviation": "LT",
+            "shortName": "Louisiana Tech",
+            "logo": "i/teamlogos/ncaa/500/2348.png"
+        },
+        "2349": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "UMass Lowell River Hawks",
+            "abbreviation": "UML",
+            "shortName": "UMass Lowell",
+            "logo": "i/teamlogos/ncaa/500/2349.png"
+        },
+        "2350": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Loyola Chicago Ramblers",
+            "abbreviation": "LUC",
+            "shortName": "Loyola Chicago",
+            "logo": "i/teamlogos/ncaa/500/2350.png"
+        },
+        "2351": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Loyola Marymount Lions",
+            "abbreviation": "LMU",
+            "shortName": "LMU",
+            "logo": "i/teamlogos/ncaa/500/2351.png"
+        },
+        "2352": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Loyola Maryland Greyhounds",
+            "abbreviation": "L-MD",
+            "shortName": "Loyola MD",
+            "logo": "i/teamlogos/ncaa/500/2352.png"
+        },
+        "2363": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Manhattan Jaspers",
+            "abbreviation": "MAN",
+            "shortName": "Manhattan",
+            "logo": "i/teamlogos/ncaa/500/2363.png"
+        },
+        "2368": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Marist Red Foxes",
+            "abbreviation": "MRST",
+            "shortName": "Marist",
+            "logo": "i/teamlogos/ncaa/500/2368.png"
+        },
+        "2377": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "McNeese Cowboys",
+            "abbreviation": "MCN",
+            "shortName": "McNeese",
+            "logo": "i/teamlogos/ncaa/500/2377.png"
+        },
+        "2378": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "UMBC Retrievers",
+            "abbreviation": "UMBC",
+            "shortName": "UMBC",
+            "logo": "i/teamlogos/ncaa/500/2378.png"
+        },
+        "2379": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "Maryland Eastern Shore Hawks",
+            "abbreviation": "UMES",
+            "shortName": "MD Eastern",
+            "logo": "i/teamlogos/ncaa/500/2379.png"
+        },
+        "2382": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "Mercer Bears",
+            "abbreviation": "MER",
+            "shortName": "Mercer",
+            "logo": "i/teamlogos/ncaa/500/2382.png"
+        },
+        "2385": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Mercyhurst Lakers",
+            "abbreviation": "MERC",
+            "shortName": "Mercyhurst",
+            "logo": "i/teamlogos/ncaa/500/2385.png"
+        },
+        "2390": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "Miami Hurricanes",
+            "abbreviation": "MIA",
+            "shortName": "Miami",
+            "logo": "i/teamlogos/ncaa/500/2390.png"
+        },
+        "2393": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Middle Tennessee Blue Raiders",
+            "abbreviation": "MTSU",
+            "shortName": "MTSU",
+            "logo": "i/teamlogos/ncaa/500/2393.png"
+        },
+        "2400": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Mississippi Valley State Delta Devils",
+            "abbreviation": "MVSU",
+            "shortName": "Miss Valley St",
+            "logo": "i/teamlogos/ncaa/500/2400.png"
+        },
+        "2405": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Monmouth Hawks",
+            "abbreviation": "MONM",
+            "shortName": "Monmouth",
+            "logo": "i/teamlogos/ncaa/500/2405.png"
+        },
+        "2413": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Morehead State Eagles",
+            "abbreviation": "MORE",
+            "shortName": "Morehead St",
+            "logo": "i/teamlogos/ncaa/500/2413.png"
+        },
+        "2415": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "Morgan State Bears",
+            "abbreviation": "MORG",
+            "shortName": "Morgan St",
+            "logo": "i/teamlogos/ncaa/500/2415.png"
+        },
+        "2426": {
+            "conferenceName": "Division I",
+            "divisionName": "Patriot",
+            "name": "Navy Midshipmen",
+            "abbreviation": "NAVY",
+            "shortName": "Navy",
+            "logo": "i/teamlogos/ncaa/500/2426.png"
+        },
+        "2427": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "UNC Asheville Bulldogs",
+            "abbreviation": "UNCA",
+            "shortName": "UNC Asheville",
+            "logo": "i/teamlogos/ncaa/500/2427.png"
+        },
+        "2428": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "North Carolina Central Eagles",
+            "abbreviation": "NCCU",
+            "shortName": "NC Central",
+            "logo": "i/teamlogos/ncaa/500/2428.png"
+        },
+        "2429": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Charlotte 49ers",
+            "abbreviation": "CLT",
+            "shortName": "Charlotte",
+            "logo": "i/teamlogos/ncaa/500/2429.png"
+        },
+        "2430": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "UNC Greensboro Spartans",
+            "abbreviation": "UNCG",
+            "shortName": "UNC Greensboro",
+            "logo": "i/teamlogos/ncaa/500/2430.png"
+        },
+        "2433": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "UL Monroe Warhawks",
+            "abbreviation": "ULM",
+            "shortName": "UL Monroe",
+            "logo": "i/teamlogos/ncaa/500/2433.png"
+        },
+        "2437": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "Omaha Mavericks",
+            "abbreviation": "OMA",
+            "shortName": "Omaha",
+            "logo": "i/teamlogos/ncaa/500/2437.png"
+        },
+        "2439": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "UNLV Rebels",
+            "abbreviation": "UNLV",
+            "shortName": "UNLV",
+            "logo": "i/teamlogos/ncaa/500/2439.png"
+        },
+        "2440": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "Nevada Wolf Pack",
+            "abbreviation": "NEV",
+            "shortName": "Nevada",
+            "logo": "i/teamlogos/ncaa/500/2440.png"
+        },
+        "2443": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "New Orleans Privateers",
+            "abbreviation": "UNO",
+            "shortName": "New Orleans",
+            "logo": "i/teamlogos/ncaa/500/2443.png"
+        },
+        "2447": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "Nicholls Colonels",
+            "abbreviation": "NICH",
+            "shortName": "Nicholls",
+            "logo": "i/teamlogos/ncaa/500/2447.png"
+        },
+        "2448": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "North Carolina A&T Aggies",
+            "abbreviation": "NCAT",
+            "shortName": "NC A&T",
+            "logo": "i/teamlogos/ncaa/500/2448.png"
+        },
+        "2449": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "North Dakota State Bison",
+            "abbreviation": "NDSU",
+            "shortName": "N Dakota St",
+            "logo": "i/teamlogos/ncaa/500/2449.png"
+        },
+        "2450": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "Norfolk State Spartans",
+            "abbreviation": "NORF",
+            "shortName": "Norfolk St",
+            "logo": "i/teamlogos/ncaa/500/2450.png"
+        },
+        "2453": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "North Alabama Lions",
+            "abbreviation": "UNA",
+            "shortName": "North Alabama",
+            "logo": "i/teamlogos/ncaa/500/2453.png"
+        },
+        "2454": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "North Florida Ospreys",
+            "abbreviation": "UNF",
+            "shortName": "North Florida",
+            "logo": "i/teamlogos/ncaa/500/2454.png"
+        },
+        "2458": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Northern Colorado Bears",
+            "abbreviation": "UNCO",
+            "shortName": "N Colorado",
+            "logo": "i/teamlogos/ncaa/500/2458.png"
+        },
+        "2459": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Northern Illinois Huskies",
+            "abbreviation": "NIU",
+            "shortName": "N Illinois",
+            "logo": "i/teamlogos/ncaa/500/2459.png"
+        },
+        "2460": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Northern Iowa Panthers",
+            "abbreviation": "UNI",
+            "shortName": "Northern Iowa",
+            "logo": "i/teamlogos/ncaa/500/2460.png"
+        },
+        "2463": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "Cal State Northridge Matadors",
+            "abbreviation": "CSUN",
+            "shortName": "CSU Northridge",
+            "logo": "i/teamlogos/ncaa/500/2463.png"
+        },
+        "2464": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Northern Arizona Lumberjacks",
+            "abbreviation": "NAU",
+            "shortName": "N Arizona",
+            "logo": "i/teamlogos/ncaa/500/2464.png"
+        },
+        "2466": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "Northwestern State Demons",
+            "abbreviation": "NWST",
+            "shortName": "N'Western St",
+            "logo": "i/teamlogos/ncaa/500/2466.png"
+        },
+        "2473": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Oakland Golden Grizzlies",
+            "abbreviation": "OAK",
+            "shortName": "Oakland",
+            "logo": "i/teamlogos/ncaa/500/2473.png"
+        },
+        "2483": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Oregon Ducks",
+            "abbreviation": "ORE",
+            "shortName": "Oregon",
+            "logo": "i/teamlogos/ncaa/500/2483.png"
+        },
+        "2492": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Pepperdine Waves",
+            "abbreviation": "PEPP",
+            "shortName": "Pepperdine",
+            "logo": "i/teamlogos/ncaa/500/2492.png"
+        },
+        "2501": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Portland Pilots",
+            "abbreviation": "PORT",
+            "shortName": "Portland",
+            "logo": "i/teamlogos/ncaa/500/2501.png"
+        },
+        "2502": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Portland State Vikings",
+            "abbreviation": "PRST",
+            "shortName": "Portland St",
+            "logo": "i/teamlogos/ncaa/500/2502.png"
+        },
+        "2504": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Prairie View A&M Panthers",
+            "abbreviation": "PV",
+            "shortName": "Prairie View",
+            "logo": "i/teamlogos/ncaa/500/2504.png"
+        },
+        "2506": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "Presbyterian Blue Hose",
+            "abbreviation": "PRES",
+            "shortName": "Presbyterian",
+            "logo": "i/teamlogos/ncaa/500/2506.png"
+        },
+        "2507": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Providence Friars",
+            "abbreviation": "PROV",
+            "shortName": "Providence",
+            "logo": "i/teamlogos/ncaa/500/2507.png"
+        },
+        "2509": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Ten",
+            "name": "Purdue Boilermakers",
+            "abbreviation": "PUR",
+            "shortName": "Purdue",
+            "logo": "i/teamlogos/ncaa/500/2509.png"
+        },
+        "2511": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "Queens University Royals",
+            "logo": "i/teamlogos/ncaa/500/2511.png",
+            "abbreviation": "QUC",
+            "shortName": "Queens"
+        },
+        "2514": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Quinnipiac Bobcats",
+            "abbreviation": "QUIN",
+            "shortName": "Quinnipiac",
+            "logo": "i/teamlogos/ncaa/500/2514.png"
+        },
+        "2515": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "Radford Highlanders",
+            "abbreviation": "RAD",
+            "shortName": "Radford",
+            "logo": "i/teamlogos/ncaa/500/2515.png"
+        },
+        "2520": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Rider Broncs",
+            "abbreviation": "RID",
+            "shortName": "Rider",
+            "logo": "i/teamlogos/ncaa/500/2520.png"
+        },
+        "2523": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Robert Morris Colonials",
+            "abbreviation": "RMU",
+            "shortName": "Robert Morris",
+            "logo": "i/teamlogos/ncaa/500/2523.png"
+        },
+        "2529": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Sacred Heart Pioneers",
+            "abbreviation": "SHU",
+            "shortName": "Sacred Heart",
+            "logo": "i/teamlogos/ncaa/500/2529.png"
+        },
+        "2534": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "Sam Houston Bearkats",
+            "abbreviation": "SHSU",
+            "shortName": "Sam Houston",
+            "logo": "i/teamlogos/ncaa/500/2534.png"
+        },
+        "2535": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "Samford Bulldogs",
+            "abbreviation": "SAM",
+            "shortName": "Samford",
+            "logo": "i/teamlogos/ncaa/500/2535.png"
+        },
+        "2539": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "San Francisco Dons",
+            "abbreviation": "SF",
+            "shortName": "San Francisco",
+            "logo": "i/teamlogos/ncaa/500/2539.png"
+        },
+        "2540": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "UC Santa Barbara Gauchos",
+            "abbreviation": "UCSB",
+            "shortName": "Santa Barbara",
+            "logo": "i/teamlogos/ncaa/500/2540.png"
+        },
+        "2541": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Santa Clara Broncos",
+            "abbreviation": "SCU",
+            "shortName": "Santa Clara",
+            "logo": "i/teamlogos/ncaa/500/2541.png"
+        },
+        "2545": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "SE Louisiana Lions",
+            "abbreviation": "SELA",
+            "shortName": "SE Louisiana",
+            "logo": "i/teamlogos/ncaa/500/2545.png"
+        },
+        "2546": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Southeast Missouri State Redhawks",
+            "abbreviation": "SEMO",
+            "shortName": "SE Missouri",
+            "logo": "i/teamlogos/ncaa/500/2546.png"
+        },
+        "2547": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "Seattle U Redhawks",
+            "abbreviation": "SEA",
+            "shortName": "Seattle U",
+            "logo": "i/teamlogos/ncaa/500/2547.png"
+        },
+        "2550": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Seton Hall Pirates",
+            "abbreviation": "HALL",
+            "shortName": "Seton Hall",
+            "logo": "i/teamlogos/ncaa/500/2550.png"
+        },
+        "2561": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Siena Saints",
+            "abbreviation": "SIE",
+            "shortName": "Siena",
+            "logo": "i/teamlogos/ncaa/500/2561.png"
+        },
+        "2565": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "SIU Edwardsville Cougars",
+            "abbreviation": "SIUE",
+            "shortName": "SIUE",
+            "logo": "i/teamlogos/ncaa/500/2565.png"
+        },
+        "2567": {
+            "conferenceName": "Division I",
+            "divisionName": "ACC",
+            "name": "SMU Mustangs",
+            "abbreviation": "SMU",
+            "shortName": "SMU",
+            "logo": "i/teamlogos/ncaa/500/2567.png"
+        },
+        "2569": {
+            "conferenceName": "Division I",
+            "divisionName": "MEAC",
+            "name": "South Carolina State Bulldogs",
+            "abbreviation": "SCST",
+            "shortName": "SC State",
+            "logo": "i/teamlogos/ncaa/500/2569.png"
+        },
+        "2571": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "South Dakota State Jackrabbits",
+            "abbreviation": "SDST",
+            "shortName": "S Dakota St",
+            "logo": "i/teamlogos/ncaa/500/2571.png"
+        },
+        "2572": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Southern Miss Golden Eagles",
+            "abbreviation": "USM",
+            "shortName": "Southern Miss",
+            "logo": "i/teamlogos/ncaa/500/2572.png"
+        },
+        "2579": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "South Carolina Gamecocks",
+            "abbreviation": "SC",
+            "shortName": "South Carolina",
+            "logo": "i/teamlogos/ncaa/500/2579.png"
+        },
+        "2582": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Southern Jaguars",
+            "abbreviation": "SOU",
+            "shortName": "Southern",
+            "logo": "i/teamlogos/ncaa/500/2582.png"
+        },
+        "2598": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "St. Francis (PA) Red Flash",
+            "abbreviation": "SFPA",
+            "shortName": "St Francis PA",
+            "logo": "i/teamlogos/ncaa/500/2598.png"
+        },
+        "2599": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "St. John's Red Storm",
+            "abbreviation": "SJU",
+            "shortName": "St John's",
+            "logo": "i/teamlogos/ncaa/500/2599.png"
+        },
+        "2603": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "Saint Joseph's Hawks",
+            "abbreviation": "JOES",
+            "shortName": "Saint Joseph's",
+            "logo": "i/teamlogos/ncaa/500/2603.png"
+        },
+        "2608": {
+            "conferenceName": "Division I",
+            "divisionName": "WCC",
+            "name": "Saint Mary's Gaels",
+            "abbreviation": "SMC",
+            "shortName": "Saint Mary's",
+            "logo": "i/teamlogos/ncaa/500/2608.png"
+        },
+        "2612": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Saint Peter's Peacocks",
+            "abbreviation": "SPU",
+            "shortName": "Saint Peter's",
+            "logo": "i/teamlogos/ncaa/500/2612.png"
+        },
+        "2617": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "Stephen F. Austin Lumberjacks",
+            "abbreviation": "SFA",
+            "shortName": "SF Austin",
+            "logo": "i/teamlogos/ncaa/500/2617.png"
+        },
+        "2619": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "Stony Brook Seawolves",
+            "abbreviation": "STBK",
+            "shortName": "Stony Brook",
+            "logo": "i/teamlogos/ncaa/500/2619.png"
+        },
+        "2623": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Missouri State Bears",
+            "abbreviation": "MOST",
+            "shortName": "Missouri St",
+            "logo": "i/teamlogos/ncaa/500/2623.png"
+        },
+        "2627": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "Tarleton State Texans",
+            "abbreviation": "TAR",
+            "shortName": "Tarleton St",
+            "logo": "i/teamlogos/ncaa/500/2627.png"
+        },
+        "2628": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "TCU Horned Frogs",
+            "abbreviation": "TCU",
+            "shortName": "TCU",
+            "logo": "i/teamlogos/ncaa/500/2628.png"
+        },
+        "2630": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "UT Martin Skyhawks",
+            "abbreviation": "UTM",
+            "shortName": "UT Martin",
+            "logo": "i/teamlogos/ncaa/500/2630.png"
+        },
+        "2633": {
+            "conferenceName": "Division I",
+            "divisionName": "SEC",
+            "name": "Tennessee Volunteers",
+            "abbreviation": "TENN",
+            "shortName": "Tennessee",
+            "logo": "i/teamlogos/ncaa/500/2633.png"
+        },
+        "2634": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Tennessee State Tigers",
+            "abbreviation": "TNST",
+            "shortName": "Tennessee St",
+            "logo": "i/teamlogos/ncaa/500/2634.png"
+        },
+        "2635": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Tennessee Tech Golden Eagles",
+            "abbreviation": "TNTC",
+            "shortName": "Tennessee Tech",
+            "logo": "i/teamlogos/ncaa/500/2635.png"
+        },
+        "2636": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "UTSA Roadrunners",
+            "abbreviation": "UTSA",
+            "shortName": "UTSA",
+            "logo": "i/teamlogos/ncaa/500/2636.png"
+        },
+        "2638": {
+            "conferenceName": "Division I",
+            "divisionName": "CUSA",
+            "name": "UTEP Miners",
+            "abbreviation": "UTEP",
+            "shortName": "UTEP",
+            "logo": "i/teamlogos/ncaa/500/2638.png"
+        },
+        "2640": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Texas Southern Tigers",
+            "abbreviation": "TXSO",
+            "shortName": "Texas Southern",
+            "logo": "i/teamlogos/ncaa/500/2640.png"
+        },
+        "2641": {
+            "conferenceName": "Division I",
+            "divisionName": "Big 12",
+            "name": "Texas Tech Red Raiders",
+            "abbreviation": "TTU",
+            "shortName": "Texas Tech",
+            "logo": "i/teamlogos/ncaa/500/2641.png"
+        },
+        "2643": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "The Citadel Bulldogs",
+            "abbreviation": "CIT",
+            "shortName": "The Citadel",
+            "logo": "i/teamlogos/ncaa/500/2643.png"
+        },
+        "2649": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Toledo Rockets",
+            "abbreviation": "TOL",
+            "shortName": "Toledo",
+            "logo": "i/teamlogos/ncaa/500/2649.png"
+        },
+        "2653": {
+            "conferenceName": "Division I",
+            "divisionName": "Sun Belt",
+            "name": "Troy Trojans",
+            "abbreviation": "TROY",
+            "shortName": "Troy",
+            "logo": "i/teamlogos/ncaa/500/2653.png"
+        },
+        "2655": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Tulane Green Wave",
+            "abbreviation": "TULN",
+            "shortName": "Tulane",
+            "logo": "i/teamlogos/ncaa/500/2655.png"
+        },
+        "2670": {
+            "conferenceName": "Division I",
+            "divisionName": "A-10",
+            "name": "VCU Rams",
+            "abbreviation": "VCU",
+            "shortName": "VCU",
+            "logo": "i/teamlogos/ncaa/500/2670.png"
+        },
+        "2674": {
+            "conferenceName": "Division I",
+            "divisionName": "MVC",
+            "name": "Valparaiso Beacons",
+            "abbreviation": "VAL",
+            "shortName": "Valparaiso",
+            "logo": "i/teamlogos/ncaa/500/2674.png"
+        },
+        "2678": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "VMI Keydets",
+            "abbreviation": "VMI",
+            "shortName": "VMI",
+            "logo": "i/teamlogos/ncaa/500/2678.png"
+        },
+        "2681": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Wagner Seahawks",
+            "abbreviation": "WAG",
+            "shortName": "Wagner",
+            "logo": "i/teamlogos/ncaa/500/2681.png"
+        },
+        "2692": {
+            "conferenceName": "Division I",
+            "divisionName": "Big Sky",
+            "name": "Weber State Wildcats",
+            "abbreviation": "WEB",
+            "shortName": "Weber St",
+            "logo": "i/teamlogos/ncaa/500/2692.png"
+        },
+        "2698": {
+            "conferenceName": "Division I",
+            "divisionName": "ASUN",
+            "name": "West Georgia Wolves",
+            "abbreviation": "WGA",
+            "shortName": "West Georgia",
+            "logo": "i/teamlogos/ncaa/500/2698.png"
+        },
+        "2710": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Western Illinois Leathernecks",
+            "abbreviation": "WIU",
+            "shortName": "W Illinois",
+            "logo": "i/teamlogos/ncaa/500/2710.png"
+        },
+        "2711": {
+            "conferenceName": "Division I",
+            "divisionName": "MAC",
+            "name": "Western Michigan Broncos",
+            "abbreviation": "WMU",
+            "shortName": "W Michigan",
+            "logo": "i/teamlogos/ncaa/500/2711.png"
+        },
+        "2717": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "Western Carolina Catamounts",
+            "abbreviation": "WCU",
+            "shortName": "W Carolina",
+            "logo": "i/teamlogos/ncaa/500/2717.png"
+        },
+        "2724": {
+            "conferenceName": "Division I",
+            "divisionName": "American",
+            "name": "Wichita State Shockers",
+            "abbreviation": "WICH",
+            "shortName": "Wichita St",
+            "logo": "i/teamlogos/ncaa/500/2724.png"
+        },
+        "2729": {
+            "conferenceName": "Division I",
+            "divisionName": "CAA",
+            "name": "William & Mary Tribe",
+            "abbreviation": "W&M",
+            "shortName": "William & Mary",
+            "logo": "i/teamlogos/ncaa/500/2729.png"
+        },
+        "2737": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "Winthrop Eagles",
+            "abbreviation": "WIN",
+            "shortName": "Winthrop",
+            "logo": "i/teamlogos/ncaa/500/2737.png"
+        },
+        "2739": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Green Bay Phoenix",
+            "abbreviation": "GB",
+            "shortName": "Green Bay",
+            "logo": "i/teamlogos/ncaa/500/2739.png"
+        },
+        "2747": {
+            "conferenceName": "Division I",
+            "divisionName": "SoCon",
+            "name": "Wofford Terriers",
+            "abbreviation": "WOF",
+            "shortName": "Wofford",
+            "logo": "i/teamlogos/ncaa/500/2747.png"
+        },
+        "2750": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Wright State Raiders",
+            "abbreviation": "WRST",
+            "shortName": "Wright St",
+            "logo": "i/teamlogos/ncaa/500/2750.png"
+        },
+        "2751": {
+            "conferenceName": "Division I",
+            "divisionName": "Mountain West",
+            "name": "Wyoming Cowboys",
+            "abbreviation": "WYO",
+            "shortName": "Wyoming",
+            "logo": "i/teamlogos/ncaa/500/2751.png"
+        },
+        "2752": {
+            "conferenceName": "Division I",
+            "divisionName": "Big East",
+            "name": "Xavier Musketeers",
+            "abbreviation": "XAV",
+            "shortName": "Xavier",
+            "logo": "i/teamlogos/ncaa/500/2752.png"
+        },
+        "2754": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Youngstown State Penguins",
+            "abbreviation": "YSU",
+            "shortName": "Youngstown St",
+            "logo": "i/teamlogos/ncaa/500/2754.png"
+        },
+        "2755": {
+            "conferenceName": "Division I",
+            "divisionName": "SWAC",
+            "name": "Grambling Tigers",
+            "abbreviation": "GRAM",
+            "shortName": "Grambling",
+            "logo": "i/teamlogos/ncaa/500/2755.png"
+        },
+        "2771": {
+            "conferenceName": "Division I",
+            "divisionName": "MAAC",
+            "name": "Merrimack Warriors",
+            "abbreviation": "MRMK",
+            "shortName": "Merrimack",
+            "logo": "i/teamlogos/ncaa/500/2771.png"
+        },
+        "2803": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "Bryant Bulldogs",
+            "abbreviation": "BRY",
+            "shortName": "Bryant",
+            "logo": "i/teamlogos/ncaa/500/2803.png"
+        },
+        "2815": {
+            "conferenceName": "Division I",
+            "divisionName": "OVC",
+            "name": "Lindenwood Lions",
+            "logo": "i/teamlogos/ncaa/500/2815.png",
+            "abbreviation": "LIN",
+            "shortName": "Lindenwood"
+        },
+        "2837": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "East Texas A&M Lions",
+            "abbreviation": "ETAM",
+            "shortName": "E Texas A&M",
+            "logo": "i/teamlogos/ncaa/500/2837.png"
+        },
+        "2856": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "California Baptist Lancers",
+            "abbreviation": "CBU",
+            "shortName": "CA Baptist",
+            "logo": "i/teamlogos/ncaa/500/2856.png"
+        },
+        "2870": {
+            "conferenceName": "Division I",
+            "divisionName": "Horizon",
+            "name": "Purdue Fort Wayne Mastodons",
+            "abbreviation": "PFW",
+            "shortName": "Purdue FW",
+            "logo": "i/teamlogos/ncaa/500/2870.png"
+        },
+        "2885": {
+            "conferenceName": "Division I",
+            "divisionName": "Am. East",
+            "name": "NJIT Highlanders",
+            "abbreviation": "NJIT",
+            "shortName": "NJIT",
+            "logo": "i/teamlogos/ncaa/500/2885.png"
+        },
+        "2900": {
+            "conferenceName": "Division I",
+            "divisionName": "Summit",
+            "name": "St. Thomas-Minnesota Tommies",
+            "abbreviation": "STMN",
+            "shortName": "St Thomas (MN)",
+            "logo": "i/teamlogos/ncaa/500/2900.png"
+        },
+        "2908": {
+            "conferenceName": "Division I",
+            "divisionName": "Big South",
+            "name": "South Carolina Upstate Spartans",
+            "abbreviation": "UPST",
+            "shortName": "SC Upstate",
+            "logo": "i/teamlogos/ncaa/500/2908.png"
+        },
+        "2916": {
+            "conferenceName": "Division I",
+            "divisionName": "Southland",
+            "name": "Incarnate Word Cardinals",
+            "abbreviation": "UIW",
+            "shortName": "Incarnate Word",
+            "logo": "i/teamlogos/ncaa/500/2916.png"
+        },
+        "2934": {
+            "conferenceName": "Division I",
+            "divisionName": "Big West",
+            "name": "Cal State Bakersfield Roadrunners",
+            "abbreviation": "CSUB",
+            "shortName": "Bakersfield",
+            "logo": "i/teamlogos/ncaa/500/2934.png"
+        },
+        "3084": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "Utah Valley Wolverines",
+            "abbreviation": "UVU",
+            "shortName": "Utah Valley",
+            "logo": "i/teamlogos/ncaa/500/3084.png"
+        },
+        "3101": {
+            "conferenceName": "Division I",
+            "divisionName": "WAC",
+            "name": "Utah Tech Trailblazers",
+            "abbreviation": "UTU",
+            "shortName": "Utah Tech",
+            "logo": "i/teamlogos/ncaa/500/3101.png"
+        },
+        "112358": {
+            "conferenceName": "Division I",
+            "divisionName": "NEC",
+            "name": "Long Island University Sharks",
+            "abbreviation": "LIU",
+            "shortName": "Long Island",
+            "logo": "i/teamlogos/ncaa/500/112358.png"
+        }
+    },
+    "nhl": {
+        "1": {
+            "name": "Boston Bruins",
+            "logo": "/i/teamlogos/nhl/500/bos.png",
+            "abbreviation": "BOS",
+            "shortName": "Bruins"
+        },
+        "2": {
+            "name": "Buffalo Sabres",
+            "logo": "/i/teamlogos/nhl/500/buf.png",
+            "abbreviation": "BUF",
+            "shortName": "Sabres"
+        },
+        "3": {
+            "name": "Calgary Flames",
+            "logo": "/i/teamlogos/nhl/500/cgy.png",
+            "abbreviation": "CGY",
+            "shortName": "Flames"
+        },
+        "4": {
+            "name": "Chicago Blackhawks",
+            "logo": "/i/teamlogos/nhl/500/chi.png",
+            "abbreviation": "CHI",
+            "shortName": "Blackhawks"
+        },
+        "5": {
+            "name": "Detroit Red Wings",
+            "logo": "/i/teamlogos/nhl/500/det.png",
+            "abbreviation": "DET",
+            "shortName": "Red Wings"
+        },
+        "6": {
+            "name": "Edmonton Oilers",
+            "logo": "/i/teamlogos/nhl/500/edm.png",
+            "abbreviation": "EDM",
+            "shortName": "Oilers"
+        },
+        "7": {
+            "name": "Carolina Hurricanes",
+            "logo": "/i/teamlogos/nhl/500/car.png",
+            "abbreviation": "CAR",
+            "shortName": "Hurricanes"
+        },
+        "8": {
+            "name": "Los Angeles Kings",
+            "logo": "/i/teamlogos/nhl/500/la.png",
+            "abbreviation": "LA",
+            "shortName": "Kings"
+        },
+        "9": {
+            "name": "Dallas Stars",
+            "logo": "/i/teamlogos/nhl/500/dal.png",
+            "abbreviation": "DAL",
+            "shortName": "Stars"
+        },
+        "10": {
+            "name": "Montreal Canadiens",
+            "logo": "/i/teamlogos/nhl/500/mtl.png",
+            "abbreviation": "MTL",
+            "shortName": "Canadiens"
+        },
+        "11": {
+            "name": "New Jersey Devils",
+            "logo": "/i/teamlogos/nhl/500/nj.png",
+            "abbreviation": "NJ",
+            "shortName": "Devils"
+        },
+        "12": {
+            "name": "New York Islanders",
+            "logo": "/i/teamlogos/nhl/500/nyi.png",
+            "abbreviation": "NYI",
+            "shortName": "Islanders"
+        },
+        "13": {
+            "name": "New York Rangers",
+            "logo": "/i/teamlogos/nhl/500/nyr.png",
+            "abbreviation": "NYR",
+            "shortName": "Rangers"
+        },
+        "14": {
+            "name": "Ottawa Senators",
+            "logo": "/i/teamlogos/nhl/500/ott.png",
+            "abbreviation": "OTT",
+            "shortName": "Senators"
+        },
+        "15": {
+            "name": "Philadelphia Flyers",
+            "logo": "/i/teamlogos/nhl/500/phi.png",
+            "abbreviation": "PHI",
+            "shortName": "Flyers"
+        },
+        "16": {
+            "name": "Pittsburgh Penguins",
+            "logo": "/i/teamlogos/nhl/500/pit.png",
+            "abbreviation": "PIT",
+            "shortName": "Penguins"
+        },
+        "17": {
+            "name": "Colorado Avalanche",
+            "logo": "/i/teamlogos/nhl/500/col.png",
+            "abbreviation": "COL",
+            "shortName": "Avalanche"
+        },
+        "18": {
+            "name": "San Jose Sharks",
+            "logo": "/i/teamlogos/nhl/500/sj.png",
+            "abbreviation": "SJ",
+            "shortName": "Sharks"
+        },
+        "19": {
+            "name": "St. Louis Blues",
+            "logo": "/i/teamlogos/nhl/500/stl.png",
+            "abbreviation": "STL",
+            "shortName": "Blues"
+        },
+        "20": {
+            "name": "Tampa Bay Lightning",
+            "logo": "/i/teamlogos/nhl/500/tb.png",
+            "abbreviation": "TB",
+            "shortName": "Lightning"
+        },
+        "21": {
+            "name": "Toronto Maple Leafs",
+            "logo": "/i/teamlogos/nhl/500/tor.png",
+            "abbreviation": "TOR",
+            "shortName": "Maple Leafs"
+        },
+        "22": {
+            "name": "Vancouver Canucks",
+            "logo": "/i/teamlogos/nhl/500/van.png",
+            "abbreviation": "VAN",
+            "shortName": "Canucks"
+        },
+        "23": {
+            "name": "Washington Capitals",
+            "logo": "/i/teamlogos/nhl/500/wsh.png",
+            "abbreviation": "WSH",
+            "shortName": "Capitals"
+        },
+        "25": {
+            "name": "Anaheim Ducks",
+            "logo": "/i/teamlogos/nhl/500/ana.png",
+            "abbreviation": "ANA",
+            "shortName": "Ducks"
+        },
+        "26": {
+            "name": "Florida Panthers",
+            "logo": "/i/teamlogos/nhl/500/fla.png",
+            "abbreviation": "FLA",
+            "shortName": "Panthers"
+        },
+        "27": {
+            "name": "Nashville Predators",
+            "logo": "/i/teamlogos/nhl/500/nsh.png",
+            "abbreviation": "NSH",
+            "shortName": "Predators"
+        },
+        "28": {
+            "name": "Winnipeg Jets",
+            "logo": "/i/teamlogos/nhl/500/wpg.png",
+            "abbreviation": "WPG",
+            "shortName": "Jets"
+        },
+        "29": {
+            "name": "Columbus Blue Jackets",
+            "logo": "/i/teamlogos/nhl/500/cbj.png",
+            "abbreviation": "CBJ",
+            "shortName": "Blue Jackets"
+        },
+        "30": {
+            "name": "Minnesota Wild",
+            "logo": "/i/teamlogos/nhl/500/min.png",
+            "abbreviation": "MIN",
+            "shortName": "Wild"
+        },
+        "37": {
+            "name": "Vegas Golden Knights",
+            "logo": "/i/teamlogos/nhl/500/vgk.png",
+            "abbreviation": "VGK",
+            "shortName": "Golden Knights"
+        },
+        "124292": {
+            "name": "Seattle Kraken",
+            "logo": "/i/teamlogos/nhl/500/sea.png",
+            "abbreviation": "SEA",
+            "shortName": "Kraken"
+        },
+        "129764": {
+            "name": "Utah Hockey Club",
+            "logo": "/i/teamlogos/nhl/500/utah.png",
+            "abbreviation": "UTAH",
+            "shortName": "Utah HC"
+        }
+    }
+}

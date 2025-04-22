@@ -155,6 +155,26 @@ export const initializeTeams = onRequest(
   }
 );
 
+// // http://127.0.0.1:5001/slates-59840/us-central1/getAllSportsTeams
+export const getAllSportsTeams = onRequest(
+  { cors: true },
+  async (req, res) => {
+    try {
+      const sports = await db.collection("sports").get();
+      const teams = sports.docs.map((sport) => {
+        const teamsData = Object.fromEntries(Object.entries(sport.data().teams).map(([teamId, teamInfo]: [string, any]) => {
+          return [teamId, teamInfo.info];
+        }));
+        return { [sport.id]: teamsData };
+      });
+      res.status(200).json(combine_maps(teams));
+    } catch (error) {
+      logger.error("Error fetching all sports teams:", error);
+      res.status(500).send("Error fetching all sports teams: " + error);
+    }
+  }
+);
+
 // // http://127.0.0.1:5001/slates-59840/us-central1/getEspnNetworks
 // export const getEspnNetworks = onRequest(
 //   { cors: true },

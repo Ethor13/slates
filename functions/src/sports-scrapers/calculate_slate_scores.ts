@@ -4,7 +4,7 @@ import { ParsedGame, GameTeams } from "../types.js";
 
 // Define TypeScript interfaces
 interface ScalingFactors {
-  powerIndex: Record<string, number>;
+  powerIndex: Record<string, any>;
   spread: number;
 }
 
@@ -39,10 +39,10 @@ const CONFIG: ConfigType = {
       },
       scalingFactors: {
         powerIndex: {
-          nba: 3,
-          ncaambb: 8,
-          mlb: 0,
-          nhl: 0,
+          nba: [3, 0],
+          ncaambb: [8, 0],
+          mlb: [0.2, 0.5],
+          nhl: [0, 0],
         },
         spread: 50,
       },
@@ -78,8 +78,8 @@ function calculateWinPercentage(record: string): number {
  * @param {number} scale - scaling factor
  * @returns {number} Normalized value between 0 and 1
  */
-function sigmoid(x: number, scale: number): number {
-  return 1 / (1 + Math.exp(-x / scale));
+function sigmoid(x: number, [scale, center]: [number, number]): number {
+  return 1 / (1 + Math.exp(-(x - center) / scale));
 }
 
 /**
@@ -136,9 +136,11 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     }
 
     // Power Index component
-    if (homePI.bpi?.bpi != null && awayPI.bpi?.bpi != null) {
-      const homePowerIndex = sigmoid(homePI.bpi.bpi, config.scalingFactors.powerIndex[sport]);
-      const awayPowerIndex = sigmoid(awayPI.bpi.bpi, config.scalingFactors.powerIndex[sport]);
+    const homePIValue = homePI.bpi?.bpi || homePI.RPI;
+    const awayPIValue = awayPI.bpi?.bpi || awayPI.RPI;
+    if (homePIValue != null && awayPIValue != null) {
+      const homePowerIndex = sigmoid(homePIValue, config.scalingFactors.powerIndex[sport]);
+      const awayPowerIndex = sigmoid(awayPIValue, config.scalingFactors.powerIndex[sport]);
       const averagePowerIndex = (homePowerIndex + awayPowerIndex) / 2;
       components.push(averagePowerIndex * config.weights.powerIndex);
       weights.push(config.weights.powerIndex);

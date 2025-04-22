@@ -55,7 +55,7 @@ const updateDateData = async (db: Firestore, date: string, teamsData: TeamsData)
     // add slateScore to gamesData
     await calculateScores(gamesData, teamsData);
     // add colors to gamesData
-    await addColorsToGamesData(gamesData, teamsData);
+    addColorsToGamesData(gamesData, teamsData);
 
     const batch = db.batch();
 
@@ -164,7 +164,7 @@ async function updateTeamsData(): Promise<TeamsData> {
 async function calculateScores(gamesData: GamesData, teamsData: TeamsData): Promise<void> {
   try {
     for (const sport of Object.values(Sports)) {
-      await scoreSportsGames(sport, gamesData[sport], teamsData[sport]).then((gameScores) => {
+      await scoreSportsGames(sport, gamesData[sport], teamsData[sport].teams).then((gameScores) => {
         // gameScores = gameId -> score
         Object.entries(gameScores).forEach(([gameId, score]) => {
           gamesData[sport][gameId].slateScore = score;
