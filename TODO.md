@@ -4,7 +4,6 @@
     - get channel logos (low priority)
 - Summary Views
     - color month day picker by quality on a certain day
-    - show a pulse view that shows when good games are being played throughout the day
 
 - Add new Sports
     - For each sport
@@ -16,5 +15,3 @@
 
 - Rendering issue on teams select menu in preferences
     - random teams are being selected in the menu, (but not showing up in the selected teams list) - render error
-
-- Scrape NHL power indexes
