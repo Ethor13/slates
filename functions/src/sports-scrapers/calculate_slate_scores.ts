@@ -34,15 +34,15 @@ const CONFIG: ConfigType = {
         matchupQuality: 3,
         winProbability: 1,
         record: 5,
-        powerIndex: 2,
+        powerIndex: 4,
         spread: 0.5,
       },
       scalingFactors: {
         powerIndex: {
           nba: [3, 0],
           ncaambb: [8, 0],
-          mlb: [0.2, 0.5],
-          nhl: [0, 0],
+          mlb: [0.03, 0.5],
+          nhl: [0.03, 0.5],
         },
         spread: 50,
       },
@@ -136,8 +136,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     }
 
     // Power Index component
-    const homePIValue = homePI.bpi?.bpi || homePI.RPI;
-    const awayPIValue = awayPI.bpi?.bpi || awayPI.RPI;
+    const homePIValue = homePI.bpi?.bpi || homePI.RPI || homePI.avg_overall_prediction;
+    const awayPIValue = awayPI.bpi?.bpi || awayPI.RPI || awayPI.avg_overall_prediction;
     if (homePIValue != null && awayPIValue != null) {
       const homePowerIndex = sigmoid(homePIValue, config.scalingFactors.powerIndex[sport]);
       const awayPowerIndex = sigmoid(awayPIValue, config.scalingFactors.powerIndex[sport]);

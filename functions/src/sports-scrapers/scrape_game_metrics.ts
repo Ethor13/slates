@@ -2,7 +2,7 @@ import { combine_maps, mappify, scrapeUrl } from "../helpers.js";
 import { logger } from "firebase-functions";
 import { GamesMetric, Metrics, ParsedTeams, GameMetric, GamesMetrics, Metric, TeamMetric } from "../types.js";
 import sportsTeams from "../data/sportsTeams.json" with { type: "json" };
-import * as cheerio from 'cheerio';
+import * as cheerio from "cheerio";
 
 interface MetricConfig {
   [metricUrl: string]: (date: string | null) => string;
@@ -138,9 +138,13 @@ const CONFIG: SportConfig = {
       },
     },
     nhl: {
-      team: {},
+      team: {
+        powerIndex: (_date: string | null) => "https://moneypuck.com/moneypuck/powerRankings/gen2Model/rankings_current.csv",
+      },
       game: {},
-      parsers: {},
+      parsers: {
+        powerIndex: parseNHLPowerIndex,
+      },
     },
   },
   statNameMapper: {
@@ -190,12 +194,12 @@ function parseMLBPowerIndex(rawHtml: string): TeamMetric {
   const $ = cheerio.load(rawHtml);
 
   // Select the table by id, then first child div, then first child div again
-  const table = $('#my-teams-table > div:first-child > div:first-child > table > tbody');
+  const table = $("#my-teams-table > div:first-child > div:first-child > table > tbody");
 
-  const trs = table.find('tr');
+  const trs = table.find("tr");
 
   // get column names
-  const colNames = $(trs[1]).find('td').map((_, column) => {
+  const colNames = $(trs[1]).find("td").map((_, column) => {
     return $(column).text();
   }).get();
 
@@ -204,13 +208,13 @@ function parseMLBPowerIndex(rawHtml: string): TeamMetric {
     if ($(row).index() < 2) return;
 
     // extract the text in each of the td elements and build a list
-    const values = $(row).find('td').map((_, column) => {
+    const values = $(row).find("td").map((_, column) => {
       return $(column).text();
     }).get();
 
-    const teamUrl = $($(row).find('td')[1]).find('a').attr('href') as string;
-    const teamAbbreviation = teamUrl.split('/')[7].toUpperCase();
-    const teamId = Object.entries(sportsTeams['mlb'] as Record<any, any>).find(([_, team]) => team.abbreviation === teamAbbreviation);
+    const teamUrl = $($(row).find("td")[1]).find("a").attr("href") as string;
+    const teamAbbreviation = teamUrl.split("/")[7].toUpperCase();
+    const teamId = Object.entries(sportsTeams["mlb"] as Record<any, any>).find(([_, team]) => team.abbreviation === teamAbbreviation);
 
     // assert teamId has exactly one match
     if (!teamId) {
@@ -228,6 +232,51 @@ function parseMLBPowerIndex(rawHtml: string): TeamMetric {
 
     return teamData;
   }).get());
+}
+
+function parseNHLPowerIndex(rawCSV: string): TeamMetric {
+  const lines = rawCSV.split("\n");
+  const headers = lines[0].split(",");
+
+  return combine_maps(lines.slice(1).map((line) => {
+    const values = line.split(",");
+
+    if (values.length === 1) {
+      return {};
+    }
+
+    const teamAbbreviation = values[0];
+    let teamId = Object.entries(sportsTeams["nhl"] as Record<any, any>).find(([_, team]) => team.abbreviation === teamAbbreviation);
+
+    // assert teamId has exactly one match
+    if (!teamId) {
+      // some abbreviations don't match up exactly. Manually code these in
+      const manualMappings: Record<string, string> = {
+        "TBL": "TB",
+        "LAK": "LA",
+        "NJD": "NJ",
+        "UTA": "UTAH",
+        "SJS": "SJ",
+      }
+
+      if (Object.keys(manualMappings).includes(teamAbbreviation)) {
+        teamId = [manualMappings[teamAbbreviation], undefined];
+      } else {
+        logger.error(`Team ID not found for abbreviation ${teamAbbreviation}`);
+        return {};
+      }
+    }
+
+    const teamData: TeamMetric = {
+      [teamId[0]]: {
+        metrics: {
+          powerIndexes: mappify(headers.slice(1), values.slice(1)),
+        },
+      }
+    };
+
+    return teamData;
+  }));
 }
 
 /**
@@ -302,7 +351,7 @@ export async function updateTeamMetrics(sport: string): Promise<ParsedTeams> {
           res[teamId] = {};
         }
         Object.entries(teamMetric).forEach(([key, value]) => {
-          if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          if (typeof value === "object" && value !== null && !Array.isArray(value)) {
             res[teamId][key] = { ...(res[teamId][key] || {}), ...value };
           } else {
             res[teamId][key] = value;
