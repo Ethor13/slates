@@ -8,6 +8,7 @@ export enum Sports {
 }
 
 export const formatGameTime = (timeString: string): string => {
+    if (timeString === "TBD") return "TBD";
     const date = new Date(timeString);
     return date.toLocaleString("en-US", {
         timeZone: "America/New_York",

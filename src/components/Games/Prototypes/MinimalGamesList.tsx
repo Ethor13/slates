@@ -10,6 +10,14 @@ const split_by_time = (games: ScheduleResponse) => {
     const games_by_time: Record<string, Record<string, any>> = {};
 
     Object.entries(games).forEach(([gameId, game]) => {
+        if (game.date === "TBD") {
+            if (!("TBD" in games_by_time)) {
+                games_by_time["TBD"] = {};
+            }
+            games_by_time["TBD"][gameId] = game; // Store TBD games separately
+            return;
+        }
+
         // Extract the date and create a copy for hour grouping
         const gameDate = new Date(game.date);
         // Create an hour key with minutes, seconds, and milliseconds set to 0
@@ -37,16 +45,26 @@ const renderGames = (
         return (
             <div className="flex flex-col w-full divide-y divide-gray-200">
                 {Object.entries(gamesByTime)
-                    .sort(([timeA, _], [timeB, __]) => new Date(timeA).getTime() - new Date(timeB).getTime())
+                    .sort(([timeA, _], [timeB, __]) => {
+                        if (timeA === "TBD") return 1; // Move TBD games to the end
+                        if (timeB === "TBD") return -1;
+                        return new Date(timeA).getTime() - new Date(timeB).getTime();
+                    })
                     .map(([gameTime, timeGames]) => (
                         <div key={gameTime} className="flex flex-col w-full">
                             <h2 className="text-md font-medium">{formatGameTime(gameTime)}</h2>
                             <div className="flex flex-col w-full divide-y divide-gray-200">
                                 {Object.entries(timeGames)
                                     // First sort by exact time
-                                    .sort(([_, game1], [__, game2]) => new Date(game1.date).getTime() - new Date(game2.date).getTime())
+                                    .sort(([_, game1], [__, game2]) => {
+                                        if (game1.date === "TBD") return 1; // Move TBD games to the end
+                                        if (game2.date === "TBD") return -1;
+                                        return new Date(game1.date).getTime() - new Date(game2.date).getTime()
+                                    })
                                     // Then break ties with slate score
                                     .sort(([_, game1], [__, game2]) => {
+                                        if (game1.date === "TBD" && game2.date === "TBD") return game2.slateScore - game1.slateScore;
+                                        if (game1.date === "TBD" || game2.date === "TBD") return 0; // Keep TBD games in their place
                                         const time1 = new Date(game1.date).getTime();
                                         const time2 = new Date(game2.date).getTime();
                                         // If times are the same (within the same minute), sort by slate score

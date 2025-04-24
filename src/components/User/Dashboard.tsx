@@ -4,9 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { ArrowUp } from 'lucide-react';
 import Nav from '../General/Nav';
-import GamesList from '../Games/GamesList';
 import Sidebar from '../Games/Sidebar';
 import MinimalGamesList from '../Games/Prototypes/MinimalGamesList';
+import GamePulseChart from '../Games/GamePulseChart';
 import { Sports } from '../../helpers';
 
 enum Sort {
@@ -132,18 +132,15 @@ const Dashboard = () => {
                                     Error loading games: {gamesError.message || 'Unknown error'}
                                 </div>
                             ) : (
-                                // <GamesList
-                                //     games={games}
-                                //     sortBy={sortBy}
-                                //     setSortBy={setSortBy}
-                                //     selectedDate={selectedDate}
-                                // />
-                                <MinimalGamesList
-                                    games={games}
-                                    sortBy={sortBy}
-                                    setSortBy={setSortBy}
-                                    selectedDate={selectedDate}
-                                />
+                                <div className="w-full px-10">
+                                    <GamePulseChart games={games} />
+                                    <MinimalGamesList
+                                        games={games}
+                                        sortBy={sortBy}
+                                        setSortBy={setSortBy}
+                                        selectedDate={selectedDate}
+                                    />
+                                </div>
                             )}
                         </div>
                     </div>

@@ -47,6 +47,7 @@ interface Competition {
     competitors: Team[];
     geoBroadcasts: Broadcast[];
     notes: Notes[];
+    timeValid: boolean;
 }
 
 interface Link {
@@ -116,7 +117,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
       sport: sport,
       home: teamData.home,
       away: teamData.away,
-      date: event.date,
+      date: event.competitions[0].timeValid ? event.date : "TBD",
       link: event.links?.find((link) => link.text === "Gamecast")?.href || "",
       broadcasts: combine_maps(
         event.competitions[0].geoBroadcasts.map((broadcast) => ({
