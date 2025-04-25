@@ -1,7 +1,15 @@
+- Make responsive layouts way better
+    - Mobile friendly?
+
+- Make it easy to print
+    - add a print button
+    - add a print specific layout
+
 - Channels
     - save channels to firestore (update channels every month or so)
     - make mappings from ESPN Channel Names to TVGuide Channel Names (high priority)
     - get channel logos (low priority)
+
 - Summary Views
     - color month day picker by quality on a certain day
 
@@ -15,3 +23,14 @@
 
 - Rendering issue on teams select menu in preferences
     - random teams are being selected in the menu, (but not showing up in the selected teams list) - render error
+
+- Update landing page
+
+- Add subscription options
+    - free trial option
+    - manage in settings
+
+- Update slate score algorithm
+    - each factor should be uniformly distributed
+
+- Highlight the peak of each day in the game pulse a different color

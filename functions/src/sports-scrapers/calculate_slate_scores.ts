@@ -19,6 +19,7 @@ interface Weights {
 interface CategoryConfig {
   weights: Weights;
   scalingFactors: ScalingFactors;
+  baselines: Record<string, number>;
   getInterestScoreFunc: (game: ParsedGame, gameTeams: GameTeams) => number;
 }
 
@@ -31,20 +32,26 @@ const CONFIG: ConfigType = {
   categories: {
     allData: {
       weights: {
-        matchupQuality: 3,
+        matchupQuality: 2,
         winProbability: 1,
-        record: 5,
-        powerIndex: 4,
-        spread: 0.5,
+        record: 3,
+        powerIndex: 3,
+        spread: 1,
       },
       scalingFactors: {
         powerIndex: {
-          nba: [3, 0],
+          nba: [2, 0],
           ncaambb: [8, 0],
-          mlb: [0.03, 0.5],
-          nhl: [0.03, 0.5],
+          mlb: [0.15, 0.5],
+          nhl: [0.05, 0.5],
         },
         spread: 50,
+      },
+      baselines: {
+        nba: 0.75,
+        ncaambb: 0.60,
+        mlb: 0.50,
+        nhl: 0.50,
       },
       getInterestScoreFunc: calculateInterestScoreAllData,
     },
@@ -78,8 +85,19 @@ function calculateWinPercentage(record: string): number {
  * @param {number} scale - scaling factor
  * @returns {number} Normalized value between 0 and 1
  */
-function sigmoid(x: number, [scale, center]: [number, number]): number {
+function sigmoid(x: number, scale: number, center: number): number {
   return 1 / (1 + Math.exp(-(x - center) / scale));
+}
+
+/**
+ * Inverse sigmoid function
+ * @param {number} x - value
+ * @param {number} scale - scaling factor
+ * @param {number} center - center point
+ * @returns {number} Inverse sigmoid value
+ */
+function inverseSigmoid(x: number, scale: number, center: number): number {
+  return center + scale * Math.log(x / (1 - x));
 }
 
 /**
@@ -110,57 +128,44 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const { powerIndexes: homePI = {} } = gameTeams.home?.metrics || {};
     const { powerIndexes: awayPI = {} } = gameTeams.away?.metrics || {};
 
-    const components: number[] = [];
-    const weights: number[] = [];
+    let rawSlateScore = inverseSigmoid(config.baselines[sport], 1, 0);
 
     // Matchup quality component
     if (homeMQ.matchupquality != null) {
-      components.push((homeMQ.matchupquality / 100) * config.weights.matchupQuality);
-      weights.push(config.weights.matchupQuality);
+      rawSlateScore += ((homeMQ.matchupquality - 50) / 50) * config.weights.matchupQuality;
     }
 
     // Win probability component
     if (homeMQ.teampredwinpct != null && awayMQ.teampredwinpct != null) {
       const probabilityDelta = Math.abs(homeMQ.teampredwinpct - awayMQ.teampredwinpct);
-      components.push((1 - probabilityDelta / 100) * config.weights.winProbability);
-      weights.push(config.weights.winProbability);
+      rawSlateScore += ((1 - probabilityDelta / 50) / 2) * config.weights.winProbability;
     }
 
     // Record component
     if (homeRecord != null && awayRecord != null) {
       const homeWinRate = calculateWinPercentage(homeRecord);
       const awayWinRate = calculateWinPercentage(awayRecord);
-      const averageWinRate = (homeWinRate + awayWinRate) / 2;
-      components.push(averageWinRate * config.weights.record);
-      weights.push(config.weights.record);
+      const averageWinRate = homeWinRate + awayWinRate - 1;
+      rawSlateScore += averageWinRate * config.weights.record;
     }
 
     // Power Index component
     const homePIValue = homePI.bpi?.bpi || homePI.RPI || homePI.avg_overall_prediction;
     const awayPIValue = awayPI.bpi?.bpi || awayPI.RPI || awayPI.avg_overall_prediction;
     if (homePIValue != null && awayPIValue != null) {
-      const homePowerIndex = sigmoid(homePIValue, config.scalingFactors.powerIndex[sport]);
-      const awayPowerIndex = sigmoid(awayPIValue, config.scalingFactors.powerIndex[sport]);
-      const averagePowerIndex = (homePowerIndex + awayPowerIndex) / 2;
-      components.push(averagePowerIndex * config.weights.powerIndex);
-      weights.push(config.weights.powerIndex);
+      const homePowerIndex = sigmoid(homePIValue, config.scalingFactors.powerIndex[sport][0], config.scalingFactors.powerIndex[sport][1]);
+      const awayPowerIndex = sigmoid(awayPIValue, config.scalingFactors.powerIndex[sport][0], config.scalingFactors.powerIndex[sport][1]);
+      const averagePowerIndex = homePowerIndex + awayPowerIndex - 1;
+      rawSlateScore += averagePowerIndex * config.weights.powerIndex;
     }
 
     // Spread component
     if (homeMQ.teampredmov != null) {
       const spreadScore = neg_exp(homeMQ.teampredmov, config.scalingFactors.spread);
-      components.push(spreadScore * config.weights.spread);
-      weights.push(config.weights.spread);
+      rawSlateScore += (2 * spreadScore - 1) * config.weights.spread;
     }
 
-    const totalWeight = weights.reduce((a, b) => a + b, 0);
-
-    if (totalWeight === 0) {
-      return -1;
-    } else {
-      const slateScore = components.reduce((a, b) => a + b, 0) / totalWeight;
-      return slateScore;
-    }
+    return sigmoid(rawSlateScore, 1, 0);
   } catch (error) {
     logger.error("Error calculating interest score:", error);
     throw new Error("Error calculating interest score");
