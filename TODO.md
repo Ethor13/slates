@@ -33,4 +33,6 @@
 - Update slate score algorithm
     - each factor should be uniformly distributed
 
+- Sort by Sport
+
 - Highlight the peak of each day in the game pulse a different color
