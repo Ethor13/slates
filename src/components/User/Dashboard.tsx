@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { ArrowUp } from 'lucide-react';
 import Nav from '../General/Nav';
 import Sidebar from '../Games/Sidebar';
-import MinimalGamesList from '../Games/Prototypes/MinimalGamesList';
+import GamesList from '../Games/GamesList';
 import GamePulseChart from '../Games/GamePulseChart';
 import { Sports } from '../../helpers';
 
@@ -134,7 +134,7 @@ const Dashboard = () => {
                             ) : (
                                 <div className="w-full px-10">
                                     <GamePulseChart games={games} />
-                                    <MinimalGamesList
+                                    <GamesList
                                         games={games}
                                         sortBy={sortBy}
                                         setSortBy={setSortBy}

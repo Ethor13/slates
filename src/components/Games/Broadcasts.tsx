@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { Provider } from '../../../contexts/AuthContext';
-import { useAuth } from '../../../contexts/AuthContext';
+import { Provider } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import broadcastMapper from './broadcastMapper.json';
 
 // Helper function to map broadcast to channel for a specific provider

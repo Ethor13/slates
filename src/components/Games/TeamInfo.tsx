@@ -1,6 +1,6 @@
 import React from "react";
-import { TeamColorBlock } from "../../General/TeamColorBlock";
-import { Team } from "../types";
+import { TeamColorBlock } from "../General/TeamColorBlock";
+import { Team } from "./types";
 
 interface TeamInfoProps {
   team: Team;
