@@ -69,28 +69,28 @@ export default function GamePulseChart({ games }: GamePulseChartProps) {
     const MAX_SCORE = 6; // Maximum height of the bars
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <div className="p-4 rounded-lg mb-6">
-                <h3 className="text-lg font-semibold text-center">Game Pulse</h3>
+        <div className="w-full flex flex-col items-center justify-center">
+            <div className="max-w-screen-lg w-full py-2 rounded-lg mb-3">
+                <h3 className="text-base md:text-lg font-semibold text-center">Game Pulse</h3>
                 {tbdGamesCount > 0 && (
                     <p className="text-xs text-center">
                         {tbdGamesCount} game{tbdGamesCount !== 1 ? 's' : ''} have yet to be scheduled
                     </p>
                 )}
-                <div className="flex gap-4 justify-between h-24">
+                <div className="w-full flex gap-[2%] justify-between h-20 px-[15%]">
                     {hourlyScores.map((score, index) => {
                         // Ensure bar has at least a minimum height if there's any score
                         const barHeight = Math.min(Math.max(0.7, score), MAX_SCORE);
 
                         return (
-                            <div className='flex flex-col items-center' key={index}>
-                                <div key={index} className="flex-1 flex flex-col justify-center items-center w-3 h-full mb-1">
+                            <div className="min-w-0 flex flex-col items-center flex-1 basis-0" key={index}>
+                                <div key={index} className="w-full flex flex-col justify-center items-center h-full mb-0.5">
                                     <div
                                         className={`w-full bg-slate-medium rounded-full transition-all duration-300 ease-in-out`}
                                         style={{ height: `${100 * barHeight / MAX_SCORE}%` }}
                                     />
                                 </div>
-                                <span className="h-3 flex flex-col items-center text-xs text-gray-500">
+                                <span className="h-0 flex flex-col items-center text-xs text-gray-500">
                                     <p>{`${(index % 12 == 0) ? 12 : index % 12}`}</p>
                                     <p>{index % 12 === 0 ? `${index >= 12 ? 'PM' : 'AM'}` : ''}</p>
                                 </span>

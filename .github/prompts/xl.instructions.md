@@ -1,0 +1,1 @@
+add the xl tailwind breakpoint tag to every tailwind class that has some sort of measure on it. For example, h-3 should turn into xl:h-3, but text-gray-500 should not change since it doesn't have a size
