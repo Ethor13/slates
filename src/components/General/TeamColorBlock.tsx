@@ -44,28 +44,6 @@ export const TeamColorBlock: React.FC<{
                     transform: `skewX(${skew})`,
                 }}
             />
-                {/* <div className="w-full h-full flex items-center justify-center" >
-                    <div
-                        style={{
-                            width: "20px",
-                            height: "20px",
-                            borderRight: `6px solid #${c1}`,
-                            borderBottom: `6px solid #${c1}`,
-                            transform: leftToRight ? "rotate(-45deg) translate(3px, 3px)": "rotate(135deg) translate(-3px, -3px)",
-                        }}
-                    />
-                </div>
-                <div className="w-full h-full flex items-center justify-center" >
-                    <div
-                        style={{
-                            width: "20px",
-                            height: "20px",
-                            borderRight: `6px solid #${c2}`,
-                            borderBottom: `6px solid #${c2}`,
-                            transform: leftToRight ? "rotate(-45deg) translate(-3px, -3px)": "rotate(135deg) translate(3px, 3px)",
-                        }}
-                    />
-                </div> */}
             </div>
         );
     } catch (error) {
