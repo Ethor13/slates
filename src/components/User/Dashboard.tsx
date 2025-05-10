@@ -162,7 +162,7 @@ const Dashboard = () => {
             </div>
             <button
                 onClick={scrollToTop}
-                className={`fixed top-24 right-8 bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
+                className={`fixed top-24 right-8 bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
                 aria-label="Scroll to top"
             >
                 <ArrowUp className="h-6 w-6" />
