@@ -114,7 +114,7 @@ const Dashboard = () => {
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
                         <button 
-                            className="md:hidden fixed top-24 left-4 z-50 bg-white p-2 rounded-md shadow-md"
+                            className={`md:hidden fixed top-24 left-4 z-50 bg-white p-2 rounded-md shadow-md transition-opacity duration-300 ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             aria-label="Toggle sidebar"
                         >
