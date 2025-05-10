@@ -2,7 +2,7 @@ import { db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, Menu } from 'lucide-react';
 import Nav from '../General/Nav';
 import Sidebar from '../Games/Sidebar';
 import GamesList from '../Games/GamesList';
@@ -34,6 +34,7 @@ const Dashboard = () => {
     const [gamesLoading, setGamesLoading] = useState<boolean>(false);
     const [gamesError, setGamesError] = useState<any | null>(null);
     const [showScrollToTop, setShowScrollToTop] = useState<boolean>(false);
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
@@ -109,20 +110,33 @@ const Dashboard = () => {
         <div className="min-h-screen bg-white relative">
             <Nav />
             <div className="min-h-screen bg-gray-50 pt-20">
-                <main className="mx-auto">
+                <main>
                     <div className="flex flex-row h-full">
-                        {/* Left sidebar with fixed width */}
+                        {/* Mobile menu toggle button */}
+                        <button 
+                            className="md:hidden fixed top-24 left-4 z-50 bg-white p-2 rounded-md shadow-md"
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                            aria-label="Toggle sidebar"
+                        >
+                            <Menu className="h-6 w-6 text-gray-700" />
+                        </button>
+                        
+                        {/* Left sidebar */}
                         <Sidebar
                             props={{
                                 selectedSports,
                                 setSelectedSports,
                                 selectedDate,
                                 setSelectedDate,
-                                setGamesLoading
+                                setGamesLoading,
+                                sidebarOpen,
+                                setSidebarOpen
                             }}
                         />
+
                         {/* Main content area that takes remaining space and centers content */}
-                        <div className="w-full flex justify-center ml-[20vw] overflow-y-visible">
+                        {/* This needs to be same padding as sidebar width */}
+                        <div className="w-full md:ml-[15rem] overflow-y-visible">
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -132,7 +146,7 @@ const Dashboard = () => {
                                     Error loading games: {gamesError.message || 'Unknown error'}
                                 </div>
                             ) : (
-                                <div className="w-full px-10">
+                                <div className="w-full px-[3vw]">
                                     <GamePulseChart games={games} />
                                     <GamesList
                                         games={games}

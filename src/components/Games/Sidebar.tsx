@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, X } from "lucide-react";
 import { Sports, SportSelectorProps, ChevronButtonProps } from "./types";
 import { getDateString } from "../../helpers";
 import { useAuth } from "../../contexts/AuthContext";
 
 const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
-  const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, setGamesLoading } = props;
+  const { selectedSports, setSelectedSports, selectedDate, setSelectedDate, setGamesLoading, sidebarOpen, setSidebarOpen } = props;
   const { userPreferences, updateUserPreferences } = useAuth();
   const today = getDateString(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
@@ -113,8 +113,19 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
   const currentMonthName = currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="fixed left-0 top-20 bottom-0 w-[20vw]">
+    <div className={`fixed left-0 top-20 bottom-0 w-full md:w-[15rem] z-40 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
       <div className="flex flex-col h-full bg-white shadow-md top-4 bottom-0">
+        {/* Close button - only visible on mobile */}
+        {setSidebarOpen && (
+          <button 
+            className="md:hidden absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100" 
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
+          >
+            <X size={20} className="text-gray-700" />
+          </button>
+        )}
+        
         <div className="flex-1 overflow-y-auto">
           <div className="px-4 flex flex-col gap-4">
             {/* Calendar month selector */}
@@ -158,7 +169,15 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                           ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
                           ${!day.isCurrentMonth ? "opacity-0" : ""}
                           ${!isPastDate && day.isCurrentMonth ? "hover:bg-blue-100" : ""}`}
-                          onClick={() => day.isCurrentMonth && !isPastDate && handleDateChange(day.date)}
+                          onClick={() => {
+                            if (day.isCurrentMonth && !isPastDate) {
+                              handleDateChange(day.date);
+                              // Close sidebar on mobile when a date is selected
+                              if (setSidebarOpen) {
+                                setSidebarOpen(false);
+                              }
+                            }
+                          }}
                           disabled={isPastDate || !day.isCurrentMonth}
                         >
                           {day.date.getDate()}
@@ -193,14 +212,14 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
             <div className="w-full border-b border-gray-200"></div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mb-6">
               {/* Sports selector */}
               <h2 className="text-lg font-semibold">Sports</h2>
               <div className="flex flex-col gap-2">
                 {Object.values(Sports).map((sport) => (
                   <div key={sport} className="flex flex-row items-center gap-1">
                     <button
-                      onClick={() => handleSportChange(sport)}
+                      onClick={() => { handleSportChange(sport); }}
                       className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
                     >
                       <div className={`w-5 h-5 flex items-center justify-center rounded border ${

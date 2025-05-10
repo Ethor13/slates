@@ -130,7 +130,7 @@ const GamesList: React.FC<GamesListProps> = ({
     }, [games, sortBy]);
 
     return (
-        <div className="flex flex-col w-full pt-8 mx-10">
+        <div className="flex flex-col w-full pt-8">
             {/* Header section with date and sort */}
             <div className="flex justify-between items-center w-full mb-6">
                 {/* Selected date display */}

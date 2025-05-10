@@ -1,4 +1,4 @@
-# Making the Website Responsive: Comprehensive Instructions
+# Always Make Edits Responsive
 
 ## Overview
 This document outlines the **step-by-step process, best practices, and non-negotiable requirements** for refactoring the codebase to ensure the website is fully responsive and accessible across a wide range of devices and screen sizes.

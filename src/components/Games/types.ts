@@ -67,6 +67,8 @@ export interface SportSelectorProps {
     selectedDate: Date;
     setSelectedDate: (date: Date) => void;
     setGamesLoading: (loading: boolean) => void;
+    sidebarOpen?: boolean;
+    setSidebarOpen?: (open: boolean) => void;
   };
 }
 
