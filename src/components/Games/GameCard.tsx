@@ -27,20 +27,20 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
                     {interestLevel.rating}
                 </div>
                 {/* Teams and Game Status - controlled width proportions */}
-                <div className="grid grid-cols-10 w-full items-center">
+                <div className="grid grid-rows-2 grid-cols-5 gap-1 md:gap-0 md:grid-rows-1 xl:grid-cols-10 w-full items-center">
                     {/* Away Team - fixed proportion */}
-                    <div className="col-span-2 w-full">
+                    <div className="row-start-1 row-end-1 col-span-3 md:col-span-2">
                         <TeamInfo team={game.away} opponent={game.home} isAway={true} />
                     </div>
                     {/* Game Status - fixed proportion */}
-                    <div className="col-span-1 flex justify-center">
-                        <div className="w-full text-center px-2">
+                    <div className="row-start-1 row-end-3 col-span-2 md:row-start-1 md:col-span-1 flex justify-center">
+                        <div className="w-full text-center">
                             <div className="text-sm font-medium uppercase">{game.sport}</div>
                             <div className="text-sm truncate">{formatGameTime(game.date)}</div>
                         </div>
                     </div>
                     {/* Home Team - fixed proportion */}
-                    <div className="col-span-2">
+                    <div className="row-start-2 row-end-2 col-span-3 md:row-start-1 md:row-end-1 md:col-span-2">
                         <TeamInfo team={game.home} opponent={game.away} isAway={false} />
                     </div>
                     {/* Broadcasts component - fixed proportion */}
