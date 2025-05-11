@@ -2,7 +2,7 @@ import { db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { ArrowUp, Menu } from 'lucide-react';
+import { ArrowUp, Menu, Printer } from 'lucide-react';
 import Nav from '../General/Nav';
 import Sidebar from '../Games/Sidebar';
 import GamesList from '../Games/GamesList';
@@ -103,6 +103,11 @@ const Dashboard = () => {
         });
     };
 
+    // Function to handle print
+    const handlePrint = () => {
+        window.print();
+    };
+
     useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
@@ -113,14 +118,14 @@ const Dashboard = () => {
                 <main>
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
-                        <button 
+                        <button
                             className={`md:hidden fixed top-24 left-4 z-50 bg-white p-2 rounded-md shadow-md transition-opacity duration-300 ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             aria-label="Toggle sidebar"
                         >
                             <Menu className="h-6 w-6 text-gray-700" />
                         </button>
-                        
+
                         {/* Left sidebar */}
                         <Sidebar
                             props={{
@@ -162,10 +167,17 @@ const Dashboard = () => {
             </div>
             <button
                 onClick={scrollToTop}
-                className={`fixed top-24 right-8 bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
+                className={`fixed top-24 right-[2vw] bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
                 aria-label="Scroll to top"
             >
                 <ArrowUp className="h-6 w-6" />
+            </button>
+            <button
+                onClick={handlePrint}
+                className="absolute top-24 right-[2vw] bg-slate-medium hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300"
+                aria-label="Print this page"
+            >
+                <Printer className="h-6 w-6" />
             </button>
         </div>
     );

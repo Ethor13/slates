@@ -132,15 +132,14 @@ const GamesList: React.FC<GamesListProps> = ({
     return (
         <div className="flex flex-col w-full pt-8">
             {/* Header section with date and sort */}
-            <div className="flex justify-between items-center w-full mb-6">
+            <div className="flex justify-between items-center w-full mb-2">
                 {/* Selected date display */}
                 <div>
                     <p className="text-md font-bold">
                         {selectedDate.toLocaleDateString("en-CA", {
                             month: 'long',
                             weekday: 'long',
-                            day: 'numeric',
-                            year: 'numeric'
+                            day: 'numeric'
                         })}
                     </p>
                 </div>
