@@ -178,7 +178,7 @@ const Dashboard = () => {
             </button>
             <button
                 onClick={handlePrint}
-                className="absolute top-24 right-[2vw] bg-slate-medium hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300"
+                className="absolute top-24 right-[2vw] bg-slate-medium hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 print:hidden"
                 aria-label="Print this page"
             >
                 <Printer className="h-6 w-6" />

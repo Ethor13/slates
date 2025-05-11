@@ -19,7 +19,15 @@ html {
   scrollbar-width: none;  /* Firefox */
 }
 
-/* ure content can still be scrolled */
+/* ensure content can still be scrolled */
 html, body {
   overflow-y: auto;
+}
+
+/* Print styles - ensure colors are preserved when printing */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 }
