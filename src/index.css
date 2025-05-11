@@ -24,8 +24,8 @@ html, body {
   overflow-y: auto;
 }
 
-/* Print styles - ensure colors are preserved when printing */
 @media print {
+  /* Print styles - ensure colors are preserved when printing */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;

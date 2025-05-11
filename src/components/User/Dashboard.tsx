@@ -116,7 +116,7 @@ const Dashboard = () => {
             <div className="print:hidden">
                 <Nav />
             </div>
-            <div className="min-h-screen bg-gray-50 pt-20 print:pt-0">
+            <div className="min-h-screen bg-gray-50 print:bg-white pt-20 print:pt-0">
                 <main>
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
