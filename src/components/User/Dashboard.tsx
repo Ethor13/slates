@@ -113,13 +113,15 @@ const Dashboard = () => {
 
     return (
         <div className="min-h-screen bg-white relative">
-            <Nav />
-            <div className="min-h-screen bg-gray-50 pt-20">
+            <div className="print:hidden">
+                <Nav />
+            </div>
+            <div className="min-h-screen bg-gray-50 pt-20 print:pt-0">
                 <main>
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
                         <button
-                            className={`md:hidden fixed top-24 left-4 z-50 bg-white p-2 rounded-md shadow-md transition-opacity duration-300 ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                            className={`md:hidden fixed top-24 left-4 z-50 bg-white p-2 rounded-md shadow-md transition-opacity duration-300 ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} print:hidden`}
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             aria-label="Toggle sidebar"
                         >
@@ -127,21 +129,23 @@ const Dashboard = () => {
                         </button>
 
                         {/* Left sidebar */}
-                        <Sidebar
-                            props={{
-                                selectedSports,
-                                setSelectedSports,
-                                selectedDate,
-                                setSelectedDate,
-                                setGamesLoading,
-                                sidebarOpen,
-                                setSidebarOpen
-                            }}
-                        />
+                        <div className="print:hidden">
+                            <Sidebar
+                                props={{
+                                    selectedSports,
+                                    setSelectedSports,
+                                    selectedDate,
+                                    setSelectedDate,
+                                    setGamesLoading,
+                                    sidebarOpen,
+                                    setSidebarOpen
+                                }}
+                            />
+                        </div>
 
                         {/* Main content area that takes remaining space and centers content */}
                         {/* This needs to be same padding as sidebar width */}
-                        <div className="w-full md:ml-[15rem] overflow-y-visible">
+                        <div className="w-full md:ml-[15rem] print:ml-0 overflow-y-visible">
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
