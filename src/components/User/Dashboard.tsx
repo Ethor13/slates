@@ -88,6 +88,16 @@ const Dashboard = () => {
         }
     }, [allGames, selectedSports]);
 
+    // Helper to ensure secondary sort is always different from primary
+    const handleSetSortBy = (newSort: Sort) => {
+        setSortBy(newSort);
+        if (secondarySort === newSort) {
+            // Pick the first available sort that isn't the new primary
+            const available = Object.values(Sort).filter(s => s !== newSort);
+            setSecondarySort(available[0]);
+        }
+    };
+
     // Handle scroll event to show/hide scroll-to-top button
     useEffect(() => {
         const handleScroll = () => {
@@ -169,7 +179,7 @@ const Dashboard = () => {
                                     <GamesList
                                         games={games}
                                         sortBy={sortBy}
-                                        setSortBy={setSortBy}
+                                        setSortBy={handleSetSortBy}
                                         secondarySort={secondarySort}
                                         setSecondarySort={setSecondarySort}
                                         selectedDate={selectedDate}
