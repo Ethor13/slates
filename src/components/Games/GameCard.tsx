@@ -4,6 +4,7 @@ import { GameCardProps } from "./types";
 import Broadcasts from "./Broadcasts";
 import TeamInfo from "./TeamInfo";
 import { formatGameTime } from "../../helpers";
+import { Star } from "lucide-react";
 
 // Interest level styling (now only using the background colors)
 const interestLevelClasses: Record<string, string[]> = {
@@ -16,7 +17,7 @@ const interestLevelClasses: Record<string, string[]> = {
 };
 
 const GameCard: React.FC<GameCardProps> = ({ game }) => {
-    const interestLevel = getInterestLevel(game.slateScore, game.isFavorite);
+    const interestLevel = getInterestLevel(game.slateScore);
 
     return (
         <div className="w-full py-1 print:py-[1px] break-inside-avoid">
@@ -26,6 +27,14 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
                 <div className={`h-10 w-10 print:w-6 print:h-6 text-base print:text-sm mr-2 print:mr-1 aspect-square flex items-center justify-center rounded-full font-semibold ${interestLevelClasses[interestLevel.className][1]} print:border-[1px]`}>
                     {interestLevel.rating}
                 </div>
+
+                {/* Favorite Star - only visible if the game is a favorite */}
+                {game.isFavorite && (
+                    <div className="z-10 absolute -translate-y-[0.9rem] translate-x-[1.5rem] print:-translate-y-[0.6rem] print:translate-x-[0.9rem]">
+                        <Star className="text-yellow-500 fill-yellow-200 w-6 h-6 print:w-4 print:h-4" />
+                    </div>
+                )}
+
                 {/* Teams and Game Status - controlled width proportions */}
                 <div className="grid grid-rows-2 grid-cols-10 gap-1 md:gap-0 md:grid-rows-1 print:gap-0 print:grid-rows-1 w-full items-center">
                     {/* Away Team - fixed proportion */}

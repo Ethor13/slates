@@ -70,13 +70,14 @@ const renderGames = (
     // General section heading function
     const getSectionHeading = (game: any) => {
         if (primarySort === Sort.SPORT) {
-            return game.sport || 'Other';
+            return String(game.sport).toUpperCase() || 'Other';
         } else if (primarySort === Sort.TIME) {
             if (game.date === 'TBD' || game.date === undefined) return 'TBD';
             const d = new Date(game.date);
             d.setMinutes(0, 0, 0);
             return formatGameTime(d.toISOString());
         } else if (primarySort === Sort.SCORE) {
+            if (game.isFavorite) return "Favorites";
             if (game.slateScore === undefined) return "Not scored";
             if (game.slateScore >= 0.8) return "80+";
             if (game.slateScore >= 0.6) return "60-79"; 
@@ -85,6 +86,7 @@ const renderGames = (
             return "Not scored";
         }
 
+        return null;
     }
 
     // If no sectioning, render flat list
@@ -125,7 +127,7 @@ const renderGames = (
         <div className="flex flex-col w-full">
             {sortedHeadings.map((heading) => (
                 <div key={heading} className="flex flex-col w-full">
-                    <h2 className="text-md font-medium uppercase">{heading}</h2>
+                    <h2 className="text-md font-medium">{heading}</h2>
                     <div className="flex flex-col w-full divide-y divide-gray-200">
                         {sectioned[heading].sort(sortFn).map(([gameId, game]) => (
                             <GameCard key={gameId} game={game} />
@@ -183,7 +185,7 @@ const GamesList: React.FC<GamesListProps> = ({
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-2 gap-2">
                 {/* Selected date display */}
                 <div>
-                    <p className="text-md font-bold">
+                    <p className="font-bold">
                         {selectedDate.toLocaleDateString("en-CA", {
                             month: 'long',
                             weekday: 'long',
@@ -193,7 +195,7 @@ const GamesList: React.FC<GamesListProps> = ({
                 </div>
                 {/* Sort selectors */}
                 <div className="flex flex-col min-w-[180px] items-end self-end">
-                    <div className="w-full flex items-center relative justify-end">
+                    <div className="w-full flex items-center relative justify-end print:hidden">
                         <p className="font-sans text-md text-right">Sort by:&nbsp;</p>
                         <div className="relative" ref={dropdownRef}>
                             <button
@@ -228,7 +230,7 @@ const GamesList: React.FC<GamesListProps> = ({
                             )}
                         </div>
                     </div>
-                    <div className="w-full flex items-center relative justify-end">
+                    <div className="w-full flex items-center relative justify-end print:hidden">
                         <p className="font-sans text-md text-right">Then by:&nbsp;</p>
                         <div className="relative" ref={secondaryDropdownRef}>
                             <button
@@ -263,6 +265,9 @@ const GamesList: React.FC<GamesListProps> = ({
                                 </ul>
                             )}
                         </div>
+                    </div>
+                    <div className='hidden print:block text-sm'>
+                        Sorted by <b>{sortBy}</b> then by <b>{secondarySort}</b>
                     </div>
                 </div>
             </div>

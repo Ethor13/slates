@@ -1,5 +1,3 @@
-import { Star } from "lucide-react";
-
 export enum Sports {
     NBA = 'nba',
     NCAAMBB = 'ncaambb',
@@ -23,9 +21,7 @@ export interface InterestLevel {
     rating: string | JSX.Element;
 }
 
-export const getInterestLevel = (score: number, isFavoriteGame: boolean): InterestLevel => {
-    if (isFavoriteGame) return { className: "favorite", rating: <Star className="text-yellow-500" /> };
-
+export const getInterestLevel = (score: number): InterestLevel => {
     const rating = score >= 0 ? (100 * score).toFixed(0) : "?";
     if (score >= 0.8) return { className: "must-watch", rating };
     if (score >= 0.6) return { className: "high-interest", rating };
