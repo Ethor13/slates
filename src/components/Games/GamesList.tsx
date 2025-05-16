@@ -36,65 +36,60 @@ const split_by_time = (games: ScheduleResponse) => {
 
 const renderGames = (
     games: ScheduleResponse,
-    sortBy: Sort
+    primarySort: Sort,
+    secondarySort: Sort
 ) => {
-    if (sortBy === Sort.TIME) {
-        // Group games by start time hour and then sort by exact time within each hour
-        const gamesByTime = split_by_time(games);
+    // Helper to get sort value
+    const getSortValue = (game: any, sort: Sort) => {
+        switch (sort) {
+            case Sort.TIME:
+                return game.date === 'TBD' ? Infinity : new Date(game.date).getTime();
+            case Sort.SCORE:
+                return game.slateScore;
+            case Sort.SPORT:
+                return game.sport || '';
+            default:
+                return '';
+        }
+    };
 
-        return (
-            <div className="flex flex-col w-full">
-                {Object.entries(gamesByTime)
-                    .sort(([timeA, _], [timeB, __]) => {
-                        if (timeA === "TBD") return 1; // Move TBD games to the end
-                        if (timeB === "TBD") return -1;
-                        return new Date(timeA).getTime() - new Date(timeB).getTime();
-                    })
-                    .map(([gameTime, timeGames]) => (
-                        <div key={gameTime} className="flex flex-col w-full">
-                            <h2 className="text-md font-medium">{formatGameTime(gameTime)}</h2>
-                            <div className="flex flex-col w-full divide-y divide-gray-200">
-                                {Object.entries(timeGames)
-                                    // First sort by exact time
-                                    .sort(([_, game1], [__, game2]) => {
-                                        if (game1.date === "TBD") return 1; // Move TBD games to the end
-                                        if (game2.date === "TBD") return -1;
-                                        return new Date(game1.date).getTime() - new Date(game2.date).getTime()
-                                    })
-                                    // Then break ties with slate score
-                                    .sort(([_, game1], [__, game2]) => {
-                                        if (game1.date === "TBD" && game2.date === "TBD") return game2.slateScore - game1.slateScore;
-                                        if (game1.date === "TBD" || game2.date === "TBD") return 0; // Keep TBD games in their place
-                                        const time1 = new Date(game1.date).getTime();
-                                        const time2 = new Date(game2.date).getTime();
-                                        // If times are the same (within the same minute), sort by slate score
-                                        if (Math.abs(time1 - time2) < 60000) {
-                                            return game2.slateScore - game1.slateScore;
-                                        }
-                                        // Otherwise keep the time sorting
-                                        return time1 - time2;
-                                    })
-                                    .map(([gameId, game]) => (
-                                        <GameCard key={gameId} game={game} />
-                                    ))}
-                            </div>
-                        </div>
-                    ))
-                }
-            </div>
-        );
-    } else if (sortBy === Sort.SCORE) {
-        // Sort all games by slate score
-        const sortedGames = Object.entries(games).sort((game1, game2) => {
-            if (game1[1].isFavorite && !game2[1].isFavorite) {
-                return -1;
-            }
-            if (!game1[1].isFavorite && game2[1].isFavorite) {
-                return 1;
-            }
-            return game2[1].slateScore - game1[1].slateScore;
-        });
+    // General sort function
+    const sortFn = ([, a]: any, [, b]: any) => {
+        let primaryA = getSortValue(a, primarySort);
+        let primaryB = getSortValue(b, primarySort);
+        if (primaryA < primaryB) return primarySort === Sort.SCORE ? 1 : -1;
+        if (primaryA > primaryB) return primarySort === Sort.SCORE ? -1 : 1;
 
+        let secondaryA = getSortValue(a, secondarySort);
+        let secondaryB = getSortValue(b, secondarySort);
+        if (secondaryA < secondaryB) return secondarySort === Sort.SCORE ? 1 : -1;
+        if (secondaryA > secondaryB) return secondarySort === Sort.SCORE ? -1 : 1;
+        return 0;
+    };
+
+    // General section heading function
+    const getSectionHeading = (game: any) => {
+        if (primarySort === Sort.SPORT) {
+            return game.sport || 'Other';
+        } else if (primarySort === Sort.TIME) {
+            if (game.date === 'TBD' || game.date === undefined) return 'TBD';
+            const d = new Date(game.date);
+            d.setMinutes(0, 0, 0);
+            return formatGameTime(d.toISOString());
+        } else if (primarySort === Sort.SCORE) {
+            if (game.slateScore === undefined) return "Not scored";
+            if (game.slateScore >= 0.8) return "80+";
+            if (game.slateScore >= 0.6) return "60-79"; 
+            if (game.slateScore >= 0.4) return "40-59";
+            if (game.slateScore >= 0) return "0-39";
+            return "Not scored";
+        }
+
+    }
+
+    // If no sectioning, render flat list
+    if (!getSectionHeading || getSectionHeading({}) === null) {
+        const sortedGames = Object.entries(games).sort(sortFn);
         return (
             <div className="flex flex-col w-full divide-y divide-gray-200">
                 {sortedGames.map(([gameId, game]) => (
@@ -102,51 +97,63 @@ const renderGames = (
                 ))}
             </div>
         );
-    } else if (sortBy === Sort.SPORT) {
-        // Group games by sport, then sort by time within each sport
-        const gamesBySport: Record<string, Record<string, any>> = {};
-        Object.entries(games).forEach(([gameId, game]) => {
-            const sport = game.sport || 'Other';
-            if (!gamesBySport[sport]) gamesBySport[sport] = {};
-            gamesBySport[sport][gameId] = game;
-        });
-        // Sort sports alphabetically (NBA, NCAAMBB, MLB, NHL, etc.)
-        return (
-            <div className="flex flex-col w-full">
-                {Object.entries(gamesBySport)
-                    .sort(([sportA], [sportB]) => sportA.localeCompare(sportB))
-                    .map(([sport, sportGames]) => (
-                        <div key={sport} className="flex flex-col w-full">
-                            <h2 className="text-md font-medium uppercase">{sport}</h2>
-                            <div className="flex flex-col w-full divide-y divide-gray-200">
-                                {Object.entries(sportGames)
-                                    .sort(([_, game1], [__, game2]) => { return game2.slateScore - game1.slateScore; })
-                                    .map(([gameId, game]) => (
-                                        <GameCard key={gameId} game={game} />
-                                    ))}
-                            </div>
-                        </div>
-                    ))}
-            </div>
-        );
-    } else {
-        throw new Error("Invalid sortBy value");
     }
+
+    // Group games by section heading
+    const sectioned: Record<string, [string, any][]> = {};
+    Object.entries(games).forEach(([gameId, game]) => {
+        const heading = getSectionHeading(game);
+        if (!heading) return;
+        if (!sectioned[heading]) sectioned[heading] = [];
+        sectioned[heading].push([gameId, game]);
+    });
+
+    // Sort section headings
+    const sortedHeadings = Object.keys(sectioned).sort((a, b) => {
+        if (a === 'TBD') return 1;
+        if (b === 'TBD') return -1;
+        // For time, sort by date; for sport, alphabetical
+        if (primarySort === Sort.TIME) {
+            return new Date(a).getTime() - new Date(b).getTime();
+        } else if (primarySort === Sort.SCORE) {
+            return b.localeCompare(a, undefined, { numeric: true });
+        }
+        return a.localeCompare(b);
+    });
+
+    return (
+        <div className="flex flex-col w-full">
+            {sortedHeadings.map((heading) => (
+                <div key={heading} className="flex flex-col w-full">
+                    <h2 className="text-md font-medium uppercase">{heading}</h2>
+                    <div className="flex flex-col w-full divide-y divide-gray-200">
+                        {sectioned[heading].sort(sortFn).map(([gameId, game]) => (
+                            <GameCard key={gameId} game={game} />
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
 };
 
 const GamesList: React.FC<GamesListProps> = ({
     sortBy,
     setSortBy,
+    secondarySort,
+    setSecondarySort,
     games,
     selectedDate
 }) => {
     const [renderedGames, setRenderedGames] = useState<React.ReactNode | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isSecondaryDropdownOpen, setIsSecondaryDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const secondaryDropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (Object.keys(games).length) {
-            setRenderedGames(renderGames(games, sortBy));
+            setRenderedGames(renderGames(games, sortBy, secondarySort));
         } else {
             setRenderedGames(
                 <div className="w-full text-center text-lg text-gray-600 py-8">
@@ -154,12 +161,26 @@ const GamesList: React.FC<GamesListProps> = ({
                 </div>
             );
         }
-    }, [games, sortBy]);
+    }, [games, sortBy, secondarySort]);
+
+    // Responsive dropdown close on click outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsDropdownOpen(false);
+            }
+            if (secondaryDropdownRef.current && !secondaryDropdownRef.current.contains(event.target as Node)) {
+                setIsSecondaryDropdownOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
         <div className="flex flex-col w-full pt-8">
             {/* Header section with date and sort */}
-            <div className="flex justify-between items-center w-full mb-2">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-2 gap-2">
                 {/* Selected date display */}
                 <div>
                     <p className="text-md font-bold">
@@ -170,15 +191,16 @@ const GamesList: React.FC<GamesListProps> = ({
                         })}
                     </p>
                 </div>
-
-                {/* Sort selector */}
-                <div>
-                    <div className="w-full flex justify-between items-center relative">
-                        <p className="font-sans text-md">Sort By:&nbsp;</p>
+                {/* Sort selectors */}
+                <div className="flex flex-col min-w-[180px] items-end self-end">
+                    <div className="w-full flex items-center relative justify-end">
+                        <p className="font-sans text-md text-right">Sort by:&nbsp;</p>
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 className="bg-transparent border-none font-bold cursor-pointer flex items-center text-md gap-0.5"
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                aria-haspopup="listbox"
+                                aria-expanded={isDropdownOpen}
                             >
                                 {sortBy}
                                 <ChevronDown
@@ -187,15 +209,53 @@ const GamesList: React.FC<GamesListProps> = ({
                                 />
                             </button>
                             {isDropdownOpen && (
-                                <ul className="absolute right-0 bg-white border border-gray-300 list-none shadow-md z-50 flex flex-col w-28">
+                                <ul className="absolute right-0 bg-white border border-gray-300 list-none shadow-md z-50 flex flex-col w-36" role="listbox">
                                     {Object.entries(Sort).map(([key, value]) => (
                                         <li
                                             key={key}
-                                            className="cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right"
+                                            className={`cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right ${sortBy === value ? 'font-bold bg-gray-100' : ''}`}
                                             onClick={() => {
                                                 setSortBy(value);
                                                 setIsDropdownOpen(false);
                                             }}
+                                            role="option"
+                                            aria-selected={sortBy === value}
+                                        >
+                                            {value}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
+                    <div className="w-full flex items-center relative justify-end">
+                        <p className="font-sans text-md text-right">Then by:&nbsp;</p>
+                        <div className="relative" ref={secondaryDropdownRef}>
+                            <button
+                                className="bg-transparent border-none font-bold cursor-pointer flex items-center text-md gap-0.5"
+                                onClick={() => setIsSecondaryDropdownOpen(!isSecondaryDropdownOpen)}
+                                aria-haspopup="listbox"
+                                aria-expanded={isSecondaryDropdownOpen}
+                            >
+                                {secondarySort}
+                                <ChevronDown
+                                    className={`text-gray-700 transition-transform ${isSecondaryDropdownOpen ? 'rotate-180' : ''}`}
+                                    size={16}
+                                />
+                            </button>
+                            {isSecondaryDropdownOpen && (
+                                <ul className="absolute right-0 bg-white border border-gray-300 list-none shadow-md z-50 flex flex-col w-36" role="listbox">
+                                    {Object.entries(Sort).map(([key, value]) => (
+                                        <li
+                                            key={key}
+                                            className={`cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right ${secondarySort === value ? 'font-bold bg-gray-100' : ''} ${sortBy === value ? 'opacity-50 pointer-events-none' : ''}`}
+                                            onClick={() => {
+                                                if (sortBy !== value) setSecondarySort(value);
+                                                setIsSecondaryDropdownOpen(false);
+                                            }}
+                                            role="option"
+                                            aria-selected={secondarySort === value}
+                                            aria-disabled={sortBy === value}
                                         >
                                             {value}
                                         </li>
@@ -206,12 +266,10 @@ const GamesList: React.FC<GamesListProps> = ({
                     </div>
                 </div>
             </div>
-            
             {/* Broadcasts header - shows TV providers as column headers */}
             <div className="hidden xl:block">
                 <BroadcastsHeader/>
             </div>
-            
             {/* Games list */}
             <div className="w-full">
                 {renderedGames}

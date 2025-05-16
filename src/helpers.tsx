@@ -14,9 +14,6 @@ export const formatGameTime = (timeString: string): string => {
         timeZone: "America/New_York",
         hour: "numeric",
         minute: "2-digit",
-        // weekday: 'short',
-        // month: 'short',
-        // day: 'numeric',
         hour12: true,
     });
 };

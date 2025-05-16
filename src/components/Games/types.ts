@@ -57,6 +57,8 @@ export interface ScheduleResponse {
 export interface GamesListProps {
   sortBy: Sort;
   setSortBy: (sort: Sort) => void;
+  secondarySort: Sort;
+  setSecondarySort: (sort: Sort) => void;
   games: ScheduleResponse;
   selectedDate: Date;
 }

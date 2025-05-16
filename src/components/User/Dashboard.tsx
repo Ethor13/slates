@@ -43,6 +43,7 @@ const Dashboard = () => {
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [sortBy, setSortBy] = useState<Sort>(Sort.SCORE);
+    const [secondarySort, setSecondarySort] = useState<Sort>(Sort.TIME); // Default to TIME
 
     // Fetch games data using Cloud Functions
     const fetchAllGamesOnDate = useCallback(async () => {
@@ -169,6 +170,8 @@ const Dashboard = () => {
                                         games={games}
                                         sortBy={sortBy}
                                         setSortBy={setSortBy}
+                                        secondarySort={secondarySort}
+                                        setSecondarySort={setSecondarySort}
                                         selectedDate={selectedDate}
                                     />
                                 </div>
