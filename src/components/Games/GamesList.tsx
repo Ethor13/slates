@@ -120,21 +120,7 @@ const renderGames = (
                             <h2 className="text-md font-medium uppercase">{sport}</h2>
                             <div className="flex flex-col w-full divide-y divide-gray-200">
                                 {Object.entries(sportGames)
-                                    .sort(([_, game1], [__, game2]) => {
-                                        if (game1.date === "TBD") return 1;
-                                        if (game2.date === "TBD") return -1;
-                                        return new Date(game1.date).getTime() - new Date(game2.date).getTime();
-                                    })
-                                    .sort(([_, game1], [__, game2]) => {
-                                        if (game1.date === "TBD" && game2.date === "TBD") return game2.slateScore - game1.slateScore;
-                                        if (game1.date === "TBD" || game2.date === "TBD") return 0;
-                                        const time1 = new Date(game1.date).getTime();
-                                        const time2 = new Date(game2.date).getTime();
-                                        if (Math.abs(time1 - time2) < 60000) {
-                                            return game2.slateScore - game1.slateScore;
-                                        }
-                                        return time1 - time2;
-                                    })
+                                    .sort(([_, game1], [__, game2]) => { return game2.slateScore - game1.slateScore; })
                                     .map(([gameId, game]) => (
                                         <GameCard key={gameId} game={game} />
                                     ))}

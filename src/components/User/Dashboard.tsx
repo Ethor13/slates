@@ -12,6 +12,7 @@ import { Sports } from '../../helpers';
 enum Sort {
     TIME = 'Time',
     SCORE = 'Slate Score',
+    SPORT = 'Sport',
 }
 
 type ScheduleResponse = Record<string, any>;
