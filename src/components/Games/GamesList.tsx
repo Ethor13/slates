@@ -67,7 +67,7 @@ const renderGames = (
         return 0;
     };
 
-    // General section heading function
+    // Section heading function (except for favorites)
     const getSectionHeading = (game: any) => {
         if (primarySort === Sort.SPORT) {
             return String(game.sport).toUpperCase() || 'Other';
@@ -77,7 +77,6 @@ const renderGames = (
             d.setMinutes(0, 0, 0);
             return formatGameTime(d.toISOString());
         } else if (primarySort === Sort.SCORE) {
-            if (game.isFavorite) return "Favorites";
             if (game.slateScore === undefined) return "Not scored";
             if (game.slateScore >= 0.8) return "80+";
             if (game.slateScore >= 0.6) return "60-79"; 
@@ -85,25 +84,40 @@ const renderGames = (
             if (game.slateScore >= 0) return "0-39";
             return "Not scored";
         }
-
         return null;
     }
 
-    // If no sectioning, render flat list
+    // Always collect favorites first
+    const favorites: [string, any][] = Object.entries(games).filter(([, game]) => game.isFavorite);
+    // All non-favorite games
+    const nonFavorites: [string, any][] = Object.entries(games);
+
+    // If no sectioning, render flat list (but still show favorites first)
     if (!getSectionHeading || getSectionHeading({}) === null) {
-        const sortedGames = Object.entries(games).sort(sortFn);
+        const sortedFavorites = favorites.sort(sortFn);
+        const sortedNonFavorites = nonFavorites.sort(sortFn);
         return (
             <div className="flex flex-col w-full divide-y divide-gray-200">
-                {sortedGames.map(([gameId, game]) => (
+                {sortedFavorites.length > 0 && (
+                    <div className="flex flex-col w-full">
+                        <h2 className="text-md font-medium">Favorites</h2>
+                        <div className="flex flex-col w-full divide-y divide-gray-200">
+                            {sortedFavorites.map(([gameId, game]) => (
+                                <GameCard key={gameId} game={game} />
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {sortedNonFavorites.map(([gameId, game]) => (
                     <GameCard key={gameId} game={game} />
                 ))}
             </div>
         );
     }
 
-    // Group games by section heading
+    // Group non-favorite games by section heading
     const sectioned: Record<string, [string, any][]> = {};
-    Object.entries(games).forEach(([gameId, game]) => {
+    nonFavorites.forEach(([gameId, game]) => {
         const heading = getSectionHeading(game);
         if (!heading) return;
         if (!sectioned[heading]) sectioned[heading] = [];
@@ -116,13 +130,10 @@ const renderGames = (
         if (primarySort === Sort.TIME) {
             if (a === 'TBD') return 1;
             if (b === 'TBD') return -1;
-
             // a and b are of the format HH:00 (A|P)M
-            // get the hour part in 0-24 format and compare
             const aHour = Number(a.split(":")[0]) + (a.includes("PM") && a.split(":")[0] !== "12" ? 12 : 0);
             const bHour = Number(b.split(":")[0]) + (b.includes("PM") && b.split(":")[0] !== "12" ? 12 : 0);
             return aHour - bHour;
-
         } else if (primarySort === Sort.SCORE) {
             return b.localeCompare(a, undefined, { numeric: true });
         }
@@ -131,6 +142,17 @@ const renderGames = (
 
     return (
         <div className="flex flex-col w-full">
+            {/* Favorites always at the top */}
+            {favorites.length > 0 && (
+                <div className="flex flex-col w-full">
+                    <h2 className="text-md font-medium">Favorites</h2>
+                    <div className="flex flex-col w-full divide-y divide-gray-200">
+                        {favorites.sort(sortFn).map(([gameId, game]) => (
+                            <GameCard key={gameId} game={game} />
+                        ))}
+                    </div>
+                </div>
+            )}
             {sortedHeadings.map((heading) => (
                 <div key={heading} className="flex flex-col w-full">
                     <h2 className="text-md font-medium">{heading}</h2>
