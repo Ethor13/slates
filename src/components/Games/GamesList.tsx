@@ -43,7 +43,7 @@ const renderGames = (
         const gamesByTime = split_by_time(games);
 
         return (
-            <div className="flex flex-col w-full divide-y divide-gray-200">
+            <div className="flex flex-col w-full">
                 {Object.entries(gamesByTime)
                     .sort(([timeA, _], [timeB, __]) => {
                         if (timeA === "TBD") return 1; // Move TBD games to the end

@@ -162,7 +162,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     return (
                       <div key={index} className="w-full flex justify-center">
                         <button
-                          className={`p-1 rounded-full text-xs h-7 w-7 flex items-center justify-center
+                          className={`aspect-square p-1 rounded-full text-xs h-[26px] w-[26px] flex items-center justify-center
                           ${!day.isCurrentMonth ? "text-gray-300" : isPastDate ? "text-gray-400" : ""}
                           ${isSelected ? "bg-blue-600 text-white" : ""}
                           ${isToday && !isSelected ? "border border-blue-600" : ""}

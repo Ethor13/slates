@@ -23,7 +23,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
             {/* Main card - always visible */}
             <div className="flex items-center w-full">
                 {/* Slate Score - fixed width */}
-                <div className={`h-10 w-10 print:w-4 print:h-4 text-base print:text-xs mr-2 print:mr-1 aspect-square flex items-center justify-center rounded-full font-semibold ${interestLevelClasses[interestLevel.className][1]} print:bg-transparent print:border-0`}>
+                <div className={`h-10 w-10 print:w-6 print:h-6 text-base print:text-sm mr-2 print:mr-1 aspect-square flex items-center justify-center rounded-full font-semibold ${interestLevelClasses[interestLevel.className][1]} print:border-0`}>
                     {interestLevel.rating}
                 </div>
                 {/* Teams and Game Status - controlled width proportions */}
