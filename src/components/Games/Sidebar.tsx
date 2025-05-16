@@ -227,7 +227,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     {props.includeGamePulseInPrint && (<Check size={14} className="text-white" />)}
                   </div>
                 </button>
-                <span className="text-md">Include Game Pulse in Print</span>
+                <span className="text-md">Include Game Pulse</span>
               </div>
             </div>
 

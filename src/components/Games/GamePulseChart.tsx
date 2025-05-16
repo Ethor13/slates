@@ -1,5 +1,6 @@
 import { ScheduleResponse } from './types';
 import { DocumentData } from 'firebase/firestore';
+import React from 'react';
 
 interface GamePulseChartProps {
     games: ScheduleResponse;
@@ -10,6 +11,20 @@ const gameDurations: Record<string, number> = {
     "mlb": 3,
     "nhl": 2.5,
     "ncaambb": 2,
+}
+
+// Add a hook to detect if the screen is md or smaller
+function useIsMdOrSmaller() {
+    const [isMdOrSmaller, setIsMdOrSmaller] = React.useState(false);
+    React.useEffect(() => {
+        function handleResize() {
+            setIsMdOrSmaller(window.matchMedia('(max-width: 768px)').matches);
+        }
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    return isMdOrSmaller;
 }
 
 export default function GamePulseChart({ games }: GamePulseChartProps) {
@@ -67,6 +82,7 @@ export default function GamePulseChart({ games }: GamePulseChartProps) {
     });
 
     const MAX_SCORE = 6; // Maximum height of the bars
+    const isMdOrSmaller = useIsMdOrSmaller();
 
     return (
         <div className="w-full flex flex-col items-center justify-center">
@@ -74,7 +90,7 @@ export default function GamePulseChart({ games }: GamePulseChartProps) {
                 <h3 className="text-base md:text-lg font-semibold text-center">Game Pulse</h3>
                 {tbdGamesCount > 0 && (
                     <p className="text-xs text-center">
-                        {tbdGamesCount} game{tbdGamesCount !== 1 ? 's' : ''} have yet to be scheduled
+                        {tbdGamesCount} game{tbdGamesCount !== 1 ? 's have' : ' has'} yet to be scheduled
                     </p>
                 )}
                 <div className="w-full flex gap-[2%] justify-between h-20 px-[15%]">
@@ -91,8 +107,18 @@ export default function GamePulseChart({ games }: GamePulseChartProps) {
                                     />
                                 </div>
                                 <span className="h-0 flex flex-col items-center text-xs text-gray-500">
-                                    <p>{`${(index % 12 == 0) ? 12 : index % 12}`}</p>
-                                    <p>{index % 12 === 0 ? `${index >= 12 ? 'PM' : 'AM'}` : ''}</p>
+                                    {/* Only print every other hour label on md and smaller, otherwise print all */}
+                                    {(!isMdOrSmaller || index % 2 === 0) ? (
+                                        <>
+                                            <p>{`${(index % 12 == 0) ? 12 : index % 12}`}</p>
+                                            <p>{index % 12 === 0 ? `${index >= 12 ? 'PM' : 'AM'}` : ''}</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className="invisible select-none">&nbsp;</p>
+                                            <p className="invisible select-none">&nbsp;</p>
+                                        </>
+                                    )}
                                 </span>
                             </div>
                         );
