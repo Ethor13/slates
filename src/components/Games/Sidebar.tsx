@@ -212,6 +212,27 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
             <div className="w-full border-b border-gray-200"></div>
 
+            {/* Print settings section */}
+            <div className="flex flex-col gap-4">
+              <h2 className="text-lg font-semibold">Print Settings</h2>
+              <div className="flex flex-row items-center gap-1">
+                <button
+                  onClick={() => props.setIncludeGamePulseInPrint(!props.includeGamePulseInPrint)}
+                  className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
+                >
+                  <div className={`w-5 h-5 flex items-center justify-center rounded border ${props.includeGamePulseInPrint
+                    ? 'bg-blue-600 border-blue-600'
+                    : 'border-gray-300'
+                    }`}>
+                    {props.includeGamePulseInPrint && (<Check size={14} className="text-white" />)}
+                  </div>
+                </button>
+                <span className="text-md">Include Game Pulse in Print</span>
+              </div>
+            </div>
+
+            <div className="w-full border-b border-gray-200"></div>
+
             <div className="flex flex-col gap-4 mb-6">
               {/* Sports selector */}
               <h2 className="text-lg font-semibold">Sports</h2>

@@ -69,6 +69,8 @@ export interface SportSelectorProps {
     setGamesLoading: (loading: boolean) => void;
     sidebarOpen?: boolean;
     setSidebarOpen?: (open: boolean) => void;
+    includeGamePulseInPrint: boolean;
+    setIncludeGamePulseInPrint: (val: boolean) => void;
   };
 }
 

@@ -35,6 +35,8 @@ const Dashboard = () => {
     const [gamesError, setGamesError] = useState<any | null>(null);
     const [showScrollToTop, setShowScrollToTop] = useState<boolean>(false);
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+    // Print settings state
+    const [includeGamePulseInPrint, setIncludeGamePulseInPrint] = useState<boolean>(true);
 
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
@@ -138,7 +140,9 @@ const Dashboard = () => {
                                     setSelectedDate,
                                     setGamesLoading,
                                     sidebarOpen,
-                                    setSidebarOpen
+                                    setSidebarOpen,
+                                    includeGamePulseInPrint,
+                                    setIncludeGamePulseInPrint
                                 }}
                             />
                         </div>
@@ -156,7 +160,10 @@ const Dashboard = () => {
                                 </div>
                             ) : (
                                 <div className="w-full px-[3vw]">
-                                    <GamePulseChart games={games} />
+                                    {/* Conditionally render GamePulseChart in print based on toggle */}
+                                    <div className={includeGamePulseInPrint ? '' : 'print:hidden'}>
+                                        <GamePulseChart games={games} />
+                                    </div>
                                     <GamesList
                                         games={games}
                                         sortBy={sortBy}
