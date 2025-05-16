@@ -3,6 +3,7 @@ import { DocumentData } from "firebase/firestore";
 export enum Sort {
     TIME = 'Time',
     SCORE = 'Slate Score',
+    SPORT = 'Sport', // Added new sort option
 }
 
 export enum Sports {
