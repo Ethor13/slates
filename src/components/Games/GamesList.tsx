@@ -112,11 +112,17 @@ const renderGames = (
 
     // Sort section headings
     const sortedHeadings = Object.keys(sectioned).sort((a, b) => {
-        if (a === 'TBD') return 1;
-        if (b === 'TBD') return -1;
         // For time, sort by date; for sport, alphabetical
         if (primarySort === Sort.TIME) {
-            return new Date(a).getTime() - new Date(b).getTime();
+            if (a === 'TBD') return 1;
+            if (b === 'TBD') return -1;
+
+            // a and b are of the format HH:00 (A|P)M
+            // get the hour part in 0-24 format and compare
+            const aHour = Number(a.split(":")[0]) + (a.includes("PM") && a.split(":")[0] !== "12" ? 12 : 0);
+            const bHour = Number(b.split(":")[0]) + (b.includes("PM") && b.split(":")[0] !== "12" ? 12 : 0);
+            return aHour - bHour;
+
         } else if (primarySort === Sort.SCORE) {
             return b.localeCompare(a, undefined, { numeric: true });
         }
