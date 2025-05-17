@@ -265,8 +265,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
 const ChevronButton: React.FC<ChevronButtonProps> = ({ onClick, direction, blocked }) => (
   <button
-    className={`p-2 flex justify-center items-center rounded-full hover:bg-slate-light/20 transition-colors duration-200
-      ${blocked ? "text-black cursor-not-allowed" : "cursor-pointer"}`}
+    className={`p-2 flex justify-center items-center rounded-full transition-colors duration-200
+      ${blocked ? "text-black cursor-not-allowed" : "hover:bg-slate-light/20 cursor-pointer"}`}
     onClick={onClick}
     disabled={blocked}
   >
