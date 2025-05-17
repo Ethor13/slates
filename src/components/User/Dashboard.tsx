@@ -2,7 +2,7 @@ import { db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { ArrowUp, Menu, Printer } from 'lucide-react';
+import { ArrowUp, SlidersHorizontal, Printer } from 'lucide-react';
 import Nav from '../General/Nav';
 import Sidebar from '../Games/Sidebar';
 import GamesList from '../Games/GamesList';
@@ -135,11 +135,11 @@ const Dashboard = () => {
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
                         <button
-                            className={`md:hidden fixed top-24 left-4 z-50 bg-white p-2 rounded-md shadow-md transition-opacity duration-300 ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} print:hidden`}
+                            className={`md:hidden absolute top-24 left-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden`}
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             aria-label="Toggle sidebar"
                         >
-                            <Menu className="h-6 w-6 text-gray-700" />
+                            <SlidersHorizontal className="h-6 w-6 text-black" />
                         </button>
 
                         {/* Left sidebar */}
@@ -192,17 +192,17 @@ const Dashboard = () => {
             </div>
             <button
                 onClick={scrollToTop}
-                className={`fixed top-24 right-[2vw] bg-gray-400 hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 z-50 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
+                className={`fixed top-24 right-4 bg-white hover:bg-gray-200  p-2 border-[2px] border-gray-300 rounded-full transition-all duration-200 z-50 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
                 aria-label="Scroll to top"
             >
-                <ArrowUp className="h-6 w-6" />
+                <ArrowUp className="h-6 w-6 text-gray-400" />
             </button>
             <button
                 onClick={handlePrint}
-                className="absolute top-24 right-[2vw] bg-slate-medium hover:bg-slate-deep text-white p-3 rounded-full shadow-lg transition-all duration-300 print:hidden"
+                className="absolute top-24 right-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden"
                 aria-label="Print this page"
             >
-                <Printer className="h-6 w-6" />
+                <Printer className="h-6 w-6 text-black" />
             </button>
         </div>
     );

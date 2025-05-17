@@ -77,12 +77,12 @@ const renderGames = (
             d.setMinutes(0, 0, 0);
             return formatGameTime(d.toISOString());
         } else if (primarySort === Sort.SCORE) {
-            if (game.slateScore === undefined) return "Not scored";
+            if (game.slateScore === undefined) return "Score Unavailable";
             if (game.slateScore >= 0.8) return "80+";
             if (game.slateScore >= 0.6) return "60-79"; 
             if (game.slateScore >= 0.4) return "40-59";
             if (game.slateScore >= 0) return "0-39";
-            return "Not scored";
+            return "Score Unavailable";
         }
         return null;
     }
@@ -135,6 +135,8 @@ const renderGames = (
             const bHour = Number(b.split(":")[0]) + (b.includes("PM") && b.split(":")[0] !== "12" ? 12 : 0);
             return aHour - bHour;
         } else if (primarySort === Sort.SCORE) {
+            if (a === "Score Unavailable") return 1;
+            if (b === "Score Unavailable") return -1;
             return b.localeCompare(a, undefined, { numeric: true });
         }
         return a.localeCompare(b);
@@ -243,7 +245,7 @@ const GamesList: React.FC<GamesListProps> = ({
                                     {Object.entries(Sort).map(([key, value]) => (
                                         <li
                                             key={key}
-                                            className={`cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right ${sortBy === value ? 'font-bold bg-gray-100' : ''}`}
+                                            className={`cursor-pointer hover:bg-slate-light/20 px-1 text-black text-md pl-2 pr-5 text-right ${sortBy === value ? 'font-bold' : ''}`}
                                             onClick={() => {
                                                 setSortBy(value);
                                                 setIsDropdownOpen(false);
@@ -278,7 +280,7 @@ const GamesList: React.FC<GamesListProps> = ({
                                     {Object.entries(Sort).map(([key, value]) => (
                                         <li
                                             key={key}
-                                            className={`cursor-pointer hover:bg-slate-deep hover:text-white px-1 text-gray-700 text-md pl-2 pr-5 text-right ${secondarySort === value ? 'font-bold bg-gray-100' : ''} ${sortBy === value ? 'opacity-50 pointer-events-none' : ''}`}
+                                            className={`cursor-pointer hover:bg-slate-light/20 px-1 text-black text-md pl-2 pr-5 text-right ${secondarySort === value ? 'font-bold' : ''} ${sortBy === value ? 'opacity-50 pointer-events-none' : ''}`}
                                             onClick={() => {
                                                 if (sortBy !== value) setSecondarySort(value);
                                                 setIsSecondaryDropdownOpen(false);

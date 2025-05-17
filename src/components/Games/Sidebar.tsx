@@ -118,11 +118,11 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         {/* Close button - only visible on mobile */}
         {setSidebarOpen && (
           <button 
-            className="md:hidden absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100" 
+            className="md:hidden absolute top-4 right-4 p-2 rounded-full hover:bg-slate-light/20 transition-colors duration-200" 
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
           >
-            <X size={20} className="text-gray-700" />
+            <X size={20} className="text-black" />
           </button>
         )}
         
@@ -160,15 +160,15 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     const isPastDate = dateStr < today;
 
                     return (
-                      <div key={index} className="w-full flex justify-center">
+                      <div key={index} className="aspect-square w-full flex justify-center items-center">
                         <button
-                          className={`aspect-square p-1 rounded-full text-xs h-[26px] w-[26px] flex items-center justify-center
+                          className={`aspect-square rounded-full text-xs w-full flex items-center justify-center
                           ${!day.isCurrentMonth ? "text-gray-300" : isPastDate ? "text-gray-400" : ""}
-                          ${isSelected ? "bg-blue-600 text-white" : ""}
-                          ${isToday && !isSelected ? "border border-blue-600" : ""}
+                          ${isSelected ? "bg-slate-light text-white" : ""}
+                          ${isToday && !isSelected ? "border border-slate-light" : ""}
                           ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
-                          ${!day.isCurrentMonth ? "opacity-0" : ""}
-                          ${!isPastDate && day.isCurrentMonth ? "hover:bg-blue-100" : ""}`}
+                          ${!day.isCurrentMonth ? "hidden" : ""}
+                          ${!isPastDate && day.isCurrentMonth ? "hover:bg-slate-light/20 transition-colors duration-200 text-black" : ""}`}
                           onClick={() => {
                             if (day.isCurrentMonth && !isPastDate) {
                               handleDateChange(day.date);
@@ -200,7 +200,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                   className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
                 >
                   <div className={`w-5 h-5 flex items-center justify-center rounded border ${userPreferences.showOnlyAvailableBroadcasts
-                    ? 'bg-blue-600 border-blue-600'
+                    ? 'bg-slate-light border-slate-light'
                     : 'border-gray-300'
                     }`}>
                     {userPreferences.showOnlyAvailableBroadcasts && (<Check size={14} className="text-white" />)}
@@ -221,7 +221,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                   className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
                 >
                   <div className={`w-5 h-5 flex items-center justify-center rounded border ${props.includeGamePulseInPrint
-                    ? 'bg-blue-600 border-blue-600'
+                    ? 'bg-slate-light border-slate-light'
                     : 'border-gray-300'
                     }`}>
                     {props.includeGamePulseInPrint && (<Check size={14} className="text-white" />)}
@@ -245,7 +245,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     >
                       <div className={`w-5 h-5 flex items-center justify-center rounded border ${
                         selectedSports.includes(sport)
-                          ? 'bg-blue-600 border-blue-600'
+                          ? 'bg-slate-light border-slate-light'
                           : 'border-gray-300'
                       }`}>
                         {selectedSports.includes(sport) && (<Check size={14} className="text-white" />)}
@@ -265,8 +265,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
 const ChevronButton: React.FC<ChevronButtonProps> = ({ onClick, direction, blocked }) => (
   <button
-    className={`bg-transparent border-none w-8 h-8 flex justify-center items-center rounded-full hover:bg-gray-100
-      ${blocked ? "text-gray-400 cursor-not-allowed" : "hover:text-blue-600 cursor-pointer"}`}
+    className={`p-2 flex justify-center items-center rounded-full hover:bg-slate-light/20 transition-colors duration-200
+      ${blocked ? "text-black cursor-not-allowed" : "cursor-pointer"}`}
     onClick={onClick}
     disabled={blocked}
   >

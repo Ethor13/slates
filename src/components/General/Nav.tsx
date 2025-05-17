@@ -57,7 +57,7 @@ const Nav = () => {
                                 <img src="/assets/logos/slates.svg" alt="Slates Logo" className="h-12 w-12" />
                             </Link>
                         </div>
-                        <div className="hidden md:flex flex-row items-center justify-between w-full">
+                        <div className="flex flex-row items-center justify-between w-full">
                             {!currentUser ? (
                                 <>
                                     <div className='hidden md:flex items-center space-x-2'>
@@ -104,11 +104,11 @@ const Nav = () => {
                                     </div>
                                     <div className="flex justify-end">
                                         <div
-                                            className="flex items-center space-x-2 text-black font-semibold cursor-pointer select-none hover:bg-slate-light/20 px-3 py-2 rounded-full transition-colors duration-200"
+                                            className="flex items-center text-black font-semibold cursor-pointer select-none hover:bg-slate-light/20 p-2 rounded-full transition-colors duration-200"
                                             onClick={() => setIsMenuOpen(true)}
                                         >
-                                            <span>{currentUser.email}</span>
-                                            <Menu className="h-4 w-4" />
+                                            <span className="hidden sm:block text-lg mr-2">{currentUser.email}</span>
+                                            <Menu className="h-6 w-6 ml-0" />
                                         </div>
                                     </div>
                                 </>
