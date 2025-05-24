@@ -6,6 +6,57 @@
   html {
     @apply text-gray-700;
   }
+  
+  /* Dark mode catch-all fixes */
+  @media (prefers-color-scheme: dark) {
+    /* Force light mode for the entire app */
+    html {
+      color-scheme: light;
+      background-color: white !important;
+      color: #374151 !important;
+    }
+    
+    /* Force body and root to be white background with dark text */
+    body, #root {
+      background-color: white !important;
+      color: #111827 !important;
+    }
+    
+    /* Force all navigation elements to have proper backgrounds */
+    nav, [role="navigation"] {
+      background-color: white !important;
+    }
+    
+    /* Force all card-like elements to have proper backgrounds */
+    .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl,
+    .border, .rounded, .rounded-lg, .rounded-md, .rounded-xl {
+      background-color: white !important;
+    }
+    
+    /* Force dropdown menus and modals to have proper backgrounds */
+    [role="listbox"], [role="menu"], [role="dialog"],
+    .absolute.bg-white, .fixed.bg-white {
+      background-color: white !important;
+      color: #111827 !important;
+    }
+    
+    /* Force inputs to have proper backgrounds */
+    input, textarea, select {
+      background-color: white !important;
+      color: #111827 !important;
+      border-color: #d1d5db !important;
+    }
+    
+    /* Specific fixes for buttons that should maintain their styling */
+    button.bg-white {
+      background-color: white !important;
+    }
+    
+    /* Fix for backdrop blur elements */
+    .backdrop-blur-sm {
+      background-color: rgba(255, 255, 255, 0.9) !important;
+    }
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
