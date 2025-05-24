@@ -67,6 +67,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
   // Create a mapping of broadcasts to display in table format
   useEffect(() => {
     // Get list of all broadcast names
+    console.log("Broadcasts:", broadcasts);
     const broadcastNames = Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type === "TV").map(([broadcastName, _]) => broadcastName);
     if (broadcastNames.length === 0) {
       setBroadcastChannels([]);
@@ -92,6 +93,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
         // Use the first channel number if there are multiple matches
         channelsForBroadcast[id] = mappedChannels.length > 0 ? [...new Set(mappedChannels.map(channel => channel.number))].join(', ') : '';
       });
+
 
       return {
         broadcastName,
@@ -121,13 +123,13 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
   }, [tvChannels]);
 
   return (
-    <div className="w-full h-full divide-x flex flex-row">
+    <div className="print:pl-[0.5rem] w-full h-full divide-x flex flex-row">
       <div className="h-full flex-grow-[2] basis-0 flex-row justify-center flex divide-x">
         {/* Broadcast Names */}
         <div className="flex flex-1 min-w-0 flex-col ">
           {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
             <div className="h-full flex-1 basis-0 text-center flex items-center justify-center min-w-0">
-              <span className="text-sm truncate w-full px-1">{broadcast.broadcastName}</span>
+              <span className="text-sm print:text-xs leading-none truncate w-full px-1">{broadcast.broadcastName}</span>
             </div>
           )) :
             <></>
@@ -143,7 +145,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
                 className="h-full flex-1 basis-0 text-center flex items-center justify-center"
               >
                 {broadcast.channels[providerId] ? (
-                  <span className="text-sm flex items-center justify-center">
+                  <span className="text-sm print:text-xs leading-none flex items-center justify-center">
                     <span>{broadcast.channels[providerId]}</span>
                   </span>
                 ) : (
@@ -159,7 +161,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
           {nonTvChannels.length ? nonTvChannels.map((broadcast) => (
             <div
               key={`${gameId}-${broadcast}`}
-              className="text-sm text-center"
+              className="text-sm print:text-xs text-center"
             >
               {broadcast}
             </div>
@@ -181,9 +183,10 @@ export const BroadcastsHeader: React.FC = () => {
   }
 
   return (
-    <div className="pl-[3rem] grid grid-cols-10 w-full">
-      <div className="col-span-5"></div>
-      <div className="col-span-5 flex items-center text-base font-medium text-black h-8 divide-x">
+    <div className="w-full grid pl-[3rem] print:pl-[2.5rem] xl:grid-cols-[10fr_1rem_10fr] print:grid-cols-[6fr_5rem_6fr] items-center">
+      <div/>
+      <div/>
+      <div className="print:pl-[2px] flex items-center text-base print:text-sm font-medium text-black divide-x">
         <div className="h-full flex-grow-[2] basis-0 flex divide-x">
           <div className="flex-1 w-full h-full flex items-center justify-center">
             <span>Broadcast</span>

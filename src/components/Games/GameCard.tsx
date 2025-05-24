@@ -36,25 +36,26 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
                 )}
 
                 {/* Teams and Game Status - controlled width proportions */}
-                <div className="grid grid-rows-2 grid-cols-10 gap-1 md:gap-0 md:grid-rows-1 print:gap-0 print:grid-rows-1 w-full items-center">
-                    {/* Away Team - fixed proportion */}
-                    <div className="row-start-1 row-end-1 col-span-7 md:col-span-4 print:col-span-4 xl:col-span-2">
-                        <TeamInfo team={game.away} isAway={true} />
-                    </div>
+                <div className="w-full grid grid-rows-2 grid-cols-[1fr_2fr] md:grid-rows-1 md:grid-cols-[1fr_3fr_1rem_3fr] xl:grid-cols-[2fr_4fr_1rem_4fr_10fr] print:grid-rows-1 print:grid-cols-[4rem_3fr_1rem_3fr_6fr] items-center">
                     {/* Game Status - fixed proportion */}
-                    <div className="row-start-1 row-end-3 col-span-3 md:row-start-1 md:col-span-2 print:row-start-1 print:col-span-2 xl:col-span-1 flex justify-center">
-                        <div className="flex flex-col print:flex-row w-[fit-content] text-center">
-                            <div className="text-base md:text-sm print:text-sm uppercase">{game.sport}</div>
-                            <span className="hidden print:block text-base md:text-sm print:text-sm font-medium relative top-[-1px]">&nbsp;|&nbsp;</span>
-                            <div className="text-base md:text-sm print:text-sm truncate">{formatGameTime(game.date)}</div>
+                    <div className="h-full row-start-1 row-end-3 md:row-start-1 md:row-end-2 print:row-start-1 print:row-end-2 flex justify-end sm:justify-center">
+                        <div className="h-full flex justify-center flex-col text-center text-sm leading-none">
+                            <div className="text-lg sm:text-sm print:text-xs sm:leading-none uppercase">{game.sport}</div>
+                            <div className="text-lg sm:text-sm print:text-xs sm:leading-none overflow-visible whitespace-nowrap">{formatGameTime(game.date)}</div>
                         </div>
                     </div>
+                    {/* Away Team - fixed proportion */}
+                    <div className="h-full row-start-1 pb-[2px] sm:pb-0">
+                        <TeamInfo team={game.away} isAway={true} />
+                    </div>
+                    {/* "at" separator */}
+                    <div className="hidden sm:flex h-full row-start-1 items-center justify-center text-sm">at</div>
                     {/* Home Team - fixed proportion */}
-                    <div className="row-start-2 row-end-2 col-span-7 md:row-start-1 md:row-end-1 print:row-start-1 print:row-end-1 md:col-span-4 print:col-span-4 xl:col-span-2">
+                    <div className="h-full row-start-2 md:row-start-1 print:row-start-1">
                         <TeamInfo team={game.home} isAway={false} />
                     </div>
                     {/* Broadcasts component - fixed proportion */}
-                    <div className="col-span-5 h-full hidden xl:block">
+                    <div className="h-full hidden xl:block print:block">
                         <Broadcasts broadcasts={game.broadcasts} />
                     </div>
                 </div>

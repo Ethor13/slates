@@ -36,14 +36,14 @@ export const TeamColorBlock: React.FC<{
                     backgroundColor: `#${c1}`,
                     transform: `skewX(${skew})`,
                 }}
-            />
-            <div
-                className="w-[20%] h-full"
-                style={{ 
-                    backgroundColor: `#${c2}`,
-                    transform: `skewX(${skew})`,
-                }}
-            />
+                />
+                <div
+                    className="w-[20%] h-full"
+                    style={{ 
+                        backgroundColor: `#${c2}`,
+                        transform: `skewX(${skew})`,
+                    }}
+                />
             </div>
         );
     } catch (error) {

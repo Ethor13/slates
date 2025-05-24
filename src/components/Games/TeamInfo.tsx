@@ -31,21 +31,27 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ team, isAway }) => {
   }, [isAway]);
 
   return (
-    <div className={`flex items-stretch justify-between`}>
-      <div className="w-10 print:w-5 flex-shrink-0">
-        <TeamColorBlock colors={team.colors} leftToRight={effectiveIsAway} reverse={true} />
-      </div>
-      <div className="flex flex-col text-center overflow-hidden">
-        <div className="text-sm md:text-base font-bold truncate">{team.shortName}</div>
+    <div className={`w-full flex h-full items-center`}>
+      {effectiveIsAway ?
+        <div className="h-10 w-10 print:w-6 print:h-6 flex-shrink-0 order-last sm:order-first">
+          <TeamColorBlock colors={team.colors} leftToRight={effectiveIsAway} reverse={true} />
+        </div> :
+        <></>
+      }
+      <div className="w-full h-full flex flex-col justify-center text-center overflow-hidden">
+        <div className="text-sm md:text-base font-semibold truncate">{team.shortName}</div>
         {!isTBD && (
           <div className="text-xs text-[clamp(0.75rem,1.5rem)] text-gray-600 truncate print:hidden">
             <span>{team.record}</span>
           </div>
         )}
       </div>
-      <div className="w-10 print:w-5 flex-shrink-0">
-        <TeamColorBlock colors={team.colors} leftToRight={effectiveIsAway} reverse={false} />
-      </div>
+      {!effectiveIsAway ?
+        <div className="h-10 w-10 print:w-6 print:h-6 flex-shrink-0 flex justify-end">
+          <TeamColorBlock colors={team.colors} leftToRight={effectiveIsAway} reverse={false} />
+        </div> :
+        <></>
+      }
     </div>
   );
 };
