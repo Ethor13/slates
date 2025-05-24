@@ -212,7 +212,7 @@ const GamesList: React.FC<GamesListProps> = ({
     return (
         <div className="flex flex-col w-full pt-8">
             {/* Header section with date and sort */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-2 gap-2">
+            <div className="flex flex-col sm:flex-row justify-between items-end w-full mb-2 gap-2">
                 {/* Selected date display */}
                 <div>
                     <p className="font-bold">
@@ -302,7 +302,7 @@ const GamesList: React.FC<GamesListProps> = ({
                 </div>
             </div>
             {/* Broadcasts header - shows TV providers as column headers */}
-            <div className="hidden xl:block">
+            <div className="hidden xl:block print:block">
                 <BroadcastsHeader/>
             </div>
             {/* Games list */}

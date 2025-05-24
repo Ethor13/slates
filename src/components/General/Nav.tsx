@@ -49,7 +49,7 @@ const Nav = () => {
 
     return (
         <>
-            <nav className="fixed top-0 w-full backdrop-blur-sm z-40 bg-white shadow-sm h-20">
+            <nav className="fixed top-0 w-full backdrop-blur-sm z-40 force-white-bg shadow-sm h-20">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-row gap-4 h-[5rem] items-center">
                         <div className="flex items-center space-x-2">
@@ -129,9 +129,9 @@ const Nav = () => {
                 {/* Side panel */}
                 <div
                     ref={menuRef}
-                    className={`fixed inset-y-0 right-0 max-w-xs w-full bg-white transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                    className={`z-50 fixed inset-y-0 right-0 max-w-xs w-full force-white-bg transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
                 >
-                    <div className="h-full flex flex-col overflow-y-auto py-6 px-4">
+                    <div className="z-50 h-full flex flex-col overflow-y-auto py-6 px-4">
                         <div className="ml-2 flex items-center justify-between">
                             <h2 className="text-lg font-medium">Account Menu</h2>
                             <button

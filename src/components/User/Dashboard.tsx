@@ -190,10 +190,10 @@ const Dashboard = () => {
                     </div>
                 </main>
             </div>
-            <div className={`h-11 w-11 fixed top-24 right-4 bg-white hover:bg-gray-200  p-2 border-[2px] rounded-full transition-all duration-200 z-50 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}>
+            <div className={`h-11 w-11 fixed top-24 right-4 bg-white hover:bg-gray-200  p-2 border-[2px] rounded-full transition-all duration-200 z-40 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}>
                 <button
                     onClick={scrollToTop}
-                    className={`fixed top-24 right-4 bg-white hover:bg-slate-light/20  p-2 border-[2px] border-black rounded-full transition-all duration-200 z-50 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
+                    className={`fixed top-24 right-4 bg-white hover:bg-slate-light/20  p-2 border-[2px] border-black rounded-full transition-all duration-200 z-40 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
                     aria-label="Scroll to top"
                 >
                     <ArrowUp className="h-6 w-6 text-black" />
