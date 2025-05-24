@@ -211,10 +211,10 @@ const Settings = () => {
             <Nav />
             <div className="pt-20 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="mt-6">
+                    <div>
                         <div className="relative">
                             {/* Sidebar Navigation - Fixed on left */}
-                            <div className="fixed left-0 top-20 bottom-0 w-64 z-10">
+                            <div className="hidden sm:block fixed left-0 top-20 bottom-0 w-64 z-10">
                                 <div className="h-full bg-white rounded-r-lg shadow overflow-hidden py-2">
                                     <nav className="flex flex-col h-full overflow-y-auto">
                                         {settingsSections.map((section) => (
@@ -236,24 +236,19 @@ const Settings = () => {
                                                 <div>
                                                     <div className="font-medium">{section.title}</div>
                                                 </div>
-                                                {section.disabled && (
-                                                    <span className="ml-auto text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded">
-                                                        Coming Soon
-                                                    </span>
-                                                )}
                                             </button>
                                         ))}
                                     </nav>
                                 </div>
                             </div>
                             {/* Main Content - with left margin to accommodate fixed sidebar */}
-                            <div className="ml-64 pl-8">
+                            <div className="sm:ml-64 sm:pl-8">
                                 {preferencesLoading ? (
                                     <div className="p-6 flex justify-center py-12">
                                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
                                     </div>
                                 ) : (
-                                    <div className="px-6" ref={sectionsRef}>
+                                    <div className="" ref={sectionsRef}>
                                         <SettingsSection
                                             id="account" 
                                             title="Account" 

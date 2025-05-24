@@ -23,7 +23,7 @@ const ZipcodeInput: React.FC<ZipcodeInputProps> = ({ zipcode, onChange, error })
                     required
                     value={zipcode}
                     onChange={handleChange}
-                    className={`px-3 py-1.5 w-[4rem] bg-transparent shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block sm:text-sm border border-gray-300 rounded-md selection:bg-blue-100 ${
+                    className={`px-3 py-1.5 w-[4rem] text-sm text-center bg-transparent shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block border border-gray-300 rounded-md selection:bg-blue-100 ${
                         error ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : ''
                     }`}
                     placeholder="00000"
