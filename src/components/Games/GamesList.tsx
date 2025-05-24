@@ -302,7 +302,7 @@ const GamesList: React.FC<GamesListProps> = ({
                 </div>
             </div>
             {/* Broadcasts header - shows TV providers as column headers */}
-            <div className="hidden xl:block print:block">
+            <div className="hidden xl:block">
                 <BroadcastsHeader/>
             </div>
             {/* Games list */}

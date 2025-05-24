@@ -121,48 +121,45 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
   }, [tvChannels]);
 
   return (
-    <div className="w-full h-full divide-x flex flex-row">
-      <div className="flex flex-col justify-center">
+    <div className="pl-[1rem] w-full h-full divide-x flex flex-row">
+      <div className="h-full flex-grow-[2] basis-0 flex-col justify-center flex">
         {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
           <div
             key={`${gameId}-${broadcast.broadcastName}`}
-            className="flex flex-row text-sm"
+            className="h-full flex flex-row text-sm divide-x items-center"
           >
-            <div className="w-[10rem] text-black pr-2 text-right whitespace-nowrap overflow-hidden text-ellipsis">
-              {broadcast.broadcastName}
+            <div className="h-full flex-1 basis-0 text-center flex items-center justify-center min-w-0">
+              <span className="text-sm truncate w-full px-1">{broadcast.broadcastName}</span>
             </div>
-            <div className="flex flex-row">
-              {Object.entries(userPreferences.tvProviders).map(([providerId]) => (
-                <div
-                  key={`${gameId}-${broadcast.broadcastName}-${providerId}`}
-                  className="flex-1 text-center w-[10rem]"
-                >
-                  {broadcast.channels[providerId] ? (
-                    <span className="text-sm">
-                      {broadcast.channels[providerId]}
-                    </span>
-                  ) : (
-                    <span className="text-gray-600">-</span>
-                  )}
-                </div>
-              ))}
-            </div>
+            {Object.entries(userPreferences.tvProviders).map(([providerId]) => (
+              <div
+                key={`${gameId}-${broadcast.broadcastName}-${providerId}`}
+                className="h-full flex-1 basis-0 text-center flex items-center justify-center"
+              >
+                {broadcast.channels[providerId] ? (
+                  <span className="text-sm flex items-center justify-center">
+                    <span>{broadcast.channels[providerId]}</span>
+                  </span>
+                ) : (
+                  <span className="text-gray-600"></span>
+                )}
+              </div>
+            ))}
           </div>
         )) :
-          <div className={`text-sm text-center italic text-gray-600 min-w-[${(1 + Object.keys(userPreferences.tvProviders).length) * 10}rem]`}>{initialized ? "No broadcasts available" : ""}</div>
+          <></>
         }
       </div>
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-1 flex-col items-center justify-center">
         {nonTvChannels.length ? nonTvChannels.map((broadcast) => (
           <div
             key={`${gameId}-${broadcast}`}
-            className="text-sm w-[10rem] text-center"
+            className="text-sm text-center"
           >
             {broadcast}
           </div>
         )) :
-
-          <div className={`text-sm text-center italic text-gray-600 min-w-[10rem]`}>No streams available</div>
+          <></>
         }
       </div>
     </div>
@@ -178,28 +175,24 @@ export const BroadcastsHeader: React.FC = () => {
   }
 
   return (
-    <div className="pl-[4rem] grid grid-cols-10 w-full">
+    <div className="pl-[3rem] grid grid-cols-10 w-full">
       <div className="col-span-5"></div>
-      <div className="col-span-5 flex items-center">
-        <div className="min-w-[10rem] pr-2 font-medium text-right text-black">
-          Broadcast
-        </div>
-        <div className="divide-x flex flex-row">
-          <div className="flex-1 flex">
-            {Object.entries(userPreferences.tvProviders).map(([providerId, providerName]) => (
-              <div
-                key={`header-${providerId}`}
-                className="font-medium text-black w-[10rem] text-center"
-              >
-                {/* Display shortened provider name */}
-                {providerName.split(' - ')[0]}
-              </div>
-            ))}
+      <div className="col-span-5 flex items-center text-base font-medium text-black h-8 divide-x">
+        <div className="pl-4 h-full flex-grow-[2] basis-0 flex divide-x">
+          <div className="flex-1 w-full h-full flex items-center justify-center">
+            <span>Broadcast</span>
           </div>
-          <div className="font-medium text-black w-[10rem] text-center">
-            Streaming
-          </div>
+          {Object.entries(userPreferences.tvProviders).map(([providerId, providerName]) => (
+            <div
+              key={`header-${providerId}`}
+              className="min-w-0 flex-1 h-full flex items-center justify-center"
+            >
+              {/* Display shortened provider name */}
+              <span className="overflow-visible whitespace-nowrap">{providerName.split(' - ')[0]}</span>
+            </div>
+          ))}
         </div>
+        <div className="flex-1 h-full flex items-center justify-center"><span>Streaming</span></div>
       </div>
     </div>
   );
