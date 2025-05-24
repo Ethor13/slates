@@ -121,17 +121,23 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
   }, [tvChannels]);
 
   return (
-    <div className="pl-[1rem] w-full h-full divide-x flex flex-row">
-      <div className="h-full flex-grow-[2] basis-0 flex-col justify-center flex">
-        {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
-          <div
-            key={`${gameId}-${broadcast.broadcastName}`}
-            className="h-full flex flex-row text-sm divide-x items-center"
-          >
+    <div className="w-full h-full divide-x flex flex-row">
+      <div className="h-full flex-grow-[2] basis-0 flex-row justify-center flex divide-x">
+        {/* Broadcast Names */}
+        <div className="flex flex-1 min-w-0 flex-col ">
+          {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
             <div className="h-full flex-1 basis-0 text-center flex items-center justify-center min-w-0">
               <span className="text-sm truncate w-full px-1">{broadcast.broadcastName}</span>
             </div>
-            {Object.entries(userPreferences.tvProviders).map(([providerId]) => (
+          )) :
+            <></>
+          }
+        </div>
+
+        {/* Broadcast Channels */}
+        {Object.entries(userPreferences.tvProviders).map(([providerId]) => (
+          <div className="flex flex-1 min-w-0 flex-col">
+            {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
               <div
                 key={`${gameId}-${broadcast.broadcastName}-${providerId}`}
                 className="h-full flex-1 basis-0 text-center flex items-center justify-center"
@@ -144,23 +150,23 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
                   <span className="text-gray-600"></span>
                 )}
               </div>
-            ))}
+              )) :
+              <></>
+            }
           </div>
-        )) :
-          <></>
-        }
-      </div>
-      <div className="flex flex-1 flex-col items-center justify-center">
-        {nonTvChannels.length ? nonTvChannels.map((broadcast) => (
-          <div
-            key={`${gameId}-${broadcast}`}
-            className="text-sm text-center"
-          >
-            {broadcast}
-          </div>
-        )) :
-          <></>
-        }
+        ))}
+        <div className="flex flex-1 flex-col items-center justify-center">
+          {nonTvChannels.length ? nonTvChannels.map((broadcast) => (
+            <div
+              key={`${gameId}-${broadcast}`}
+              className="text-sm text-center"
+            >
+              {broadcast}
+            </div>
+          )) :
+            <></>
+          }
+        </div>
       </div>
     </div>
   );
@@ -178,7 +184,7 @@ export const BroadcastsHeader: React.FC = () => {
     <div className="pl-[3rem] grid grid-cols-10 w-full">
       <div className="col-span-5"></div>
       <div className="col-span-5 flex items-center text-base font-medium text-black h-8 divide-x">
-        <div className="pl-4 h-full flex-grow-[2] basis-0 flex divide-x">
+        <div className="h-full flex-grow-[2] basis-0 flex divide-x">
           <div className="flex-1 w-full h-full flex items-center justify-center">
             <span>Broadcast</span>
           </div>
@@ -191,8 +197,8 @@ export const BroadcastsHeader: React.FC = () => {
               <span className="overflow-visible whitespace-nowrap">{providerName.split(' - ')[0]}</span>
             </div>
           ))}
+          <div className="flex-1 h-full flex items-center justify-center"><span>Streaming</span></div>
         </div>
-        <div className="flex-1 h-full flex items-center justify-center"><span>Streaming</span></div>
       </div>
     </div>
   );
