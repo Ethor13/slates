@@ -63,13 +63,6 @@ const PricingSection = () => {
                 : 'bg-white'
                 } shadow-xl`}
             >
-              {plan.popular && (
-                <div className="z-10 absolute top-0 right-0 -translate-y-1/2 translate-x-1/2">
-                  <span className="inline-flex items-center px-4 py-1 rounded-full text-sm font-semibold bg-yellow-400 text-gray-900">
-                    Most Popular
-                  </span>
-                </div>
-              )}
               <div className="h-full p-8 flex flex-col justify-between">
                 <div className="flex flex-col items-start gap-4">
                   <h3 className="text-2xl font-bold">{plan.name}</h3>
