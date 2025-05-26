@@ -37,7 +37,7 @@ const Dashboard = () => {
     const [showScrollToTop, setShowScrollToTop] = useState<boolean>(false);
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     // Print settings state
-    const [includeGamePulseInPrint, setIncludeGamePulseInPrint] = useState<boolean>(true);
+    const [includeGamePulseInPrint, setIncludeGamePulseInPrint] = useState<boolean>(false);
 
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
