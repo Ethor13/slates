@@ -206,7 +206,7 @@ const Dashboard = () => {
                                     <button
                                         onClick={() => setSidebarOpen(!sidebarOpen)}
                                         id="mobile-menu-toggle"
-                                        className={`absolute top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-black hover:text-white hover:bg-slate-deep print:hidden z-30`}
+                                        className={`absolute sm:hidden top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-black hover:text-white hover:bg-slate-deep print:hidden z-30`}
                                         aria-label="Toggle sidebar"
                                     >
                                         <SlidersHorizontal className="h-6 w-6" />

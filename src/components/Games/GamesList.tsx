@@ -5,35 +5,6 @@ import { formatGameTime } from '../../helpers';
 import { ChevronDown } from 'lucide-react';
 import { BroadcastsHeader } from './Broadcasts';
 
-// Helper function to split games by hour
-const split_by_time = (games: ScheduleResponse) => {
-    const games_by_time: Record<string, Record<string, any>> = {};
-
-    Object.entries(games).forEach(([gameId, game]) => {
-        if (game.date === "TBD") {
-            if (!("TBD" in games_by_time)) {
-                games_by_time["TBD"] = {};
-            }
-            games_by_time["TBD"][gameId] = game; // Store TBD games separately
-            return;
-        }
-
-        // Extract the date and create a copy for hour grouping
-        const gameDate = new Date(game.date);
-        // Create an hour key with minutes, seconds, and milliseconds set to 0
-        const hourDate = new Date(gameDate);
-        hourDate.setMinutes(0, 0, 0);
-        const hourKey = hourDate.toISOString();
-
-        if (!(hourKey in games_by_time)) {
-            games_by_time[hourKey] = {};
-        }
-        games_by_time[hourKey][gameId] = game;
-    });
-
-    return games_by_time;
-};
-
 const renderGames = (
     games: ScheduleResponse,
     primarySort: Sort,
