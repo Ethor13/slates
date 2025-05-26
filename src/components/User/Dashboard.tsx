@@ -130,6 +130,36 @@ const Dashboard = () => {
             <div className="print:hidden">
                 <Nav />
             </div>
+            
+            {/* Print Header Banner */}
+            <div className="hidden h-[4rem] w-full bg-slate-light/20 px-3 py-3 print:flex items-center">
+                <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center space-x-2">
+                        <img 
+                            src="/assets/logos/slates.svg" 
+                            alt="Slates Logo" 
+                            className="h-8 sm:h-10 xl:h-12 w-auto"
+                        />
+                        <div className="pl-1">
+                            <h1 className="text-lg sm:text-xl xl:text-2xl font-bold text-gray-900">Slates</h1>
+                            <p className="text-xs sm:text-sm text-gray-600">www.slates.co</p>
+                        </div>
+                    </div>
+                    <div className="text-right text-xs sm:text-sm text-gray-600">
+                        <p>
+                            Games for <b>{selectedDate.toLocaleDateString("en-CA", {
+                                month: 'long',
+                                weekday: 'long',
+                                day: 'numeric'
+                            })}</b>
+                        </p>
+                        <div className='hidden print:block text-sm'>
+                            Sorted by <b>{sortBy}</b> then by <b>{secondarySort}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div className="min-h-screen bg-gray-50 print:bg-white pt-20 print:pt-0">
                 <main>
                     <div className="flex flex-row h-full">

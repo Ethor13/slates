@@ -210,12 +210,12 @@ const GamesList: React.FC<GamesListProps> = ({
     }, []);
 
     return (
-        <div className="flex flex-col w-full pt-8">
+        <div className="flex flex-col w-full pt-8 print:pt-0">
             {/* Header section with date and sort */}
             <div className="flex flex-row justify-between items-end w-full mb-2 gap-2">
                 {/* Selected date display */}
                 <div>
-                    <p className="font-bold print:text-sm">
+                    <p className="font-bold print:hidden">
                         {selectedDate.toLocaleDateString("en-CA", {
                             month: 'long',
                             weekday: 'long',
@@ -295,9 +295,6 @@ const GamesList: React.FC<GamesListProps> = ({
                                 </ul>
                             )}
                         </div>
-                    </div>
-                    <div className='hidden print:block text-sm'>
-                        Sorted by <b>{sortBy}</b> then by <b>{secondarySort}</b>
                     </div>
                 </div>
             </div>
