@@ -7,7 +7,7 @@
     "FanDuel SN North": {
         "market": "Home",
         "type": "TV",
-        "tvGuideName": "^FanDuel Sports Network North"
+        "tvGuideName": "FanDuel Sports Network North"
     },
     "FS1": {
         "market": "National",
@@ -74,7 +74,7 @@
     "TNT": {
         "market": "National",
         "type": "TV",
-        "tvGuideName": "^TNT"
+        "tvGuideName": "^TNT$"
     },
     "CHSN": {
         "market": "Home",
@@ -321,5 +321,295 @@
         "type": "TV",
         "market": "National",
         "tvGuideName": "WLNY-DT Riverhead, N.Y. (IND)"
+    },
+    "FanDuel SN WIX": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "KNTV": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KNTV-DT San Jose, Calif. (NBC)"
+    },
+    "Space City Home (Alt.)": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "FanDuel Sports KC": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "MSGSN": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "^MSG Plus"
+    },
+    "Prime Video": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "KSMO": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KSMO-DT Kansas City, Mo. (MyNet)"
+    },
+    "ABC": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "\\(ABC\\)$"
+    },
+    "Tele Wisconsin": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "WTOG": {
+        "market": "Away",
+        "type": "TV",
+        "tvGuideName": "WTOG-DT St. Petersburg, Fla. (Tampa Bay 44)"
+    },
+    "KMSP-TV": {
+        "market": "Away",
+        "type": "TV",
+        "tvGuideName": "WFTC-DT Minneapolis, Minn. (FOX)"
+    },
+    "WITI FOX-6": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WITI-DT Milwaukee, Wis. (FOX)"
+    },
+    "KFMB 8.1 (CBS)": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KFMB-DT San Diego, Calif. (CBS)"
+    },
+    "MLB.TV": {
+        "market": "Away",
+        "type": "Subscription Package",
+        "tvGuideName": null
+    },
+    "FanDuel SN MW Extra": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Apple TV+": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Roku": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Scripps Sports": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "MLB Net": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "MLB Network"
+    },
+    "CW33": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KDAF-DT Dallas, Texas (CW)"
+    },
+    "KPNX": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KPNX-DT Mesa, Ariz. (NBC)"
+    },
+    "Altitude 2 Sports": {
+        "market": "Away",
+        "type": "TV",
+        "tvGuideName": "Altitude Sports"
+    },
+    "Gray Media": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "NBC Sports BA +": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "WBFS": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WBFS-DT Miami, Fla. (CW)"
+    },
+    "MASN2": {
+        "type": "Streaming",
+        "market": "Away",
+        "tvGuideName": null
+    },
+    "NBC 10": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "WCAU-DT Philadelphia, Pa. (NBC)"
+    },
+    "TVA": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "\\(TVA\\)$"
+    },
+    "MLB.com": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Mobile": {
+        "market": "Away",
+        "type": "Mobile",
+        "tvGuideName": null
+    },
+    "KVVU": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "KVVU-DT Henderson, Nev. (FOX)"
+    },
+    "CLEGuardians.TV": {
+        "type": "Streaming",
+        "market": "Home",
+        "tvGuideName": null
+    },
+    "NESN": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "New England Sports Network"
+    },
+    "WPIX": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "WPIX-DT New York, N.Y. (CW)"
+    },
+    "KFMB 8.2 (CW)": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KFMB-DT2 San Diego, Calif. (CW)"
+    },
+    "WKYC 3": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WKYC-DT Cleveland, Ohio (NBC)"
+    },
+    "Rangers Sports Network": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": null
+    },
+    "Sportsnet LA": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "Spectrum SportsNet LA (Dodgers)"
+    },
+    "KUSA-TV (9NEWS)": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KUSA-DT Denver, Colo. (NBC)"
+    },
+    "FanDuel SN South": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "Fanduel Sports Network South[^e]*$"
+    },
+    "Matrix Midwest": {
+        "type": "Streaming",
+        "market": "Away",
+        "tvGuideName": null
+    },
+    "KMOV-TV": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "KMOV-DT Saint Louis, Mo. (CBS)"
+    },
+    "Padres.TV": {
+        "type": "Streaming",
+        "market": "Home",
+        "tvGuideName": null
+    },
+    "DBACKS.TV": {
+        "type": "Streaming",
+        "market": "Away",
+        "tvGuideName": null
+    },
+    "Marquee Sports Net": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "Marquee Sports Network"
+    },
+    "MLBN": {
+        "type": "TV",
+        "market": "National",
+        "tvGuideName": "MLB Network"
+    },
+    "SportsNet PIT": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "SportsNet Pittsburgh"
+    },
+    "Victory+": {
+        "type": "Streaming",
+        "market": "Away",
+        "tvGuideName": null
+    },
+    "FanDuel SN KC": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "FanDuel Sports Network Kansas City"
+    },
+    "FanDuel SN MW": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "FanDuel Sports Network Midwest (St. Louis)"
+    },
+    "Sportsnet One": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "^Sportsnet One"
+    },
+    "Twins.TV": {
+        "type": "Streaming",
+        "market": "Home",
+        "tvGuideName": null
+    },
+    "Rockies.TV": {
+        "type": "Streaming",
+        "market": "Home",
+        "tvGuideName": null
+    },
+    "SNY": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "SportsNet New York"
+    },
+    "FanDuel SN West": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "FanDuel Sports Network West"
+    },
+    "Root Sports NW": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "ROOT Sports Northwest"
+    },
+    "MASN": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "Mid-Atlantic Sports Network"
+    },
+    "MAS+": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "Mid-Atlantic Sports Network (Two)"
     }
 }

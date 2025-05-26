@@ -11,8 +11,6 @@
     "typecheck": "tsc --noEmit --watch",
     "emulators": "firebase emulators:start",
     "emulators:persist": "firebase emulators:start --import=./emulator-data --export-on-exit=./emulator-data",
-    "emulators:dev": "concurrently \"npm run dev\" \"npm run emulators\"",
-    "emulators:dev:persist": "concurrently \"npm run dev\" \"npm run emulators:persist\"",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:hosting": "firebase deploy --only hosting",
     "deploy": "firebase deploy"

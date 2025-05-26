@@ -215,7 +215,7 @@ const GamesList: React.FC<GamesListProps> = ({
             <div className="flex flex-row justify-between items-end w-full mb-2 gap-2">
                 {/* Selected date display */}
                 <div>
-                    <p className="font-bold">
+                    <p className="font-bold print:text-sm">
                         {selectedDate.toLocaleDateString("en-CA", {
                             month: 'long',
                             weekday: 'long',

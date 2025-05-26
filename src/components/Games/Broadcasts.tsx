@@ -67,7 +67,6 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
   // Create a mapping of broadcasts to display in table format
   useEffect(() => {
     // Get list of all broadcast names
-    console.log("Broadcasts:", broadcasts);
     const broadcastNames = Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type === "TV").map(([broadcastName, _]) => broadcastName);
     if (broadcastNames.length === 0) {
       setBroadcastChannels([]);
@@ -128,7 +127,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
         {/* Broadcast Names */}
         <div className="flex flex-1 min-w-0 flex-col ">
           {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
-            <div className="h-full flex-1 basis-0 text-center flex items-center justify-center min-w-0">
+            <div key={`${gameId}-${broadcast.broadcastName}`} className="h-full flex-1 basis-0 text-center flex items-center justify-center min-w-0">
               <span className="text-sm print:text-xs leading-none truncate w-full px-1">{broadcast.broadcastName}</span>
             </div>
           )) :
@@ -138,7 +137,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
 
         {/* Broadcast Channels */}
         {Object.entries(userPreferences.tvProviders).map(([providerId]) => (
-          <div className="flex flex-1 min-w-0 flex-col">
+          <div key={`${gameId}-${providerId}`} className="flex flex-1 min-w-0 flex-col">
             {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
               <div
                 key={`${gameId}-${broadcast.broadcastName}-${providerId}`}
@@ -197,7 +196,7 @@ export const BroadcastsHeader: React.FC = () => {
               className="min-w-0 flex-1 h-full flex items-center justify-center"
             >
               {/* Display shortened provider name */}
-              <span className="overflow-visible whitespace-nowrap">{providerName.split(' - ')[0]}</span>
+              <span className="h-full w-full truncate text-center">{providerName.split(' - ')[0]}</span>
             </div>
           ))}
           <div className="flex-1 h-full flex items-center justify-center"><span>Streaming</span></div>
