@@ -54,7 +54,7 @@ const Nav = () => {
                     <div className="flex flex-row gap-4 h-[5rem] items-center">
                         <div className="flex items-center space-x-2">
                             <Link to="/">
-                                <img src="/assets/logos/slates.svg" alt="Slates Logo" className="h-12 w-12" />
+                                <img src="/assets/logos/slates_white_outline.svg" alt="Slates Logo" className="h-12 w-12"/>
                             </Link>
                         </div>
                         <div className="flex flex-row items-center justify-between w-full">

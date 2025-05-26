@@ -141,20 +141,20 @@ const Dashboard = () => {
             </div>
             
             {/* Print Header Banner */}
-            <div className="hidden h-[4rem] w-full bg-slate-light/20 px-3 py-3 print:flex items-center">
+            <div className="hidden h-[4rem] w-full bg-slate-light/20 px-3 py-3 print:flex items-center text-white">
                 <div className="flex items-center justify-between w-full">
                     <div className="flex items-center space-x-2">
                         <img 
-                            src="/assets/logos/slates.svg" 
+                            src="/assets/logos/slates_white_outline.svg" 
                             alt="Slates Logo" 
                             className="h-8 sm:h-10 xl:h-12 w-auto"
                         />
                         <div className="pl-1">
-                            <h1 className="text-lg sm:text-xl xl:text-2xl font-bold text-gray-900">Slates</h1>
-                            <p className="text-xs sm:text-sm text-gray-600">www.slates.co</p>
+                            <h1 className="text-lg sm:text-xl xl:text-2xl font-bold">Slates</h1>
+                            <p className="text-xs sm:text-sm">www.slates.co</p>
                         </div>
                     </div>
-                    <div className="text-right text-xs sm:text-sm text-gray-600">
+                    <div className="text-right text-xs sm:text-sm">
                         <p>
                             Games for <b>{selectedDate.toLocaleDateString("en-CA", {
                                 month: 'long',
