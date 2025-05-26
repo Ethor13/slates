@@ -29,3 +29,5 @@
 - Sort by Sport
 
 - Highlight the peak of each day in the game pulse a different color
+
+- favorited teams don't always show up at the top until you refresh
