@@ -49,7 +49,7 @@ const Nav = () => {
 
     return (
         <>
-            <nav className="fixed top-0 w-full backdrop-blur-sm z-40 force-white-bg shadow-sm h-20">
+            <nav className="fixed top-0 w-full z-40 bg-transparent shadow-sm h-20">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-row gap-4 h-[5rem] items-center">
                         <div className="flex items-center space-x-2">

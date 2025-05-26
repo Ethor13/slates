@@ -24,7 +24,7 @@
     
     /* Force all navigation elements to have proper backgrounds */
     nav, [role="navigation"] {
-      background-color: white !important;
+      background-color: white;
     }
 
     .force-white-bg {

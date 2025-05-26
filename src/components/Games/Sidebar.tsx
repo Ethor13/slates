@@ -114,7 +114,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
   return (
     <div className={`fixed left-0 top-20 bottom-0 w-full md:w-[15rem] z-40 transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-      <div className="flex flex-col h-full force-white-bg top-4 bottom-0">
+      <div className="flex flex-col h-full top-4 bottom-0">
         {/* Close button - only visible on mobile */}
         {setSidebarOpen && (
           <button 

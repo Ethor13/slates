@@ -101,20 +101,29 @@ const Dashboard = () => {
     // Handle scroll event to show/hide scroll-to-top button
     useEffect(() => {
         const handleScroll = () => {
-            // Show button when user scrolls down 300px
-            setShowScrollToTop(window.scrollY > 300);
+            const gameContentDiv = document.getElementById('game-content');
+            if (gameContentDiv) {
+                // Show button when user scrolls down 300px within the game-content div
+                setShowScrollToTop(gameContentDiv.scrollTop > 300);
+            }
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        const gameContentDiv = document.getElementById('game-content');
+        if (gameContentDiv) {
+            gameContentDiv.addEventListener('scroll', handleScroll);
+            return () => gameContentDiv.removeEventListener('scroll', handleScroll);
+        }
     }, []);
 
     // Scroll to top function
     const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        const gameContentDiv = document.getElementById('game-content');
+        if (gameContentDiv) {
+            gameContentDiv.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
     };
 
     // Function to handle print
@@ -126,7 +135,7 @@ const Dashboard = () => {
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
     return (
-        <div className="min-h-screen bg-white relative">
+        <div className="min-h-screen bg-gradient-to-br from-slate-deep to-slate-light relative">
             <div className="print:hidden">
                 <Nav />
             </div>
@@ -160,7 +169,7 @@ const Dashboard = () => {
                 </div>
             </div>
             
-            <div className="min-h-screen bg-gray-50 print:bg-white pt-20 print:pt-0">
+            <div className="min-h-screen bg-transparent print:bg-white pt-20 print:pt-0">
                 <main>
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
@@ -191,7 +200,7 @@ const Dashboard = () => {
 
                         {/* Main content area that takes remaining space and centers content */}
                         {/* This needs to be same padding as sidebar width */}
-                        <div className="w-full md:ml-[15rem] print:ml-0 overflow-y-visible">
+                        <div id="game-content" className="w-full md:ml-[15rem] print:ml-0 h-screen overflow-y-auto bg-white">
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
