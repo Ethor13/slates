@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply text-gray-700;
-  }
-  
   /* Dark mode catch-all fixes */
   @media (prefers-color-scheme: dark) {
     /* Force light mode for the entire app */

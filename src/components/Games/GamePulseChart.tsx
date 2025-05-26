@@ -102,7 +102,7 @@ export default function GamePulseChart({ games }: GamePulseChartProps) {
                             <div className="min-w-0 flex flex-col items-center flex-1 basis-0" key={index}>
                                 <div key={index} className="w-full flex flex-col justify-center items-center h-full mb-0.5">
                                     <div
-                                        className={`w-full bg-slate-light rounded-full transition-all duration-300 ease-in-out`}
+                                        className="w-full bg-gradient-to-br from-slate-medium to-slate-light rounded-full transition-all duration-300 ease-in-out"
                                         style={{ height: `${100 * barHeight / MAX_SCORE}%` }}
                                     />
                                 </div>
