@@ -135,7 +135,7 @@ const Dashboard = () => {
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-deep to-slate-light relative">
+        <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-deep to-slate-light relative">
             <div className="print:hidden">
                 <Nav />
             </div>
@@ -169,8 +169,8 @@ const Dashboard = () => {
                 </div>
             </div>
             
-            <div className="min-h-screen bg-transparent print:bg-white pt-20 print:pt-0">
-                <main>
+            <div className="h-screen bg-transparent print:bg-white pt-20 print:pt-0 overflow-hidden">
+                <main className="h-full">
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
                         <button
@@ -200,7 +200,7 @@ const Dashboard = () => {
 
                         {/* Main content area that takes remaining space and centers content */}
                         {/* This needs to be same padding as sidebar width */}
-                        <div id="game-content" className="w-full md:ml-[15rem] print:ml-0 h-screen overflow-y-auto bg-white">
+                        <div id="game-content" className="w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative">
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -211,6 +211,15 @@ const Dashboard = () => {
                                 </div>
                             ) : (
                                 <div className="w-full px-[3vw]">
+                                    {/* Print button - positioned inside scrollable area */}
+                                    <button
+                                        onClick={handlePrint}
+                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden z-30"
+                                        aria-label="Print this page"
+                                    >
+                                        <Printer className="h-6 w-6 text-black" />
+                                    </button>
+                                    
                                     {/* Conditionally render GamePulseChart in print based on toggle */}
                                     <div className={includeGamePulseInPrint ? '' : 'print:hidden'}>
                                         <GamePulseChart games={games} />
@@ -238,13 +247,6 @@ const Dashboard = () => {
                     <ArrowUp className="h-6 w-6 text-black" />
                 </button>
             </div>
-            <button
-                onClick={handlePrint}
-                className="absolute top-24 right-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden"
-                aria-label="Print this page"
-            >
-                <Printer className="h-6 w-6 text-black" />
-            </button>
         </div>
     );
 }

@@ -22,7 +22,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
     return (
         <div className="w-full py-1 print:py-[1px] break-inside-avoid">
             {/* Main card - always visible */}
-            <div className="flex items-center w-full">
+            <div className="flex items-center w-full relative">
                 {/* Slate Score - fixed width */}
                 <div className={`h-10 w-10 print:w-6 print:h-6 text-base print:text-sm mr-2 print:mr-1 aspect-square flex items-center justify-center rounded-full font-semibold ${interestLevelClasses[interestLevel.className][1]} print:border-[1px]`}>
                     {interestLevel.rating}
@@ -30,7 +30,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
                 {/* Favorite Star - only visible if the game is a favorite */}
                 {game.isFavorite && (
-                    <div className="z-10 absolute -translate-y-[0.9rem] translate-x-[1.5rem] print:-translate-y-[0.6rem] print:translate-x-[0.9rem]">
+                    <div className="z-10 absolute top-0 left-[1.5rem] -translate-y-[0.4rem] print:left-[0.9rem] print:-translate-y-[0.15rem]">
                         <Star className="text-yellow-500 fill-yellow-200 w-6 h-6 print:w-4 print:h-4" />
                     </div>
                 )}

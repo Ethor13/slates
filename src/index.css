@@ -44,6 +44,16 @@ html {
   scrollbar-width: none;  /* Firefox */
 }
 
+/* Hide scrollbar for game-content div */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 /* ensure content can still be scrolled */
 html, body {
   overflow-y: auto;
