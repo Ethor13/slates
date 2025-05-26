@@ -118,7 +118,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         {/* Close button - only visible on mobile */}
         {setSidebarOpen && (
           <button 
-            className="md:hidden absolute top-4 right-4 p-2 rounded-full hover:bg-slate-light/20 transition-colors duration-200" 
+            className="md:hidden absolute top-4 right-4 p-2 rounded-full hover:bg-slate-deep transition-colors duration-200" 
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
           >
@@ -126,7 +126,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
           </button>
         )}
         
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto text-white">
           <div className="px-4 flex flex-col gap-4">
             {/* Calendar month selector */}
             <div className="flex flex-col gap-4 mt-4">
@@ -147,7 +147,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                 <div className="grid grid-cols-7 gap-1 text-center">
                   {/* Week day headers */}
                   {weekDays.map(day => (
-                    <div key={day} className="text-xs font-semibold text-gray-500 py-1 text-center">
+                    <div key={day} className="text-xs font-semibold py-1 text-center">
                       {day}
                     </div>
                   ))}
@@ -168,7 +168,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                           ${isToday && !isSelected ? "border border-slate-light" : ""}
                           ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
                           ${!day.isCurrentMonth ? "hidden" : ""}
-                          ${!isPastDate && day.isCurrentMonth ? "hover:bg-slate-light/20 transition-colors duration-200 text-black" : ""}`}
+                          ${!isPastDate && day.isCurrentMonth ? "hover:bg-slate-deep transition-colors duration-200" : ""}`}
                           onClick={() => {
                             if (day.isCurrentMonth && !isPastDate) {
                               handleDateChange(day.date);
@@ -266,7 +266,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 const ChevronButton: React.FC<ChevronButtonProps> = ({ onClick, direction, blocked }) => (
   <button
     className={`p-2 flex justify-center items-center rounded-full transition-colors duration-200
-      ${blocked ? "text-black cursor-not-allowed" : "hover:bg-slate-light/20 cursor-pointer"}`}
+      ${blocked ? "text-black cursor-not-allowed" : "hover:bg-slate-deep cursor-pointer"}`}
     onClick={onClick}
     disabled={blocked}
   >

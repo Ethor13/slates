@@ -30,7 +30,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
                 {/* Favorite Star - only visible if the game is a favorite */}
                 {game.isFavorite && (
-                    <div className="z-10 absolute top-0 left-[1.5rem] -translate-y-[0.4rem] print:left-[0.9rem] print:-translate-y-[0.15rem]">
+                    <div className="z-10 absolute top-[0.8rem] left-[1.5rem] sm:-top-[0.4rem] print:left-[0.9rem] print:-top-[0.15rem]">
                         <Star className="text-yellow-500 fill-yellow-200 w-6 h-6 print:w-4 print:h-4" />
                     </div>
                 )}

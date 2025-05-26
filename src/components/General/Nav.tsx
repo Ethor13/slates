@@ -107,8 +107,8 @@ const Nav = () => {
                                             className="flex items-center text-black font-semibold cursor-pointer select-none hover:bg-slate-light/20 p-2 rounded-full transition-colors duration-200"
                                             onClick={() => setIsMenuOpen(true)}
                                         >
-                                            <span className="hidden sm:block text-lg mr-2">{currentUser.email}</span>
-                                            <Menu className="h-6 w-6 ml-0" />
+                                            <span className="hidden sm:block text-lg mr-2 text-white">{currentUser.email}</span>
+                                            <Menu className="h-6 w-6 ml-0 text-white" />
                                         </div>
                                     </div>
                                 </>

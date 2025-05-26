@@ -135,7 +135,7 @@ const Dashboard = () => {
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
     return (
-        <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-deep to-slate-light relative">
+        <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-deep to-slate-light via-slate-medium via-20% to-60% relative">
             <div className="print:hidden">
                 <Nav />
             </div>
@@ -174,7 +174,8 @@ const Dashboard = () => {
                     <div className="flex flex-row h-full">
                         {/* Mobile menu toggle button */}
                         <button
-                            className={`md:hidden absolute top-24 left-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden`}
+                            id="mobile-menu-toggle"
+                            className={`md:hidden absolute top-24 left-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden z-50`}
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             aria-label="Toggle sidebar"
                         >
@@ -200,7 +201,7 @@ const Dashboard = () => {
 
                         {/* Main content area that takes remaining space and centers content */}
                         {/* This needs to be same padding as sidebar width */}
-                        <div id="game-content" className="w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative">
+                        <div id="game-content" className="w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative sm:rounded-l-xl">
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
