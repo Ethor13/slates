@@ -135,7 +135,7 @@ const Dashboard = () => {
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
     return (
-        <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-deep to-slate-light via-slate-medium via-20% to-60% relative">
+        <div className="h-screen overflow-hidden relative slate-gradient">
             <div className="print:hidden">
                 <Nav />
             </div>
@@ -191,7 +191,7 @@ const Dashboard = () => {
 
                         {/* Main content area that takes remaining space and centers content */}
                         {/* This needs to be same padding as sidebar width */}
-                        <div id="game-content" className={`w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative sm:rounded-l-xl transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-full' : 'translate-x-0'} md:transform-none`}>
+                        <div id="game-content" className={`w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative sm:rounded-tl-xl transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-full' : 'translate-x-0'} md:transform-none`}>
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -206,17 +206,20 @@ const Dashboard = () => {
                                     <button
                                         onClick={() => setSidebarOpen(!sidebarOpen)}
                                         id="mobile-menu-toggle"
-                                        className={`absolute sm:hidden top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-black hover:text-white hover:bg-slate-deep print:hidden z-30`}
+                                        className={`flex gap-2 slate-gradient absolute sm:hidden top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-white print:hidden z-30`}
                                         aria-label="Toggle sidebar"
                                     >
+                                        <p><b>Filters</b></p>
                                         <SlidersHorizontal className="h-6 w-6" />
                                     </button>
                                     {/* Print button - positioned inside scrollable area */}
                                     <button
                                         onClick={handlePrint}
-                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 text-black hover:text-white hover:bg-slate-deep print:hidden z-30"
+                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 text-white slate-gradient print:hidden z-30
+                                                   flex gap-2"
                                         aria-label="Print this page"
                                     >
+                                        <p><b>Print</b></p>
                                         <Printer className="h-6 w-6" />
                                     </button>
                                     

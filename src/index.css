@@ -49,6 +49,10 @@ html {
   display: none;
 }
 
+.slate-gradient {
+  @apply bg-gradient-to-br from-slate-deep to-slate-light via-slate-medium via-20% to-60%
+}
+
 .hide-scrollbar {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
