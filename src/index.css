@@ -50,9 +50,13 @@ html, body {
 }
 
 @media print {
-  /* Print styles - ensure colors are preserved when printing */
   * {
-    -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  
+  /* Remove any margins/padding that might cause page breaks */
+  .min-h-screen {
+    min-height: auto !important;
   }
 }
