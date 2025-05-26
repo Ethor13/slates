@@ -118,19 +118,19 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
         {/* Close button - only visible on mobile */}
         {setSidebarOpen && (
           <button 
-            className="md:hidden absolute top-4 right-4 p-2 rounded-full hover:bg-slate-deep transition-colors duration-200" 
+            className="md:hidden absolute top-4 right-4 p-2 rounded-full bg-slate-light hover:bg-slate-deep transition-colors duration-200" 
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
           >
-            <X size={20} className="text-black" />
+            <X size={20} className="text-white" />
           </button>
         )}
         
-        <div className="flex-1 overflow-y-auto text-white">
+        <div className="flex-1 overflow-y-auto text-white hide-scrollbar">
           <div className="px-4 flex flex-col gap-4">
             {/* Calendar month selector */}
             <div className="flex flex-col gap-4 mt-4">
-              <h2 className="text-lg font-semibold">Date</h2>
+              <h2 className="font-semibold text-xl sm:text-lg">Date</h2>
               <div>
                 <div className="flex flex-row items-center justify-between mb-4">
                   <ChevronButton
@@ -139,7 +139,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     blocked={currentMonth.getFullYear() === new Date().getFullYear() &&
                       currentMonth.getMonth() === new Date().getMonth()}
                   />
-                  <span className="font-bold">{currentMonthName}</span>
+                  <span className="font-bold text-xl sm:text-base">{currentMonthName}</span>
                   <ChevronButton onClick={() => changeMonth(1)} direction="right" />
                 </div>
 
@@ -147,7 +147,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                 <div className="grid grid-cols-7 gap-1 text-center">
                   {/* Week day headers */}
                   {weekDays.map(day => (
-                    <div key={day} className="text-xs font-semibold py-1 text-center">
+                    <div key={day} className="text-xl sm:text-xs font-semibold py-1 text-center">
                       {day}
                     </div>
                   ))}
@@ -162,8 +162,8 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     return (
                       <div key={index} className="aspect-square w-full flex justify-center items-center">
                         <button
-                          className={`aspect-square rounded-full text-xs w-full flex items-center justify-center
-                          ${!day.isCurrentMonth ? "text-gray-300" : isPastDate ? "text-gray-400" : ""}
+                          className={`aspect-square rounded-full text-xl sm:text-xs w-full flex items-center justify-center
+                          ${!day.isCurrentMonth && isPastDate ? "text-gray-300" : ""}
                           ${isSelected ? "bg-slate-light text-white" : ""}
                           ${isToday && !isSelected ? "border border-slate-light" : ""}
                           ${isPastDate ? "text-gray-300 cursor-not-allowed" : ""}
@@ -193,7 +193,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
             {/* Broadcast settings section */}
             <div className="flex flex-col gap-4">
-              <h2 className="text-lg font-semibold">Broadcast Settings</h2>
+              <h2 className="text-xl sm:text-lg font-semibold">Broadcast Settings</h2>
               <div className="flex flex-row items-center gap-1">
                 <button
                   onClick={toggleShowOnlyAvailableBroadcasts}
@@ -206,7 +206,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     {userPreferences.showOnlyAvailableBroadcasts && (<Check size={14} className="text-white" />)}
                   </div>
                 </button>
-                <span className="text-md">Only show available broadcasts</span>
+                <span className="text-lg sm:text-base">Only show available broadcasts</span>
               </div>
             </div>
 
@@ -214,7 +214,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
             {/* Print settings section */}
             <div className="flex flex-col gap-4">
-              <h2 className="text-lg font-semibold">Print Settings</h2>
+              <h2 className="text-xl sm:text-lg font-semibold">Print Settings</h2>
               <div className="flex flex-row items-center gap-1">
                 <button
                   onClick={() => props.setIncludeGamePulseInPrint(!props.includeGamePulseInPrint)}
@@ -227,7 +227,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                     {props.includeGamePulseInPrint && (<Check size={14} className="text-white" />)}
                   </div>
                 </button>
-                <span className="text-md">Include Game Pulse</span>
+                <span className="text-lg sm:text-base">Include Game Pulse</span>
               </div>
             </div>
 
@@ -235,7 +235,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
             <div className="flex flex-col gap-4 mb-6">
               {/* Sports selector */}
-              <h2 className="text-lg font-semibold">Sports</h2>
+              <h2 className="text-xl sm:text-lg font-semibold">Sports</h2>
               <div className="flex flex-col gap-2">
                 {Object.values(Sports).map((sport) => (
                   <div key={sport} className="flex flex-row items-center gap-1">
@@ -251,7 +251,7 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                         {selectedSports.includes(sport) && (<Check size={14} className="text-white" />)}
                       </div>
                     </button>
-                    <span className="text-md">{getSportDisplayName(sport)}</span>
+                    <span className="text-lg sm:text-base">{getSportDisplayName(sport)}</span>
                   </div>
                 ))}
               </div>

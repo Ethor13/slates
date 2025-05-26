@@ -172,16 +172,6 @@ const Dashboard = () => {
             <div className="h-screen bg-transparent print:bg-white pt-20 print:pt-0 overflow-hidden">
                 <main className="h-full">
                     <div className="flex flex-row h-full">
-                        {/* Mobile menu toggle button */}
-                        <button
-                            id="mobile-menu-toggle"
-                            className={`md:hidden absolute top-24 left-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden z-50`}
-                            onClick={() => setSidebarOpen(!sidebarOpen)}
-                            aria-label="Toggle sidebar"
-                        >
-                            <SlidersHorizontal className="h-6 w-6 text-black" />
-                        </button>
-
                         {/* Left sidebar */}
                         <div className="print:hidden">
                             <Sidebar
@@ -212,13 +202,22 @@ const Dashboard = () => {
                                 </div>
                             ) : (
                                 <div className="w-full px-[3vw]">
+                                    {/* Mobile menu toggle button */}
+                                    <button
+                                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                                        id="mobile-menu-toggle"
+                                        className={`absolute top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-black hover:text-white hover:bg-slate-deep print:hidden z-30`}
+                                        aria-label="Toggle sidebar"
+                                    >
+                                        <SlidersHorizontal className="h-6 w-6" />
+                                    </button>
                                     {/* Print button - positioned inside scrollable area */}
                                     <button
                                         onClick={handlePrint}
-                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 hover:bg-slate-light/20 print:hidden z-30"
+                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 text-black hover:text-white hover:bg-slate-deep print:hidden z-30"
                                         aria-label="Print this page"
                                     >
-                                        <Printer className="h-6 w-6 text-black" />
+                                        <Printer className="h-6 w-6" />
                                     </button>
                                     
                                     {/* Conditionally render GamePulseChart in print based on toggle */}

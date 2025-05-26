@@ -49,7 +49,7 @@ const Nav = () => {
 
     return (
         <>
-            <nav className="fixed top-0 w-full z-40 bg-transparent shadow-sm h-20">
+            <nav className="fixed top-0 w-full z-40 bg-transparent h-20">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-row gap-4 h-[5rem] items-center">
                         <div className="flex items-center space-x-2">
@@ -104,7 +104,7 @@ const Nav = () => {
                                     </div>
                                     <div className="flex justify-end">
                                         <div
-                                            className="flex items-center text-black font-semibold cursor-pointer select-none hover:bg-slate-light/20 p-2 rounded-full transition-colors duration-200"
+                                            className="flex items-center text-black font-semibold cursor-pointer select-none hover:bg-slate-deep p-2 rounded-full transition-colors duration-200"
                                             onClick={() => setIsMenuOpen(true)}
                                         >
                                             <span className="hidden sm:block text-lg mr-2 text-white">{currentUser.email}</span>
