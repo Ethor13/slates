@@ -10,7 +10,7 @@ import Footer from '../General/Footer';
 
 const LandingPage = () => {
     return (
-        <div className="min-h-screen bg-slate-light/30">
+        <div className="min-h-screen slate-gradient">
             <Nav />
             <main className="">
                 <HeroSection />

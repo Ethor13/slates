@@ -7,22 +7,21 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-5xl font-bold text-gray-900 leading-tight">
-              Smart Sports Programming for
-              <span className="text-blue-600"> Maximum Revenue</span>
+            <h1 className="text-5xl font-bold text-white leading-tight">
+              Smart Sports Programming for Maximum Revenue
             </h1>
-            <p className="mt-6 text-xl text-gray-600">
+            <p className="mt-6 text-xl text-gray-300">
               Use data-driven insights to show the right games at the right time.
               Increase customer engagement and boost your revenue with our
               advanced sports game ranking algorithm.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <button className="flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-slate-deep hover:bg-slate-medium md:py-4 md:text-lg md:px-10">
+              <button className="flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg bg-white hover:ring-2 hover:ring-slate-deep transition-all duration-200 md:py-4 md:text-lg md:px-10">
+                Watch Demo
+              </button>
+              <button className="flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-white bg-slate-light slate-gradient-hover md:py-4 md:text-lg md:px-10">
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </button>
-              <button className="flex items-center justify-center px-8 py-3 border border-slate-light text-base font-medium rounded-lg bg-white hover:bg-slate-light/10 md:py-4 md:text-lg md:px-10">
-                Watch Demo
               </button>
             </div>
             <div className="mt-8 flex items-center gap-8">
@@ -33,21 +32,21 @@ const HeroSection = () => {
                   className="h-12 w-12 rounded-full"
                 />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">500+</p>
-                  <p className="text-sm text-gray-500">Venues Trust Us</p>
+                  <p className="text-sm font-medium text-white">500+</p>
+                  <p className="text-sm text-white">Venues Trust Us</p>
                 </div>
               </div>
               <div className="flex items-center">
                 <div className="flex -space-x-2">
                   {[...Array(5)].map((_, i) => (
-                    <div key={i} className="h-8 w-8 rounded-full bg-slate-medium flex items-center justify-center border-2 border-white">
-                      <Star className="h-4 w-4 text-white" />
+                    <div key={i} className="h-8 w-8 rounded-full bg-slate-medium flex items-center justify-center border-2 border-yellow-300">
+                      <Star className="h-4 w-4 text-yellow-300" />
                     </div>
                   ))}
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">4.9/5</p>
-                  <p className="text-sm text-gray-500">Customer Rating</p>
+                  <p className="text-sm font-medium text-white">4.9/5</p>
+                  <p className="text-sm text-white">Customer Rating</p>
                 </div>
               </div>
             </div>
