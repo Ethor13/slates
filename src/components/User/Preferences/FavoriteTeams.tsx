@@ -113,7 +113,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
             {selectedTeams.length > 0 && (
                 <div className="mb-3">
                     {Object.entries(selectedTeamsBySport).map(([sportName, teams]) => (
-                        <div key={sportName} className="mb-2 flex flex-row items-center">
+                        <div key={sportName} className="mb-2 flex flex-row items-start">
                             <div className="text-md font-medium text-gray-700 mr-2">{sportName}: </div>
                             <div className="flex flex-wrap gap-2">
                                 {teams.map(team => {

@@ -210,12 +210,12 @@ const Dashboard = () => {
                                     Error loading games: {gamesError.message || 'Unknown error'}
                                 </div>
                             ) : (
-                                <div className="w-full px-[3vw]">
+                                <div className="w-full px-[3vw] pt-[4rem] sm:pt-[3rem] md:pt-[2.5rem]">
                                     {/* Mobile menu toggle button */}
                                     <button
                                         onClick={() => setSidebarOpen(!sidebarOpen)}
                                         id="mobile-menu-toggle"
-                                        className={`flex gap-2 slate-gradient absolute sm:hidden top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-white print:hidden z-30`}
+                                        className={`flex gap-2 slate-gradient slate-gradient-hover absolute sm:hidden top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-white print:hidden z-30`}
                                         aria-label="Toggle sidebar"
                                     >
                                         <p><b>Filters</b></p>
