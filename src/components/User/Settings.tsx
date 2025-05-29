@@ -29,17 +29,19 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
             id={id} 
             className={`scroll-mt-20 py-4 xl:py-5 border-b border-gray-200`}
         >
-            <div className="flex items-center mb-3 xl:mb-4">
-                <div className="mr-3 p-2 rounded-full bg-slate-light/20 text-slate-deep">
+            <div className="flex flex-row mb-3 xl:mb-4 items-start gap-2">
+                <div className="p-2 rounded-full slate-gradient text-white">
                     {icon}
                 </div>
-                <div>
-                    <h2 className="text-lg xl:text-xl font-semibold text-gray-900">{title}</h2>
-                    <p className="text-sm xl:text-base text-gray-500">{description}</p>
+                <div className="w-full">
+                    <div>
+                        <h2 className="text-lg xl:text-xl font-semibold text-gray-900 leading-none">{title}</h2>
+                        <p className="text-sm xl:text-base text-gray-500">{description}</p>
+                    </div>
+                    <div className="pt-2 w-full">
+                        {children}
+                    </div>
                 </div>
-            </div>
-            <div className="pl-10 xl:pl-12">
-                {children}
             </div>
         </section>
     );

@@ -224,7 +224,7 @@ const Dashboard = () => {
                                     {/* Print button - positioned inside scrollable area */}
                                     <button
                                         onClick={handlePrint}
-                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 text-white slate-gradient print:hidden z-30
+                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 text-white slate-gradient slate-gradient-hover print:hidden z-30
                                                    flex gap-2"
                                         aria-label="Print this page"
                                     >
@@ -252,7 +252,7 @@ const Dashboard = () => {
             </div>
             <button
                 onClick={scrollToTop}
-                className={`slate-gradient text-white fixed top-24 right-4 p-2 rounded-full transition-all duration-200 z-40 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
+                className={`slate-gradient slate-gradient-hover text-white fixed top-24 right-4 p-2 rounded-full transition-all duration-200 z-40 ${!sidebarOpen && showScrollToTop ? 'opacity-100' : 'opacity-0 hidden'}`}
                 aria-label="Scroll to top"
             >
                 <ArrowUp className="h-6 w-6" strokeWidth={3} />

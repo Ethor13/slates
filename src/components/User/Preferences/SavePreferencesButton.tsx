@@ -16,7 +16,7 @@ const SavePreferencesButton: React.FC<SavePreferencesButtonProps> = ({
                     type="button"
                     onClick={onSave}
                     disabled={saveStatus === 'saving'}
-                    className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-slate-deep hover:bg-slate-deep/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                    className="ml-3 inline-flex justify-center py-2 px-4 shadow-sm text-sm font-medium rounded-md text-white slate-gradient slate-gradient-hover disabled:opacity-50"
                 >
                     {saveStatus === 'saving' ? (
                         <>
