@@ -22,14 +22,16 @@ const markFavoriteTeams = (games: ScheduleResponse, favoriteTeams: Record<string
     const markedGames = { ...games };
     Object.keys(markedGames).forEach((sport) => {
         Object.entries(markedGames[sport]).forEach(([_, game]: [string, any]) => {
-            game.isFavorite = favoriteTeams.some((team) => (game.sport === team.sport) && (team.id === game.home.id || team.id === game.away.id));
+            game.isFavorite = favoriteTeams && favoriteTeams.length > 0 ? 
+                favoriteTeams.some((team) => (game.sport === team.sport) && (team.id === game.home.id || team.id === game.away.id)) :
+                false;
         });
     });
     return markedGames;
 }
 
 const Dashboard = () => {
-    const { currentUser, userPreferences } = useAuth();
+    const { currentUser, userPreferences, preferencesLoading } = useAuth();
     const [allGames, setAllGames] = useState<ScheduleResponse>({});
     const [games, setGames] = useState<ScheduleResponse>({});
     const [gamesLoading, setGamesLoading] = useState<boolean>(false);
@@ -47,7 +49,7 @@ const Dashboard = () => {
 
     // Fetch games data using Cloud Functions
     const fetchAllGamesOnDate = useCallback(async () => {
-        if (!currentUser) return;
+        if (!currentUser || preferencesLoading) return;
 
         setGamesLoading(true);
         setGamesError(null);
@@ -68,7 +70,7 @@ const Dashboard = () => {
         } finally {
             setGamesLoading(false);
         }
-    }, [currentUser, selectedDate]);
+    }, [currentUser, selectedDate, userPreferences.favoriteTeams, preferencesLoading]);
 
     const setDisplayedGames = useCallback(() => {
         setGamesLoading(true);
@@ -133,6 +135,13 @@ const Dashboard = () => {
 
     useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
+
+    // Re-mark favorite teams when user preferences change
+    useEffect(() => {
+        if (Object.keys(allGames).length > 0 && !preferencesLoading) {
+            setAllGames(prevGames => markFavoriteTeams(prevGames, userPreferences.favoriteTeams));
+        }
+    }, [userPreferences.favoriteTeams, preferencesLoading]);
 
     return (
         <div className="h-screen overflow-hidden relative slate-gradient">

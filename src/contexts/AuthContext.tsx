@@ -95,7 +95,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const userDocRef = doc(db, 'users', currentUser.uid);
                 const userDoc = await getDoc(userDocRef);
                 if (!userDoc.exists()) {
-                    await updateUserPreferences({});
+                    // Set default preferences first, then save to Firestore
+                    const defaultPrefs = getDefaultPreferences();
+                    setUserPreferences(defaultPrefs);
+                    await setDoc(userDocRef, defaultPrefs);
                 } else {
                     const userData = userDoc.data() as UserPreferences;
                     setUserPreferences({
