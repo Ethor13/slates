@@ -215,8 +215,8 @@ const Settings = () => {
             <div className="h-screen bg-transparent pt-20 overflow-hidden">
                 <main className="h-full">
                     <div className="flex flex-row h-full">
-                        {/* Left sidebar */}
-                        <div className={`fixed left-0 top-20 bottom-0 w-full md:w-[15rem] z-40 transform transition-transform duration-300 ease-in-out translate-x-0 bg-transparent`}>
+                        {/* Left sidebar - hidden on mobile */}
+                        <div className={`hidden sm:block fixed left-0 top-20 bottom-0 w-full md:w-[15rem] z-40 transform transition-transform duration-300 ease-in-out translate-x-0 bg-transparent`}>
                             <div className="flex flex-col h-full bg-transparent">
                                 <div className="flex-1 overflow-y-auto text-white hide-scrollbar bg-transparent">
                                     <div className="px-4 flex flex-col gap-3 bg-transparent">
@@ -252,7 +252,7 @@ const Settings = () => {
                         </div>
 
                         {/* Main content area */}
-                        <div className={`w-full md:ml-[15rem] h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative md:rounded-tl-xl transform transition-transform duration-300 ease-in-out translate-x-0`}>
+                        <div className={`w-full sm:ml-[15rem] h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative sm:rounded-tl-xl transform transition-transform duration-300 ease-in-out translate-x-0`}>
                             {preferencesLoading ? (
                                 <div className="flex justify-center py-12">
                                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-deep"></div>
