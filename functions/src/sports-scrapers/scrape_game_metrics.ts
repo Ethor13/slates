@@ -260,7 +260,7 @@ function parseNHLPowerIndex(rawCSV: string): TeamMetric {
       }
 
       if (Object.keys(manualMappings).includes(teamAbbreviation)) {
-        teamId = [manualMappings[teamAbbreviation], undefined];
+        teamId = Object.entries(sportsTeams["nhl"] as Record<any, any>).find(([_, team]) => team.abbreviation === manualMappings[teamAbbreviation]);
       } else {
         logger.error(`Team ID not found for abbreviation ${teamAbbreviation}`);
         return {};
@@ -268,7 +268,7 @@ function parseNHLPowerIndex(rawCSV: string): TeamMetric {
     }
 
     const teamData: TeamMetric = {
-      [teamId[0]]: {
+      [(teamId as [string, any])[0]]: {
         metrics: {
           powerIndexes: mappify(headers.slice(1), values.slice(1)),
         },

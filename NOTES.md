@@ -1,0 +1,17 @@
+- NCAAMBB
+    - 3 teams don't have info in the team info scrape, so had to put these in manually
+        - ID 88 = Southern Indiana
+            - abbreviation = USI
+            - logo = i/teamlogos/ncaa/500/88.png
+            - name = Southern Indiana Screaming Eagles
+            - shortName = So Indiana
+        - ID 2511 = Queens University
+            - abbreviation = QUC
+            - logo = i/teamlogos/ncaa/500/2511.png
+            - name = Queens University Royals
+            - shortName = Queens
+        - ID 2815 = Lindenwood
+            - abbreviation = LIN
+            - logo = i/teamlogos/ncaa/500/2815.png
+            - name = Lindenwood Lions
+            - shortName = Lindenwood

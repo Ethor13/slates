@@ -51,11 +51,11 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
 
                     if (sportData.teams) {
                         const teams = Object.entries(sportData.teams).map(([teamId, teamData]: [any, any]) => ({
-                            id: teamId,
-                            name: teamData.info.name,
-                            logo: teamData.info.logo,
-                            colors: teamData.colors,
-                            sport
+                                id: teamId,
+                                name: teamData?.info.name,
+                                logo: teamData?.info.logo,
+                                colors: teamData?.colors,
+                                sport
                         })).sort((a, b) => a.name.localeCompare(b.name));
 
                         sportTeamGroups.push({
