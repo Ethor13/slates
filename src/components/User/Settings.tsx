@@ -35,8 +35,8 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
                 </div>
                 <div className="w-full">
                     <div>
-                        <h2 className="text-lg xl:text-xl font-semibold text-gray-900 leading-none">{title}</h2>
-                        <p className="text-sm xl:text-base text-gray-500">{description}</p>
+                        <h2 className="text-lg font-semibold text-gray-900 leading-[18px]">{title}</h2>
+                        <p className="text-sm text-gray-500">{description}</p>
                     </div>
                     <div className="pt-2 w-full">
                         {children}

@@ -106,9 +106,6 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
 
     return (
         <div>
-            <label className="block text-sm font-medium">Favorite Teams</label>
-            <p className="text-sm text-gray-500 mb-2">Search and select your favorite teams</p>
-
             {/* Selected teams by sport */}
             {selectedTeams.length > 0 && (
                 <div className="mb-3">
