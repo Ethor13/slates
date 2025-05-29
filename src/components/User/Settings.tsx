@@ -27,18 +27,18 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
     return (
         <section 
             id={id} 
-            className={`scroll-mt-20 py-6 border-b border-gray-200`}
+            className={`scroll-mt-20 py-4 xl:py-5 border-b border-gray-200`}
         >
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-3 xl:mb-4">
                 <div className="mr-3 p-2 rounded-full bg-slate-light/20 text-slate-deep">
                     {icon}
                 </div>
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
-                    <p className="tddext-sm text-gray-500">{description}</p>
+                    <h2 className="text-lg xl:text-xl font-semibold text-gray-900">{title}</h2>
+                    <p className="text-sm xl:text-base text-gray-500">{description}</p>
                 </div>
             </div>
-            <div className="pl-12">
+            <div className="pl-10 xl:pl-12">
                 {children}
             </div>
         </section>
@@ -207,111 +207,118 @@ const Settings = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="h-screen overflow-hidden relative slate-gradient">
             <Nav />
-            <div className="pt-20 pb-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div>
-                        <div className="relative">
-                            {/* Sidebar Navigation - Fixed on left */}
-                            <div className="hidden sm:block fixed left-0 top-20 bottom-0 w-64 z-10">
-                                <div className="h-full bg-white rounded-r-lg shadow overflow-hidden py-2">
-                                    <nav className="flex flex-col h-full overflow-y-auto">
-                                        {settingsSections.map((section) => (
-                                            <button
-                                                key={section.id}
-                                                onClick={() => !section.disabled && scrollToSection(section.id)}
-                                                className={`flex items-center px-4 py-3 text-left transition-colors ${
-                                                    section.disabled 
-                                                        ? 'text-gray-400 cursor-not-allowed' 
-                                                        : activeSection === section.id
-                                                            ? 'bg-slate-light/20 text-slate-deep border-l-4 border-slate-deep'
-                                                            : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent'
-                                                }`}
-                                                disabled={section.disabled}
-                                            >
-                                                <div className="mr-3">
-                                                    {section.icon}
-                                                </div>
-                                                <div>
-                                                    <div className="font-medium">{section.title}</div>
-                                                </div>
-                                            </button>
-                                        ))}
-                                    </nav>
-                                </div>
-                            </div>
-                            {/* Main Content - with left margin to accommodate fixed sidebar */}
-                            <div className="sm:ml-64 sm:pl-8">
-                                {preferencesLoading ? (
-                                    <div className="p-6 flex justify-center py-12">
-                                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                                    </div>
-                                ) : (
-                                    <div className="" ref={sectionsRef}>
-                                        <SettingsSection
-                                            id="account" 
-                                            title="Account" 
-                                            description="Manage your account information"
-                                            icon={<User size={20} />}
-                                        >
-                                            <div className='text-lg'>
-                                                {currentUser?.email}
-                                            </div>
-                                        </SettingsSection>
-
-                                        <SettingsSection 
-                                            id="location" 
-                                            title="Location" 
-                                            description="Set your location for regional sports information"
-                                            icon={<MapPin size={20} />}
-                                        >
-                                            <ZipcodeInput 
-                                                zipcode={localPreferences.zipcode} 
-                                                onChange={handleZipcodeChange}
-                                                error={zipcodeError}
-                                            />
-                                        </SettingsSection>
-                                        
-                                        <SettingsSection 
-                                            id="providers" 
-                                            title="TV Providers" 
-                                            description="Select your TV providers to see available channels"
-                                            icon={<Tv size={20} />}
-                                        >
-                                            <TvProviders 
-                                                selectedProviders={localPreferences.tvProviders} 
-                                                onToggle={handleTvProviderToggle}
-                                                availableProviders={availableProviders}
-                                                loading={providersLoading}
-                                                hasValidZipcode={isValidZipcode(localPreferences.zipcode)}
-                                            />
-                                        </SettingsSection>
-                                        
-                                        <SettingsSection 
-                                            id="teams" 
-                                            title="Favorite Teams" 
-                                            description="Select your favorite teams to get personalized recommendations"
-                                            icon={<Star size={20} />}
-                                        >
-                                            <FavoriteTeams 
-                                                selectedTeams={localPreferences.favoriteTeams} 
-                                                onToggle={handleTeamToggle} 
-                                            />
-                                        </SettingsSection>
-
-                                        <div className='py-6'>
-                                            <SavePreferencesButton 
-                                                onSave={savePreferences} 
-                                                saveStatus={saveStatus} 
-                                            />
+            
+            <div className="h-screen bg-transparent pt-20 overflow-hidden">
+                <main className="h-full">
+                    <div className="flex flex-row h-full">
+                        {/* Left sidebar */}
+                        <div className={`fixed left-0 top-20 bottom-0 w-full md:w-[15rem] z-40 transform transition-transform duration-300 ease-in-out translate-x-0 bg-transparent`}>
+                            <div className="flex flex-col h-full bg-transparent">
+                                <div className="flex-1 overflow-y-auto text-white hide-scrollbar bg-transparent">
+                                    <div className="px-4 flex flex-col gap-3 bg-transparent">
+                                        <div className="flex flex-col gap-3 mt-3">
+                                            <h2 className="font-semibold text-lg md:text-base">Settings</h2>
+                                            <nav className="flex flex-col gap-1 bg-transparent">
+                                                {settingsSections.map((section) => (
+                                                    <button
+                                                        key={section.id}
+                                                        onClick={() => !section.disabled && scrollToSection(section.id)}
+                                                        className={`flex items-center px-3 py-1.5 text-left transition-colors rounded-lg ${
+                                                            section.disabled 
+                                                                ? 'text-white/40 cursor-not-allowed' 
+                                                                : activeSection === section.id
+                                                                    ? 'bg-white/20 text-white'
+                                                                    : 'text-white/80 hover:bg-white/10 hover:text-white'
+                                                        }`}
+                                                        disabled={section.disabled}
+                                                    >
+                                                        <div className="mr-2.5">
+                                                            {section.icon}
+                                                        </div>
+                                                        <div>
+                                                            <div className="font-medium text-base md:text-sm">{section.title}</div>
+                                                        </div>
+                                                    </button>
+                                                ))}
+                                            </nav>
                                         </div>
                                     </div>
-                                )}
+                                </div>
                             </div>
                         </div>
+
+                        {/* Main content area */}
+                        <div className={`w-full md:ml-[15rem] h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative md:rounded-tl-xl transform transition-transform duration-300 ease-in-out translate-x-0`}>
+                            {preferencesLoading ? (
+                                <div className="flex justify-center py-12">
+                                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-deep"></div>
+                                </div>
+                            ) : (
+                                <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12" ref={sectionsRef}>
+                                    <SettingsSection
+                                        id="account" 
+                                        title="Account" 
+                                        description="Manage your account information"
+                                        icon={<User size={20} />}
+                                    >
+                                        <div className='text-lg'>
+                                            {currentUser?.email}
+                                        </div>
+                                    </SettingsSection>
+
+                                    <SettingsSection 
+                                        id="location" 
+                                        title="Location" 
+                                        description="Set your location for regional sports information"
+                                        icon={<MapPin size={20} />}
+                                    >
+                                        <ZipcodeInput 
+                                            zipcode={localPreferences.zipcode} 
+                                            onChange={handleZipcodeChange}
+                                            error={zipcodeError}
+                                        />
+                                    </SettingsSection>
+                                    
+                                    <SettingsSection 
+                                        id="providers" 
+                                        title="TV Providers" 
+                                        description="Select your TV providers to see available channels"
+                                        icon={<Tv size={20} />}
+                                    >
+                                        <TvProviders 
+                                            selectedProviders={localPreferences.tvProviders} 
+                                            onToggle={handleTvProviderToggle}
+                                            availableProviders={availableProviders}
+                                            loading={providersLoading}
+                                            hasValidZipcode={isValidZipcode(localPreferences.zipcode)}
+                                        />
+                                    </SettingsSection>
+                                    
+                                    <SettingsSection 
+                                        id="teams" 
+                                        title="Favorite Teams" 
+                                        description="Select your favorite teams to get personalized recommendations"
+                                        icon={<Star size={20} />}
+                                    >
+                                        <FavoriteTeams 
+                                            selectedTeams={localPreferences.favoriteTeams} 
+                                            onToggle={handleTeamToggle} 
+                                        />
+                                    </SettingsSection>
+
+                                    <div className='py-6'>
+                                        <SavePreferencesButton 
+                                            onSave={savePreferences} 
+                                            saveStatus={saveStatus} 
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
     );
