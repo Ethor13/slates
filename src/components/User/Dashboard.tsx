@@ -210,7 +210,7 @@ const Dashboard = () => {
                                     Error loading games: {gamesError.message || 'Unknown error'}
                                 </div>
                             ) : (
-                                <div className="w-full px-[3vw] pt-[4rem] sm:pt-[3rem] md:pt-[2.5rem]">
+                                <div className="w-full px-[3vw] pt-[4rem] sm:pt-[3rem] md:pt-[2.5rem] print:pt-0">
                                     {/* Mobile menu toggle button */}
                                     <button
                                         onClick={() => setSidebarOpen(!sidebarOpen)}
