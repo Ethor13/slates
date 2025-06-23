@@ -172,8 +172,8 @@ const Settings = () => {
     const handleTeamToggle = (team: Record<string, string>) => {
         setLocalPreferences(prev => ({
             ...prev,
-            favoriteTeams: prev.favoriteTeams.map(favoriteTeam => favoriteTeam.id).includes(team.id)
-                ? prev.favoriteTeams.filter(t => t.id !== team.id)
+            favoriteTeams: prev.favoriteTeams.some(favoriteTeam => favoriteTeam.id === team.id && favoriteTeam.sport === team.sport)
+                ? prev.favoriteTeams.filter(t => !(t.id === team.id && t.sport === team.sport))
                 : [...prev.favoriteTeams, team]
         }));
     };
