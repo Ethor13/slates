@@ -7,7 +7,7 @@ interface TeamColors {
 
 const defaultColors: TeamColors = {
     primary: "888888",
-    alternate: "FFFFFF",
+    alternate: "888888",
 };
 
 export const TeamColorBlock: React.FC<{

@@ -21,6 +21,11 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Create a Set of selected team keys for fast lookup (id + sport)
+    const selectedTeamKeys = new Set(
+        selectedTeams.map(team => `${team.sport}__${team.id}`)
+    );
+
     // Group selected teams by sport
     const selectedTeamsBySport = selectedTeams.reduce<Record<string, Record<string, string>[]>>((acc, team) => {
         const sportName = team.sport.toUpperCase();
@@ -52,11 +57,11 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
                     if (sportData.teams) {
                         const teams = Object.entries(sportData.teams).map(([teamId, teamData]: [any, any]) => ({
                                 id: teamId,
-                                name: teamData?.info.name,
-                                logo: teamData?.info.logo,
+                                name: teamData?.info?.name,
+                                logo: teamData?.info?.logo,
                                 colors: teamData?.colors,
                                 sport
-                        })).sort((a, b) => a.name.localeCompare(b.name));
+                        })).sort((a, b) => b.name ? a.name?.localeCompare(b.name) || 1 : -1);
 
                         sportTeamGroups.push({
                             sport,
@@ -87,7 +92,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
         return teamsBySport
             .map(sportGroup => {
                 const filteredTeams = sportGroup.teams.filter(team =>
-                    team.name.toLowerCase().includes(searchQuery.toLowerCase())
+                    team.name?.toLowerCase().includes(searchQuery.toLowerCase())
                 );
 
                 return filteredTeams.length > 0
@@ -179,7 +184,7 @@ const FavoriteTeams: React.FC<FavoriteTeamsProps> = ({ selectedTeams, onToggle }
                                                     <input
                                                         id={`${team.sport}-${team.id}`}
                                                         type="checkbox"
-                                                        checked={selectedTeams.map(selectedTeam => selectedTeam.id).includes(team.id)}
+                                                        checked={selectedTeamKeys.has(`${team.sport}__${team.id}`)}
                                                         onChange={() => onToggle(team)}
                                                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                                     />
