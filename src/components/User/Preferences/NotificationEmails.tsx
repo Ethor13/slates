@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, X, Mail } from 'lucide-react';
+import { X, Mail } from 'lucide-react';
 
 interface NotificationEmailsProps {
     notificationEmails: string[];

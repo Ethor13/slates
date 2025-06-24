@@ -1,13 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../General/Nav';
-import { 
-    ZipcodeInput, 
-    TvProviders, 
-    FavoriteTeams,
-    NotificationEmails,
-    SavePreferencesButton 
-} from './Preferences';
+import { ZipcodeInput, TvProviders, FavoriteTeams, NotificationEmails } from './Preferences';
 import { MapPin, Tv, Star, User, Bell, Shield, HelpCircle } from 'lucide-react';
 
 interface SettingsSectionProps {
@@ -23,7 +17,7 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
     title, 
     description, 
     icon, 
-    children 
+    children
 }) => {
     return (
         <section 
@@ -50,21 +44,12 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({
 
 const Settings = () => {
     const { currentUser, userPreferences, preferencesLoading, updateUserPreferences } = useAuth();
-    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
-    const [zipcodeError, setZipcodeError] = useState<string | null>(null);
     const [providersLoading, setProvidersLoading] = useState(false);
+    const [zipcode, setZipcode] = useState(userPreferences.zipcode);
     const [availableProviders, setAvailableProviders] = useState<Record<string, any>>({});
     const [activeSection, setActiveSection] = useState('location');
     const sectionsRef = useRef<HTMLDivElement>(null);
     
-    // Local copy of preferences that will be updated as the user makes changes
-    const [localPreferences, setLocalPreferences] = useState({ ...userPreferences });
-
-    // Update local preferences when userPreferences from context changes
-    useEffect(() => {
-        setLocalPreferences({ ...userPreferences });
-    }, [userPreferences]);
-
     useEffect(() => {
         // Setup intersection observer for section scrolling
         const observer = new IntersectionObserver(
@@ -93,10 +78,10 @@ const Settings = () => {
 
     // If the user has a valid zipcode, fetch providers on component mount
     useEffect(() => {
-        if (isValidZipcode(userPreferences.zipcode)) {
-            fetchProviders(userPreferences.zipcode);
+        if (isValidZipcode(zipcode)) {
+            fetchProviders(zipcode);
         }
-    }, [userPreferences.zipcode]);
+    }, [zipcode]);
 
     const scrollToSection = (sectionId: string) => {
         const section = document.getElementById(sectionId);
@@ -131,29 +116,26 @@ const Settings = () => {
         }
     };
 
-    const handleZipcodeChange = (zipcode: string) => {
-        if (zipcodeError) setZipcodeError(null);
-        setLocalPreferences(prev => ({
-            ...prev,
-            zipcode
-        }));
-        
-        // If zipcode becomes valid, fetch providers
-        if (isValidZipcode(zipcode)) {
-            fetchProviders(zipcode);
-            setLocalPreferences(prev => ({
-                ...prev,
-                tvProviders: {} // Changed from [] to {} for map structure
-            }));
-        } else {
-            // Clear providers if zipcode is invalid
-            setAvailableProviders({});
+    const handleZipcodeChange = useCallback(async (zipcode: string) => {
+        try {
+            setZipcode(zipcode);
+            
+            // If zipcode becomes valid, fetch providers and clear current providers
+            if (isValidZipcode(zipcode)) {
+                fetchProviders(zipcode);
+                await updateUserPreferences({ tvProviders: {}, zipcode });
+            } else {
+                // Clear providers if zipcode is invalid
+                setAvailableProviders({});
+            }
+        } catch (error) {
+            console.error('Error saving zipcode:', error);
         }
-    };
+    }, [updateUserPreferences, fetchProviders, setAvailableProviders]);
 
-    const handleTvProviderToggle = (providerId: string, providerName: string) => {
-        setLocalPreferences(prev => {
-            const newProviders = { ...prev.tvProviders };
+    const handleTvProviderToggle = async (providerId: string, providerName: string) => {
+        try {
+            const newProviders = { ...userPreferences.tvProviders };
             
             if (providerId in newProviders) {
                 // Remove provider if it already exists
@@ -163,46 +145,33 @@ const Settings = () => {
                 newProviders[providerId] = providerName;
             }
             
-            return {
-                ...prev,
-                tvProviders: newProviders
-            };
-        });
-    };
-
-    const handleTeamToggle = (team: Record<string, string>) => {
-        setLocalPreferences(prev => ({
-            ...prev,
-            favoriteTeams: prev.favoriteTeams.some(favoriteTeam => favoriteTeam.id === team.id && favoriteTeam.sport === team.sport)
-                ? prev.favoriteTeams.filter(t => !(t.id === team.id && t.sport === team.sport))
-                : [...prev.favoriteTeams, team]
-        }));
-    };
-
-    const handleNotificationEmailsChange = (emails: string[]) => {
-        setLocalPreferences(prev => ({
-            ...prev,
-            notificationEmails: emails
-        }));
-    };
-
-    const savePreferences = async () => {
-        if (!currentUser) return;
-        
-        if (!localPreferences.zipcode || !isValidZipcode(localPreferences.zipcode)) {
-            setZipcodeError('Please enter a valid 5-digit zipcode');
-            return;
-        }
-        
-        setSaveStatus('saving');
-        try {
-            await updateUserPreferences(localPreferences);
-            setSaveStatus('success');
-            setTimeout(() => setSaveStatus('idle'), 3000);
+            await updateUserPreferences({ tvProviders: newProviders });
         } catch (error) {
-            console.error('Error saving preferences:', error);
-            setSaveStatus('error');
-            setTimeout(() => setSaveStatus('idle'), 3000);
+            console.error('Error saving TV providers:', error);
+        }
+    };
+
+    const handleTeamToggle = async (team: Record<string, string>) => {
+        try {
+            const isAlreadyFavorite = userPreferences.favoriteTeams.some(
+                favoriteTeam => favoriteTeam.id === team.id && favoriteTeam.sport === team.sport
+            );
+            
+            const newFavoriteTeams = isAlreadyFavorite
+                ? userPreferences.favoriteTeams.filter(t => !(t.id === team.id && t.sport === team.sport))
+                : [...userPreferences.favoriteTeams, team];
+            
+            await updateUserPreferences({ favoriteTeams: newFavoriteTeams });
+        } catch (error) {
+            console.error('Error saving favorite teams:', error);
+        }
+    };
+
+    const handleNotificationEmailsChange = async (emails: string[]) => {
+        try {
+            await updateUserPreferences({ notificationEmails: emails });
+        } catch (error) {
+            console.error('Error saving notification emails:', error);
         }
     };
 
@@ -285,9 +254,8 @@ const Settings = () => {
                                         icon={<MapPin size={20} />}
                                     >
                                         <ZipcodeInput 
-                                            zipcode={localPreferences.zipcode} 
+                                            zipcode={zipcode} 
                                             onChange={handleZipcodeChange}
-                                            error={zipcodeError}
                                         />
                                     </SettingsSection>
                                     
@@ -298,11 +266,11 @@ const Settings = () => {
                                         icon={<Tv size={20} />}
                                     >
                                         <TvProviders 
-                                            selectedProviders={localPreferences.tvProviders} 
+                                            selectedProviders={userPreferences.tvProviders} 
                                             onToggle={handleTvProviderToggle}
                                             availableProviders={availableProviders}
                                             loading={providersLoading}
-                                            hasValidZipcode={isValidZipcode(localPreferences.zipcode)}
+                                            hasValidZipcode={isValidZipcode(userPreferences.zipcode)}
                                         />
                                     </SettingsSection>
                                     
@@ -313,7 +281,7 @@ const Settings = () => {
                                         icon={<Bell size={20} />}
                                     >
                                         <NotificationEmails 
-                                            notificationEmails={localPreferences.notificationEmails} 
+                                            notificationEmails={userPreferences.notificationEmails} 
                                             onChange={handleNotificationEmailsChange} 
                                         />
                                     </SettingsSection>
@@ -325,17 +293,10 @@ const Settings = () => {
                                         icon={<Star size={20} />}
                                     >
                                         <FavoriteTeams 
-                                            selectedTeams={localPreferences.favoriteTeams} 
+                                            selectedTeams={userPreferences.favoriteTeams} 
                                             onToggle={handleTeamToggle} 
                                         />
                                     </SettingsSection>
-
-                                    <div className='py-6'>
-                                        <SavePreferencesButton 
-                                            onSave={savePreferences} 
-                                            saveStatus={saveStatus} 
-                                        />
-                                    </div>
                                 </div>
                             )}
                         </div>

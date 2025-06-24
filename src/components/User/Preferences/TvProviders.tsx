@@ -51,7 +51,7 @@ const TvProviders: React.FC<TvProvidersProps> = ({
                     ))}
                 </div>
             ) : hasValidZipcode ? (
-                <p className="text-sm text-gray-500 italic">No providers found for this zipcode</p>
+                <p className="text-sm text-gray-500 italic">No providers found for the specified zipcode</p>
             ) : null}
         </div>
     );
