@@ -14,6 +14,8 @@ import { updateDatesData } from "./scheduledUpdater.js";
 import { getProviders, getChannels } from "./channel-scraper/service_providers.js";
 import { downloadImages } from "./sports-scrapers/scrape_images.js";
 import { combine_maps } from "./helpers.js";
+import Mailgun from "mailgun.js";
+import formData from "form-data";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -23,6 +25,7 @@ db.settings({
   timestampsInSnapshots: true,
 });
 const storage = admin.storage();
+const mailgun = new Mailgun(formData);
 
 const UPDATE_SIZE = 14;
 
@@ -223,6 +226,45 @@ export const getRandomQuery = onRequest(
     } catch (error) {
       logger.error("Error fetching ESPN networks:", error);
       res.status(500).send("Error fetching ESPN networks: " + error);
+    }
+  }
+);
+
+// http://127.0.0.1:5001/slates-59840/us-central1/sendDailyEmail
+export const sendDailyEmail = onRequest(
+  { 
+    cors: true,
+    secrets: ["MAILGUN_API_KEY", "MAILGUN_DOMAIN"]
+  },
+  async (req, res) => {
+    try {
+      // Get Mailgun configuration from environment variables
+      const apiKey = process.env.MAILGUN_API_KEY;
+      const domain = process.env.MAILGUN_DOMAIN;
+      
+      if (!apiKey || !domain) {
+        logger.error("Mailgun configuration missing", { 
+          hasApiKey: !!apiKey, 
+          hasDomain: !!domain 
+        });
+        throw new Error("Mailgun API key or domain not configured!");
+      }
+
+      const mg = mailgun.client({ username: "api", key: apiKey });
+
+      await mg.messages.create(domain, {
+        from: "Slates <no-reply@slates.co>",
+        to: ["ethaniorlowsky@gmail.com"],
+        subject: "Slates Daily Summary",
+        text: "Here's your daily summary!",
+        html: "<p>Here's your <b>daily summary</b>!</p>",
+      });
+      
+      logger.info("Daily email sent successfully");
+      res.json({ message: "Daily email sent successfully" });
+    } catch (error) {
+      logger.error("Error sending daily email:", error);
+      res.status(500).send("Error sending daily email: " + error);
     }
   }
 );
