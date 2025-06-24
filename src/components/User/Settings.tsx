@@ -4,7 +4,8 @@ import Nav from '../General/Nav';
 import { 
     ZipcodeInput, 
     TvProviders, 
-    FavoriteTeams, 
+    FavoriteTeams,
+    NotificationEmails,
     SavePreferencesButton 
 } from './Preferences';
 import { MapPin, Tv, Star, User, Bell, Shield, HelpCircle } from 'lucide-react';
@@ -178,6 +179,13 @@ const Settings = () => {
         }));
     };
 
+    const handleNotificationEmailsChange = (emails: string[]) => {
+        setLocalPreferences(prev => ({
+            ...prev,
+            notificationEmails: emails
+        }));
+    };
+
     const savePreferences = async () => {
         if (!currentUser) return;
         
@@ -202,8 +210,8 @@ const Settings = () => {
         { id: 'account', title: 'Account', description: 'Manage your account information', icon: <User size={20} /> },
         { id: 'location', title: 'Location', description: 'Set your location for regional sports', icon: <MapPin size={20} /> },
         { id: 'providers', title: 'TV Providers', description: 'Choose your TV providers for channel recommendations', icon: <Tv size={20} /> },
+        { id: 'notifications', title: 'Notifications', description: 'Configure daily email notifications with your personalized dashboard', icon: <Bell size={20} /> },
         { id: 'teams', title: 'Favorite Teams', description: 'Select your favorite teams to prioritize their games', icon: <Star size={20} /> },
-        { id: 'notifications', title: 'Notifications', description: 'Configure how you receive notifications', icon: <Bell size={20} />, disabled: true },
         { id: 'privacy', title: 'Privacy', description: 'Control your privacy settings', icon: <Shield size={20} />, disabled: true },
         { id: 'help', title: 'Help & Support', description: 'Get assistance with Slates', icon: <HelpCircle size={20} />, disabled: true }
     ];
@@ -298,6 +306,18 @@ const Settings = () => {
                                         />
                                     </SettingsSection>
                                     
+                                    <SettingsSection 
+                                        id="notifications" 
+                                        title="Notification Emails" 
+                                        description="Manage your notification email preferences"
+                                        icon={<Bell size={20} />}
+                                    >
+                                        <NotificationEmails 
+                                            notificationEmails={localPreferences.notificationEmails} 
+                                            onChange={handleNotificationEmailsChange} 
+                                        />
+                                    </SettingsSection>
+
                                     <SettingsSection 
                                         id="teams" 
                                         title="Favorite Teams" 

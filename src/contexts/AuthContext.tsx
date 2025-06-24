@@ -17,6 +17,7 @@ interface UserPreferences {
     zipcode: string;
     tvProviders: Record<string, string>; // Changed from string[] to Record<string, string>
     favoriteTeams: Record<string, string>[];
+    notificationEmails: string[];
     showOnlyAvailableBroadcasts: boolean;
 }
 
@@ -62,6 +63,7 @@ const getDefaultPreferences = (): UserPreferences => ({
     zipcode: '',
     tvProviders: {},
     favoriteTeams: [],
+    notificationEmails: [],
     showOnlyAvailableBroadcasts: true
 });
 
