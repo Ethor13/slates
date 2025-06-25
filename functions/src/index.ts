@@ -273,45 +273,66 @@ export const sendDailyEmail = onRequest(
   }
 );
 
-// Generate shareable dashboard token
-// http://127.0.0.1:5001/slates-59840/us-central1/generateDashboardToken
-export const generateDashboardToken = onRequest(
+// Internal function to generate shareable dashboard token for a specific user
+const generateDashboardTokenForUser = async (userId: string): Promise<{ token: string; shareableUrl: string }> => {
+  try {
+    // Get user preferences to include in the token
+    const userDoc = await admin.firestore().collection('users').doc(userId).get();
+    const userPreferences = userDoc.exists ? userDoc.data() : {};
+
+    // Create JWT token with user preferences and expiration (30 days)
+    const tokenPayload = {
+      userId,
+      userPreferences,
+      access: 'dashboard-view',
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) // 30 days
+    };
+
+    const shareableToken = jwt.sign(tokenPayload, JWT_SECRET);
+    
+    return {
+      token: shareableToken,
+      shareableUrl: `https://slates.co/shared/${shareableToken}`
+    };
+  } catch (error) {
+    logger.error("Error generating dashboard token for user:", userId, error);
+    throw new Error('Failed to generate shareable link');
+  }
+};
+
+// Example: Generate shareable link for daily email notifications
+// This could be called internally when sending daily emails to include a personalized link
+// http://127.0.0.1:5001/slates-59840/us-central1/generateEmailDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj
+export const generateEmailDashboardLink = onRequest(
   { cors: true },
   async (req, res) => {
     try {
-      // Verify the user is authenticated
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(401).json({ error: 'Authentication required' });
+      // This endpoint could be secured with API keys or internal authentication
+      const userId = req.query.userid as string;
+      
+      if (!userId) {
+        res.status(400).json({ error: 'userId is required' });
         return;
       }
 
-      const idToken = authHeader.split('Bearer ')[1];
-      const decodedToken = await admin.auth().verifyIdToken(idToken);
-      const userId = decodedToken.uid;
+      // Verify the user exists
+      try {
+        await admin.auth().getUser(userId);
+      } catch (error) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+      }
 
-      // Get user preferences to include in the token
-      const userDoc = await admin.firestore().collection('users').doc(userId).get();
-      const userPreferences = userDoc.exists ? userDoc.data() : {};
+      console.log(req.headers);
 
-      // Create JWT token with user preferences and expiration (30 days)
-      const tokenPayload = {
-        userId,
-        userPreferences,
-        access: 'dashboard-view',
-        iat: Math.floor(Date.now() / 1000),
-        exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) // 30 days
-      };
-
-      const shareableToken = jwt.sign(tokenPayload, JWT_SECRET);
+      const result = await generateDashboardTokenForUser(userId);
       
-      res.status(200).json({ 
-        token: shareableToken,
-        shareableUrl: `${req.headers.origin || 'https://slates.co'}/shared/${shareableToken}`
-      });
+      // This could be used to send the link via email or return it for other internal processes
+      res.status(200).json({ message: 'Dashboard link generated successfully', ...result });
     } catch (error) {
-      logger.error("Error generating dashboard token:", error);
-      res.status(500).json({ error: 'Failed to generate shareable link' });
+      logger.error("Error in generateEmailDashboardLink:", error);
+      res.status(500).json({ error: 'Failed to generate dashboard link' });
     }
   }
 );
