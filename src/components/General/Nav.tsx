@@ -65,7 +65,21 @@ const Nav = ({ isJWTUser = false }: NavProps) => {
                             </Link>
                         </div>
                         <div className="flex flex-row items-center justify-between w-full">
-                            {!currentUser ? (
+                            {isJWTUser ? 
+                                <>
+                                    <div className="flex-1">
+                                        {/* Left side space holder when user is logged in */}
+                                    </div>
+                                    <div className="flex justify-end">
+                                        <div
+                                            className="flex items-center text-black font-semibold cursor-pointer select-none hover:bg-slate-deep p-2 rounded-full transition-colors duration-200"
+                                            onClick={() => setIsMenuOpen(true)}
+                                        >
+                                            <span className="hidden sm:block text-lg mr-2 text-white">Access via Shareable Link</span>
+                                        </div>
+                                    </div>
+                                </>
+                                : !currentUser ? (
                                 <>
                                     <div className='hidden md:flex items-center space-x-2'>
                                         <a
