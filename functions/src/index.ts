@@ -16,6 +16,7 @@ import { downloadImages } from "./sports-scrapers/scrape_images.js";
 import { combine_maps } from "./helpers.js";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
+import jwt from "jsonwebtoken";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -28,6 +29,9 @@ const storage = admin.storage();
 const mailgun = new Mailgun(formData);
 
 const UPDATE_SIZE = 14;
+
+// JWT Secret - in production, this should be an environment variable
+const JWT_SECRET = process.env.JWT_SECRET || "your-super-secret-key-change-in-production";
 
 // http://127.0.0.1:5001/slates-59840/us-central1/requestImgUpdate
 export const requestImgUpdate = onRequest(
@@ -265,6 +269,91 @@ export const sendDailyEmail = onRequest(
     } catch (error) {
       logger.error("Error sending daily email:", error);
       res.status(500).send("Error sending daily email: " + error);
+    }
+  }
+);
+
+// Generate shareable dashboard token
+// http://127.0.0.1:5001/slates-59840/us-central1/generateDashboardToken
+export const generateDashboardToken = onRequest(
+  { cors: true },
+  async (req, res) => {
+    try {
+      // Verify the user is authenticated
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        res.status(401).json({ error: 'Authentication required' });
+        return;
+      }
+
+      const idToken = authHeader.split('Bearer ')[1];
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const userId = decodedToken.uid;
+
+      // Get user preferences to include in the token
+      const userDoc = await admin.firestore().collection('users').doc(userId).get();
+      const userPreferences = userDoc.exists ? userDoc.data() : {};
+
+      // Create JWT token with user preferences and expiration (30 days)
+      const tokenPayload = {
+        userId,
+        userPreferences,
+        access: 'dashboard-view',
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) // 30 days
+      };
+
+      const shareableToken = jwt.sign(tokenPayload, JWT_SECRET);
+      
+      res.status(200).json({ 
+        token: shareableToken,
+        shareableUrl: `${req.headers.origin || 'https://slates.co'}/shared/${shareableToken}`
+      });
+    } catch (error) {
+      logger.error("Error generating dashboard token:", error);
+      res.status(500).json({ error: 'Failed to generate shareable link' });
+    }
+  }
+);
+
+// Verify shareable dashboard token
+// http://127.0.0.1:5001/slates-59840/us-central1/verifyDashboardToken?token=your_jwt_token_here
+export const verifyDashboardToken = onRequest(
+  { cors: true },
+  async (req, res) => {
+    try {
+      const { token } = req.query;
+      
+      if (!token || typeof token !== 'string') {
+        res.status(400).json({ error: 'Token is required' });
+        return;
+      }
+
+      // Verify and decode the JWT token
+      const decoded = jwt.verify(token, JWT_SECRET) as any;
+      
+      // Check if token is expired (additional check, though jwt.verify should handle this)
+      if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) {
+        res.status(401).json({ error: 'Token has expired' });
+        return;
+      }
+
+      // Return user preferences and access level
+      res.status(200).json({
+        valid: true,
+        userId: decoded.userId,
+        userPreferences: decoded.userPreferences,
+        access: decoded.access
+      });
+    } catch (error: any) {
+      if (error.name === 'TokenExpiredError') {
+        res.status(401).json({ error: 'Token has expired' });
+      } else if (error.name === 'JsonWebTokenError') {
+        res.status(401).json({ error: 'Invalid token' });
+      } else {
+        logger.error("Error verifying dashboard token:", error);
+        res.status(500).json({ error: 'Failed to verify token' });
+      }
     }
   }
 );

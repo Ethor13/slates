@@ -3,6 +3,7 @@ import AuthForm from './components/Auth/AuthForm';
 import ProtectedRoute from './components/User/ProtectedRoute';
 import Dashboard from './components/User/Dashboard';
 import Settings from './components/User/Settings';
+import SharedDashboard from './components/User/SharedDashboard';
 import LandingPage from './components/Landing/LandingPage';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/auth" element={<AuthForm />} />
+      <Route path="/shared/:token" element={<SharedDashboard />} />
       <Route
         path="/dashboard"
         element={
