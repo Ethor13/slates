@@ -16,6 +16,10 @@
         "function": "channels"
       },
       {
+        "source": "/verifyDashboardToken",
+        "function": "verifyDashboardToken"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
