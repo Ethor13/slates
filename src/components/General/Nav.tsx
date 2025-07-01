@@ -1,17 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useJWT } from '../../contexts/JWTContext';
 import { Menu, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
 
-interface NavProps {
-    isJWTUser?: boolean;
-}
-
-const Nav = ({ isJWTUser = false }: NavProps) => {
+const Nav = () => {
     const { currentUser, logout } = useAuth();
-    const { clearJWTUser } = useJWT();
-    const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -65,21 +58,7 @@ const Nav = ({ isJWTUser = false }: NavProps) => {
                             </Link>
                         </div>
                         <div className="flex flex-row items-center justify-between w-full">
-                            {isJWTUser ? 
-                                <>
-                                    <div className="flex-1">
-                                        {/* Left side space holder when user is logged in */}
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <div
-                                            className="flex items-center text-black font-semibold cursor-pointer select-none hover:bg-slate-deep p-2 rounded-full transition-colors duration-200"
-                                            onClick={() => setIsMenuOpen(true)}
-                                        >
-                                            <span className="hidden sm:block text-lg mr-2 text-white">Access via Shareable Link</span>
-                                        </div>
-                                    </div>
-                                </>
-                                : !currentUser ? (
+                            {!currentUser ? (
                                 <>
                                     <div className='hidden md:flex items-center space-x-2'>
                                         <a
@@ -165,21 +144,12 @@ const Nav = ({ isJWTUser = false }: NavProps) => {
                         </div>
 
                         <div className="ml-2 border-b border-gray-200 py-4">
-                            <div className="text-sm text-gray-500">
-                                {isJWTUser ? 'Viewing shared dashboard' : 'Signed in as:'}
+                            <div className="text-sm text-gray-500">Signed in as:</div>
+                            <div className='flex items-center space-x-2 mt-2'>
+                                <Mail className="h-4 w-4 text-slate-deep" />
+                                {/* add elipses if email surpasses a certain length */}
+                                <div className="text-md font-medium text-slate-deep">{currentUser?.email}</div>
                             </div>
-                            {!isJWTUser && (
-                                <div className='flex items-center space-x-2 mt-2'>
-                                    <Mail className="h-4 w-4 text-slate-deep" />
-                                    {/* add elipses if email surpasses a certain length */}
-                                    <div className="text-md font-medium text-slate-deep">{currentUser?.email}</div>
-                                </div>
-                            )}
-                            {isJWTUser && (
-                                <div className='flex items-center space-x-2 mt-2'>
-                                    <div className="text-md font-medium text-slate-deep">Guest Access</div>
-                                </div>
-                            )}
                         </div>
 
                         <nav className="flex flex-col mt-2">
@@ -193,33 +163,26 @@ const Nav = ({ isJWTUser = false }: NavProps) => {
                                     <p>Dashboard</p>
                                 </div>
                             </Link>
-                            {!isJWTUser && (
-                                <Link
-                                    to="/settings"
-                                    className="px-2 py-2 block font-semibold text-slate-deep hover:bg-slate-light hover:bg-opacity-20 rounded-md transition-colors duration-200"
-                                    onClick={() => setIsMenuOpen(false)}
-                                >
-                                    <div className="flex items-center">
-                                        <Settings className="h-4 w-4 text-slate-deep inline-block mr-2" />
-                                        <p>User Settings</p>
-                                    </div>
-                                </Link>
-                            )}
+                            <Link
+                                to="/settings"
+                                className="px-2 py-2 block font-semibold text-slate-deep hover:bg-slate-light hover:bg-opacity-20 rounded-md transition-colors duration-200"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <div className="flex items-center">
+                                    <Settings className="h-4 w-4 text-slate-deep inline-block mr-2" />
+                                    <p>User Settings</p>
+                                </div>
+                            </Link>
                             <button
                                 onClick={() => {
-                                    if (isJWTUser) {
-                                        clearJWTUser();
-                                        navigate('/');
-                                    } else {
-                                        logout();
-                                    }
+                                    logout();
                                     setIsMenuOpen(false);
                                 }}
                                 className="px-2 py-2 w-full text-left font-semibold text-slate-deep hover:bg-slate-light hover:bg-opacity-20 rounded-md transition-colors duration-200"
                             >
                                 <div className="flex items-center">
                                     <LogOut className="h-4 w-4 text-slate-deep inline-block mr-2" />
-                                    <p>{isJWTUser ? 'Exit' : 'Logout'}</p>
+                                    <p>Logout</p>
                                 </div>
                             </button>
                         </nav>

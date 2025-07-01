@@ -24,3 +24,5 @@
     - each factor should be uniformly distributed
 
 - Highlight the peak of each day in the game pulse a different color
+
+- make it so unlogged in users with JWT can access sports data

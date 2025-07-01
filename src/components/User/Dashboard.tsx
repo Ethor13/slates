@@ -30,17 +30,8 @@ const markFavoriteTeams = (games: ScheduleResponse, favoriteTeams: Record<string
     return markedGames;
 }
 
-interface DashboardProps {
-    isJWTUser?: boolean;
-    jwtUserPreferences?: any;
-}
-
-const Dashboard = ({ isJWTUser = false, jwtUserPreferences }: DashboardProps) => {
+const Dashboard = () => {
     const { currentUser, userPreferences, preferencesLoading } = useAuth();
-    
-    // Use JWT preferences if JWT user, otherwise use auth context
-    const effectivePreferences = isJWTUser ? jwtUserPreferences : userPreferences;
-    const effectivePreferencesLoading = isJWTUser ? false : preferencesLoading;
     
     const [allGames, setAllGames] = useState<ScheduleResponse>({});
     const [games, setGames] = useState<ScheduleResponse>({});
@@ -59,7 +50,7 @@ const Dashboard = ({ isJWTUser = false, jwtUserPreferences }: DashboardProps) =>
 
     // Fetch games data using Cloud Functions
     const fetchAllGamesOnDate = useCallback(async () => {
-        if ((!currentUser && !isJWTUser) || effectivePreferencesLoading) return;
+        if (!currentUser || preferencesLoading) return;
 
         setGamesLoading(true);
         setGamesError(null);
@@ -73,14 +64,14 @@ const Dashboard = ({ isJWTUser = false, jwtUserPreferences }: DashboardProps) =>
             }
             const games = scheduleSnapshot.data() as ScheduleResponse;
 
-            setAllGames(markFavoriteTeams(games, effectivePreferences.favoriteTeams || []));
+            setAllGames(markFavoriteTeams(games, userPreferences.favoriteTeams || []));
         } catch (error) {
             console.error('Error getting games', error);
             setGamesError(error);
         } finally {
             setGamesLoading(false);
         }
-    }, [currentUser, isJWTUser, selectedDate, effectivePreferences.favoriteTeams, effectivePreferencesLoading]);
+    }, [currentUser, selectedDate, userPreferences.favoriteTeams, preferencesLoading]);
 
     const setDisplayedGames = useCallback(() => {
         setGamesLoading(true);
@@ -148,15 +139,15 @@ const Dashboard = ({ isJWTUser = false, jwtUserPreferences }: DashboardProps) =>
 
     // Re-mark favorite teams when user preferences change
     useEffect(() => {
-        if (Object.keys(allGames).length > 0 && !effectivePreferencesLoading) {
-            setAllGames(prevGames => markFavoriteTeams(prevGames, effectivePreferences.favoriteTeams || []));
+        if (Object.keys(allGames).length > 0 && !preferencesLoading) {
+            setAllGames(prevGames => markFavoriteTeams(prevGames, userPreferences.favoriteTeams || []));
         }
-    }, [effectivePreferences.favoriteTeams, effectivePreferencesLoading]);
+    }, [userPreferences.favoriteTeams, preferencesLoading]);
 
     return (
         <div className="h-screen overflow-hidden relative slate-gradient">
             <div className="print:hidden">
-                <Nav isJWTUser={isJWTUser} />
+                <Nav />
             </div>
             
             {/* Print Header Banner */}

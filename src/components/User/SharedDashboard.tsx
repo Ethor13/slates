@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useJWT } from '../../contexts/JWTContext';
 import Dashboard from './Dashboard';
 import { Link } from 'react-router-dom';
+import { signInWithCustomToken } from 'firebase/auth';
+import { auth } from '../../lib/firebase';
 
 const SharedDashboard = () => {
   const { token } = useParams<{ token: string }>();
-  const { jwtUser, loading, verifyTokenWithDetails } = useJWT();
   const [verificationAttempted, setVerificationAttempted] = useState(false);
   const [isValidToken, setIsValidToken] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -25,11 +25,13 @@ const SharedDashboard = () => {
       }
 
       try {
-        const result = await verifyTokenWithDetails(token);
-        setIsValidToken(result.isValid);
-        if (!result.isValid) {
-          setErrorMessage(result.errorMessage || 'This shareable link is invalid or has expired.');
-        }
+        const res = await signInWithCustomToken(auth, token);
+        console.log(res);
+
+        const idToken = await auth.currentUser?.getIdToken();
+        console.log('ID Token:', idToken);
+
+        setIsValidToken(true);
       } catch (error) {
         console.error('Token validation error:', error);
         setIsValidToken(false);
@@ -40,10 +42,10 @@ const SharedDashboard = () => {
     };
 
     validateToken();
-  }, [token, verifyTokenWithDetails]);
+  }, [token]);
 
   // Show loading while verifying token
-  if (loading || !verificationAttempted) {
+  if (!verificationAttempted) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <div className="text-center">
@@ -55,7 +57,7 @@ const SharedDashboard = () => {
   }
 
   // Redirect to auth if token is invalid or missing
-  if (!token || !isValidToken || !jwtUser) {
+  if (!token || !isValidToken) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <div className="text-center max-w-md mx-auto">
@@ -74,7 +76,8 @@ const SharedDashboard = () => {
   }
 
   // Render the dashboard with JWT user context
-  return <Dashboard isJWTUser={true} jwtUserPreferences={jwtUser.userPreferences} />;
+  // return <Dashboard isJWTUser={true} jwtUserPreferences={jwtUser.userPreferences} />;
+  return <Dashboard />;
 };
 
 export default SharedDashboard;
