@@ -272,22 +272,25 @@ export const sendDailyEmail = onRequest(
 );
 
 // Internal function to generate shareable dashboard token for a specific user
-const generateDashboardTokenForUser = async (userId: string): Promise<{ token: string; shareableUrl: string }> => {
+const generateDashboardTokenForUser = async (userId: string, email: string): Promise<{ token: string; shareableUrl: string }> => {
   try {
     // Get user preferences to include in the token
-    const userDoc = await admin.firestore().collection('users').doc(userId).get();
+    const userDoc = await db.collection('users').doc(userId).get();
     const userPreferences = userDoc.exists ? userDoc.data() : {};
+
+    const currentTime = Math.floor(Date.now() / 1000);
 
     // Create custom claims for the token
     const customClaims = {
-      userPreferences,
-      access: 'dashboard-view',
-      shareableToken: true,
-      createdAt: Math.floor(Date.now() / 1000),
-      expiresAt: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) // 30 days
+      role: "tempUser",
+      expiresAt: currentTime + (30 * 24 * 60 * 60) // 30 days
     };
 
-    const shareableToken = await auth.createCustomToken(userId, customClaims);
+    const tempUserId = `${userId}:${email}:${currentTime}`;
+    await auth.createUser({ uid: tempUserId, email });
+    await db.collection('users').doc(tempUserId).set(userPreferences || {});
+
+    const shareableToken = await auth.createCustomToken(tempUserId, customClaims);
     
     return {
       token: shareableToken,
@@ -301,16 +304,22 @@ const generateDashboardTokenForUser = async (userId: string): Promise<{ token: s
 
 // Example: Generate shareable link for daily email notifications
 // This could be called internally when sending daily emails to include a personalized link
-// http://127.0.0.1:5001/slates-59840/us-central1/generateEmailDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj
+// http://127.0.0.1:5001/slates-59840/us-central1/generateEmailDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj&email=info3%40slates%2Eco
 export const generateEmailDashboardLink = onRequest(
   { cors: true },
   async (req, res) => {
     try {
       // This endpoint could be secured with API keys or internal authentication
       const userId = req.query.userid as string;
-      
+      const email = req.query.email as string;
+
       if (!userId) {
         res.status(400).json({ error: 'userId is required' });
+        return;
+      }
+
+      if (!email) {
+        res.status(400).json({ error: 'email is required' });
         return;
       }
 
@@ -322,65 +331,13 @@ export const generateEmailDashboardLink = onRequest(
         return;
       }
 
-      const result = await generateDashboardTokenForUser(userId);
+      const result = await generateDashboardTokenForUser(userId, email);
       
       // This could be used to send the link via email or return it for other internal processes
       res.status(200).json({ message: 'Dashboard link generated successfully', ...result });
     } catch (error) {
       logger.error("Error in generateEmailDashboardLink:", error);
       res.status(500).json({ error: 'Failed to generate dashboard link' });
-    }
-  }
-);
-
-// Verify shareable dashboard token
-// http://127.0.0.1:5001/slates-59840/us-central1/verifyDashboardToken?token=your_custom_token_here
-export const verifyDashboardToken = onRequest(
-  { cors: true },
-  async (req, res) => {
-    try {
-      const { token } = req.query;
-
-      if (!token || typeof token !== 'string') {
-        res.status(400).json({ error: 'Token is required' });
-        return;
-      }
-
-      // Verify the custom token using Firebase Auth
-      const decodedToken = await auth.verifyIdToken(token);
-
-      logger.log("Decoded token:", decodedToken);
-      
-      // Check if this is a shareable token and if it's expired
-      const customClaims = decodedToken;
-      
-      if (!customClaims.shareableToken) {
-        res.status(401).json({ error: 'Invalid shareable token' });
-        return;
-      }
-
-      if (customClaims.expiresAt && customClaims.expiresAt < Math.floor(Date.now() / 1000)) {
-        res.status(401).json({ error: 'Token has expired' });
-        return;
-      }
-
-      // Return user preferences and access level
-      res.status(200).json({
-        valid: true,
-        userId: decodedToken.uid,
-        userPreferences: customClaims.userPreferences,
-        access: customClaims.access
-      });
-    } catch (error: any) {
-      logger.log(error);
-      if (error.code === 'auth/id-token-expired') {
-        res.status(401).json({ error: 'Token has expired' });
-      } else if (error.code === 'auth/argument-error' || error.code === 'auth/id-token-revoked') {
-        res.status(401).json({ error: 'Invalid token' });
-      } else {
-        logger.error("Error verifying dashboard token:", error);
-        res.status(500).json({ error: 'Failed to verify token' });
-      }
     }
   }
 );

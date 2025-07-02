@@ -5,9 +5,10 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signInWithPopup,
+    signInWithCustomToken,
     signOut,
     sendPasswordResetEmail,
-    onAuthStateChanged
+    onAuthStateChanged,
 } from 'firebase/auth';
 import { auth, db } from '../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -44,6 +45,7 @@ interface AuthContextType {
     signIn: (email: string, password: string) => Promise<void>;
     signUp: (email: string, password: string) => Promise<void>;
     signInWithGoogle: () => Promise<void>;
+    signInWithToken: (token: string) => Promise<void>;
     logout: () => Promise<void>;
     resetPassword: (email: string) => Promise<void>;
     updateUserPreferences: (preferences: Partial<UserPreferences>) => Promise<void>;
@@ -76,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Listen for auth state changes
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             setCurrentUser(user);
             setLoading(false);
         });
@@ -84,9 +86,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return unsubscribe;
     }, []);
 
-    // Listen for user changes
     useEffect(() => {
-        const setupPreferencesListener = async () => {
+        const setUserPreferencesFromFirestore = async () => {
+            setPreferencesLoading(true);
             if (!currentUser) {
                 setUserPreferences(getDefaultPreferences());
                 setPreferencesLoading(false);
@@ -109,13 +111,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     });
                 }
             } catch (error) {
-                console.error('Error setting up preferences listener:', error);
+                console.error(`Error setting up preferences listener for ${currentUser?.email}:`, error);
             } finally {
                 setPreferencesLoading(false);
             }
-        };
+        }
 
-        setupPreferencesListener();
+        setUserPreferencesFromFirestore();
     }, [currentUser]);
 
     // Listen for provider changes
@@ -165,6 +167,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await signInWithPopup(auth, provider);
     };
 
+    const signInWithToken = async (token: string) => {
+        await signInWithCustomToken(auth, token);
+    }
+
     const logout = async () => {
         await signOut(auth);
     };
@@ -196,6 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signIn,
         signUp,
         signInWithGoogle,
+        signInWithToken,
         logout,
         resetPassword,
         updateUserPreferences

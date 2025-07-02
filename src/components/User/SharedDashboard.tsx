@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import { Link } from 'react-router-dom';
-import { signInWithCustomToken } from 'firebase/auth';
-import { auth } from '../../lib/firebase';
+import { useAuth } from '../../contexts/AuthContext';
 
 const SharedDashboard = () => {
   const { token } = useParams<{ token: string }>();
   const [verificationAttempted, setVerificationAttempted] = useState(false);
   const [isValidToken, setIsValidToken] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const { signInWithToken } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const validateToken = async () => {
@@ -19,19 +20,12 @@ const SharedDashboard = () => {
         return;
       }
 
-      if (verificationAttempted) {
-        // If already attempted verification, no need to do it again
-        return;
-      }
+      if (verificationAttempted) return;
 
       try {
-        const res = await signInWithCustomToken(auth, token);
-        console.log(res);
-
-        const idToken = await auth.currentUser?.getIdToken();
-        console.log('ID Token:', idToken);
-
+        await signInWithToken(token);
         setIsValidToken(true);
+        navigate("/dashboard");
       } catch (error) {
         console.error('Token validation error:', error);
         setIsValidToken(false);
@@ -75,8 +69,6 @@ const SharedDashboard = () => {
     );
   }
 
-  // Render the dashboard with JWT user context
-  // return <Dashboard isJWTUser={true} jwtUserPreferences={jwtUser.userPreferences} />;
   return <Dashboard />;
 };
 
