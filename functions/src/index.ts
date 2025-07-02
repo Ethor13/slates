@@ -233,7 +233,7 @@ export const getRandomQuery = onRequest(
 );
 
 // Internal utility function to send daily email to a specific user
-const sendDailyEmailToUser = async (userEmail: string, userId: string): Promise<void> => {
+const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promise<void> => {
   // Get Mailgun configuration from environment variables
   const apiKey = process.env.MAILGUN_API_KEY;
   const domain = process.env.MAILGUN_DOMAIN;
@@ -255,18 +255,15 @@ const sendDailyEmailToUser = async (userEmail: string, userId: string): Promise<
     day: 'numeric' 
   });
 
-  // Generate personalized link
-  const { shareableUrl } = await generateDashboardTokenForUser(userId, userEmail);
-
   // Customize template variables
   const templateVariables = {
     date: today,
-    link: shareableUrl,
+    link,
   };
 
   await mg.messages.create(domain, {
     from: "Slates <no-reply@slates.co>",
-    to: [userEmail],
+    to: [recipientEmail],
     subject: `Slates Summary for ${today}`,
     template: "slates daily email",
     "h:X-Mailgun-Variables": JSON.stringify(templateVariables),
@@ -294,28 +291,31 @@ export const sendBulkEmail = onRequest(
           const userId = userDoc.id;
           const userData = userDoc.data();
 
-          // Skip users without email addresses
-          if (userId.includes(":")) {
+          // Skip Guest Accounts
+          if (userId.endsWith(":Guest")) {
             logger.info(`Temp User ${userId}, skipping`);
             continue;
           }
 
           const recipient_list = userData.notificationEmails || [];
 
+          // Generate personalized link
+          const guestUrl = await generateDashboardTokenForUser(userId, false);
+
           // Use the existing sendDailyEmailToUser function
-          for (const userEmail of recipient_list) {
+          for (const recipientEmail of recipient_list) {
             try {
-              await sendDailyEmailToUser(userEmail, userId);
+              await sendDailyEmailToUser(recipientEmail, guestUrl);
               successCount++;
             } catch (error) {
               errorCount++;
               const errorInfo = {
                 userId: userId,
-                email: userEmail,
+                email: recipientEmail,
                 error: error instanceof Error ? error.message : String(error)
               };
               errors.push(errorInfo);
-              logger.error(`Failed to send email to ${userEmail}:`, error);
+              logger.error(`Failed to send email to ${recipientEmail}:`, error);
             }
           }
 
@@ -332,7 +332,7 @@ export const sendBulkEmail = onRequest(
         errorCount: errorCount,
         totalUsers: usersSnapshot.docs.length,
         errors: errors
-      });
+        });
 
     } catch (error) {
       logger.error("Error in bulk email operation:", error);
@@ -342,44 +342,33 @@ export const sendBulkEmail = onRequest(
 );
 
 // Internal function to generate shareable dashboard token for a specific user
-const generateDashboardTokenForUser = async (userId: string, email: string): Promise<{ token: string; shareableUrl: string }> => {
+const generateDashboardTokenForUser = async (userId: string, owner: boolean): Promise<string> => {
   try {
     // Get user preferences to include in the token
     const userDoc = await db.collection('users').doc(userId).get();
     const userPreferences = userDoc.exists ? userDoc.data() : {};
+    const userEmail = await auth.getUser(userId).then(user => user.email);
 
-    const currentTime = Math.floor(Date.now() / 1000);
+    if (owner) {
+      const shareableToken = await auth.createCustomToken(userId);
+      return `https://slates.co/shared/${shareableToken}`
+    } else {
+      let tempUserId = `${userId}:${userEmail}:Guest`;
 
-    // Create custom claims for the token
-    const customClaims = {
-      role: "tempUser",
-      expiresAt: currentTime + (30 * 24 * 60 * 60) // 30 days
-    };
-
-    let tempUserId = `${userId}:${email}`;
-
-    try {
-      await auth.getUser(tempUserId);
-      // User already exists, no need to create
-    } catch (error) {
       try {
-        const existingUser = await auth.getUserByEmail(email);
-        tempUserId = existingUser.uid;
+        // User already exists, no need to create
+        await auth.getUser(tempUserId);
       } catch (error) {
         // User doesn't exist, create it
         await auth.createUser({ uid: tempUserId });
       }
+
+      const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
+      await db.collection('users').doc(tempUserId).set(userPreferencesWithoutEmails);
+
+      const shareableToken = await auth.createCustomToken(tempUserId);
+      return `https://slates.co/shared/${shareableToken}`
     }
-
-    const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
-    await db.collection('users').doc(tempUserId).set(userPreferencesWithoutEmails);
-
-    const shareableToken = await auth.createCustomToken(tempUserId, customClaims);
-    
-    return {
-      token: shareableToken,
-      shareableUrl: `https://slates.co/shared/${shareableToken}`
-    };
   } catch (error) {
     logger.error("Error generating dashboard token for user:", userId, error);
     throw new Error('Failed to generate shareable link');
@@ -388,22 +377,16 @@ const generateDashboardTokenForUser = async (userId: string, email: string): Pro
 
 // Example: Generate shareable link for daily email notifications
 // This could be called internally when sending daily emails to include a personalized link
-// http://127.0.0.1:5001/slates-59840/us-central1/generateEmailDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj&email=info%40slates%2Eco
-export const generateEmailDashboardLink = onRequest(
+// http://127.0.0.1:5001/slates-59840/us-central1/generateDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj
+export const generateDashboardLink = onRequest(
   { cors: true },
   async (req, res) => {
     try {
       // This endpoint could be secured with API keys or internal authentication
       const userId = req.query.userid as string;
-      const email = req.query.email as string;
 
       if (!userId) {
         res.status(400).json({ error: 'userId is required' });
-        return;
-      }
-
-      if (!email) {
-        res.status(400).json({ error: 'email is required' });
         return;
       }
 
@@ -415,12 +398,12 @@ export const generateEmailDashboardLink = onRequest(
         return;
       }
 
-      const result = await generateDashboardTokenForUser(userId, email);
+      const shareableUrl = await generateDashboardTokenForUser(userId, false);
       
       // This could be used to send the link via email or return it for other internal processes
-      res.status(200).json({ message: 'Dashboard link generated successfully', ...result });
+      res.status(200).json({ message: 'Dashboard link generated successfully', shareableUrl });
     } catch (error) {
-      logger.error("Error in generateEmailDashboardLink:", error);
+      logger.error("Error in generateDashboardLink:", error);
       res.status(500).json({ error: 'Failed to generate dashboard link' });
     }
   }

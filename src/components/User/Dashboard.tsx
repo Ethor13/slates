@@ -2,7 +2,7 @@ import { db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { ArrowUp, SlidersHorizontal, Printer } from 'lucide-react';
+import { ArrowUp, SlidersHorizontal, Printer, Share2 } from 'lucide-react';
 import Nav from '../General/Nav';
 import Sidebar from '../Games/Sidebar';
 import GamesList from '../Games/GamesList';
@@ -134,6 +134,18 @@ const Dashboard = () => {
         window.print();
     };
 
+    if (!currentUser) return;
+    const handleShare = async () => {
+        try {
+            const response = await fetch(`/generateDashboardLink?userid=${currentUser.uid.split(":").at(0)}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            await navigator.clipboard.writeText(data.shareableUrl);
+        } catch (error) {
+            console.error('Error sharing:', error);
+        }
+    };
+
     useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
@@ -222,16 +234,29 @@ const Dashboard = () => {
                                         <p><b>Filters</b></p>
                                         <SlidersHorizontal className="h-6 w-6" />
                                     </button>
-                                    {/* Print button - positioned inside scrollable area */}
-                                    <button
-                                        onClick={handlePrint}
-                                        className="absolute top-6 right-[3vw] p-2 rounded-full transition-all duration-200 text-white slate-gradient slate-gradient-hover print:hidden z-30
-                                                   flex gap-2"
-                                        aria-label="Print this page"
-                                    >
-                                        <p><b>Print</b></p>
-                                        <Printer className="h-6 w-6" />
-                                    </button>
+                                    <div className="absolute top-6 right-[3vw] flex flex-col items-end">
+                                        {/* Print button - positioned inside scrollable area */}
+                                        <button
+                                            onClick={handlePrint}
+                                            className="w-full p-2 mb-1 rounded-full transition-all duration-200 text-white slate-gradient slate-gradient-hover print:hidden z-30
+                                                    flex gap-2 flex-row justify-between items-center"
+                                            aria-label="Print this page"
+                                        >
+                                            <div className="text-center">
+                                                <p><b>Print</b></p>
+                                            </div>
+                                            <Printer className="h-6 w-6" />
+                                        </button>
+                                        <button
+                                            onClick={handleShare}
+                                            className="w-full p-2 rounded-full transition-all duration-200 text-white slate-gradient slate-gradient-hover print:hidden z-30
+                                                    flex gap-2 flex-row justify-between items-center"
+                                            aria-label="Share this page"
+                                        >
+                                            <p><b>Share</b></p>
+                                            <Share2 className="h-6 w-6" />
+                                        </button>
+                                    </div>
                                     
                                     {/* Conditionally render GamePulseChart in print based on toggle */}
                                     <div className={includeGamePulseInPrint ? '' : 'print:hidden'}>

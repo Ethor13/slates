@@ -15,6 +15,10 @@ export default defineConfig({
         target: 'http://localhost:5001/slates-59840/us-central1/channels',
         changeOrigin: true,
       },
+      '/generateDashboardLink': {
+        target: 'http://localhost:5001/slates-59840/us-central1/generateDashboardLink',
+        changeOrigin: true,
+      },
     },
   },
   build: {

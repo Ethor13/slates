@@ -16,6 +16,10 @@
         "function": "channels"
       },
       {
+        "source": "/generateDashboardLink",
+        "function": "generateDashboardLink"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

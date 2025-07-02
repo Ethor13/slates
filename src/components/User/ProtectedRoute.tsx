@@ -1,7 +1,12 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+interface ProtectedRouteProps {
+    children: React.ReactNode;
+    redirectTemp?: boolean;
+}
+
+export default function ProtectedRoute({ children, redirectTemp = false }: ProtectedRouteProps) {
     const { currentUser, loading } = useAuth();
 
     if (loading) {
@@ -10,6 +15,11 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
     if (!currentUser) {
         return <Navigate to="/auth" />;
+    }
+
+    // Check if user is a temp user (has : in uid) and redirectTemp is enabled
+    if (redirectTemp && currentUser.uid.includes(':')) {
+        return <Navigate to="/dashboard" />;
     }
 
     return <>{children}</>;

@@ -5,7 +5,15 @@ import { Menu, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
 import { User } from 'firebase/auth/web-extension';
 
 const getDisplayName = (user: User) => {
-    return user.email || user.uid.split(":").at(-1);
+    if (user.email) {
+        return user.email
+    } else {
+        if (user.uid.includes(":")) {
+            const email = user.uid.split(":").at(-2);
+            return `${email} (Guest)`;
+        }
+        return "Guest Access";
+    }
 };
 
 const Nav = () => {
@@ -174,16 +182,19 @@ const Nav = () => {
                                     <p>Dashboard</p>
                                 </div>
                             </Link>
-                            <Link
-                                to="/settings"
-                                className="px-2 py-2 block font-semibold text-slate-deep hover:bg-slate-light hover:bg-opacity-20 rounded-md transition-colors duration-200"
-                                onClick={() => setIsMenuOpen(false)}
-                            >
-                                <div className="flex items-center">
-                                    <Settings className="h-4 w-4 text-slate-deep inline-block mr-2" />
-                                    <p>User Settings</p>
-                                </div>
-                            </Link>
+                            {/* Only show settings for non-temp users (temp users have : in their uid) */}
+                            {currentUser && !currentUser.uid.includes(':') && (
+                                <Link
+                                    to="/settings"
+                                    className="px-2 py-2 block font-semibold text-slate-deep hover:bg-slate-light hover:bg-opacity-20 rounded-md transition-colors duration-200"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    <div className="flex items-center">
+                                        <Settings className="h-4 w-4 text-slate-deep inline-block mr-2" />
+                                        <p>User Settings</p>
+                                    </div>
+                                </Link>
+                            )}
                             <button
                                 onClick={() => {
                                     logout();
