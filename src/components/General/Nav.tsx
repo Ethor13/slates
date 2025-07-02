@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Menu, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
+import { User } from 'firebase/auth/web-extension';
+
+const getDisplayName = (user: User) => {
+    return user.email || user.uid.split(":").at(-1);
+};
 
 const Nav = () => {
     const { currentUser, logout } = useAuth();
@@ -107,7 +112,7 @@ const Nav = () => {
                                             className="flex items-center text-black font-semibold cursor-pointer select-none hover:bg-slate-deep p-2 rounded-full transition-colors duration-200"
                                             onClick={() => setIsMenuOpen(true)}
                                         >
-                                            <span className="hidden sm:block text-lg mr-2 text-white">{currentUser.email}</span>
+                                            <span className="hidden sm:block text-lg mr-2 text-white">{getDisplayName(currentUser)}</span>
                                             <Menu className="h-6 w-6 ml-0 text-white" />
                                         </div>
                                     </div>
@@ -144,12 +149,18 @@ const Nav = () => {
                         </div>
 
                         <div className="ml-2 border-b border-gray-200 py-4">
-                            <div className="text-sm text-gray-500">Signed in as:</div>
-                            <div className='flex items-center space-x-2 mt-2'>
-                                <Mail className="h-4 w-4 text-slate-deep" />
-                                {/* add elipses if email surpasses a certain length */}
-                                <div className="text-md font-medium text-slate-deep">{currentUser?.email}</div>
-                            </div>
+                            {currentUser ? (
+                                <>
+                                    <div className="text-sm text-gray-500">Signed in as:</div>
+                                    <div className='flex items-center space-x-2 mt-2'>
+                                        <Mail className="h-4 w-4 text-slate-deep" />
+                                        {/* add elipses if email surpasses a certain length */}
+                                        <div className="text-md font-medium text-slate-deep">{getDisplayName(currentUser)}</div>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="text-sm text-gray-500">Not signed in</div>
+                            )}
                         </div>
 
                         <nav className="flex flex-col mt-2">

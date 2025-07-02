@@ -303,7 +303,7 @@ export const sendBulkEmail = onRequest(
           const recipient_list = userData.notificationEmails || [];
 
           // Use the existing sendDailyEmailToUser function
-          recipient_list.forEach(async (userEmail: string) => {
+          for (const userEmail of recipient_list) {
             try {
               await sendDailyEmailToUser(userEmail, userId);
               successCount++;
@@ -311,13 +311,13 @@ export const sendBulkEmail = onRequest(
               errorCount++;
               const errorInfo = {
                 userId: userId,
-                email: userDoc.data().email,
+                email: userEmail,
                 error: error instanceof Error ? error.message : String(error)
               };
               errors.push(errorInfo);
               logger.error(`Failed to send email to ${userEmail}:`, error);
             }
-          });
+          }
 
         } catch (userError) {
           logger.error(`Failed to send emails for user ${userDoc.id}:`, userError);
@@ -356,14 +356,19 @@ const generateDashboardTokenForUser = async (userId: string, email: string): Pro
       expiresAt: currentTime + (30 * 24 * 60 * 60) // 30 days
     };
 
-    const tempUserId = `${userId}:${email}`;
+    let tempUserId = `${userId}:${email}`;
 
     try {
       await auth.getUser(tempUserId);
       // User already exists, no need to create
     } catch (error) {
-      // User doesn't exist, create it
-      await auth.createUser({ uid: tempUserId, email });
+      try {
+        const existingUser = await auth.getUserByEmail(email);
+        tempUserId = existingUser.uid;
+      } catch (error) {
+        // User doesn't exist, create it
+        await auth.createUser({ uid: tempUserId });
+      }
     }
 
     const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
@@ -383,7 +388,7 @@ const generateDashboardTokenForUser = async (userId: string, email: string): Pro
 
 // Example: Generate shareable link for daily email notifications
 // This could be called internally when sending daily emails to include a personalized link
-// http://127.0.0.1:5001/slates-59840/us-central1/generateEmailDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj&email=info3%40slates%2Eco
+// http://127.0.0.1:5001/slates-59840/us-central1/generateEmailDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj&email=info%40slates%2Eco
 export const generateEmailDashboardLink = onRequest(
   { cors: true },
   async (req, res) => {
