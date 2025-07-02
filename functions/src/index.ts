@@ -270,13 +270,14 @@ const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promi
   });
 };
 
-// http://127.0.0.1:5001/slates-59840/us-central1/sendBulkEmail
-export const sendBulkEmail = onRequest(
+// Scheduled daily email sending at 8am Eastern Time
+export const scheduledDailyEmail = onSchedule(
   { 
-    cors: true,
+    schedule: "0 8 * * *",
+    timeZone: "America/New_York",
     secrets: ["MAILGUN_API_KEY", "MAILGUN_DOMAIN"]
   },
-  async (req, res) => {
+  async () => {
     try {
       // Get all users from the database
       const usersSnapshot = await db.collection('users').get();
@@ -323,20 +324,10 @@ export const sendBulkEmail = onRequest(
           logger.error(`Failed to send emails for user ${userDoc.id}:`, userError);
         }
       }
-
-      logger.info(`Bulk email operation completed: ${successCount} sent, ${errorCount} failed`);
-      
-      res.json({ 
-        message: "Bulk email operation completed",
-        sentCount: successCount,
-        errorCount: errorCount,
-        totalUsers: usersSnapshot.docs.length,
-        errors: errors
-        });
-
+      logger.info(`Scheduled daily email operation completed: ${successCount} sent, ${errorCount} failed`);
     } catch (error) {
-      logger.error("Error in bulk email operation:", error);
-      res.status(500).send("Error in bulk email operation: " + error);
+      logger.error("Error in scheduled daily email operation:", error);
+      throw error;
     }
   }
 );
