@@ -232,55 +232,111 @@ export const getRandomQuery = onRequest(
   }
 );
 
-// http://127.0.0.1:5001/slates-59840/us-central1/sendDailyEmail
-export const sendDailyEmail = onRequest(
+// Internal utility function to send daily email to a specific user
+const sendDailyEmailToUser = async (userEmail: string, userId: string): Promise<void> => {
+  // Get Mailgun configuration from environment variables
+  const apiKey = process.env.MAILGUN_API_KEY;
+  const domain = process.env.MAILGUN_DOMAIN;
+  
+  if (!apiKey || !domain) {
+    logger.error("Mailgun configuration missing", { 
+      hasApiKey: !!apiKey, 
+      hasDomain: !!domain 
+    });
+    throw new Error("Mailgun API key or domain not configured!");
+  }
+
+  const mg = mailgun.client({ username: "api", key: apiKey });
+
+  // Get today's date for template variables
+  const today = new Date().toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+
+  // Generate personalized link
+  const { shareableUrl } = await generateDashboardTokenForUser(userId, userEmail);
+
+  // Customize template variables
+  const templateVariables = {
+    date: today,
+    link: shareableUrl,
+  };
+
+  await mg.messages.create(domain, {
+    from: "Slates <no-reply@slates.co>",
+    to: [userEmail],
+    subject: `Slates Summary for ${today}`,
+    template: "slates daily email",
+    "h:X-Mailgun-Variables": JSON.stringify(templateVariables),
+  });
+};
+
+// http://127.0.0.1:5001/slates-59840/us-central1/sendBulkEmail
+export const sendBulkEmail = onRequest(
   { 
     cors: true,
     secrets: ["MAILGUN_API_KEY", "MAILGUN_DOMAIN"]
   },
   async (req, res) => {
     try {
-      // Get Mailgun configuration from environment variables
-      const apiKey = process.env.MAILGUN_API_KEY;
-      const domain = process.env.MAILGUN_DOMAIN;
+      // Get all users from the database
+      const usersSnapshot = await db.collection('users').get();
       
-      if (!apiKey || !domain) {
-        logger.error("Mailgun configuration missing", { 
-          hasApiKey: !!apiKey, 
-          hasDomain: !!domain 
-        });
-        throw new Error("Mailgun API key or domain not configured!");
+      let successCount = 0;
+      let errorCount = 0;
+      const errors: any[] = [];
+
+      // Iterate through all users and send emails using the existing sendDailyEmailToUser function
+      for (const userDoc of usersSnapshot.docs) {
+        try {
+          const userId = userDoc.id;
+          const userData = userDoc.data();
+
+          // Skip users without email addresses
+          if (userId.includes(":")) {
+            logger.info(`Temp User ${userId}, skipping`);
+            continue;
+          }
+
+          const recipient_list = userData.notificationEmails || [];
+
+          // Use the existing sendDailyEmailToUser function
+          recipient_list.forEach(async (userEmail: string) => {
+            try {
+              await sendDailyEmailToUser(userEmail, userId);
+              successCount++;
+            } catch (error) {
+              errorCount++;
+              const errorInfo = {
+                userId: userId,
+                email: userDoc.data().email,
+                error: error instanceof Error ? error.message : String(error)
+              };
+              errors.push(errorInfo);
+              logger.error(`Failed to send email to ${userEmail}:`, error);
+            }
+          });
+
+        } catch (userError) {
+          logger.error(`Failed to send emails for user ${userDoc.id}:`, userError);
+        }
       }
 
-      const mg = mailgun.client({ username: "api", key: apiKey });
-
-      // Get today's date for template variables
-      const today = new Date().toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      });
-
-      // You can customize these template variables based on your needs
-      const templateVariables = {
-        date: today,
-        link: "https://slates.co/dashboard",
-      };
-
-      await mg.messages.create(domain, {
-        from: "Slates <no-reply@slates.co>",
-        to: ["ethaniorlowsky@gmail.com"],
-        subject: "Slates Daily Summary",
-        template: "slates daily email",
-        "h:X-Mailgun-Variables": JSON.stringify(templateVariables),
-      });
+      logger.info(`Bulk email operation completed: ${successCount} sent, ${errorCount} failed`);
       
-      logger.info("Daily email sent successfully");
-      res.json({ message: "Daily email sent successfully" });
+      res.json({ 
+        message: "Bulk email operation completed",
+        sentCount: successCount,
+        errorCount: errorCount,
+        totalUsers: usersSnapshot.docs.length,
+        errors: errors
+      });
+
     } catch (error) {
-      logger.error("Error sending daily email:", error);
-      res.status(500).send("Error sending daily email: " + error);
+      logger.error("Error in bulk email operation:", error);
+      res.status(500).send("Error in bulk email operation: " + error);
     }
   }
 );
@@ -300,9 +356,18 @@ const generateDashboardTokenForUser = async (userId: string, email: string): Pro
       expiresAt: currentTime + (30 * 24 * 60 * 60) // 30 days
     };
 
-    const tempUserId = `${userId}:${email}:${currentTime}`;
-    await auth.createUser({ uid: tempUserId, email });
-    await db.collection('users').doc(tempUserId).set(userPreferences || {});
+    const tempUserId = `${userId}:${email}`;
+
+    try {
+      await auth.getUser(tempUserId);
+      // User already exists, no need to create
+    } catch (error) {
+      // User doesn't exist, create it
+      await auth.createUser({ uid: tempUserId, email });
+    }
+
+    const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
+    await db.collection('users').doc(tempUserId).set(userPreferencesWithoutEmails);
 
     const shareableToken = await auth.createCustomToken(tempUserId, customClaims);
     
