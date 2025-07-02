@@ -254,12 +254,26 @@ export const sendDailyEmail = onRequest(
 
       const mg = mailgun.client({ username: "api", key: apiKey });
 
+      // Get today's date for template variables
+      const today = new Date().toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      // You can customize these template variables based on your needs
+      const templateVariables = {
+        date: today,
+        link: "https://slates.co/dashboard",
+      };
+
       await mg.messages.create(domain, {
         from: "Slates <no-reply@slates.co>",
         to: ["ethaniorlowsky@gmail.com"],
         subject: "Slates Daily Summary",
-        text: "Here's your daily summary!",
-        html: "<p>Here's your <b>daily summary</b>!</p>",
+        template: "slates daily email",
+        "h:X-Mailgun-Variables": JSON.stringify(templateVariables),
       });
       
       logger.info("Daily email sent successfully");
