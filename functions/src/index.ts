@@ -198,36 +198,24 @@ export const getEspnNetworks = onRequest(
   }
 );
 
-// http://127.0.0.1:5001/slates-59840/us-central1/getRandomQuery?network=KNTV
+// http://127.0.0.1:5001/slates-59840/us-central1/getRandomQuery
 export const getRandomQuery = onRequest(
   { cors: true },
   async (req, res) => {
     try {
-      // go through each date in sports/all/schedule/$date and find the game that has tv network = "AZ Family Sports Net"
-      const desiredNetwork = req.query.network as string;
-      if (!desiredNetwork) {
-        res.status(400).send("Missing network query parameter");
-        return;
-      }
+      // for each sports in the sports collection, map each team to it's id
+      const sportsSnapshot = await db.collection("sports").get();
+      const sports = sportsSnapshot.docs.map((doc) => {
+        if (doc.id === "all") return {};
 
-      const snapshot = await db
-        .collection("sports")
-        .doc("all")
-        .collection("schedule")
-        .get();
-      const dates = snapshot.docs.map((doc) => doc.data());
-      const filteredGames = dates.map((date) => {
-        const tmp = Object.values(date).map((sport: string) => {
-          return Object.values(Object.values(sport)).filter((game: any) => {
-            return Object.keys(game.broadcasts || {}).includes(desiredNetwork);
-          });
+        const teams = Object.entries(doc.data().teams || {}).map(([teamId, teamInfo]) => {
+          return { [(teamInfo as any).info.name]: teamId };
         });
-        return tmp;
+        return { [doc.id]: combine_maps(teams) };
       });
-      res.status(200).json(filteredGames);
+      res.status(200).json(combine_maps(sports));
     } catch (error) {
-      logger.error("Error fetching ESPN networks:", error);
-      res.status(500).send("Error fetching ESPN networks: " + error);
+      res.status(500).send("Error: " + error);
     }
   }
 );

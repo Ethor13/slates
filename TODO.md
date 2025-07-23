@@ -13,6 +13,9 @@
         - request Teams update using the cloud function
         - download all the images using the cloud function
         - add the league logo
+        - add zipcodes for each team
+
+- add missing zipcodes
 
 - Update landing page
 
