@@ -125,10 +125,8 @@ export interface InterestLevel {
     rating: string | JSX.Element;
 }
 
-export const getInterestLevel = (game: Record<any, any>, zipcode: string): InterestLevel => {
+export const adjustSlateScoreForLocation = (game: Record<any, any>, zipcode: string): number => {
     const [userLat, userLng] = zipcodeMap.get(zipcode) || [undefined, undefined];
-
-    let score = game.slateScore;
 
     if (userLat !== undefined && userLng !== undefined) {
         // Get the sport map first
@@ -155,10 +153,14 @@ export const getInterestLevel = (game: Record<any, any>, zipcode: string): Inter
             const maxLocationEffect = 0.7;
             const distanceFactor = 0.002;
             const minLocationScore = Math.max(0, maxLocationEffect - minDistance * distanceFactor);
-            score = minLocationScore + (1 - minLocationScore) * score;
+            return minLocationScore + (1 - minLocationScore) * game.slateScore;
         }
     }
 
+    return game.slateScore;
+};
+
+export const getInterestLevel = (score: number): InterestLevel => {
     const rating = score >= 0 ? (100 * score).toFixed(0) : "?";
     if (score >= 0.8) return { className: "must-watch", rating };
     if (score >= 0.6) return { className: "high-interest", rating };

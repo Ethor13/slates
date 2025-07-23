@@ -7,7 +7,7 @@ import Nav from '../General/Nav';
 import Sidebar from '../Games/Sidebar';
 import GamesList from '../Games/GamesList';
 import GamePulseChart from '../Games/GamePulseChart';
-import { Sports } from '../../helpers';
+import { Sports, adjustSlateScoreForLocation } from '../../helpers';
 
 enum Sort {
     TIME = 'Time',
@@ -18,13 +18,16 @@ enum Sort {
 type ScheduleResponse = Record<string, any>;
 
 // mark games as favorites
-const markFavoriteTeams = (games: ScheduleResponse, favoriteTeams: Record<string, string>[]) => {
+const addGameMetadata = (games: ScheduleResponse, favoriteTeams: Record<string, string>[], zipcode: string) => {
     const markedGames = { ...games };
     Object.keys(markedGames).forEach((sport) => {
         Object.entries(markedGames[sport]).forEach(([_, game]: [string, any]) => {
+            // mark favorite teams
             game.isFavorite = favoriteTeams && favoriteTeams.length > 0 ? 
                 favoriteTeams.some((team) => (game.sport === team.sport) && (team.id === game.home.id || team.id === game.away.id)) :
                 false;
+
+            game.slateScore = adjustSlateScoreForLocation(game, zipcode);
         });
     });
     return markedGames;
@@ -64,14 +67,14 @@ const Dashboard = () => {
             }
             const games = scheduleSnapshot.data() as ScheduleResponse;
 
-            setAllGames(markFavoriteTeams(games, userPreferences.favoriteTeams || []));
+            setAllGames(addGameMetadata(games, userPreferences.favoriteTeams || [], userPreferences.zipcode));
         } catch (error) {
             console.error('Error getting games', error);
             setGamesError(error);
         } finally {
             setGamesLoading(false);
         }
-    }, [currentUser, selectedDate, userPreferences.favoriteTeams, preferencesLoading]);
+    }, [currentUser, selectedDate, userPreferences.favoriteTeams, userPreferences.zipcode, preferencesLoading]);
 
     const setDisplayedGames = useCallback(() => {
         setGamesLoading(true);
@@ -149,10 +152,9 @@ const Dashboard = () => {
     useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
     useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
 
-    // Re-mark favorite teams when user preferences change
     useEffect(() => {
         if (Object.keys(allGames).length > 0 && !preferencesLoading) {
-            setAllGames(prevGames => markFavoriteTeams(prevGames, userPreferences.favoriteTeams || []));
+            setAllGames(prevGames => addGameMetadata(prevGames, userPreferences.favoriteTeams || [], userPreferences.zipcode));
         }
     }, [userPreferences.favoriteTeams, preferencesLoading]);
 

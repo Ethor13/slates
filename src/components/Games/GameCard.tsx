@@ -5,7 +5,6 @@ import Broadcasts from "./Broadcasts";
 import TeamInfo from "./TeamInfo";
 import { formatGameTime } from "../../helpers";
 import { Star } from "lucide-react";
-import { useAuth } from "../../contexts/AuthContext";
 
 // Interest level styling (now only using the background colors)
 const interestLevelClasses: Record<string, string[]> = {
@@ -18,8 +17,7 @@ const interestLevelClasses: Record<string, string[]> = {
 };
 
 const GameCard: React.FC<GameCardProps> = ({ game }) => {
-    const { userPreferences } = useAuth();
-    const interestLevel = getInterestLevel(game, userPreferences.zipcode);
+    const interestLevel = getInterestLevel(game.slateScore);
 
     return (
         <div className="w-full py-1 print:py-[1px] break-inside-avoid">
