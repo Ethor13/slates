@@ -1,0 +1,630 @@
+{
+  "nba": {
+    "1": {
+      "teamName": "Atlanta Hawks",
+      "instagramFollowers": 2.6,
+      "xFollowers": 1.5
+    },
+    "2": {
+      "teamName": "Boston Celtics",
+      "instagramFollowers": 8.4,
+      "xFollowers": 4.2
+    },
+    "3": {
+      "teamName": "New Orleans Pelicans",
+      "instagramFollowers": 2.7,
+      "xFollowers": 1.3
+    },
+    "4": {
+      "teamName": "Chicago Bulls",
+      "instagramFollowers": 10.2,
+      "xFollowers": 4.6
+    },
+    "5": {
+      "teamName": "Cleveland Cavaliers",
+      "instagramFollowers": 16.5,
+      "xFollowers": 3.2
+    },
+    "6": {
+      "teamName": "Dallas Mavericks",
+      "instagramFollowers": 4.6,
+      "xFollowers": 2.3
+    },
+    "7": {
+      "teamName": "Denver Nuggets",
+      "instagramFollowers": 3.1,
+      "xFollowers": 1.4
+    },
+    "8": {
+      "teamName": "Detroit Pistons",
+      "instagramFollowers": 1.7,
+      "xFollowers": 1.1
+    },
+    "9": {
+      "teamName": "Golden State Warriors",
+      "instagramFollowers": 32.7,
+      "xFollowers": 8.6
+    },
+    "10": {
+      "teamName": "Houston Rockets",
+      "instagramFollowers": 6.3,
+      "xFollowers": 3.2
+    },
+    "11": {
+      "teamName": "Indiana Pacers",
+      "instagramFollowers": 3.4,
+      "xFollowers": 1.4
+    },
+    "12": {
+      "teamName": "Los Angeles Clippers",
+      "instagramFollowers": 5.3,
+      "xFollowers": 2
+    },
+    "13": {
+      "teamName": "Los Angeles Lakers",
+      "instagramFollowers": 25.3,
+      "xFollowers": 12.3
+    },
+    "14": {
+      "teamName": "Miami Heat",
+      "instagramFollowers": 6.7,
+      "xFollowers": 4.9
+    },
+    "15": {
+      "teamName": "Milwaukee Bucks",
+      "instagramFollowers": 5.5,
+      "xFollowers": 2
+    },
+    "16": {
+      "teamName": "Minnesota Timberwolves",
+      "instagramFollowers": 4.1,
+      "xFollowers": 1.3
+    },
+    "17": {
+      "teamName": "Brooklyn Nets",
+      "instagramFollowers": 4.7,
+      "xFollowers": 2
+    },
+    "18": {
+      "teamName": "New York Knicks",
+      "instagramFollowers": 4.5,
+      "xFollowers": 2.4
+    },
+    "19": {
+      "teamName": "Orlando Magic",
+      "instagramFollowers": 2,
+      "xFollowers": 1.6
+    },
+    "20": {
+      "teamName": "Philadelphia 76ers",
+      "instagramFollowers": 4.5,
+      "xFollowers": 2.3
+    },
+    "21": {
+      "teamName": "Phoenix Suns",
+      "instagramFollowers": 3.6,
+      "xFollowers": 1.7
+    },
+    "22": {
+      "teamName": "Portland Trail Blazers",
+      "instagramFollowers": 2.9,
+      "xFollowers": 1.5
+    },
+    "23": {
+      "teamName": "Sacramento Kings",
+      "instagramFollowers": 2.2,
+      "xFollowers": 1.2
+    },
+    "24": {
+      "teamName": "San Antonio Spurs",
+      "instagramFollowers": 5.3,
+      "xFollowers": 3.5
+    },
+    "25": {
+      "teamName": "Oklahoma City Thunder",
+      "instagramFollowers": 6.1,
+      "xFollowers": 2.7
+    },
+    "26": {
+      "teamName": "Utah Jazz",
+      "instagramFollowers": 1.4,
+      "xFollowers": 1.2
+    },
+    "27": {
+      "teamName": "Washington Wizards",
+      "instagramFollowers": 1.5,
+      "xFollowers": 1.2
+    },
+    "28": {
+      "teamName": "Toronto Raptors",
+      "instagramFollowers": 4.1,
+      "xFollowers": 2.5
+    },
+    "29": {
+      "teamName": "Memphis Grizzlies",
+      "instagramFollowers": 2.1,
+      "xFollowers": 1.6
+    },
+    "30": {
+      "teamName": "Charlotte Hornets",
+      "instagramFollowers": 2.5,
+      "xFollowers": 1.2
+    }
+  },
+  "mlb": {
+    "1": {
+      "teamName": "Baltimore Orioles",
+      "instagramFollowers": 0.7,
+      "xFollowers": 0.9
+    },
+    "2": {
+      "teamName": "Boston Red Sox",
+      "instagramFollowers": 2.3,
+      "xFollowers": 2.1
+    },
+    "3": {
+      "teamName": "Los Angeles Angels",
+      "instagramFollowers": 1.2,
+      "xFollowers": 1.3
+    },
+    "4": {
+      "teamName": "Chicago White Sox",
+      "instagramFollowers": 0.7,
+      "xFollowers": 1
+    },
+    "5": {
+      "teamName": "Cleveland Guardians",
+      "instagramFollowers": 0.7,
+      "xFollowers": 1.1
+    },
+    "6": {
+      "teamName": "Detroit Tigers",
+      "instagramFollowers": 1,
+      "xFollowers": 1.5
+    },
+    "7": {
+      "teamName": "Kansas City Royals",
+      "instagramFollowers": 1,
+      "xFollowers": 1.1
+    },
+    "8": {
+      "teamName": "Milwaukee Brewers",
+      "instagramFollowers": 0.7,
+      "xFollowers": 0.7
+    },
+    "9": {
+      "teamName": "Minnesota Twins",
+      "instagramFollowers": 0.6,
+      "xFollowers": 0.7
+    },
+    "10": {
+      "teamName": "New York Yankees",
+      "instagramFollowers": 4,
+      "xFollowers": 3.8
+    },
+    "11": {
+      "teamName": "Oakland Athletics",
+      "instagramFollowers": 0.5,
+      "xFollowers": 0.6
+    },
+    "12": {
+      "teamName": "Seattle Mariners",
+      "instagramFollowers": 0.9,
+      "xFollowers": 0.7
+    },
+    "13": {
+      "teamName": "Texas Rangers",
+      "instagramFollowers": 1,
+      "xFollowers": 1.5
+    },
+    "14": {
+      "teamName": "Toronto Blue Jays",
+      "instagramFollowers": 1.7,
+      "xFollowers": 2.4
+    },
+    "15": {
+      "teamName": "Atlanta Braves",
+      "instagramFollowers": 1.9,
+      "xFollowers": 1.6
+    },
+    "16": {
+      "teamName": "Chicago Cubs",
+      "instagramFollowers": 1.9,
+      "xFollowers": 2.5
+    },
+    "17": {
+      "teamName": "Cincinnati Reds",
+      "instagramFollowers": 0.8,
+      "xFollowers": 1
+    },
+    "18": {
+      "teamName": "Houston Astros",
+      "instagramFollowers": 1.6,
+      "xFollowers": 2
+    },
+    "19": {
+      "teamName": "Los Angeles Dodgers",
+      "instagramFollowers": 5.1,
+      "xFollowers": 2.9
+    },
+    "20": {
+      "teamName": "Washington Nationals",
+      "instagramFollowers": 0.7,
+      "xFollowers": 0.8
+    },
+    "21": {
+      "teamName": "New York Mets",
+      "instagramFollowers": 1.7,
+      "xFollowers": 1.2
+    },
+    "22": {
+      "teamName": "Philadelphia Phillies",
+      "instagramFollowers": 1.4,
+      "xFollowers": 2.1
+    },
+    "23": {
+      "teamName": "Pittsburgh Pirates",
+      "instagramFollowers": 0.8,
+      "xFollowers": 0.8
+    },
+    "24": {
+      "teamName": "St. Louis Cardinals",
+      "instagramFollowers": 1.1,
+      "xFollowers": 1.4
+    },
+    "25": {
+      "teamName": "San Diego Padres",
+      "instagramFollowers": 1.5,
+      "xFollowers": 0.7
+    },
+    "26": {
+      "teamName": "San Francisco Giants",
+      "instagramFollowers": 1.6,
+      "xFollowers": 1.7
+    },
+    "27": {
+      "teamName": "Colorado Rockies",
+      "instagramFollowers": 0.5,
+      "xFollowers": 0.6
+    },
+    "28": {
+      "teamName": "Miami Marlins",
+      "instagramFollowers": 0.8,
+      "xFollowers": 0.4
+    },
+    "29": {
+      "teamName": "Arizona Diamondbacks",
+      "instagramFollowers": 0.7,
+      "xFollowers": 0.6
+    },
+    "30": {
+      "teamName": "Tampa Bay Rays",
+      "instagramFollowers": 0.5,
+      "xFollowers": 0.6
+    }
+  },
+  "nfl": {
+    "newenglandpatriots": {
+      "teamName": "New England Patriots",
+      "instagramFollowers": 4.99,
+      "xFollowers": 4.69
+    },
+    "dallascowboys": {
+      "teamName": "Dallas Cowboys",
+      "instagramFollowers": 4.84,
+      "xFollowers": 4.37
+    },
+    "kansascitychiefs": {
+      "teamName": "Kansas City Chiefs",
+      "instagramFollowers": 4.26,
+      "xFollowers": 2.6
+    },
+    "sanfrancisco49ers": {
+      "teamName": "San Francisco 49ers",
+      "instagramFollowers": 3.76,
+      "xFollowers": 2.4
+    },
+    "pittsburghsteelers": {
+      "teamName": "Pittsburgh Steelers",
+      "instagramFollowers": 3.66,
+      "xFollowers": 3.7
+    },
+    "philadelphiaeagles": {
+      "teamName": "Philadelphia Eagles",
+      "instagramFollowers": 3.65,
+      "xFollowers": 3.9
+    },
+    "seattleseahawks": {
+      "teamName": "Seattle Seahawks",
+      "instagramFollowers": 3.31,
+      "xFollowers": 2.5
+    },
+    "newyorkgiants": {
+      "teamName": "New York Giants",
+      "instagramFollowers": 2.74,
+      "xFollowers": 2
+    },
+    "greenbaypackers": {
+      "teamName": "Green Bay Packers",
+      "instagramFollowers": 2.74,
+      "xFollowers": 2.6
+    },
+    "lasvegasraiders": {
+      "teamName": "Las Vegas Raiders",
+      "instagramFollowers": 2.35,
+      "xFollowers": 1.9
+    },
+    "baltimoreravens": {
+      "teamName": "Baltimore Ravens",
+      "instagramFollowers": 2.14,
+      "xFollowers": 1.9
+    },
+    "carolinapanthers": {
+      "teamName": "Carolina Panthers",
+      "instagramFollowers": 1.9,
+      "xFollowers": 3
+    },
+    "denverbroncos": {
+      "teamName": "Denver Broncos",
+      "instagramFollowers": 1.4,
+      "xFollowers": 2.7
+    },
+    "chicagobears": {
+      "teamName": "Chicago Bears",
+      "instagramFollowers": 1.7,
+      "xFollowers": 2.1
+    },
+    "houstontexans": {
+      "teamName": "Houston Texans",
+      "instagramFollowers": 1.7,
+      "xFollowers": 2
+    },
+    "atlantafalcons": {
+      "teamName": "Atlanta Falcons",
+      "instagramFollowers": 1.4,
+      "xFollowers": 2.4
+    },
+    "minnesotavikings": {
+      "teamName": "Minnesota Vikings",
+      "instagramFollowers": 1.5,
+      "xFollowers": 1.5
+    },
+    "detroitlions": {
+      "teamName": "Detroit Lions",
+      "instagramFollowers": 1.4,
+      "xFollowers": 1.7
+    },
+    "miamidolphins": {
+      "teamName": "Miami Dolphins",
+      "instagramFollowers": 1.9,
+      "xFollowers": 1.3
+    },
+    "indianapoliscolts": {
+      "teamName": "Indianapolis Colts",
+      "instagramFollowers": 1,
+      "xFollowers": 1.2
+    },
+    "clevelandbrowns": {
+      "teamName": "Cleveland Browns",
+      "instagramFollowers": 1.5,
+      "xFollowers": 1.6
+    },
+    "cincinnatibengals": {
+      "teamName": "Cincinnati Bengals",
+      "instagramFollowers": 1.7,
+      "xFollowers": 1.6
+    },
+    "neworleanssaints": {
+      "teamName": "New Orleans Saints",
+      "instagramFollowers": 2.1,
+      "xFollowers": 1.7
+    },
+    "arizonacardinals": {
+      "teamName": "Arizona Cardinals",
+      "instagramFollowers": 1.1,
+      "xFollowers": 1.1
+    },
+    "losangeleschargers": {
+      "teamName": "Los Angeles Chargers",
+      "instagramFollowers": 1.1,
+      "xFollowers": 1.1
+    },
+    "losangelesrams": {
+      "teamName": "Los Angeles Rams",
+      "instagramFollowers": 1.7,
+      "xFollowers": 1.2
+    },
+    "buffalobills": {
+      "teamName": "Buffalo Bills",
+      "instagramFollowers": 1.8,
+      "xFollowers": 1.8
+    },
+    "newyorkjets": {
+      "teamName": "New York Jets",
+      "instagramFollowers": 1.2,
+      "xFollowers": 1.3
+    },
+    "washingtoncommanders": {
+      "teamName": "Washington Commanders",
+      "instagramFollowers": 1.1,
+      "xFollowers": 1.4
+    },
+    "tennesseetitans": {
+      "teamName": "Tennessee Titans",
+      "instagramFollowers": 0.96,
+      "xFollowers": 1
+    },
+    "tampabaybuccaneers": {
+      "teamName": "Tampa Bay Buccaneers",
+      "instagramFollowers": 1.4,
+      "xFollowers": 1.3
+    },
+    "jacksonvillejaguars": {
+      "teamName": "Jacksonville Jaguars",
+      "instagramFollowers": 0.9,
+      "xFollowers": 0.88
+    }
+  },
+  "nhl": {
+    "1": {
+      "teamName": "Boston Bruins",
+      "instagramFollowers": 3.8,
+      "xFollowers": 1.6
+    },
+    "2": {
+      "teamName": "Buffalo Sabres",
+      "instagramFollowers": 0.9,
+      "xFollowers": 0.65
+    },
+    "3": {
+      "teamName": "Calgary Flames",
+      "instagramFollowers": 1.4,
+      "xFollowers": 0.88
+    },
+    "4": {
+      "teamName": "Chicago Blackhawks",
+      "instagramFollowers": 4.7,
+      "xFollowers": 2.3
+    },
+    "5": {
+      "teamName": "Detroit Red Wings",
+      "instagramFollowers": 2.6,
+      "xFollowers": 1.2
+    },
+    "6": {
+      "teamName": "Edmonton Oilers",
+      "instagramFollowers": 2.2,
+      "xFollowers": 0.98
+    },
+    "7": {
+      "teamName": "Carolina Hurricanes",
+      "instagramFollowers": 0.97,
+      "xFollowers": 0.58
+    },
+    "8": {
+      "teamName": "Los Angeles Kings",
+      "instagramFollowers": 1.9,
+      "xFollowers": 1.1
+    },
+    "9": {
+      "teamName": "Dallas Stars",
+      "instagramFollowers": 1.9,
+      "xFollowers": 1.1
+    },
+    "10": {
+      "teamName": "Montreal Canadiens",
+      "instagramFollowers": 3,
+      "xFollowers": 1.6
+    },
+    "11": {
+      "teamName": "New Jersey Devils",
+      "instagramFollowers": 1.3,
+      "xFollowers": 0.92
+    },
+    "12": {
+      "teamName": "New York Islanders",
+      "instagramFollowers": 1.2,
+      "xFollowers": 0.89
+    },
+    "13": {
+      "teamName": "New York Rangers",
+      "instagramFollowers": 3.5,
+      "xFollowers": 1.5
+    },
+    "14": {
+      "teamName": "Ottawa Senators",
+      "instagramFollowers": 0.95,
+      "xFollowers": 0.75
+    },
+    "15": {
+      "teamName": "Philadelphia Flyers",
+      "instagramFollowers": 2.4,
+      "xFollowers": 1.5
+    },
+    "16": {
+      "teamName": "Pittsburgh Penguins",
+      "instagramFollowers": 4.9,
+      "xFollowers": 1.8
+    },
+    "17": {
+      "teamName": "Colorado Avalanche",
+      "instagramFollowers": 1.7,
+      "xFollowers": 0.67
+    },
+    "18": {
+      "teamName": "San Jose Sharks",
+      "instagramFollowers": 0.8,
+      "xFollowers": 0.66
+    },
+    "19": {
+      "teamName": "St. Louis Blues",
+      "instagramFollowers": 1.5,
+      "xFollowers": 0.95
+    },
+    "20": {
+      "teamName": "Tampa Bay Lightning",
+      "instagramFollowers": 1.9,
+      "xFollowers": 0.85
+    },
+    "21": {
+      "teamName": "Toronto Maple Leafs",
+      "instagramFollowers": 4.1,
+      "xFollowers": 2.1
+    },
+    "22": {
+      "teamName": "Vancouver Canucks",
+      "instagramFollowers": 2.9,
+      "xFollowers": 1.1
+    },
+    "23": {
+      "teamName": "Washington Capitals",
+      "instagramFollowers": 2.1,
+      "xFollowers": 0.81
+    },
+    "25": {
+      "teamName": "Anaheim Ducks",
+      "instagramFollowers": 1,
+      "xFollowers": 0.78
+    },
+    "26": {
+      "teamName": "Florida Panthers",
+      "instagramFollowers": 0.85,
+      "xFollowers": 0.6
+    },
+    "27": {
+      "teamName": "Nashville Predators",
+      "instagramFollowers": 0.98,
+      "xFollowers": 0.8
+    },
+    "28": {
+      "teamName": "Winnipeg Jets",
+      "instagramFollowers": 0.78,
+      "xFollowers": 0.62
+    },
+    "29": {
+      "teamName": "Columbus Blue Jackets",
+      "instagramFollowers": 0.82,
+      "xFollowers": 0.68
+    },
+    "30": {
+      "teamName": "Minnesota Wild",
+      "instagramFollowers": 1.1,
+      "xFollowers": 0.85
+    },
+    "37": {
+      "teamName": "Vegas Golden Knights",
+      "instagramFollowers": 1.6,
+      "xFollowers": 0.57
+    },
+    "124292": {
+      "teamName": "Seattle Kraken",
+      "instagramFollowers": 0.75,
+      "xFollowers": 0.6
+    },
+    "129764": {
+      "teamName": "Utah Hockey Club",
+      "instagramFollowers": 0.28,
+      "xFollowers": 0.28
+    }
+  }
+}

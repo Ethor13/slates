@@ -14,8 +14,11 @@
         - download all the images using the cloud function
         - add the league logo
         - add zipcodes for each team
+        - add team popularities
 
 - add missing zipcodes
+
+- add ids for team popularities, and team zipcodes
 
 - Update landing page
 

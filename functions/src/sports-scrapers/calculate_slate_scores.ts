@@ -1,6 +1,20 @@
 import { logger } from "firebase-functions";
 import { GameScores, ParsedGames, ParsedTeams } from "../types.js";
 import { ParsedGame, GameTeams } from "../types.js";
+import teamPopularityData from "../data/team_popularity.json" with { type: "json" };
+
+// Define TypeScript interfaces for team popularity data
+interface TeamPopularityInfo {
+  teamName: string;
+  instagramFollowers: number;
+  xFollowers: number;
+}
+
+interface TeamPopularityData {
+  [sport: string]: {
+    [teamId: string]: TeamPopularityInfo;
+  };
+}
 
 // Define TypeScript interfaces
 interface ScalingFactors {
@@ -14,6 +28,7 @@ interface Weights {
   record: number;
   powerIndex: number;
   spread: number;
+  popularity: number;
 }
 
 interface CategoryConfig {
@@ -37,6 +52,7 @@ const CONFIG: ConfigType = {
         record: 3,
         powerIndex: 3,
         spread: 1,
+        popularity: 1,
       },
       scalingFactors: {
         powerIndex: {
@@ -49,8 +65,8 @@ const CONFIG: ConfigType = {
       },
       baselines: {
         nba: 0.75,
+        mlb: 0.65,
         ncaambb: 0.60,
-        mlb: 0.50,
         nhl: 0.50,
       },
       getInterestScoreFunc: calculateInterestScoreAllData,
@@ -76,6 +92,21 @@ function calculateWinPercentage(record: string): number {
   } catch (error) {
     logger.error("Error calculating win percentage from record:", error);
     throw new Error("Invalid record format");
+  }
+}
+
+const teamPopularityMap = teamPopularityData as TeamPopularityData;
+
+// Calculate average popularity for each sport
+const medSportsPopularity = new Map<string, number>();
+for (const [sport, teamMap] of Object.entries(teamPopularityMap)) {
+  const followers = Object.values(teamMap).map(team => team.instagramFollowers + team.xFollowers);
+  if (followers.length > 0) {
+    const sorted = [...followers].sort((a, b) => a - b);
+    const median = sorted.length % 2 === 0
+      ? (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2
+      : sorted[Math.floor(sorted.length / 2)];
+    medSportsPopularity.set(sport, median);
   }
 }
 
@@ -128,6 +159,10 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const { powerIndexes: homePI = {} } = gameTeams.home?.metrics || {};
     const { powerIndexes: awayPI = {} } = gameTeams.away?.metrics || {};
 
+    const sportPopularityMap = teamPopularityMap[sport];
+    const homePopularity = sportPopularityMap?.[game.home.id];
+    const awayPopularity = sportPopularityMap?.[game.away.id];
+
     let rawSlateScore = inverseSigmoid(config.baselines[sport], 1, 0);
 
     // Matchup quality component
@@ -163,6 +198,19 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     if (homeMQ.teampredmov != null) {
       const spreadScore = neg_exp(homeMQ.teampredmov, config.scalingFactors.spread);
       rawSlateScore += (2 * spreadScore - 1) * config.weights.spread;
+    }
+
+    // Popularity component
+    if (homePopularity != undefined && awayPopularity != undefined) {
+      // Calculate total popularity (Instagram + X followers) for each team
+      const homePopularityScore = homePopularity.instagramFollowers + homePopularity.xFollowers;
+      const awayPopularityScore = awayPopularity.instagramFollowers + awayPopularity.xFollowers;
+      
+      const medPopularity = medSportsPopularity.get(sport)!;
+      const homeNormalizedScore = sigmoid(homePopularityScore, medPopularity / 2, medPopularity);
+      const awayNormalizedScore = sigmoid(awayPopularityScore, medPopularity / 2, medPopularity);
+      const averagePopularity = homeNormalizedScore + awayNormalizedScore - 1;
+      rawSlateScore += averagePopularity * config.weights.popularity;
     }
 
     return sigmoid(rawSlateScore, 1, 0);
