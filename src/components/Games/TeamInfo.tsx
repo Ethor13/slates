@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { TeamColorBlock } from "../General/TeamColorBlock";
 import { Team } from "./types";
 
@@ -8,35 +8,14 @@ interface TeamInfoProps {
   isAway: boolean;
 }
 
-const MOBILE_THRESHOLD = 640;
-
 const TeamInfo: React.FC<TeamInfoProps> = ({ team, isAway }) => {
   const isTBD = team.shortName === "TBD";
-  const [effectiveIsAway, setEffectiveIsAway] = useState(window.innerWidth < MOBILE_THRESHOLD ? !isAway : isAway);
-
-  // Handle responsive behavior for isAway property
-  useEffect(() => {
-    const handleResize = () => {
-      // Tailwind md breakpoint is 768px
-      const isMobile = window.innerWidth < MOBILE_THRESHOLD;
-      setEffectiveIsAway(isMobile ? !isAway : isAway);
-    };
-
-    // Set initial value
-    handleResize();
-    
-    // Add event listener
-    window.addEventListener('resize', handleResize);
-    
-    // Clean up
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isAway]);
 
   return (
     <div className={`w-full flex h-full items-center`}>
-      {effectiveIsAway ?
-        <div className="h-10 w-10 print:w-6 print:h-6 flex-shrink-0 order-last sm:order-first">
-          <TeamColorBlock colors={team.colors} leftToRight={effectiveIsAway} reverse={true} />
+      {isAway ?
+        <div className="h-10 w-10 print:w-6 print:h-6 flex-shrink-0">
+          <TeamColorBlock colors={team.colors} leftToRight={isAway} reverse={true} />
         </div> :
         <></>
       }
@@ -48,9 +27,9 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ team, isAway }) => {
           </div>
         )}
       </div>
-      {!effectiveIsAway ?
+      {!isAway ?
         <div className="h-10 w-10 print:w-6 print:h-6 flex-shrink-0 flex justify-end">
-          <TeamColorBlock colors={team.colors} leftToRight={effectiveIsAway} reverse={false} />
+          <TeamColorBlock colors={team.colors} leftToRight={isAway} reverse={false} />
         </div> :
         <></>
       }

@@ -20,7 +20,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
     const interestLevel = getInterestLevel(game.slateScore);
 
     return (
-        <div className="w-full py-1 print:py-[1px] break-inside-avoid">
+        <div className="w-full py-[6px] print:py-[1px] break-inside-avoid">
             {/* Main card - always visible */}
             <div className="flex items-center w-full relative">
                 {/* Slate Score - fixed width */}
@@ -30,28 +30,26 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
                 {/* Favorite Star - only visible if the game is a favorite */}
                 {game.isFavorite && (
-                    <div className="z-10 absolute top-[1.1rem] left-[1.5rem] sm:-top-[0.4rem] print:left-[0.9rem] print:-top-[0.15rem]">
+                    <div className="z-10 absolute top-[-0.2rem] left-[1.5rem] md:top-[-0.3rem] print:left-[0.9rem] print:-top-[0.15rem]">
                         <Star className="text-yellow-500 fill-yellow-200 w-6 h-6 print:w-4 print:h-4" />
                     </div>
                 )}
 
                 {/* Teams and Game Status - controlled width proportions */}
-                <div className="w-full grid grid-rows-2 grid-cols-[1fr_2fr] sm:grid-rows-1 sm:grid-cols-[1fr_3fr_1rem_3fr] xl:grid-cols-[2fr_4fr_1rem_4fr_10fr] print:grid-rows-1 print:grid-cols-[4rem_3fr_1rem_3fr_6fr] items-center">
-                    {/* Game Status - fixed proportion */}
-                    <div className="h-full row-start-1 row-end-3 sm:row-start-1 sm:row-end-2 print:row-start-1 print:row-end-2 flex justify-end sm:justify-center">
-                        <div className="h-full flex justify-center flex-col text-center text-sm leading-none">
-                            <div className="text-lg sm:text-sm print:text-xs sm:leading-none uppercase font-semibold">{game.sport}</div>
-                            <div className="text-lg sm:text-sm print:text-xs sm:leading-none overflow-visible whitespace-nowrap">{formatGameTime(game.date)}</div>
-                        </div>
-                    </div>
+                <div className="w-full ml-[2vw] grid grid-cols-[2fr_1fr_2fr] xl:grid-cols-[4fr_1rem_4fr_10fr] print:grid-cols-[3fr_1rem_3fr_6fr] items-center">
                     {/* Away Team - fixed proportion */}
-                    <div className="h-full row-start-1 pb-[2px] sm:pb-0">
+                    <div className="h-full pb-[2px]">
                         <TeamInfo team={game.away} isAway={true} />
                     </div>
-                    {/* "at" separator */}
-                    <div className="hidden sm:flex h-full row-start-1 items-center justify-center text-sm">at</div>
+                    {/* Game Status - fixed proportion */}
+                    <div className="h-full flex justify-center">
+                        <div className="h-full flex justify-center flex-col text-center text-sm leading-none">
+                            <div className="text-base print:leading-none print:text-xs uppercase">{game.sport}</div>
+                            <div className="text-md print:leading-none print:text-xs overflow-visible whitespace-nowrap">{formatGameTime(game.date)}</div>
+                        </div>
+                    </div>
                     {/* Home Team - fixed proportion */}
-                    <div className="h-full row-start-2 sm:row-start-1 print:row-start-1">
+                    <div className="h-full">
                         <TeamInfo team={game.home} isAway={false} />
                     </div>
                     {/* Broadcasts component - fixed proportion */}

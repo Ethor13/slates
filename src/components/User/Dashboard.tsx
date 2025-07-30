@@ -23,7 +23,7 @@ const addGameMetadata = (games: ScheduleResponse, favoriteTeams: Record<string, 
     Object.keys(markedGames).forEach((sport) => {
         Object.entries(markedGames[sport]).forEach(([_, game]: [string, any]) => {
             // mark favorite teams
-            game.isFavorite = favoriteTeams && favoriteTeams.length > 0 ? 
+            game.isFavorite = favoriteTeams && favoriteTeams.length > 0 ?
                 favoriteTeams.some((team) => (game.sport === team.sport) && (team.id === game.home.id || team.id === game.away.id)) :
                 false;
 
@@ -36,7 +36,7 @@ const addGameMetadata = (games: ScheduleResponse, favoriteTeams: Record<string, 
 
 const Dashboard = () => {
     const { currentUser, userPreferences, preferencesLoading } = useAuth();
-    
+
     const [allGames, setAllGames] = useState<ScheduleResponse>({});
     const [games, setGames] = useState<ScheduleResponse>({});
     const [gamesLoading, setGamesLoading] = useState<boolean>(false);
@@ -146,10 +146,10 @@ const Dashboard = () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             await navigator.clipboard.writeText(data.shareableUrl);
-            
+
             // Show the "link copied" notification
             setShowLinkCopied(true);
-            
+
             // Hide the notification after 2 seconds
             setTimeout(() => {
                 setShowLinkCopied(false);
@@ -173,14 +173,14 @@ const Dashboard = () => {
             <div className="print:hidden">
                 <Nav />
             </div>
-            
+
             {/* Print Header Banner */}
             <div className="hidden h-[4rem] w-full bg-slate-light/20 px-3 py-3 print:flex items-center text-white">
                 <div className="flex items-center justify-between w-full">
                     <div className="flex items-center space-x-2">
-                        <img 
-                            src="/assets/logos/slates_white_outline.svg" 
-                            alt="Slates Logo" 
+                        <img
+                            src="/assets/logos/slates_white_outline.svg"
+                            alt="Slates Logo"
                             className="h-8 sm:h-10 xl:h-12 w-auto"
                         />
                         <div className="pl-1">
@@ -202,7 +202,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            
+
             <div className="h-screen bg-transparent print:bg-white pt-20 print:pt-0 overflow-hidden">
                 <main className="h-full">
                     <div className="flex flex-row h-full">
@@ -225,7 +225,7 @@ const Dashboard = () => {
 
                         {/* Main content area that takes remaining space and centers content */}
                         {/* This needs to be same padding as sidebar width */}
-                        <div id="game-content" className={`w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative sm:rounded-tl-xl transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-full' : 'translate-x-0'} md:transform-none`}>
+                        <div id="game-content" className={`w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative md:rounded-tl-xl transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-full' : 'translate-x-0'} md:transform-none`}>
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -237,53 +237,59 @@ const Dashboard = () => {
                             ) : (
                                 <div className="w-full px-[3vw] pt-[1rem] print:pt-0">
                                     {/* Unified Control Bar */}
-                                    <div className="w-full flex justify-center print:hidden relative">
-                                        <div className="slate-gradient rounded-full px-6 py-2 flex items-center gap-3 shadow-lg">
+                                    <div className="w-full h-full flex justify-center print:hidden relative">
+                                        <div className="slate-gradient rounded-full px-6 py-2 flex items-center gap-2">
                                             {/* Filters button - only show on mobile */}
-                                            <button
-                                                onClick={() => setSidebarOpen(!sidebarOpen)}
-                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10 md:hidden"
-                                                aria-label="Toggle sidebar"
-                                            >
-                                                <SlidersHorizontal className="h-5 w-5" />
-                                                <span className="text-lg font-medium">Filters</span>
-                                            </button>
-                                            
-                                            {/* Separator for mobile */}
-                                            <div className="h-6 w-px bg-white/30 sm:hidden"></div>
-                                            
+                                            <div className='w-[6rem] md:hidden'>
+                                                <button
+                                                    onClick={() => setSidebarOpen(!sidebarOpen)}
+                                                    className="w-full flex gap-2 justify-center items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
+                                                    aria-label="Toggle sidebar"
+                                                >
+                                                    <SlidersHorizontal className="h-5 w-5" />
+                                                    <span className="text-lg font-medium">Filters</span>
+                                                </button>
+                                            </div>
+
+                                            {/* Conditional divider - only show on mobile after filters */}
+                                            <div className="w-px h-6 bg-white/20 mx-1 md:hidden"></div>
+
                                             {/* Print button */}
-                                            <button
-                                                onClick={handlePrint}
-                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
-                                                aria-label="Print this page"
-                                            >
-                                                <Printer className="h-5 w-5" />
-                                                <span className="text-lg font-medium">Print</span>
-                                            </button>
-                                            
-                                            {/* Separator */}
-                                            <div className="h-6 w-px bg-white/30"></div>
-                                            
+                                            <div className='w-[6rem]'>
+                                                <button
+                                                    onClick={handlePrint}
+                                                    className="w-full flex gap-2 justify-center items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
+                                                    aria-label="Print this page"
+                                                >
+                                                    <Printer className="h-5 w-5" />
+                                                    <span className="text-lg font-medium">Print</span>
+                                                </button>
+                                            </div>
+
+
+                                            {/* Divider between Print and Share */}
+                                            <div className="w-px h-6 bg-white/20 mx-1"></div>
+
                                             {/* Share button */}
-                                            <button
-                                                onClick={handleShare}
-                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
-                                                aria-label="Share this page"
-                                            >
-                                                <Share2 className="h-5 w-5" />
-                                                <span className="text-lg font-medium">Share</span>
-                                            </button>
+                                            <div className='w-[6rem]'>
+                                                <button
+                                                    onClick={handleShare}
+                                                    className="w-full flex gap-2 justify-center items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
+                                                    aria-label="Share this page"
+                                                >
+                                                    <Share2 className="h-5 w-5" />
+                                                    <span className="text-lg font-medium">Share</span>
+                                                </button>
+                                            </div>
                                         </div>
-                                        
+
                                         {/* Link Copied Notification */}
-                                        <div className={`absolute text-md top-full mt-2 slate-gradient text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all duration-300 ${
-                                            showLinkCopied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
-                                        }`}>
+                                        <div className={`absolute text-md top-full mt-2 slate-gradient text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all duration-300 ${showLinkCopied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+                                            }`}>
                                             Link Copied!
                                         </div>
                                     </div>
-                                    
+
                                     {/* Conditionally render GamePulseChart in print based on toggle */}
                                     <div className={`hidden mt-6 md:block ${includeGamePulseInPrint ? '' : 'print:hidden'}`}>
                                         <GamePulseChart games={games} />
