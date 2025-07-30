@@ -36,20 +36,20 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
                 )}
 
                 {/* Teams and Game Status - controlled width proportions */}
-                <div className="w-full ml-[2vw] grid grid-cols-[2fr_1fr_2fr] xl:grid-cols-[4fr_1rem_4fr_10fr] print:grid-cols-[3fr_1rem_3fr_6fr] items-center">
+                <div className="w-full ml-2 grid grid-cols-[2fr_1fr_2fr] xl:grid-cols-[4fr_4rem_4fr_10fr] print:grid-cols-[3fr_2rem_3fr_6fr] items-center">
                     {/* Away Team - fixed proportion */}
-                    <div className="h-full pb-[2px]">
+                    <div className="h-full pb-[2px] min-w-0">
                         <TeamInfo team={game.away} isAway={true} />
                     </div>
                     {/* Game Status - fixed proportion */}
                     <div className="h-full flex justify-center">
                         <div className="h-full flex justify-center flex-col text-center text-sm leading-none">
-                            <div className="text-base print:leading-none print:text-xs uppercase">{game.sport}</div>
-                            <div className="text-md print:leading-none print:text-xs overflow-visible whitespace-nowrap">{formatGameTime(game.date)}</div>
+                            <div className="text-sm md:text-base print:leading-none print:text-xs print:font-light uppercase">{game.sport}</div>
+                            <div className="text-xs md:text-md print:leading-none print:text-xs print:font-light overflow-visible whitespace-nowrap">{formatGameTime(game.date)}</div>
                         </div>
                     </div>
                     {/* Home Team - fixed proportion */}
-                    <div className="h-full">
+                    <div className="h-full min-w-0">
                         <TeamInfo team={game.home} isAway={false} />
                     </div>
                     {/* Broadcasts component - fixed proportion */}

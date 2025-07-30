@@ -20,7 +20,7 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ team, isAway }) => {
         <></>
       }
       <div className="w-full h-full flex flex-col justify-center text-center overflow-hidden">
-        <div className="text-lg print:text-sm md:text-base font-semibold truncate">{team.shortName}</div>
+        <div className="text-sm print:text-sm md:text-base font-semibold truncate">{team.shortName}</div>
         {!isTBD && (
           <div className="text-xs text-[clamp(0.75rem,1.5rem)] text-gray-600 truncate print:hidden">
             <span>{team.record}</span>

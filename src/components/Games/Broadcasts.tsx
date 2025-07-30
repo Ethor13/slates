@@ -182,7 +182,7 @@ export const BroadcastsHeader: React.FC = () => {
   }
 
   return (
-    <div className="w-full grid pl-[3rem] print:pl-[2.5rem] xl:grid-cols-[8fr_1rem_10fr] print:grid-cols-[6fr_1rem_6fr] items-center">
+    <div className="w-full grid pl-[3.5rem] print:pl-[3rem] xl:grid-cols-[8fr_4rem_10fr] print:grid-cols-[6fr_2rem_6fr] items-center">
       <div/>
       <div/>
       <div className="print:pl-[2px] flex items-center text-base print:text-sm font-medium text-black divide-x">
