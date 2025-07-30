@@ -137,6 +137,7 @@ const Dashboard = () => {
 
     // Function to handle print
     const handlePrint = () => {
+        document.body.offsetHeight; // Force reflow to ensure print styles are applied
         window.print();
     };
 
