@@ -242,7 +242,7 @@ const Dashboard = () => {
                                             {/* Filters button - only show on mobile */}
                                             <button
                                                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10 sm:hidden"
+                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10 md:hidden"
                                                 aria-label="Toggle sidebar"
                                             >
                                                 <SlidersHorizontal className="h-5 w-5" />

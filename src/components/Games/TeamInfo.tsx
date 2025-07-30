@@ -8,15 +8,17 @@ interface TeamInfoProps {
   isAway: boolean;
 }
 
+const MOBILE_THRESHOLD = 640;
+
 const TeamInfo: React.FC<TeamInfoProps> = ({ team, isAway }) => {
   const isTBD = team.shortName === "TBD";
-  const [effectiveIsAway, setEffectiveIsAway] = useState(window.innerWidth < 768 ? !isAway : isAway);
+  const [effectiveIsAway, setEffectiveIsAway] = useState(window.innerWidth < MOBILE_THRESHOLD ? !isAway : isAway);
 
   // Handle responsive behavior for isAway property
   useEffect(() => {
     const handleResize = () => {
       // Tailwind md breakpoint is 768px
-      const isMobile = window.innerWidth < 768;
+      const isMobile = window.innerWidth < MOBILE_THRESHOLD;
       setEffectiveIsAway(isMobile ? !isAway : isAway);
     };
 
