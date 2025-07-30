@@ -181,7 +181,7 @@ const GamesList: React.FC<GamesListProps> = ({
     }, []);
 
     return (
-        <div className="flex flex-col w-full pt-8 print:pt-0">
+        <div className="flex flex-col w-full pt-4 print:pt-0">
             {/* Header section with date and sort */}
             <div className="flex flex-row justify-between items-end w-full mb-2 gap-2">
                 {/* Selected date display */}

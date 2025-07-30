@@ -44,6 +44,8 @@ const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     // Print settings state
     const [includeGamePulseInPrint, setIncludeGamePulseInPrint] = useState<boolean>(false);
+    // Share notification state
+    const [showLinkCopied, setShowLinkCopied] = useState<boolean>(false);
 
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
@@ -143,6 +145,14 @@ const Dashboard = () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             await navigator.clipboard.writeText(data.shareableUrl);
+            
+            // Show the "link copied" notification
+            setShowLinkCopied(true);
+            
+            // Hide the notification after 2 seconds
+            setTimeout(() => {
+                setShowLinkCopied(false);
+            }, 1500);
         } catch (error) {
             console.error('Error sharing:', error);
         }
@@ -224,43 +234,57 @@ const Dashboard = () => {
                                     Error loading games: {gamesError.message || 'Unknown error'}
                                 </div>
                             ) : (
-                                <div className="w-full px-[3vw] pt-[4rem] sm:pt-[3rem] md:pt-[2.5rem] print:pt-0">
-                                    {/* Mobile menu toggle button */}
-                                    <button
-                                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                                        id="mobile-menu-toggle"
-                                        className={`flex gap-2 slate-gradient slate-gradient-hover absolute sm:hidden top-6 left-[3vw] p-2 rounded-full transition-all duration-200 text-white print:hidden z-30`}
-                                        aria-label="Toggle sidebar"
-                                    >
-                                        <p><b>Filters</b></p>
-                                        <SlidersHorizontal className="h-6 w-6" />
-                                    </button>
-                                    <div className="absolute top-6 right-[3vw] flex flex-col items-end">
-                                        {/* Print button - positioned inside scrollable area */}
-                                        <button
-                                            onClick={handlePrint}
-                                            className="w-full p-2 mb-1 rounded-full transition-all duration-200 text-white slate-gradient slate-gradient-hover print:hidden z-30
-                                                    flex gap-2 flex-row justify-between items-center"
-                                            aria-label="Print this page"
-                                        >
-                                            <div className="text-center">
-                                                <p><b>Print</b></p>
-                                            </div>
-                                            <Printer className="h-6 w-6" />
-                                        </button>
-                                        <button
-                                            onClick={handleShare}
-                                            className="w-full p-2 rounded-full transition-all duration-200 text-white slate-gradient slate-gradient-hover print:hidden z-30
-                                                    flex gap-2 flex-row justify-between items-center"
-                                            aria-label="Share this page"
-                                        >
-                                            <p><b>Share</b></p>
-                                            <Share2 className="h-6 w-6" />
-                                        </button>
+                                <div className="w-full px-[3vw] pt-[1rem] print:pt-0">
+                                    {/* Unified Control Bar */}
+                                    <div className="w-full flex justify-center print:hidden relative">
+                                        <div className="slate-gradient rounded-full px-6 py-2 flex items-center gap-3 shadow-lg">
+                                            {/* Filters button - only show on mobile */}
+                                            <button
+                                                onClick={() => setSidebarOpen(!sidebarOpen)}
+                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10 sm:hidden"
+                                                aria-label="Toggle sidebar"
+                                            >
+                                                <SlidersHorizontal className="h-5 w-5" />
+                                                <span className="text-lg font-medium">Filters</span>
+                                            </button>
+                                            
+                                            {/* Separator for mobile */}
+                                            <div className="h-6 w-px bg-white/30 sm:hidden"></div>
+                                            
+                                            {/* Print button */}
+                                            <button
+                                                onClick={handlePrint}
+                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
+                                                aria-label="Print this page"
+                                            >
+                                                <Printer className="h-5 w-5" />
+                                                <span className="text-lg font-medium">Print</span>
+                                            </button>
+                                            
+                                            {/* Separator */}
+                                            <div className="h-6 w-px bg-white/30"></div>
+                                            
+                                            {/* Share button */}
+                                            <button
+                                                onClick={handleShare}
+                                                className="flex gap-2 items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
+                                                aria-label="Share this page"
+                                            >
+                                                <Share2 className="h-5 w-5" />
+                                                <span className="text-lg font-medium">Share</span>
+                                            </button>
+                                        </div>
+                                        
+                                        {/* Link Copied Notification */}
+                                        <div className={`absolute text-md top-full mt-2 slate-gradient text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all duration-300 ${
+                                            showLinkCopied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+                                        }`}>
+                                            Link Copied!
+                                        </div>
                                     </div>
                                     
                                     {/* Conditionally render GamePulseChart in print based on toggle */}
-                                    <div className={includeGamePulseInPrint ? '' : 'print:hidden'}>
+                                    <div className={`hidden mt-6 md:block ${includeGamePulseInPrint ? '' : 'print:hidden'}`}>
                                         <GamePulseChart games={games} />
                                     </div>
                                     <GamesList
