@@ -142,7 +142,7 @@ const Nav = () => {
                 {/* Side panel */}
                 <div
                     ref={menuRef}
-                    className={`z-50 fixed inset-y-0 right-0 max-w-xs w-full force-white-bg transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                    className={`z-50 fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
                 >
                     <div className="z-50 h-full flex flex-col overflow-y-auto py-6 px-4">
                         <div className="ml-2 flex items-center justify-between">

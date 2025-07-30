@@ -137,10 +137,9 @@ const Dashboard = () => {
         window.print();
     };
 
-    if (!currentUser) return;
     const handleShare = async () => {
         try {
-            const response = await fetch(`/generateDashboardLink?userid=${currentUser.uid.split(":").at(0)}`);
+            const response = await fetch(`/generateDashboardLink?userid=${currentUser!.uid.split(":").at(0)}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             await navigator.clipboard.writeText(data.shareableUrl);

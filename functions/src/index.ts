@@ -104,6 +104,7 @@ export const channels = onRequest(
 
     try {
       const channels = await getChannels(providerId);
+
       // add cache control headers for up to 1 month
       res.set("Cache-Control", "public, max-age=2592000");
       // set content type to application/json
@@ -198,8 +199,8 @@ export const getEspnNetworks = onRequest(
   }
 );
 
-// http://127.0.0.1:5001/slates-59840/us-central1/getRandomQuery
-export const getRandomQuery = onRequest(
+// http://127.0.0.1:5001/slates-59840/us-central1/getTeamIds
+export const getTeamIds = onRequest(
   { cors: true },
   async (req, res) => {
     try {
@@ -214,6 +215,27 @@ export const getRandomQuery = onRequest(
         return { [doc.id]: combine_maps(teams) };
       });
       res.status(200).json(combine_maps(sports));
+    } catch (error) {
+      res.status(500).send("Error: " + error);
+    }
+  }
+);
+
+// http://127.0.0.1:5001/slates-59840/us-central1/getRandomQuery
+export const getRandomQuery = onRequest(
+  { cors: true },
+  async (req, res) => {
+    try {
+      // for each sports in the sports collection, map each team to it's id
+      const ncaambbDoc = await db.collection("sports").doc("ncaambb").get();
+      const ncaambbTeams = ncaambbDoc.data()?.teams || {};
+
+      const conferences = new Set<string>();
+      Object.values(ncaambbTeams).forEach((teamInfo) => {
+        conferences.add((teamInfo as any).info.divisionName);
+      });
+
+      res.status(200).json(JSON.parse(JSON.stringify(Array.from(conferences).sort((a, b) => a.localeCompare(b)))));
     } catch (error) {
       res.status(500).send("Error: " + error);
     }

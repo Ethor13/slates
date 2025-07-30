@@ -40,7 +40,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
                     {/* Game Status - fixed proportion */}
                     <div className="h-full row-start-1 row-end-3 md:row-start-1 md:row-end-2 print:row-start-1 print:row-end-2 flex justify-end sm:justify-center">
                         <div className="h-full flex justify-center flex-col text-center text-sm leading-none">
-                            <div className="text-lg sm:text-sm print:text-xs sm:leading-none uppercase">{game.sport}</div>
+                            <div className="text-lg sm:text-sm print:text-xs sm:leading-none uppercase font-semibold">{game.sport}</div>
                             <div className="text-lg sm:text-sm print:text-xs sm:leading-none overflow-visible whitespace-nowrap">{formatGameTime(game.date)}</div>
                         </div>
                     </div>
