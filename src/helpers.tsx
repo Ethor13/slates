@@ -153,7 +153,7 @@ export const adjustSlateScoreForLocation = (game: Record<any, any>, zipcode: str
             const maxLocationEffect = 0.7;
             const distanceFactor = 0.002;
             const minLocationScore = Math.max(0, maxLocationEffect - minDistance * distanceFactor);
-            return minLocationScore + (1 - minLocationScore) * game.slateScore;
+            return minLocationScore + (1 - minLocationScore) * game.rawSlateScore;
         }
     }
 

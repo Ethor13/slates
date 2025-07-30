@@ -27,6 +27,7 @@ const addGameMetadata = (games: ScheduleResponse, favoriteTeams: Record<string, 
                 favoriteTeams.some((team) => (game.sport === team.sport) && (team.id === game.home.id || team.id === game.away.id)) :
                 false;
 
+            game.rawSlateScore = game.rawSlateScore ? game.rawSlateScore : game.slateScore;
             game.slateScore = adjustSlateScoreForLocation(game, zipcode);
         });
     });
@@ -76,7 +77,7 @@ const Dashboard = () => {
         } finally {
             setGamesLoading(false);
         }
-    }, [currentUser, selectedDate, userPreferences.favoriteTeams, userPreferences.zipcode, preferencesLoading]);
+    }, [currentUser, selectedDate]);
 
     const setDisplayedGames = useCallback(() => {
         setGamesLoading(true);
@@ -163,9 +164,9 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (Object.keys(allGames).length > 0 && !preferencesLoading) {
-            setAllGames(prevGames => addGameMetadata(prevGames, userPreferences.favoriteTeams || [], userPreferences.zipcode));
+            setAllGames(addGameMetadata(allGames, userPreferences.favoriteTeams || [], userPreferences.zipcode));
         }
-    }, [userPreferences.favoriteTeams, preferencesLoading]);
+    }, [userPreferences.favoriteTeams, userPreferences.zipcode, preferencesLoading]);
 
     return (
         <div className="h-screen overflow-hidden relative slate-gradient">
