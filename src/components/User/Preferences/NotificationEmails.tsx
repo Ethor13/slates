@@ -105,17 +105,17 @@ const NotificationEmails: React.FC<NotificationEmailsProps> = ({
                         {notificationEmails.map((email, index) => (
                             <div
                                 key={index}
-                                className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 rounded-lg border gap-2 sm:gap-0"
+                                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border gap-3"
                             >
                                 <div className="flex items-center gap-2 flex-1 min-w-0">
                                     <Mail size={16} className="text-gray-400 flex-shrink-0" />
-                                    <span className="text-sm text-gray-900 break-all sm:truncate">
+                                    <span className="text-sm text-gray-900 truncate">
                                         {email}
                                     </span>
                                 </div>
                                 <button
                                     onClick={() => handleRemoveEmail(email)}
-                                    className="self-end sm:self-auto ml-auto sm:ml-2 p-1 text-gray-400 hover:text-red-600 transition-colors flex-shrink-0"
+                                    className="p-1 text-gray-400 hover:text-red-600 transition-colors flex-shrink-0"
                                     title="Remove email"
                                 >
                                     <X size={16} />
