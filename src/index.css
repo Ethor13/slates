@@ -74,4 +74,24 @@ html, body {
   .min-h-screen {
     min-height: auto !important;
   }
+  
+  /* Fix viewport unit issues for print */
+  #game-content {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    max-height: none !important;
+  }
+  
+  /* Ensure proper page flow for print */
+  .print-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* Prevent content from being cut off */
+  body, html {
+    height: auto !important;
+    overflow: visible !important;
+  }
 }

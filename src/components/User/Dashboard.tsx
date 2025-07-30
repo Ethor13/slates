@@ -169,7 +169,7 @@ const Dashboard = () => {
     }, [userPreferences.favoriteTeams, userPreferences.zipcode, preferencesLoading]);
 
     return (
-        <div className="h-screen overflow-hidden relative slate-gradient">
+        <div className="h-screen print:h-auto overflow-hidden print:overflow-visible relative slate-gradient">
             <div className="print:hidden">
                 <Nav />
             </div>
@@ -203,9 +203,9 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="h-screen bg-transparent print:bg-white pt-20 print:pt-0 overflow-hidden">
-                <main className="h-full">
-                    <div className="flex flex-row h-full">
+            <div className="h-screen print:h-auto bg-transparent print:bg-white pt-20 print:pt-0 overflow-hidden print:overflow-visible">
+                <main className="h-full print:h-auto">
+                    <div className="flex flex-row h-full print:h-auto">
                         {/* Left sidebar */}
                         <div className="print:hidden">
                             <Sidebar
@@ -225,7 +225,7 @@ const Dashboard = () => {
 
                         {/* Main content area that takes remaining space and centers content */}
                         {/* This needs to be same padding as sidebar width */}
-                        <div id="game-content" className={`w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] overflow-y-auto bg-white hide-scrollbar relative md:rounded-tl-xl transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-full' : 'translate-x-0'} md:transform-none`}>
+                        <div id="game-content" className={`w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] print:h-auto overflow-y-auto print:overflow-visible bg-white hide-scrollbar relative md:rounded-tl-xl transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-full' : 'translate-x-0'} md:transform-none print-container`}>
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
                                     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
