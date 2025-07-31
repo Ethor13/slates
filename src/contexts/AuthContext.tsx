@@ -16,6 +16,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 // Define UserPreferences interface
 interface UserPreferences {
     zipcode: string;
+    timezone: string;
     tvProviders: Record<string, string>; // Changed from string[] to Record<string, string>
     favoriteTeams: Record<string, string>[];
     notificationEmails: string[];
@@ -63,6 +64,7 @@ export const useAuth = () => {
 
 const getDefaultPreferences = (): UserPreferences => ({
     zipcode: '',
+    timezone: '',
     tvProviders: {},
     favoriteTeams: [],
     notificationEmails: [],

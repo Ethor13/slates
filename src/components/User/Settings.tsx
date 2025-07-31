@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../General/Nav';
-import { ZipcodeInput, TvProviders, FavoriteTeams, NotificationEmails } from './Preferences';
+import { ZipcodeInput, TimezoneSelector, TvProviders, FavoriteTeams, NotificationEmails } from './Preferences';
 import { MapPin, Tv, Star, User, Bell, Shield, HelpCircle } from 'lucide-react';
 
 interface SettingsSectionProps {
@@ -46,6 +46,7 @@ const Settings = () => {
     const { currentUser, userPreferences, preferencesLoading, updateUserPreferences } = useAuth();
     const [providersLoading, setProvidersLoading] = useState(false);
     const [zipcode, setZipcode] = useState(userPreferences.zipcode);
+    const [timezone, setTimezone] = useState(userPreferences.timezone);
     const [availableProviders, setAvailableProviders] = useState<Record<string, any>>({});
     const [activeSection, setActiveSection] = useState('location');
     const sectionsRef = useRef<HTMLDivElement>(null);
@@ -82,6 +83,12 @@ const Settings = () => {
             fetchProviders(zipcode);
         }
     }, [zipcode]);
+
+    // Sync local state with userPreferences when they change
+    useEffect(() => {
+        setZipcode(userPreferences.zipcode);
+        setTimezone(userPreferences.timezone);
+    }, [userPreferences.zipcode, userPreferences.timezone]);
 
     const scrollToSection = (sectionId: string) => {
         const section = document.getElementById(sectionId);
@@ -132,6 +139,15 @@ const Settings = () => {
             console.error('Error saving zipcode:', error);
         }
     }, [updateUserPreferences, fetchProviders, setAvailableProviders]);
+
+    const handleTimezoneChange = useCallback(async (timezone: string) => {
+        try {
+            setTimezone(timezone);
+            await updateUserPreferences({ timezone });
+        } catch (error) {
+            console.error('Error saving timezone:', error);
+        }
+    }, [updateUserPreferences]);
 
     const handleTvProviderToggle = async (providerId: string, providerName: string) => {
         try {
@@ -253,10 +269,16 @@ const Settings = () => {
                                         description="Set your location for regional sports information"
                                         icon={<MapPin size={20} />}
                                     >
-                                        <ZipcodeInput 
-                                            zipcode={zipcode} 
-                                            onChange={handleZipcodeChange}
-                                        />
+                                        <div className="space-y-4">
+                                            <ZipcodeInput 
+                                                zipcode={zipcode} 
+                                                onChange={handleZipcodeChange}
+                                            />
+                                            <TimezoneSelector 
+                                                timezone={timezone} 
+                                                onChange={handleTimezoneChange}
+                                            />
+                                        </div>
                                     </SettingsSection>
                                     
                                     <SettingsSection 
