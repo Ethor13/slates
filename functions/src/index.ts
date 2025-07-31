@@ -280,6 +280,44 @@ const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promi
   });
 };
 
+// Internal function to generate shareable dashboard token for a specific user
+const generateDashboardTokenForUser = async (userId: string, owner: boolean): Promise<string> => {
+  try {
+    // Get user preferences to include in the token
+    const userDoc = await db.collection("users").doc(userId).get();
+    const userPreferences = userDoc.exists ? userDoc.data() : {};
+    const userEmail = await auth.getUser(userId).then(user => user.email);
+
+    if (owner) {
+      const shareableToken = await auth.createCustomToken(userId);
+      return `https://slates.co/shared/${shareableToken}`
+    } else {
+      const tempUserId = `${userId}:${userEmail}:Guest`;
+
+      try {
+        // User already exists, no need to create
+        await auth.getUser(tempUserId);
+      } catch (error) {
+        // User doesn't exist, create it
+        logger.log(error);
+        await auth.createUser({ uid: tempUserId });
+      }
+
+      const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
+      await db.collection("users").doc(tempUserId).set(userPreferencesWithoutEmails);
+
+      const shareableToken = await auth.createCustomToken(tempUserId);
+
+      const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true';
+      const baseUrl = isEmulator ? 'http://localhost:5173' : 'https://slates.co';
+      return `${baseUrl}/shared/${shareableToken}`;
+    }
+  } catch (error) {
+    logger.error("Error generating dashboard token for user:", userId, error);
+    throw new Error("Failed to generate shareable link");
+  }
+};
+
 // Scheduled daily email sending at 8am Eastern Time
 export const scheduledDailyEmail = onSchedule(
   { 
@@ -341,41 +379,6 @@ export const scheduledDailyEmail = onSchedule(
     }
   }
 );
-
-// Internal function to generate shareable dashboard token for a specific user
-const generateDashboardTokenForUser = async (userId: string, owner: boolean): Promise<string> => {
-  try {
-    // Get user preferences to include in the token
-    const userDoc = await db.collection("users").doc(userId).get();
-    const userPreferences = userDoc.exists ? userDoc.data() : {};
-    const userEmail = await auth.getUser(userId).then(user => user.email);
-
-    if (owner) {
-      const shareableToken = await auth.createCustomToken(userId);
-      return `https://slates.co/shared/${shareableToken}`
-    } else {
-      const tempUserId = `${userId}:${userEmail}:Guest`;
-
-      try {
-        // User already exists, no need to create
-        await auth.getUser(tempUserId);
-      } catch (error) {
-        // User doesn't exist, create it
-        logger.log(error);
-        await auth.createUser({ uid: tempUserId });
-      }
-
-      const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
-      await db.collection("users").doc(tempUserId).set(userPreferencesWithoutEmails);
-
-      const shareableToken = await auth.createCustomToken(tempUserId);
-      return `https://slates.co/shared/${shareableToken}`
-    }
-  } catch (error) {
-    logger.error("Error generating dashboard token for user:", userId, error);
-    throw new Error("Failed to generate shareable link");
-  }
-};
 
 // Example: Generate shareable link for daily email notifications
 // This could be called internally when sending daily emails to include a personalized link

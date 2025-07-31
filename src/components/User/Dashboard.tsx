@@ -144,11 +144,12 @@ const Dashboard = () => {
         try {
             const response = await fetch(`/generateDashboardLink?userid=${currentUser!.uid.split(":").at(0)}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-            await navigator.clipboard.writeText(data.shareableUrl);
 
             // Show the "link copied" notification
             setShowLinkCopied(true);
+
+            const data = await response.json();
+            await navigator.clipboard.writeText(data.shareableUrl);
 
             // Hide the notification after 2 seconds
             setTimeout(() => {
