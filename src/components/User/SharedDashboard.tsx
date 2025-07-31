@@ -20,8 +20,6 @@ const SharedDashboard = () => {
         return;
       }
 
-      if (verificationAttempted) return;
-
       try {
         await signInWithToken(token);
         setIsValidToken(true);
@@ -36,7 +34,7 @@ const SharedDashboard = () => {
     };
 
     validateToken();
-  }, [token]);
+  }, []); // Empty dependency array - only run once on mount
 
   // Show loading while verifying token
   if (!verificationAttempted) {
