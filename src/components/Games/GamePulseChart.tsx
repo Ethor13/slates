@@ -4,6 +4,7 @@ import React from 'react';
 
 interface GamePulseChartProps {
     games: ScheduleResponse;
+    timezone?: string;
 }
 
 const gameDurations: Record<string, number> = {
@@ -27,7 +28,7 @@ function useIsMdOrSmaller() {
     return isMdOrSmaller;
 }
 
-export default function GamePulseChart({ games }: GamePulseChartProps) {
+export default function GamePulseChart({ games, timezone }: GamePulseChartProps) {
     // Initialize hourly buckets (0-23)
     const hourlyScores: number[] = Array(24).fill(0);
     let maxScore = 0;
@@ -42,8 +43,17 @@ export default function GamePulseChart({ games }: GamePulseChartProps) {
         }
 
         const gameDate = new Date(game.date);
-        const startHour = gameDate.getHours(); // 0-23 based on local time
-        const startMinutes = gameDate.getMinutes(); // 0-59 minutes
+        
+        // Use timezone-aware formatting to get the hour in the user's timezone
+        const timezonedDate = new Intl.DateTimeFormat('en-US', {
+            timeZone: timezone || 'America/New_York',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+        }).formatToParts(gameDate);
+        
+        const startHour = parseInt(timezonedDate.find(part => part.type === 'hour')?.value || '0');
+        const startMinutes = parseInt(timezonedDate.find(part => part.type === 'minute')?.value || '0');
         
         // Get game duration based on sport
         const gameDuration = gameDurations[game.sport];

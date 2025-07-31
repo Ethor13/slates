@@ -16,7 +16,7 @@ const interestLevelClasses: Record<string, string[]> = {
     "unknown-interest": ["", "border-2 border-gray-500 bg-gray-300 text-gray-500"]
 };
 
-const GameCard: React.FC<GameCardProps> = ({ game }) => {
+const GameCard: React.FC<GameCardProps> = ({ game, timezone }) => {
     const interestLevel = getInterestLevel(game.slateScore);
 
     return (
@@ -45,7 +45,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
                     <div className="h-full flex justify-center">
                         <div className="h-full flex justify-center flex-col text-center text-sm leading-none">
                             <div className="text-sm md:text-base print:leading-none print:text-xs print:font-light uppercase">{game.sport}</div>
-                            <div className="text-xs md:text-md print:leading-none print:text-xs print:font-light overflow-visible whitespace-nowrap">{formatGameTime(game.date)}</div>
+                            <div className="text-xs md:text-md print:leading-none print:text-xs print:font-light overflow-visible whitespace-nowrap">{formatGameTime(game.date, timezone)}</div>
                         </div>
                     </div>
                     {/* Home Team - fixed proportion */}

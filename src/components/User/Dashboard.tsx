@@ -292,7 +292,7 @@ const Dashboard = () => {
 
                                     {/* Conditionally render GamePulseChart in print based on toggle */}
                                     <div className={`hidden mt-6 md:block ${includeGamePulseInPrint ? '' : 'print:hidden'}`}>
-                                        <GamePulseChart games={games} />
+                                        <GamePulseChart games={games} timezone={userPreferences.timezone} />
                                     </div>
                                     <GamesList
                                         games={games}
@@ -301,6 +301,7 @@ const Dashboard = () => {
                                         secondarySort={secondarySort}
                                         setSecondarySort={setSecondarySort}
                                         selectedDate={selectedDate}
+                                        timezone={userPreferences.timezone}
                                     />
                                 </div>
                             )}

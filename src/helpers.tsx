@@ -68,11 +68,11 @@ const parseTeamCoordinatesData = (): Map<string, Map<string, [number, number]>> 
 // Create the team coordinates mapping
 const teamCoordinatesMap = parseTeamCoordinatesData();
 
-export const formatGameTime = (timeString: string): string => {
+export const formatGameTime = (timeString: string, timezone?: string): string => {
     if (timeString === "TBD") return "TBD";
     const date = new Date(timeString);
     return date.toLocaleString("en-US", {
-        timeZone: "America/New_York",
+        timeZone: timezone || "America/New_York", // Default to ET if no timezone provided
         hour: "numeric",
         minute: "2-digit",
         hour12: true,

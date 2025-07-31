@@ -8,7 +8,8 @@ import { BroadcastsHeader } from './Broadcasts';
 const renderGames = (
     games: ScheduleResponse,
     primarySort: Sort,
-    secondarySort: Sort
+    secondarySort: Sort,
+    timezone?: string
 ) => {
     // Helper to get sort value
     const getSortValue = (game: any, sort: Sort) => {
@@ -46,7 +47,7 @@ const renderGames = (
             if (game.date === 'TBD' || game.date === undefined) return 'TBD';
             const d = new Date(game.date);
             d.setMinutes(0, 0, 0);
-            return formatGameTime(d.toISOString());
+            return formatGameTime(d.toISOString(), timezone);
         } else if (primarySort === Sort.SCORE) {
             if (game.slateScore === undefined) return "Score Unavailable";
             if (game.slateScore >= 0.8) return "80+";
@@ -74,13 +75,13 @@ const renderGames = (
                         <h2 className="text-md font-medium">Favorites</h2>
                         <div className="flex flex-col w-full divide-y divide-gray-200">
                             {sortedFavorites.map(([gameId, game]) => (
-                                <GameCard key={gameId} game={game} />
+                                <GameCard key={gameId} game={game} timezone={timezone} />
                             ))}
                         </div>
                     </div>
                 )}
                 {sortedNonFavorites.map(([gameId, game]) => (
-                    <GameCard key={gameId} game={game} />
+                    <GameCard key={gameId} game={game} timezone={timezone} />
                 ))}
             </div>
         );
@@ -121,7 +122,7 @@ const renderGames = (
                     <h2 className="text-md font-medium">Favorites</h2>
                     <div className="flex flex-col w-full divide-y divide-gray-200">
                         {favorites.sort(sortFn).map(([gameId, game]) => (
-                            <GameCard key={gameId} game={game} />
+                            <GameCard key={gameId} game={game} timezone={timezone} />
                         ))}
                     </div>
                 </div>
@@ -131,7 +132,7 @@ const renderGames = (
                     <h2 className="text-md font-medium">{heading}</h2>
                     <div className="flex flex-col w-full divide-y divide-gray-200">
                         {sectioned[heading].sort(sortFn).map(([gameId, game]) => (
-                            <GameCard key={gameId} game={game} />
+                            <GameCard key={gameId} game={game} timezone={timezone} />
                         ))}
                     </div>
                 </div>
@@ -146,7 +147,8 @@ const GamesList: React.FC<GamesListProps> = ({
     secondarySort,
     setSecondarySort,
     games,
-    selectedDate
+    selectedDate,
+    timezone
 }) => {
     const [renderedGames, setRenderedGames] = useState<React.ReactNode | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -156,7 +158,7 @@ const GamesList: React.FC<GamesListProps> = ({
 
     useEffect(() => {
         if (Object.keys(games).length) {
-            setRenderedGames(renderGames(games, sortBy, secondarySort));
+            setRenderedGames(renderGames(games, sortBy, secondarySort, timezone));
         } else {
             setRenderedGames(
                 <div className="w-full text-center text-lg text-gray-600 py-8">
@@ -164,7 +166,7 @@ const GamesList: React.FC<GamesListProps> = ({
                 </div>
             );
         }
-    }, [games, sortBy, secondarySort]);
+    }, [games, sortBy, secondarySort, timezone]);
 
     // Responsive dropdown close on click outside
     useEffect(() => {

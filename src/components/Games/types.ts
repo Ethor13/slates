@@ -38,6 +38,7 @@ export interface Team {
 
 export interface GameCardProps {
   game: DocumentData;
+  timezone?: string;
 }
 
 export interface TeamInfoProps {
@@ -61,6 +62,7 @@ export interface GamesListProps {
   setSecondarySort: (sort: Sort) => void;
   games: ScheduleResponse;
   selectedDate: Date;
+  timezone?: string;
 }
 
 export interface SportSelectorProps {
