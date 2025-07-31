@@ -7,9 +7,9 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, redirectTemp = false }: ProtectedRouteProps) {
-    const { currentUser, loading } = useAuth();
+    const { currentUser, userLoading } = useAuth();
 
-    if (loading) {
+    if (userLoading) {
         return <div>Loading...</div>;
     }
 

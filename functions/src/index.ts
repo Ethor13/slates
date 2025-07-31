@@ -366,7 +366,6 @@ const generateDashboardTokenForUser = async (userId: string, owner: boolean): Pr
       }
 
       const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
-      logger.log(notificationEmails);
       await db.collection("users").doc(tempUserId).set(userPreferencesWithoutEmails);
 
       const shareableToken = await auth.createCustomToken(tempUserId);

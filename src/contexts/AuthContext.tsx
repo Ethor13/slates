@@ -38,7 +38,7 @@ export interface Provider {
 
 interface AuthContextType {
     currentUser: User | null;
-    loading: boolean;
+    userLoading: boolean;
     userPreferences: UserPreferences;
     preferencesLoading: boolean;
     tvChannels: Record<string, Provider>;
@@ -71,7 +71,7 @@ const getDefaultPreferences = (): UserPreferences => ({
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [userLoading, setUserLoading] = useState(true);
     const [preferencesLoading, setPreferencesLoading] = useState(true);
     const [userPreferences, setUserPreferences] = useState<UserPreferences>(getDefaultPreferences());
     const [tvChannels, setTvChannels] = useState<Record<string, Provider>>({});
@@ -80,7 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             setCurrentUser(user);
-            setLoading(false);
+            setUserLoading(false);
         });
 
         return unsubscribe;
@@ -89,7 +89,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const setUserPreferencesFromFirestore = async () => {
             setPreferencesLoading(true);
-            if (!currentUser) {
+
+            if (!currentUser || userLoading) {
                 setUserPreferences(getDefaultPreferences());
                 setPreferencesLoading(false);
                 return;
@@ -118,7 +119,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         setUserPreferencesFromFirestore();
-    }, [currentUser]);
+    }, [currentUser, userLoading]);
 
     // Listen for provider changes
     useEffect(() => {
@@ -155,24 +156,54 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [userPreferences.tvProviders]);
 
     const signIn = async (email: string, password: string) => {
-        await signInWithEmailAndPassword(auth, email, password);
+        setUserLoading(true);
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            setUserLoading(false);
+            throw error;
+        }
     };
 
     const signUp = async (email: string, password: string) => {
-        await createUserWithEmailAndPassword(auth, email, password);
+        setUserLoading(true);
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            setUserLoading(false);
+            throw error;
+        }
     };
 
     const signInWithGoogle = async () => {
-        const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
+        setUserLoading(true);
+        try {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+        } catch (error) {
+            setUserLoading(false);
+            throw error;
+        }
     };
 
     const signInWithToken = async (token: string) => {
-        await signInWithCustomToken(auth, token);
+        setUserLoading(true);
+        try {
+            await signInWithCustomToken(auth, token);
+        } catch (error) {
+            setUserLoading(false);
+            throw error;
+        }
     }
 
     const logout = async () => {
-        await signOut(auth);
+        setUserLoading(true);
+        try {
+            await signOut(auth);
+        } catch (error) {
+            setUserLoading(false);
+            throw error;
+        }
     };
 
     const resetPassword = async (email: string) => {
@@ -195,7 +226,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const value: AuthContextType = {
         currentUser,
-        loading,
+        userLoading,
         userPreferences,
         tvChannels,
         preferencesLoading,
@@ -210,7 +241,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {!userLoading && children}
         </AuthContext.Provider>
     );
 };

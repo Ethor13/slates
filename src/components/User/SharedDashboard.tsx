@@ -68,8 +68,6 @@ const SharedDashboard = () => {
       </div>
     );
   }
-
-  return <Dashboard />;
 };
 
 export default SharedDashboard;
