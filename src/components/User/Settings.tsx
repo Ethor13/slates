@@ -192,7 +192,7 @@ const Settings = () => {
         <div className="h-screen overflow-hidden relative slate-gradient">
             <Nav />
             
-            <div className="h-screen bg-transparent pt-20 overflow-hidden">
+            <div className="h-screen bg-transparent overflow-hidden">
                 <main className="h-full">
                     <div className="flex flex-row h-full">
                         {/* Left sidebar - hidden on mobile */}
