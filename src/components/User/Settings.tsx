@@ -126,13 +126,10 @@ const Settings = () => {
     const handleZipcodeChange = useCallback(async (zipcode: string) => {
         try {
             setZipcode(zipcode);
-            
-            // If zipcode becomes valid, fetch providers and clear current providers
             if (isValidZipcode(zipcode)) {
                 fetchProviders(zipcode);
-                await updateUserPreferences({ tvProviders: {}, zipcode });
+                await updateUserPreferences({ tvProviders: '' , zipcode });
             } else {
-                // Clear providers if zipcode is invalid
                 setAvailableProviders({});
             }
         } catch (error) {
@@ -149,21 +146,11 @@ const Settings = () => {
         }
     }, [updateUserPreferences]);
 
-    const handleTvProviderToggle = async (providerId: string, providerName: string) => {
+    const handleTvProviderSelect = async (providerId: string) => {
         try {
-            const newProviders = { ...userPreferences.tvProviders };
-            
-            if (providerId in newProviders) {
-                // Remove provider if it already exists
-                delete newProviders[providerId];
-            } else {
-                // Add provider with name if it doesn't exist
-                newProviders[providerId] = providerName;
-            }
-            
-            await updateUserPreferences({ tvProviders: newProviders });
+            await updateUserPreferences({ tvProviders: providerId });
         } catch (error) {
-            console.error('Error saving TV providers:', error);
+            console.error('Error saving TV provider:', error);
         }
     };
 
@@ -283,13 +270,13 @@ const Settings = () => {
                                     
                                     <SettingsSection 
                                         id="providers" 
-                                        title="TV Providers" 
-                                        description="Select your TV providers to see available channels"
+                                        title="TV Provider" 
+                                        description="Select your TV provider to see available channels"
                                         icon={<Tv size={20} />}
                                     >
                                         <TvProviders 
                                             selectedProviders={userPreferences.tvProviders} 
-                                            onToggle={handleTvProviderToggle}
+                                            onSelect={handleTvProviderSelect}
                                             availableProviders={availableProviders}
                                             loading={providersLoading}
                                             hasValidZipcode={isValidZipcode(userPreferences.zipcode)}

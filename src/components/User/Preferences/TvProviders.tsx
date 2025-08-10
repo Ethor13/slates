@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface TvProvidersProps {
-    selectedProviders: Record<string, string>; // Changed from string[] to Record<string, string>
-    onToggle: (providerId: string, providerName: string) => void; // Updated to include provider name
+    selectedProviders: string; // now a single providerId
+    onSelect: (providerId: string, providerName: string) => void;
     availableProviders: Record<string, any>;
     loading: boolean;
     hasValidZipcode: boolean;
@@ -10,20 +10,19 @@ interface TvProvidersProps {
 
 const TvProviders: React.FC<TvProvidersProps> = ({
     selectedProviders,
-    onToggle,
+    onSelect,
     availableProviders,
     loading,
     hasValidZipcode
 }) => {
     return (
         <div>
-            <label className="block text-sm font-medium">TV Providers</label>
+            <label className="block text-sm font-medium">TV Provider</label>
             <p className="text-sm text-gray-500 mb-2">
                 {!hasValidZipcode
                     ? "Enter a valid zipcode to see providers in your area"
-                    : "Select your TV providers"}
+                    : "Select your TV provider"}
             </p>
-
             {loading ? (
                 <div className="flex justify-center py-4">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -38,11 +37,11 @@ const TvProviders: React.FC<TvProvidersProps> = ({
                         <div key={providerId} className="flex items-center">
                             <input
                                 id={`provider-${providerId}`}
-                                name={`provider-${providerId}`}
-                                type="checkbox"
-                                checked={Object.keys(selectedProviders).includes(providerId)}
-                                onChange={() => onToggle(providerId, provider.name)}
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                name="tv-provider"
+                                type="radio"
+                                checked={selectedProviders === providerId}
+                                onChange={() => onSelect(providerId, provider.name)}
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                             />
                             <label htmlFor={`provider-${providerId}`} className="ml-3 text-sm">
                                 {provider.name}

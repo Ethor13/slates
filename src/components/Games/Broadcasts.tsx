@@ -62,7 +62,6 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
   const { userPreferences, tvChannels } = useAuth();
   const [broadcastChannels, setBroadcastChannels] = React.useState<any[]>([]);
   const [nonTvChannels, setnonTvChannels] = React.useState<any[]>([]);
-  const [initialized, setInitialized] = React.useState(false);
 
   // Create a mapping of broadcasts to display in table format
   useEffect(() => {
@@ -72,37 +71,21 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
       setBroadcastChannels([]);
       return;
     }
-
-    // Get list of providers with their IDs and names
-    const providers = Object.entries(userPreferences.tvProviders)
-      .map(([providerId, providerName]) => ({
-        id: providerId,
-        name: providerName,
-        provider: tvChannels[providerId]
-      }))
-      .filter(item => item.provider); // Only include providers that exist in tvChannels
-
-    // Create broadcast rows with channel numbers for each provider
+    const providerId = userPreferences.tvProviders;
+    const providers = providerId ? [{ id: providerId, name: providerId, provider: tvChannels[providerId] }] : [];
     const allBroadcasts = broadcastNames.map(broadcastName => {
       const channelsForBroadcast: Record<string, string> = {};
-
-      // Find channel number for each provider
       providers.forEach(({ id, provider }) => {
+        if (!provider) return;
         const mappedChannels = mapBroadcastToChannelForProvider(broadcastName, provider);
-        // Use the first channel number if there are multiple matches
         channelsForBroadcast[id] = mappedChannels.length > 0 ? [...new Set(mappedChannels.map(channel => channel.number))].join(', ') : '';
       });
-
-
       return {
         broadcastName,
         channels: channelsForBroadcast,
-        // Track if this broadcast has any channels across all providers
         hasAnyChannels: Object.values(channelsForBroadcast).some(channel => channel !== '')
       };
     });
-
-    // Filter broadcasts if showOnlyAvailableBroadcasts is enabled
     if (userPreferences.showOnlyAvailableBroadcasts) {
       setBroadcastChannels(allBroadcasts.filter(broadcast => broadcast.hasAnyChannels));
     } else {
@@ -115,58 +98,45 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
     setnonTvChannels(Object.entries(broadcasts).filter(([_, broadcast]) => broadcast.type !== "TV").map(([broadcastName, _]) => broadcastName));
   }, [broadcasts]);
 
-  useEffect(() => {
-    if (Object.keys(tvChannels).length) {
-      setInitialized(true);
-    }
-  }, [tvChannels]);
-
   return (
     <div className="print:pl-[0.5rem] w-full h-full divide-x flex flex-row">
       <div className="h-full flex-grow-[2] basis-0 flex-row justify-center flex divide-x">
-        {/* Broadcast Names */}
         <div className="flex flex-1 min-w-0 flex-col ">
           {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
             <div key={`${gameId}-${broadcast.broadcastName}`} className="h-full flex-1 basis-0 text-center flex items-center justify-center min-w-0">
               <span className="text-sm print:text-xs leading-none truncate w-full px-1">{broadcast.broadcastName}</span>
             </div>
-          )) :
-            <></>
-          }
+          )) : <></>}
         </div>
-
-        {/* Broadcast Channels */}
-        {Object.entries(userPreferences.tvProviders).map(([providerId]) => (
-          <div key={`${gameId}-${providerId}`} className="flex flex-1 min-w-0 flex-col">
+        {userPreferences.tvProviders && (
+          <div className="flex flex-1 min-w-0 flex-col">
             {broadcastChannels.length ? broadcastChannels.map((broadcast) => (
               <div
-                key={`${gameId}-${broadcast.broadcastName}-${providerId}`}
-                className="h-full flex-1 basis-0 text-center flex items-center justify-center"
+                key={`${gameId}-${broadcast.broadcastName}-${userPreferences.tvProviders}`}
+                className="h-full flex-1 basis-0 text-center flex items-center justify-center min-w-0"
               >
-                {broadcast.channels[providerId] ? (
-                  <span className="text-sm print:text-xs leading-none flex items-center justify-center">
-                    <span>{broadcast.channels[providerId]}</span>
+                {broadcast.channels[userPreferences.tvProviders] ? (
+                  <span className="text-sm print:text-xs leading-none flex items-center justify-center w-full min-w-0 px-1">
+                    <span className="truncate w-full min-w-0 whitespace-nowrap overflow-hidden">
+                      {broadcast.channels[userPreferences.tvProviders]}
+                    </span>
                   </span>
                 ) : (
                   <span className="text-gray-600"></span>
                 )}
               </div>
-              )) :
-              <></>
-            }
+            )) : <></>}
           </div>
-        ))}
-        <div className="flex flex-1 flex-col items-center justify-center">
+        )}
+        <div className="flex flex-1 min-w-0 flex-col items-center justify-center">
           {nonTvChannels.length ? nonTvChannels.map((broadcast) => (
             <div
               key={`${gameId}-${broadcast}`}
-              className="text-sm print:text-xs text-center"
+              className="text-sm print:text-xs text-center w-full px-1 min-w-0"
             >
-              {broadcast}
+              <span className="truncate w-full block whitespace-nowrap overflow-hidden">{broadcast}</span>
             </div>
-          )) :
-            <></>
-          }
+          )) : <></>}
         </div>
       </div>
     </div>
@@ -175,31 +145,22 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
 
 export const BroadcastsHeader: React.FC = () => {
   const { userPreferences } = useAuth();
-
-  // If no providers, don't show the header
-  if (Object.keys(userPreferences.tvProviders).length === 0) {
+  if (!userPreferences.tvProviders) {
     return null;
   }
-
   return (
     <div className="w-full grid pl-[3.5rem] print:pl-[3rem] xl:grid-cols-[8fr_4rem_10fr] print:grid-cols-[6fr_2rem_6fr] items-center">
-      <div/>
-      <div/>
+      <div />
+      <div />
       <div className="print:pl-[2px] flex items-center text-base print:text-sm font-medium text-black divide-x">
-        <div className="h-full flex-grow-[2] basis-0 flex divide-x">
+        <div className="h-full flex-grow-[2] basis-0 flex divide-x w-full min-w-0">
           <div className="flex-1 w-full h-full flex items-center justify-center">
-            <span>Broadcast</span>
+            <span>Channel</span>
           </div>
-          {Object.entries(userPreferences.tvProviders).map(([providerId, providerName]) => (
-            <div
-              key={`header-${providerId}`}
-              className="min-w-0 flex-1 h-full flex items-center justify-center"
-            >
-              {/* Display shortened provider name */}
-              <span className="h-full w-full truncate text-center">{providerName.split(' - ')[0]}</span>
-            </div>
-          ))}
-          <div className="flex-1 h-full flex items-center justify-center"><span>Streaming</span></div>
+          <div className="min-w-0 flex-1 h-full flex items-center justify-center">
+            <span className="h-full w-full truncate text-center px-1">Channel Number</span>
+          </div>
+          <div className="flex-1 h-full flex items-center justify-center min-w-0"><span className="truncate px-1">Streams</span></div>
         </div>
       </div>
     </div>

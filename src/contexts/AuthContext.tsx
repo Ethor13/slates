@@ -17,7 +17,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 interface UserPreferences {
     zipcode: string;
     timezone: string;
-    tvProviders: Record<string, string>; // Changed from string[] to Record<string, string>
+    tvProviders: string; // Changed from Record<string, string> to single providerId string
     favoriteTeams: Record<string, string>[];
     notificationEmails: string[];
     showOnlyAvailableBroadcasts: boolean;
@@ -65,7 +65,7 @@ export const useAuth = () => {
 const getDefaultPreferences = (): UserPreferences => ({
     zipcode: '',
     timezone: '',
-    tvProviders: {},
+    tvProviders: '',
     favoriteTeams: [],
     notificationEmails: [],
     showOnlyAvailableBroadcasts: true
@@ -108,10 +108,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     setUserPreferences(defaultPrefs);
                     await setDoc(userDocRef, defaultPrefs);
                 } else {
-                    const userData = userDoc.data() as UserPreferences;
+                    const userData = userDoc.data() as any;
+                    // Migration: previous tvProviders may have been an object mapping providerId->name
+                    let tvProviders: string = '';
+                    if (typeof userData.tvProviders === 'string') {
+                        tvProviders = userData.tvProviders;
+                    } else if (userData.tvProviders && typeof userData.tvProviders === 'object') {
+                        const keys = Object.keys(userData.tvProviders);
+                        if (keys.length) tvProviders = keys[0];
+                    }
                     setUserPreferences({
                         ...getDefaultPreferences(),
-                        ...userData
+                        ...userData,
+                        tvProviders // ensure new single-string field
                     });
                 }
             } catch (error) {
@@ -127,28 +136,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen for provider changes
     useEffect(() => {
         const fetchProviderChannels = async () => {
-            const providersChannels: Record<string, any> = {};
-            const providerIds = Object.keys(userPreferences.tvProviders);
-            
-            if (providerIds.length === 0) {
+            const providerId = userPreferences.tvProviders;
+            if (!providerId) {
                 setTvChannels({});
                 return;
             }
-            
             try {
-                // Use Promise.all to fetch all channels in parallel
-                await Promise.all(
-                    providerIds.map(async (providerId) => {
-                        try {
-                            const response = await fetch(`/channels?providerId=${providerId}`);
-                            const channels = await response.json();
-                            providersChannels[providerId] = channels;
-                        } catch (error) {
-                            console.error(`Error fetching TV channels for provider ${providerId}:`, error);
-                        }
-                    })
-                );
-                
+                const providersChannels: Record<string, any> = {};
+                try {
+                    const response = await fetch(`/channels?providerId=${providerId}`);
+                    const channels = await response.json();
+                    providersChannels[providerId] = channels;
+                } catch (error) {
+                    console.error(`Error fetching TV channels for provider ${providerId}:`, error);
+                }
                 setTvChannels(providersChannels);
             } catch (error) {
                 console.error('Error fetching TV channels:', error);
