@@ -91,7 +91,7 @@ const CONFIG: ConfigType = {
 function calculateWinPercentage(record: string): number {
   try {
     const [wins, losses] = record.split("-").map(Number);
-    return wins / (wins + losses);
+    return wins + losses > 0 ? wins / (wins + losses) : 0.5;
   } catch (error) {
     logger.error("Error calculating win percentage from record:", error);
     throw new Error("Invalid record format");
@@ -154,7 +154,7 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
   try {
     const config = CONFIG.categories.allData;
 
-    const { sport } = game;
+    const { sport, season } = game;
     const { record: homeRecord } = game.home;
     const { record: awayRecord } = game.away;
     const { matchupQualities: homeMQ = {} } = game.home.metrics;
@@ -166,7 +166,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const homePopularity = sportPopularityMap?.[game.home.id];
     const awayPopularity = sportPopularityMap?.[game.away.id];
 
-    let rawSlateScore = inverseSigmoid(config.baselines[sport], 1, 0);
+    const baseline = season === "Preseason" ? config.baselines[sport] / 3 : season === "Postseason" ? (config.baselines[sport] + 1) / 2 : config.baselines[sport];
+    let rawSlateScore = inverseSigmoid(baseline, 1, 0);
 
     // Matchup quality component
     if (homeMQ.matchupquality != null) {

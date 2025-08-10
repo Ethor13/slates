@@ -64,6 +64,7 @@ interface Event {
 
 interface ScheduleResponse {
     events: Event[];
+    leagues: any;
 }
 
 interface TeamData {
@@ -121,6 +122,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
       away: teamData.away,
       date: event.competitions[0].timeValid ? event.date : "TBD",
       link: event.links?.find((link) => link.text === "Gamecast")?.href || "",
+      season: events.leagues[0].season.type.name || "",
       broadcasts: combine_maps(
         event.competitions[0].geoBroadcasts.map((broadcast) => ({
           [broadcast.media.shortName]: {
