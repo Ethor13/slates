@@ -64,6 +64,11 @@ html, body {
   overflow-y: auto;
 }
 
+/* Disable rubber band / overscroll bounce globally */
+html, body { overscroll-behavior: none; }
+/* Extra containment for scrollable areas (optional) */
+.scroll-region { overscroll-behavior: contain; }
+
 @media print {
   * {
     print-color-adjust: exact !important;
