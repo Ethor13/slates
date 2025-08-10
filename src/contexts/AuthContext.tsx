@@ -73,18 +73,19 @@ const getDefaultPreferences = (): UserPreferences => ({
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    // userLoading should represent ONLY the initial auth state resolution
     const [userLoading, setUserLoading] = useState(true);
     const [preferencesLoading, setPreferencesLoading] = useState(true);
     const [userPreferences, setUserPreferences] = useState<UserPreferences>(getDefaultPreferences());
     const [tvChannels, setTvChannels] = useState<Record<string, Provider>>({});
 
-    // Listen for auth state changes
+    // Listen for auth state changes (initial + subsequent sign-in/out)
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             setCurrentUser(user);
+            // Once first auth state is known, loading ends
             setUserLoading(false);
         });
-
         return unsubscribe;
     }, []);
 
@@ -158,52 +159,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [userPreferences.tvProviders]);
 
     const signIn = async (email: string, password: string) => {
-        setUserLoading(true);
+        // Do not toggle userLoading here; rely on initial listener. Actions can have their own UI.
         try {
             await signInWithEmailAndPassword(auth, email, password);
         } catch (error) {
-            setUserLoading(false);
             throw error;
         }
     };
 
     const signUp = async (email: string, password: string) => {
-        setUserLoading(true);
         try {
             await createUserWithEmailAndPassword(auth, email, password);
         } catch (error) {
-            setUserLoading(false);
             throw error;
         }
     };
 
     const signInWithGoogle = async () => {
-        setUserLoading(true);
         try {
             const provider = new GoogleAuthProvider();
             await signInWithPopup(auth, provider);
         } catch (error) {
-            setUserLoading(false);
             throw error;
         }
     };
 
     const signInWithToken = async (token: string) => {
-        setUserLoading(true);
+        // Avoid leaving global loading stuck; do not set userLoading true.
         try {
             await signInWithCustomToken(auth, token);
         } catch (error) {
-            setUserLoading(false);
             throw error;
         }
-    }
+    };
 
     const logout = async () => {
-        setUserLoading(true);
         try {
             await signOut(auth);
         } catch (error) {
-            setUserLoading(false);
             throw error;
         }
     };

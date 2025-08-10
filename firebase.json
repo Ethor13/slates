@@ -20,6 +20,10 @@
         "function": "generateDashboardLink"
       },
       {
+        "source": "/signInWithJWT",
+        "function": "signInWithJWT"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

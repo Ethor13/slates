@@ -19,6 +19,10 @@ export default defineConfig({
         target: 'http://localhost:5001/slates-59840/us-central1/generateDashboardLink',
         changeOrigin: true,
       },
+      '/signInWithJWT': {
+        target: 'http://localhost:5001/slates-59840/us-central1/signInWithJWT',
+        changeOrigin: true,
+      },
     },
   },
   build: {

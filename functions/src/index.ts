@@ -16,6 +16,10 @@ import { downloadImages } from "./sports-scrapers/scrape_images.js";
 import { combine_maps } from "./helpers.js";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
+import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables from .env file
 
 admin.initializeApp();
 
@@ -281,16 +285,43 @@ const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promi
 };
 
 // Internal function to generate shareable dashboard token for a specific user
-const generateDashboardTokenForUser = async (userId: string, owner: boolean): Promise<string> => {
+const generateDashboardTokenForUser = async (
+  userId: string, 
+  owner: boolean, 
+  expiresIn: string = "7d"
+): Promise<string> => {
   try {
     // Get user preferences to include in the token
     const userDoc = await db.collection("users").doc(userId).get();
     const userPreferences = userDoc.exists ? userDoc.data() : {};
     const userEmail = await auth.getUser(userId).then(user => user.email);
 
+    // Get JWT secret from environment variables
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      logger.error("JWT_SECRET environment variable is not configured");
+      throw new Error("JWT secret not configured");
+    }
+
     if (owner) {
-      const shareableToken = await auth.createCustomToken(userId);
-      return `https://slates.co/shared/${shareableToken}`
+      // Generate JWT token for owner with user preferences
+      const payload = {
+        userId,
+        userEmail,
+        owner: true,
+        preferences: userPreferences,
+        type: "owner"
+      };
+      
+      const token = jwt.sign(payload, jwtSecret, { 
+        expiresIn: expiresIn,
+        issuer: "slates-dashboard",
+        audience: "slates-users"
+      } as jwt.SignOptions);
+      
+      const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true';
+      const baseUrl = isEmulator ? 'http://localhost:5173' : 'https://slates.co';
+      return `${baseUrl}/shared/${token}`;
     } else {
       const tempUserId = `${userId}:${userEmail}:Guest`;
 
@@ -306,15 +337,49 @@ const generateDashboardTokenForUser = async (userId: string, owner: boolean): Pr
       const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
       await db.collection("users").doc(tempUserId).set(userPreferencesWithoutEmails);
 
-      const shareableToken = await auth.createCustomToken(tempUserId);
+      // Generate JWT token for guest with limited preferences
+      const payload = {
+        userId: tempUserId,
+        originalUserId: userId,
+        userEmail,
+        owner: false,
+        preferences: userPreferencesWithoutEmails,
+        type: "guest"
+      };
+      
+      const token = jwt.sign(payload, jwtSecret, { 
+        expiresIn: expiresIn,
+        issuer: "slates-dashboard",
+        audience: "slates-users"
+      } as jwt.SignOptions);
 
       const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true';
       const baseUrl = isEmulator ? 'http://localhost:5173' : 'https://slates.co';
-      return `${baseUrl}/shared/${shareableToken}`;
+      return `${baseUrl}/shared/${token}`;
     }
   } catch (error) {
     logger.error("Error generating dashboard token for user:", userId, error);
-    throw new Error("Failed to generate shareable link");
+    throw new Error(`Failed to generate shareable link: ${error}`);
+  }
+};
+
+// Internal function to verify JWT tokens
+const verifyDashboardToken = async (token: string): Promise<any> => {
+  try {
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      throw new Error("JWT secret not configured");
+    }
+
+    const decoded = jwt.verify(token, jwtSecret, {
+      issuer: "slates-dashboard",
+      audience: "slates-users"
+    } as jwt.VerifyOptions);
+
+    return decoded;
+  } catch (error) {
+    logger.error("Error verifying JWT token:", error);
+    throw new Error("Invalid or expired token");
   }
 };
 
@@ -323,7 +388,7 @@ export const scheduledDailyEmail = onSchedule(
   { 
     schedule: "0 8 * * *",
     timeZone: "America/New_York",
-    secrets: ["MAILGUN_API_KEY", "MAILGUN_DOMAIN"]
+    secrets: ["MAILGUN_API_KEY", "MAILGUN_DOMAIN", "JWT_SECRET"]
   },
   async () => {
     try {
@@ -380,15 +445,91 @@ export const scheduledDailyEmail = onSchedule(
   }
 );
 
+// http://127.0.0.1:5001/slates-59840/us-central1/verifyDashboardToken
+export const verifyDashboardTokenEndpoint = onRequest(
+  { 
+    cors: true,
+    secrets: ["JWT_SECRET"]
+  },
+  async (req, res) => {
+    try {
+      const token = req.query.token as string || req.body?.token;
+
+      if (!token) {
+        res.status(400).json({ error: "Token is required" });
+        return;
+      }
+
+      const decoded = await verifyDashboardToken(token);
+      
+      res.status(200).json({ 
+        message: "Token is valid", 
+        payload: decoded,
+        isExpired: false
+      });
+    } catch (error) {
+      logger.error("Error in verifyDashboardToken:", error);
+      res.status(401).json({ 
+        error: "Invalid or expired token",
+        isExpired: true
+      });
+    }
+  }
+);
+
+// http://127.0.0.1:5001/slates-59840/us-central1/signInWithJWT
+export const signInWithJWT = onRequest(
+  { 
+    cors: true,
+    secrets: ["JWT_SECRET"]
+  },
+  async (req, res) => {
+    try {
+      const token = req.query.token as string || req.body?.token;
+
+      if (!token) {
+        res.status(400).json({ error: "JWT token is required" });
+        return;
+      }
+
+      // Verify the JWT token
+      const jwtPayload = await verifyDashboardToken(token);
+      
+      // Create a Firebase custom token for the user
+      const firebaseToken = await auth.createCustomToken(jwtPayload.userId);
+      
+      res.status(200).json({ 
+        message: "Firebase token created successfully", 
+        firebaseToken,
+        userInfo: {
+          userId: jwtPayload.userId,
+          userEmail: jwtPayload.userEmail,
+          type: jwtPayload.type,
+          isOwner: jwtPayload.owner
+        }
+      });
+    } catch (error) {
+      logger.error("Error in signInWithJWT:", error);
+      res.status(401).json({ 
+        error: "Failed to create Firebase token from JWT"
+      });
+    }
+  }
+);
+
 // Example: Generate shareable link for daily email notifications
 // This could be called internally when sending daily emails to include a personalized link
 // http://127.0.0.1:5001/slates-59840/us-central1/generateDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj
 export const generateDashboardLink = onRequest(
-  { cors: true },
+  { 
+    cors: true,
+    secrets: ["JWT_SECRET"]
+  },
   async (req, res) => {
     try {
       // This endpoint could be secured with API keys or internal authentication
       const userId = req.query.userid as string;
+      const expiresIn = (req.query.expiresIn as string) || "7d"; // Default to 7 days
 
       if (!userId) {
         res.status(400).json({ error: "userId is required" });
@@ -403,13 +544,17 @@ export const generateDashboardLink = onRequest(
         return;
       }
 
-      const shareableUrl = await generateDashboardTokenForUser(userId, false);
+      const shareableUrl = await generateDashboardTokenForUser(userId, false, expiresIn);
       
       // This could be used to send the link via email or return it for other internal processes
-      res.status(200).json({ message: "Dashboard link generated successfully", shareableUrl });
+      res.status(200).json({ 
+        message: "Dashboard link generated successfully", 
+        shareableUrl,
+        expiresIn 
+      });
     } catch (error) {
       logger.error("Error in generateDashboardLink:", error);
-      res.status(500).json({ error: "Failed to generate dashboard link" });
+      res.status(500).json({ error: `Failed to generate dashboard link ${error}` });
     }
   }
 );
