@@ -298,14 +298,14 @@ function parseNFLPowerIndex(rawHTML: string): TeamMetric {
     }
 
     // Find the opening brace of the JSON object
-    const braceStart = rawHTML.indexOf('{', markerIdx);
+    const braceStart = rawHTML.indexOf("{", markerIdx);
     if (braceStart === -1) {
       logger.error("Opening brace for __espnfitt__ JSON not found");
       return {};
     }
 
     // Limit search to current <script> tag content for simplicity
-    const scriptEnd = rawHTML.indexOf('</script>', braceStart);
+    const scriptEnd = rawHTML.indexOf("</script>", braceStart);
     if (scriptEnd === -1) {
       logger.error("Closing script tag not found after __espnfitt__");
       return {};
@@ -339,7 +339,7 @@ function parseNFLPowerIndex(rawHTML: string): TeamMetric {
           if (!s?.name) return;
           statNames.push(s.name);
           let v: any = s.value;
-          if (typeof v === 'string' && s.name !== 'numwins' && /^-?\d+(\.\d+)?$/.test(v)) {
+          if (typeof v === "string" && s.name !== "numwins" && /^-?\d+(\.\d+)?$/.test(v)) {
             v = Number(v);
           }
           statValues.push(v);
