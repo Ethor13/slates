@@ -327,7 +327,7 @@ const Dashboard = () => {
                                         </div>
 
                                         {/* Link Copied Notification */}
-                                        <div className={`absolute text-md top-full mt-2 slate-gradient text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all duration-300 ${showLinkCopied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
+                                        <div className={`absolute z-50 text-md top-full mt-2 slate-gradient text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all duration-300 ${showLinkCopied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
                                             Link Copied!
                                         </div>
                                     </div>
