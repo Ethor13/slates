@@ -158,7 +158,7 @@ export const BroadcastsHeader: React.FC = () => {
             <span>Channel</span>
           </div>
           <div className="min-w-0 flex-1 h-full flex items-center justify-center">
-            <span className="h-full w-full truncate text-center px-1">Channel Number</span>
+            <span className="h-full w-full truncate text-center px-1">Number</span>
           </div>
           <div className="flex-1 h-full flex items-center justify-center min-w-0"><span className="truncate px-1">Streams</span></div>
         </div>
