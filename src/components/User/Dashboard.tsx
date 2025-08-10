@@ -47,6 +47,7 @@ const Dashboard = () => {
     const [includeGamePulseInPrint, setIncludeGamePulseInPrint] = useState<boolean>(false);
     // Share notification state
     const [showLinkCopied, setShowLinkCopied] = useState<boolean>(false);
+    const [shareLoading, setShareLoading] = useState<boolean>(false);
 
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
@@ -176,22 +177,26 @@ const Dashboard = () => {
     };
 
     const handleShare = async () => {
+        if (shareLoading) return; // prevent duplicate clicks
+        setShareLoading(true);
         try {
             const response = await fetch(`/generateDashboardLink?userid=${currentUser!.uid.split(":").at(0)}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-            // Show the "link copied" notification
-            setShowLinkCopied(true);
-
             const data = await response.json();
             await navigator.clipboard.writeText(data.shareableUrl);
+
+            // Show the "link copied" notification
+            setShareLoading(false);
+            setShowLinkCopied(true);
 
             // Hide the notification after 2 seconds
             setTimeout(() => {
                 setShowLinkCopied(false);
-            }, 1500);
+            }, 1000);
         } catch (error) {
             console.error('Error sharing:', error);
+            setShareLoading(false);
         }
     };
 
@@ -310,7 +315,9 @@ const Dashboard = () => {
                                             <div className='w-[6rem]'>
                                                 <button
                                                     onClick={handleShare}
-                                                    className="w-full flex gap-2 justify-center items-center p-2 rounded-full transition-all duration-200 text-white hover:bg-white/10"
+                                                    disabled={shareLoading}
+                                                    aria-busy={shareLoading}
+                                                    className={`w-full flex gap-2 justify-center items-center p-2 rounded-full transition-all duration-200 text-white focus:outline-none focus:ring-2 focus:ring-white/40 disabled:cursor-wait ${shareLoading ? 'animate-pulse bg-white/10' : 'hover:bg-white/10'}`}
                                                     aria-label="Share this page"
                                                 >
                                                     <Share2 className="h-5 w-5" />
@@ -320,8 +327,7 @@ const Dashboard = () => {
                                         </div>
 
                                         {/* Link Copied Notification */}
-                                        <div className={`absolute text-md top-full mt-2 slate-gradient text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all duration-300 ${showLinkCopied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
-                                            }`}>
+                                        <div className={`absolute text-md top-full mt-2 slate-gradient text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transition-all duration-300 ${showLinkCopied ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}`}>
                                             Link Copied!
                                         </div>
                                     </div>
