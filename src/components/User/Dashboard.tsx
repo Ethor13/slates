@@ -235,7 +235,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="h-screen print:h-auto bg-transparent print:bg-white pt-20 print:pt-0 overflow-hidden print:overflow-visible">
+            <div className="h-screen print:h-auto bg-transparent print:bg-white print:pt-0 overflow-hidden print:overflow-visible">
                 <main className="h-full print:h-auto">
                     <div className="flex flex-row h-full print:h-auto">
                         {/* Left sidebar */}

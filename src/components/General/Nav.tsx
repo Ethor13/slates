@@ -62,7 +62,7 @@ const Nav = () => {
 
     return (
         <>
-            <nav className="fixed top-0 w-full z-40 bg-transparent h-20">
+            <nav className="relative top-0 w-full z-40 bg-transparent h-20">
                 <div className="mx-auto px-4 sm:px-6">
                     <div className="flex flex-row gap-4 h-[5rem] items-center">
                         <div className="flex items-center space-x-2">
