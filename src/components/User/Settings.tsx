@@ -238,7 +238,7 @@ const Settings = () => {
                                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-deep"></div>
                                 </div>
                             ) : (
-                                <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 mt-3" ref={sectionsRef}>
+                                <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 mt-3 mb-[6rem]" ref={sectionsRef}>
                                     <SettingsSection
                                         id="account" 
                                         title="Account" 
