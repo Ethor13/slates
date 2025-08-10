@@ -63,6 +63,8 @@ export interface GamesListProps {
   games: ScheduleResponse;
   selectedDate: Date;
   timezone?: string;
+  gamesLoading?: boolean; // indicate if games are currently loading
+  hasFetchedGames?: boolean; // indicate if at least one fetch attempt has completed
 }
 
 export interface SportSelectorProps {

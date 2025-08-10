@@ -53,6 +53,7 @@ const Dashboard = () => {
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [sortBy, setSortBy] = useState<Sort>(Sort.SCORE);
     const [secondarySort, setSecondarySort] = useState<Sort>(Sort.TIME); // Default to TIME
+    const [hasFetchedGames, setHasFetchedGames] = useState<boolean>(false);
 
     // Fetch games data using Cloud Functions
     const fetchAllGamesOnDate = useCallback(async () => {
@@ -76,25 +77,37 @@ const Dashboard = () => {
             setGamesError(error);
         } finally {
             setGamesLoading(false);
+            setHasFetchedGames(true);
         }
-    }, [currentUser, selectedDate]);
+    }, [currentUser, selectedDate, preferencesLoading, userPreferences.favoriteTeams, userPreferences.zipcode]);
 
-    const setDisplayedGames = useCallback(() => {
-        setGamesLoading(true);
-        setGamesError(null);
-        try {
-            const filteredGames = Object.values(selectedSports).reduce((acc, sport) => ({
-                ...acc,
-                ...allGames[sport]
-            }), {} as ScheduleResponse);
-
-            setGames(filteredGames);
-        } catch (error) {
-            console.error('Error setting displayed games:', error);
-            setGamesError(error);
-        } finally {
-            setGamesLoading(false);
+    // Clear games on sign out
+    useEffect(() => {
+        if (!currentUser) {
+            setAllGames({});
+            setGames({});
         }
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (Object.keys(allGames).length > 0 && !preferencesLoading) {
+            setAllGames(addGameMetadata(allGames, userPreferences.favoriteTeams || [], userPreferences.zipcode));
+        }
+    }, [userPreferences.favoriteTeams, userPreferences.zipcode, preferencesLoading]);
+
+    // Trigger fetch whenever prerequisites change (sign-in via shared link, preferences loaded, date change, or favorites/zipcode change)
+    useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
+
+    // Derive displayed games from allGames + selectedSports
+    useEffect(() => {
+        // Do not touch loading state here; only reflect fetch state
+        const filteredGames = selectedSports.reduce((acc, sport) => {
+            if (allGames[sport]) {
+                Object.assign(acc, allGames[sport]);
+            }
+            return acc;
+        }, {} as ScheduleResponse);
+        setGames(filteredGames);
     }, [allGames, selectedSports]);
 
     // Helper to ensure secondary sort is always different from primary
@@ -160,15 +173,6 @@ const Dashboard = () => {
         }
     };
 
-    useEffect(() => { fetchAllGamesOnDate(); }, [fetchAllGamesOnDate]);
-    useEffect(() => { setDisplayedGames(); }, [setDisplayedGames]);
-
-    useEffect(() => {
-        if (Object.keys(allGames).length > 0 && !preferencesLoading) {
-            setAllGames(addGameMetadata(allGames, userPreferences.favoriteTeams || [], userPreferences.zipcode));
-        }
-    }, [userPreferences.favoriteTeams, userPreferences.zipcode, preferencesLoading]);
-
     return (
         <div className="h-screen print:h-auto overflow-hidden print:overflow-visible relative slate-gradient">
             <div className="print:hidden">
@@ -229,7 +233,9 @@ const Dashboard = () => {
                         <div id="game-content" className={`w-full md:ml-[15rem] print:ml-0 h-[calc(100vh-5rem)] print:h-auto overflow-y-auto print:overflow-visible bg-white hide-scrollbar relative md:rounded-tl-xl transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-full' : 'translate-x-0'} md:transform-none print-container`}>
                             {gamesLoading ? (
                                 <div className="flex justify-center py-8">
-                                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+                                    <div className="flex w-full h-[calc(100vh-12rem)] items-center justify-center">
+                                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
+                                    </div>
                                 </div>
                             ) : gamesError ? (
                                 <div className="text-center p-4 mt-8 text-lg bg-red-100 text-red-600 rounded-lg">
@@ -303,6 +309,8 @@ const Dashboard = () => {
                                         setSecondarySort={setSecondarySort}
                                         selectedDate={selectedDate}
                                         timezone={userPreferences.timezone}
+                                        gamesLoading={gamesLoading}
+                                        hasFetchedGames={hasFetchedGames}
                                     />
                                 </div>
                             )}

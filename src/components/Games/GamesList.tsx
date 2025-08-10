@@ -148,7 +148,9 @@ const GamesList: React.FC<GamesListProps> = ({
     setSecondarySort,
     games,
     selectedDate,
-    timezone
+    timezone,
+    gamesLoading = false,
+    hasFetchedGames = false
 }) => {
     const [renderedGames, setRenderedGames] = useState<React.ReactNode | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -157,16 +159,31 @@ const GamesList: React.FC<GamesListProps> = ({
     const secondaryDropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        if (gamesLoading && !hasFetchedGames) {
+            setRenderedGames(
+                <div className="flex justify-center py-12">
+                    <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
+                </div>
+            );
+            return;
+        }
         if (Object.keys(games).length) {
             setRenderedGames(renderGames(games, sortBy, secondarySort, timezone));
-        } else {
+        } else if (hasFetchedGames) {
             setRenderedGames(
                 <div className="w-full text-center text-lg text-gray-600 py-8">
                     No games scheduled for the selected sports
                 </div>
             );
+        } else {
+            // Still waiting initial fetch (not loading due to upstream race) show spinner
+            setRenderedGames(
+                <div className="flex justify-center py-12">
+                    <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
+                </div>
+            );
         }
-    }, [games, sortBy, secondarySort, timezone]);
+    }, [games, sortBy, secondarySort, timezone, gamesLoading, hasFetchedGames]);
 
     // Responsive dropdown close on click outside
     useEffect(() => {
