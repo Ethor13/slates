@@ -92,6 +92,8 @@ const CONFIG: SportConfig = {
       `https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard?dates=${date}`,
     nfl: (date: string) =>
       `https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=${date}`,
+    ncaaf: (date: string) =>
+      `https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=${date}`,
   },
 };
 

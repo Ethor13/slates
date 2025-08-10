@@ -13,6 +13,7 @@ const gameDurations: Record<string, number> = {
     "nhl": 2.5,
     "ncaambb": 2,
     "nfl": 3,
+    "ncaaf": 3
 }
 
 // Add a hook to detect if the screen is md or smaller

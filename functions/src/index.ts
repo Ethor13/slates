@@ -124,6 +124,7 @@ export const channels = onRequest(
 // http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=basketball&league=mens-college-basketball
 // http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=hockey&league=nhl
 // http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=football&league=nfl
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=football&league=college-football
 export const initializeTeams = onRequest(
   { cors: true },
   async (req, res) => {
@@ -144,7 +145,7 @@ export const initializeTeams = onRequest(
         [team.id]: {
           info: {
             abbreviation: team.abbreviation,
-            logo: team.logos[0].href.replace(/^.*\.com/g, ""),
+            logo: team.logos[0]?.href.replace(/^.*\.com/g, ""),
             name: team.displayName,
             shortName: team.shortDisplayName,
           },
@@ -157,7 +158,7 @@ export const initializeTeams = onRequest(
       }
     });
 
-    const leagueAdj = league == "mens-college-basketball" ? "ncaambb" : league;
+    const leagueAdj = league == "mens-college-basketball" ? "ncaambb" : league === "college-football" ? "ncaaf" : league;
     const teamsRef = db.collection("sports").doc(leagueAdj);
     await teamsRef.set({ teams: combine_maps(teams) }, { merge: true });
     res.status(200).send("Initialized Teams successfully");

@@ -7,6 +7,7 @@ export enum Sports {
     MLB = 'mlb',
     NHL = 'nhl',
     NFL = 'nfl',
+    NCAAF = 'ncaaf',
 }
 
 // Parse CSV data and create zipcode to lat/lng mapping

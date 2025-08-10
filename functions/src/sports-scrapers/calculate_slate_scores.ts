@@ -60,16 +60,18 @@ const CONFIG: ConfigType = {
           ncaambb: [8, 0],
           mlb: [0.15, 0.5],
           nhl: [0.05, 0.5],
-          nfl: [1.5, 0]
+          nfl: [1.5, 0],
+          ncaaf: [10, 0]
         },
         spread: 50,
       },
       baselines: {
         nba: 0.75,
         mlb: 0.65,
-        ncaambb: 0.60,
+        ncaambb: 0.50,
         nhl: 0.50,
         nfl: 0.80,
+        ncaaf: 0.60,
       },
       getInterestScoreFunc: calculateInterestScoreAllData,
     },
@@ -80,6 +82,7 @@ const CONFIG: ConfigType = {
     mlb: "allData",
     nhl: "allData",
     nfl: "allData",
+    ncaaf: "allData",
   },
 };
 

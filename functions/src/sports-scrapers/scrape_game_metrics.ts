@@ -152,7 +152,16 @@ const CONFIG: SportConfig = {
       },
       game: {},
       parsers: {
-        powerIndex: parseNFLPowerIndex,
+        powerIndex: parseFootballPowerIndex,
+      },
+    },
+    ncaaf: {
+      team: {
+        powerIndex: (_date: string | null) => "https://www.espn.com/college-football/fpi",
+      },
+      game: {},
+      parsers: {
+        powerIndex: parseFootballPowerIndex,
       },
     },
   },
@@ -288,7 +297,7 @@ function parseNHLPowerIndex(rawCSV: string): TeamMetric {
   }));
 }
 
-function parseNFLPowerIndex(rawHTML: string): TeamMetric {
+function parseFootballPowerIndex(rawHTML: string): TeamMetric {
   try {
     const marker = "window['__espnfitt__']";
     const markerIdx = rawHTML.indexOf(marker);
