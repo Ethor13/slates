@@ -11,6 +11,7 @@ export enum Sports {
     NCAAMBB = 'ncaambb',
     MLB = 'mlb',
     NHL = 'nhl',
+    NFL = 'nfl'
 }
 
 export interface Game {

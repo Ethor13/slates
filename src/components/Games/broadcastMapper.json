@@ -611,5 +611,25 @@
         "type": "TV",
         "market": "Away",
         "tvGuideName": "Mid-Atlantic Sports Network (Two)"
+    },
+    "NFL Net": {
+        "type": "TV",
+        "market": "National",
+        "tvGuideName": "NFL Network"
+    },
+    "FOX32": {
+        "type": "TV",
+        "market": "National",
+        "tvGuideName": "WFLD-DT Chicago, Ill. (FOX)"
+    },
+    "FOX 8": {
+        "type": "TV",
+        "market": "National",
+        "tvGuideName": "WVUE-DT New Orleans, La. (FOX)"
+    },
+    "CBS Miami": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "WFOR-DT Miami, Fla. (CBS)"
     }
 }

@@ -60,6 +60,7 @@ const CONFIG: ConfigType = {
           ncaambb: [8, 0],
           mlb: [0.15, 0.5],
           nhl: [0.05, 0.5],
+          nfl: [1.5, 0]
         },
         spread: 50,
       },
@@ -68,6 +69,7 @@ const CONFIG: ConfigType = {
         mlb: 0.65,
         ncaambb: 0.60,
         nhl: 0.50,
+        nfl: 0.80,
       },
       getInterestScoreFunc: calculateInterestScoreAllData,
     },
@@ -77,6 +79,7 @@ const CONFIG: ConfigType = {
     ncaambb: "allData",
     mlb: "allData",
     nhl: "allData",
+    nfl: "allData",
   },
 };
 
@@ -185,8 +188,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     }
 
     // Power Index component
-    const homePIValue = homePI.bpi?.bpi || homePI.RPI || homePI.avg_overall_prediction;
-    const awayPIValue = awayPI.bpi?.bpi || awayPI.RPI || awayPI.avg_overall_prediction;
+    const homePIValue = homePI.bpi?.bpi || homePI.RPI || homePI.fpi || homePI.avg_overall_prediction;
+    const awayPIValue = awayPI.bpi?.bpi || awayPI.RPI || awayPI.fpi || awayPI.avg_overall_prediction;
     if (homePIValue != null && awayPIValue != null) {
       const homePowerIndex = sigmoid(homePIValue, config.scalingFactors.powerIndex[sport][0], config.scalingFactors.powerIndex[sport][1]);
       const awayPowerIndex = sigmoid(awayPIValue, config.scalingFactors.powerIndex[sport][0], config.scalingFactors.powerIndex[sport][1]);

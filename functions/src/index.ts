@@ -123,6 +123,7 @@ export const channels = onRequest(
 // http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=basketball&league=nba
 // http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=basketball&league=mens-college-basketball
 // http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=hockey&league=nhl
+// http://127.0.0.1:5001/slates-59840/us-central1/initializeTeams?sport=football&league=nfl
 export const initializeTeams = onRequest(
   { cors: true },
   async (req, res) => {

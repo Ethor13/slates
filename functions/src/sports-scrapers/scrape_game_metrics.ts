@@ -146,6 +146,15 @@ const CONFIG: SportConfig = {
         powerIndex: parseNHLPowerIndex,
       },
     },
+    nfl: {
+      team: {
+        powerIndex: (_date: string | null) => "https://www.espn.com/nfl/fpi",
+      },
+      game: {},
+      parsers: {
+        powerIndex: parseNFLPowerIndex,
+      },
+    },
   },
   statNameMapper: {
     matchupquality: "matchupquality",
@@ -277,6 +286,80 @@ function parseNHLPowerIndex(rawCSV: string): TeamMetric {
 
     return teamData;
   }));
+}
+
+function parseNFLPowerIndex(rawHTML: string): TeamMetric {
+  try {
+    const marker = "window['__espnfitt__']";
+    const markerIdx = rawHTML.indexOf(marker);
+    if (markerIdx === -1) {
+      logger.error("__espnfitt__ marker not found in NFL Power Index HTML");
+      return {};
+    }
+
+    // Find the opening brace of the JSON object
+    const braceStart = rawHTML.indexOf('{', markerIdx);
+    if (braceStart === -1) {
+      logger.error("Opening brace for __espnfitt__ JSON not found");
+      return {};
+    }
+
+    // Limit search to current <script> tag content for simplicity
+    const scriptEnd = rawHTML.indexOf('</script>', braceStart);
+    if (scriptEnd === -1) {
+      logger.error("Closing script tag not found after __espnfitt__");
+      return {};
+    }
+
+    const scriptSegment = rawHTML.slice(braceStart, scriptEnd - 1);
+
+    let configObj: any;
+    try {
+      configObj = JSON.parse(scriptSegment);
+    } catch (e) {
+      logger.error("Failed to parse __espnfitt__ JSON", e);
+      return {};
+    }
+
+    const statsArray: any[] = configObj?.page?.content?.table?.stats;
+    if (!Array.isArray(statsArray)) {
+      logger.error("NFL Power Index stats array not found in parsed __espnfitt__ JSON");
+      return {};
+    }
+
+    const teamMetrics: TeamMetric = combine_maps(
+      statsArray.map((entry: any) => {
+        const teamId = entry?.team?.id;
+        const teamStats = entry?.stats;
+        if (!teamId || !Array.isArray(teamStats)) return {};
+
+        const statNames: string[] = [];
+        const statValues: any[] = [];
+        teamStats.forEach((s: any) => {
+          if (!s?.name) return;
+          statNames.push(s.name);
+          let v: any = s.value;
+          if (typeof v === 'string' && s.name !== 'numwins' && /^-?\d+(\.\d+)?$/.test(v)) {
+            v = Number(v);
+          }
+          statValues.push(v);
+        });
+
+        return {
+          [teamId]: {
+            metrics: {
+              powerIndexes: mappify(statNames, statValues),
+            },
+          },
+        } as TeamMetric;
+      })
+    );
+
+    return teamMetrics;
+  } catch (err) {
+    logger.error("Unexpected error parsing NFL Power Index", err);
+    return {};
+  }
 }
 
 /**
