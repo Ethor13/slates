@@ -35,7 +35,7 @@ interface CategoryConfig {
   weights: Weights;
   scalingFactors: ScalingFactors;
   baselines: Record<string, number>;
-  getInterestScoreFunc: (game: ParsedGame, gameTeams: GameTeams) => number;
+  getInterestScoreFunc: (game: ParsedGame, gameTeams: GameTeams) => Record<string, any>;
 }
 
 interface ConfigType {
@@ -153,7 +153,7 @@ function neg_exp(x: number, scale: number): number {
  * @param {string} sport - Sport abbreviation
  * @returns {number} Interest score between 0 and 1
  */
-function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): number {
+function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): Record<string, any> {
   try {
     const config = CONFIG.categories.allData;
 
@@ -170,17 +170,23 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const awayPopularity = sportPopularityMap?.[game.away.id];
 
     const baseline = season === "Preseason" ? config.baselines[sport] / 3 : season === "Postseason" ? (config.baselines[sport] + 1) / 2 : config.baselines[sport];
+
+    let components: Record<string, Record<string, number>> = {};
     let rawSlateScore = inverseSigmoid(baseline, 1, 0);
 
     // Matchup quality component
     if (homeMQ.matchupquality != null) {
-      rawSlateScore += ((homeMQ.matchupquality - 50) / 50) * config.weights.matchupQuality;
+      const mq = (homeMQ.matchupquality - 50) / 50;
+      rawSlateScore += mq * config.weights.matchupQuality;
+      components.matchupQuality = { value: mq, weight: config.weights.matchupQuality };
     }
 
     // Win probability component
     if (homeMQ.teampredwinpct != null && awayMQ.teampredwinpct != null) {
       const probabilityDelta = Math.abs(homeMQ.teampredwinpct - awayMQ.teampredwinpct);
-      rawSlateScore += ((1 - probabilityDelta / 50) / 2) * config.weights.winProbability;
+      const scaledProbabilityDelta = (1 - probabilityDelta / 50) / 2;
+      rawSlateScore += scaledProbabilityDelta * config.weights.winProbability;
+      components.winProbability = { value: scaledProbabilityDelta, weight: config.weights.winProbability };
     }
 
     // Record component
@@ -189,6 +195,7 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       const awayWinRate = calculateWinPercentage(awayRecord);
       const averageWinRate = homeWinRate + awayWinRate - 1;
       rawSlateScore += averageWinRate * config.weights.record;
+      components.record = { value: averageWinRate, weight: config.weights.record };
     }
 
     // Power Index component
@@ -199,12 +206,15 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       const awayPowerIndex = sigmoid(awayPIValue, config.scalingFactors.powerIndex[sport][0], config.scalingFactors.powerIndex[sport][1]);
       const averagePowerIndex = homePowerIndex + awayPowerIndex - 1;
       rawSlateScore += averagePowerIndex * config.weights.powerIndex;
+      components.powerIndex = { value: averagePowerIndex, weight: config.weights.powerIndex };
     }
 
     // Spread component
     if (homeMQ.teampredmov != null) {
       const spreadScore = neg_exp(homeMQ.teampredmov, config.scalingFactors.spread);
-      rawSlateScore += (2 * spreadScore - 1) * config.weights.spread;
+      const scaledSpreadScore = 2 * spreadScore - 1;
+      rawSlateScore += scaledSpreadScore * config.weights.spread;
+      components.spread = { value: scaledSpreadScore, weight: config.weights.spread };
     }
 
     // Popularity component
@@ -218,9 +228,13 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       const awayNormalizedScore = sigmoid(awayPopularityScore, medPopularity / 2, medPopularity);
       const averagePopularity = homeNormalizedScore + awayNormalizedScore - 1;
       rawSlateScore += averagePopularity * config.weights.popularity;
+      components.popularity = { value: averagePopularity, weight: config.weights.popularity };
     }
 
-    return sigmoid(rawSlateScore, 1, 0);
+    return {
+      components,
+      slateScore: sigmoid(rawSlateScore, 1, 0)
+    };
   } catch (error) {
     logger.error("Error calculating interest score:", error);
     throw new Error("Error calculating interest score");
@@ -244,8 +258,8 @@ export async function scoreSportsGames(sport: string, games: ParsedGames, teams:
         home: teams[game.home.id],
         away: teams[game.away.id],
       }
-      const slateScore = sport_config.getInterestScoreFunc(game, gameTeams) || -1;
-      res[gameId] = slateScore;
+      const scoreDetails = sport_config.getInterestScoreFunc(game, gameTeams);
+      res[gameId] = { slateScore: scoreDetails.slateScore || -1, scoreComponents: scoreDetails.components};
     });
 
     return res;

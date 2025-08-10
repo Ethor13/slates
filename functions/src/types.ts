@@ -31,7 +31,7 @@ export type ParsedGame = Record<string, any>;
 // always have a gameId be a key
 export type ParsedGames = Record<string, ParsedGame>;
 // always have a gameId be a key
-export type GameScores = Record<string, number>;
+export type GameScores = Record<string, any>;
 
 // always have a teamId be a key
 export type ParsedTeams = Record<string, TeamsMetrics>;
