@@ -54,10 +54,32 @@ const Dashboard = () => {
     const [sortBy, setSortBy] = useState<Sort>(Sort.SCORE);
     const [secondarySort, setSecondarySort] = useState<Sort>(Sort.TIME); // Default to TIME
     const [hasFetchedGames, setHasFetchedGames] = useState<boolean>(false);
+    const [outOfRange, setOutOfRange] = useState<boolean>(false); // selected date beyond available window
 
     // Fetch games data using Cloud Functions
     const fetchAllGamesOnDate = useCallback(async () => {
         if (!currentUser || preferencesLoading) return;
+
+        // Determine if selectedDate is beyond 14-day window (today + 13 days)
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const target = new Date(selectedDate);
+        target.setHours(0,0,0,0);
+        const diffDays = Math.floor((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        const isOutOfRange = diffDays > 13; // today + 13 = 14 total days including today
+
+        if (isOutOfRange) {
+            // Mark out-of-range and skip fetch
+            setOutOfRange(true);
+            setGamesLoading(false);
+            setGamesError(null);
+            setAllGames({});
+            setGames({});
+            setHasFetchedGames(false);
+            return;
+        } else {
+            setOutOfRange(false);
+        }
 
         setGamesLoading(true);
         setGamesError(null);
@@ -235,6 +257,13 @@ const Dashboard = () => {
                                 <div className="flex justify-center py-8">
                                     <div className="flex w-full h-[calc(100vh-12rem)] items-center justify-center">
                                         <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
+                                    </div>
+                                </div>
+                            ) : outOfRange ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <div className="text-center p-6 text-lg text-gray-500 rounded-lg max-w-xxl mx-auto">
+                                        <p className="font-semibold mb-2">The Slate is Not Yet Available</p>
+                                        <p>Slates are only available for the next 14 days. Please choose an earlier date.</p>
                                     </div>
                                 </div>
                             ) : gamesError ? (

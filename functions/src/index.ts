@@ -17,9 +17,7 @@ import { combine_maps } from "./helpers.js";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
 import jwt from "jsonwebtoken";
-import dotenv from 'dotenv';
 
-dotenv.config(); // Load environment variables from .env file
 
 admin.initializeApp();
 
@@ -319,8 +317,8 @@ const generateDashboardTokenForUser = async (
         audience: "slates-users"
       } as jwt.SignOptions);
       
-      const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true';
-      const baseUrl = isEmulator ? 'http://localhost:5173' : 'https://slates.co';
+      const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
+      const baseUrl = isEmulator ? "http://localhost:5173" : "https://slates.co";
       return `${baseUrl}/shared/${token}`;
     } else {
       const tempUserId = `${userId}:${userEmail}:Guest`;
@@ -334,6 +332,7 @@ const generateDashboardTokenForUser = async (
         await auth.createUser({ uid: tempUserId });
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
       await db.collection("users").doc(tempUserId).set(userPreferencesWithoutEmails);
 
@@ -353,8 +352,8 @@ const generateDashboardTokenForUser = async (
         audience: "slates-users"
       } as jwt.SignOptions);
 
-      const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true';
-      const baseUrl = isEmulator ? 'http://localhost:5173' : 'https://slates.co';
+      const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
+      const baseUrl = isEmulator ? "http://localhost:5173" : "https://slates.co";
       return `${baseUrl}/shared/${token}`;
     }
   } catch (error) {
