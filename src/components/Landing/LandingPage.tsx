@@ -1,11 +1,4 @@
 import Nav from '../General/Nav';
-import HeroSection from './HeroSection';
-import TechnologySection from './TechnologySection';
-import BenefitsSection from './BenefitsSection';
-import PricingSection from './PricingSection';
-import TestimonialsSection from './TestimonialsSection';
-import DemoSection from './DemoSection';
-import ContactSection from './ContactSection';
 import Footer from '../General/Footer';
 
 const LandingPage = () => {
@@ -13,13 +6,7 @@ const LandingPage = () => {
         <div className="min-h-screen slate-gradient">
             <Nav />
             <main className="">
-                <HeroSection />
-                <TechnologySection />
-                <BenefitsSection />
-                <DemoSection />
-                <TestimonialsSection />
-                <PricingSection />
-                <ContactSection />
+                {/* TODO: implement landing page sections */}
             </main>
             <Footer />
         </div>
