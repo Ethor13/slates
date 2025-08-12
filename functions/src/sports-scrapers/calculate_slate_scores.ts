@@ -91,10 +91,10 @@ const CONFIG: ConfigType = {
  * @param {string} record - Format: "W-L"
  * @returns {number} Win percentage
  */
-function calculateWinPercentage(record: string): number {
+function calculateWinPercentage(record: string, pseudo: number = 2): number {
   try {
     const [wins, losses] = record.split("-").map(Number);
-    return wins + losses > 0 ? wins / (wins + losses) : 0.5;
+    return wins + losses + pseudo > 0 ? (wins + pseudo) / (wins + losses + 2 * pseudo) : 0.5;
   } catch (error) {
     logger.error("Error calculating win percentage from record:", error);
     throw new Error("Invalid record format");
@@ -170,6 +170,7 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const awayPopularity = sportPopularityMap?.[game.away.id];
 
     const baseline = season === "Preseason" ? config.baselines[sport] / 3 : season === "Postseason" ? (config.baselines[sport] + 1) / 2 : config.baselines[sport];
+    const weightStrength = season === "Preseason" ? 0.2 : 1;
 
     let components: Record<string, Record<string, number>> = {};
     let rawSlateScore = inverseSigmoid(baseline, 1, 0);
@@ -177,16 +178,16 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     // Matchup quality component
     if (homeMQ.matchupquality != null) {
       const mq = (homeMQ.matchupquality - 50) / 50;
-      rawSlateScore += mq * config.weights.matchupQuality;
-      components.matchupQuality = { value: mq, weight: config.weights.matchupQuality };
+      rawSlateScore += mq * config.weights.matchupQuality * weightStrength;
+      components.matchupQuality = { value: mq, weight: config.weights.matchupQuality * weightStrength };
     }
 
     // Win probability component
     if (homeMQ.teampredwinpct != null && awayMQ.teampredwinpct != null) {
       const probabilityDelta = Math.abs(homeMQ.teampredwinpct - awayMQ.teampredwinpct);
       const scaledProbabilityDelta = (1 - probabilityDelta / 50) / 2;
-      rawSlateScore += scaledProbabilityDelta * config.weights.winProbability;
-      components.winProbability = { value: scaledProbabilityDelta, weight: config.weights.winProbability };
+      rawSlateScore += scaledProbabilityDelta * config.weights.winProbability * weightStrength;
+      components.winProbability = { value: scaledProbabilityDelta, weight: config.weights.winProbability * weightStrength };
     }
 
     // Record component
@@ -194,8 +195,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       const homeWinRate = calculateWinPercentage(homeRecord);
       const awayWinRate = calculateWinPercentage(awayRecord);
       const averageWinRate = homeWinRate + awayWinRate - 1;
-      rawSlateScore += averageWinRate * config.weights.record;
-      components.record = { value: averageWinRate, weight: config.weights.record };
+      rawSlateScore += averageWinRate * config.weights.record * weightStrength;
+      components.record = { value: averageWinRate, weight: config.weights.record * weightStrength };
     }
 
     // Power Index component
@@ -205,16 +206,16 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       const homePowerIndex = sigmoid(homePIValue, config.scalingFactors.powerIndex[sport][0], config.scalingFactors.powerIndex[sport][1]);
       const awayPowerIndex = sigmoid(awayPIValue, config.scalingFactors.powerIndex[sport][0], config.scalingFactors.powerIndex[sport][1]);
       const averagePowerIndex = homePowerIndex + awayPowerIndex - 1;
-      rawSlateScore += averagePowerIndex * config.weights.powerIndex;
-      components.powerIndex = { value: averagePowerIndex, weight: config.weights.powerIndex };
+      rawSlateScore += averagePowerIndex * config.weights.powerIndex * weightStrength;
+      components.powerIndex = { value: averagePowerIndex, weight: config.weights.powerIndex * weightStrength };
     }
 
     // Spread component
     if (homeMQ.teampredmov != null) {
       const spreadScore = neg_exp(homeMQ.teampredmov, config.scalingFactors.spread);
       const scaledSpreadScore = 2 * spreadScore - 1;
-      rawSlateScore += scaledSpreadScore * config.weights.spread;
-      components.spread = { value: scaledSpreadScore, weight: config.weights.spread };
+      rawSlateScore += scaledSpreadScore * config.weights.spread * weightStrength;
+      components.spread = { value: scaledSpreadScore, weight: config.weights.spread * weightStrength };
     }
 
     // Popularity component
@@ -227,8 +228,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       const homeNormalizedScore = sigmoid(homePopularityScore, medPopularity / 2, medPopularity);
       const awayNormalizedScore = sigmoid(awayPopularityScore, medPopularity / 2, medPopularity);
       const averagePopularity = homeNormalizedScore + awayNormalizedScore - 1;
-      rawSlateScore += averagePopularity * config.weights.popularity;
-      components.popularity = { value: averagePopularity, weight: config.weights.popularity };
+      rawSlateScore += averagePopularity * config.weights.popularity * weightStrength;
+      components.popularity = { value: averagePopularity, weight: config.weights.popularity * weightStrength };
     }
 
     return {

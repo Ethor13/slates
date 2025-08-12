@@ -7,12 +7,12 @@ export enum Sort {
 }
 
 export enum Sports {
+    NFL = 'nfl',
     NBA = 'nba',
-    NCAAMBB = 'ncaambb',
     MLB = 'mlb',
     NHL = 'nhl',
-    NFL = 'nfl',
-    NCAAF = 'ncaaf'
+    NCAAF = 'ncaaf',
+    NCAAMBB = 'ncaambb',
 }
 
 export interface Game {

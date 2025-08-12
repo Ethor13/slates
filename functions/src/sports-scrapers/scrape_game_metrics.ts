@@ -359,6 +359,7 @@ function parseFootballPowerIndex(rawHTML: string): TeamMetric {
             metrics: {
               powerIndexes: mappify(statNames, statValues),
             },
+            conference: entry?.conference,
           },
         } as TeamMetric;
       })
