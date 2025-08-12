@@ -172,7 +172,7 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const baseline = season === "Preseason" ? config.baselines[sport] / 3 : season === "Postseason" ? (config.baselines[sport] + 1) / 2 : config.baselines[sport];
     const weightStrength = season === "Preseason" ? 0.2 : 1;
 
-    let components: Record<string, Record<string, number>> = {};
+    const components: Record<string, Record<string, number>> = {};
     let rawSlateScore = inverseSigmoid(baseline, 1, 0);
 
     // Matchup quality component
