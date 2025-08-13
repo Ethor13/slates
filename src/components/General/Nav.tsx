@@ -73,25 +73,25 @@ const Nav = () => {
                         <div className="flex flex-row items-center justify-between w-full">
                             {!currentUser ? (
                                 <>
-                                    <div className='hidden md:flex items-center space-x-2'>
+                                    <div className='text-white hidden md:flex items-center space-x-2'>
                                         <a
                                             href="#technology"
-                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
                                             onClick={(e) => scrollToSection(e, 'technology')}
                                         >Technology</a>
                                         <a
                                             href="#benefits"
-                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
                                             onClick={(e) => scrollToSection(e, 'benefits')}
                                         >Benefits</a>
                                         <a
                                             href="#demo"
-                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
                                             onClick={(e) => scrollToSection(e, 'demo')}
                                         >Live Demo</a>
                                         <a
                                             href="#pricing"
-                                            className="text-black font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
+                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
                                             onClick={(e) => scrollToSection(e, 'pricing')}
                                         >Pricing</a>
                                     </div>
