@@ -1,6 +1,7 @@
 import Nav from '../General/Nav';
 import Footer from '../General/Footer';
 import Hero from './Hero';
+import Funnel from './Funnel';
 
 const LandingPage = () => {
     return (
@@ -8,6 +9,7 @@ const LandingPage = () => {
             <Nav />
             <main>
                 <Hero />
+                <Funnel />
             </main>
             <Footer />
         </div>
