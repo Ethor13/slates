@@ -100,7 +100,7 @@ export const Funnel = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   // Original progress spans entire section; we remap so animation finishes halfway (orbs reach output mid screen)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const midProgress = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
+  const midProgress = useTransform(scrollYProgress, [0.3, 0.6], [0, 1]);
 
   // Dynamic refs matching FUNNEL_INPUTS length
   const inputRefs = useRef<(HTMLDivElement | null)[]>([]);

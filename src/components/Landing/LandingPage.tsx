@@ -2,6 +2,7 @@ import Nav from '../General/Nav';
 import Footer from '../General/Footer';
 import Hero from './Hero';
 import Funnel from './Funnel';
+import BenefitsForBars from './BenefitsForBars';
 
 const LandingPage = () => {
     return (
@@ -10,6 +11,7 @@ const LandingPage = () => {
             <main>
                 <Hero />
                 <Funnel />
+                <BenefitsForBars />
             </main>
             <Footer />
         </div>
