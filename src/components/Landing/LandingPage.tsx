@@ -5,7 +5,7 @@ import Funnel from './Funnel';
 
 const LandingPage = () => {
     return (
-        <div className="min-h-screen slate-gradient">
+        <div className="slate-gradient">
             <Nav />
             <main>
                 <Hero />

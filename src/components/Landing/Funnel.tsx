@@ -1,5 +1,21 @@
 import { motion, useScroll, useTransform, useMotionValueEvent, MotionValue } from 'framer-motion';
 import { useEffect, useRef, useState, useLayoutEffect } from 'react';
+import { MapPin, Activity, Users, Trophy, type LucideIcon, TrendingUp } from 'lucide-react';
+
+// Configure funnel inputs: add/remove items; each can have icon + description
+interface FunnelInputCfg {
+  key: string;
+  label: string;
+  icon?: LucideIcon;
+  description?: string;
+}
+
+const FUNNEL_INPUTS: FunnelInputCfg[] = [
+  { key: 'quality', label: 'Game Analytics', icon: Activity, description: 'Team strength & competitive balance calibrate Slate Scores' },
+  { key: 'location', label: 'Local Market Analysis', icon: MapPin, description: 'Regional team popularity tailors Slate Scores to your venue' },
+  { key: 'popularity', label: 'Fan Engagement Metrics', icon: Users, description: 'Games that your customers care about most receive Slate Score boosts' },
+  { key: 'stakes', label: 'Match Stakes', icon: Trophy, description: 'Playoff implications & game narratives heavily influence Slate Scores' },
+];
 
 // Animated path with traveling orb representing data flowing.
 interface PathArrowProps {
@@ -63,15 +79,20 @@ const PathArrow = ({ d, color = '#fff', progress, lengthPortion = [0, 1], orbSiz
   );
 };
 
-const InputBox = ({ title }: { title: string; description?: string }) => (
-  <div className="relative bg-slate-deep rounded-xl py-3 shadow-2xl min-w-[200px] text-center">
-    <h4 className="text-white font-semibold tracking-wide">{title}</h4>
+interface InputBoxProps { title: string; description?: string; Icon?: LucideIcon }
+const InputBox = ({ title, description, Icon }: InputBoxProps) => (
+  <div className="relative bg-slate-deep text-white rounded-xl px-5 py-4 shadow-xl max-w-[250px] text-center border-2 border-white flex flex-col items-center gap-2">
+    {Icon && <Icon className="h-6 w-6 " strokeWidth={1.5} />}
+    <h4 className="font-semibold tracking-wide text-sm md:text-base">{title}</h4>
+    {description && <p className="text-xs leading-snug hidden md:block">{description}</p>}
   </div>
 );
 
 const OutputBox = ({ boxRef }: { boxRef: React.RefObject<HTMLDivElement> }) => (
-  <div ref={boxRef} className="relative rounded-xl slate-gradient border-2 border-white py-3 text-center shadow-xl min-w-[200px]">
-    <h4 className="text-white text-2xl font-bold tracking-wide">Slate Score</h4>
+  <div ref={boxRef} className="relative slate-gradient text-white rounded-xl px-5 py-4 shadow-xl max-w-[300px] text-center border-2 border-white flex flex-col items-center gap-2">
+    <TrendingUp className="h-8 w-8 text-white" strokeWidth={1.5} />
+    <h3 className="font-semibold tracking-wide text-2xl">Slate Score</h3>
+    <p className="text-sm leading-snug hidden md:block">The number that guarantees you're always showing the right games</p>
   </div>
 );
 
@@ -79,9 +100,10 @@ export const Funnel = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   // Original progress spans entire section; we remap so animation finishes halfway (orbs reach output mid screen)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const midProgress = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const midProgress = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
 
-  const inputRefs = [useRef<HTMLDivElement | null>(null), useRef<HTMLDivElement | null>(null), useRef<HTMLDivElement | null>(null)];
+  // Dynamic refs matching FUNNEL_INPUTS length
+  const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
   const outputRef = useRef<HTMLDivElement | null>(null);
   const svgWrapRef = useRef<HTMLDivElement | null>(null);
   const [paths, setPaths] = useState<string[]>([]);
@@ -111,8 +133,8 @@ export const Funnel = () => {
       const containerRect = svgWrapRef.current.getBoundingClientRect();
       const outRect = outputRef.current.getBoundingClientRect();
       // Determine desired center: midpoint between first and last input centers
-      const first = inputRefs[0].current?.getBoundingClientRect();
-      const last = inputRefs[2].current?.getBoundingClientRect();
+  const first = inputRefs.current[0]?.getBoundingClientRect();
+  const last = inputRefs.current[inputRefs.current.length - 1]?.getBoundingClientRect();
       let shift = 0;
       if (first && last) {
         const desiredCenter = (first.left + first.width / 2 + last.left + last.width / 2) / 2 - containerRect.left;
@@ -121,10 +143,8 @@ export const Funnel = () => {
       }
       setOutputShift(shift);
       const newPaths: string[] = [];
-      inputRefs.forEach(r => {
-        if (r.current) {
-          newPaths.push(buildPath(r.current.getBoundingClientRect(), outRect, containerRect, shift));
-        }
+      inputRefs.current.forEach(r => {
+        if (r) newPaths.push(buildPath(r.getBoundingClientRect(), outRect, containerRect, shift));
       });
       setPaths(newPaths);
     };
@@ -134,16 +154,22 @@ export const Funnel = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-16" aria-label="Data Funnel Visualization">
+    <section ref={sectionRef} className="relative py-16 bg-slate-900 min-h-screen" aria-label="Data Funnel Visualization">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-row gap-20 items-center">
-          {/* Funnel Visualization Left */}
+        <div className="flex flex-col gap-20 items-center">
+          <div className="flex flex-col items-center justify-center text-center px-[15rem]">
+            <h1 className="text-5xl font-bold text-white">How We Score the Slate</h1>
+            <h1 className="text-5xl font-bold text-slate-medium pb-5">Leveraging Advanced Analytics</h1>
+            <p className="text-lg text-slate-200">A diverse range of heuristics is unified into a single number using models that understand the drivers behind customer engagement and retention</p>
+          </div>
           <div className="relative" ref={svgWrapRef}>
             {/* Inputs Row */}
-            <div className="flex flex-row items-stretch md:items-start justify-start gap-10 mb-40">
-              <div ref={inputRefs[0]}><InputBox title="Location" /></div>
-              <div ref={inputRefs[1]}><InputBox title="Game Quality" /></div>
-              <div ref={inputRefs[2]}><InputBox title="Popularity" /></div>
+            <div className="flex flex-row items-stretch md:items-start justify-start gap-10 mb-40 flex-wrap">
+              {FUNNEL_INPUTS.map((cfg, i) => (
+                <div key={cfg.key} ref={(el) => (inputRefs.current[i] = el)}>
+                  <InputBox title={cfg.label} description={cfg.description} Icon={cfg.icon} />
+                </div>
+              ))}
             </div>
             {/* Dynamic SVG paths */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" aria-hidden>
@@ -164,10 +190,6 @@ export const Funnel = () => {
                 <OutputBox boxRef={outputRef} />
               </div>
             </div>
-          </div>
-          {/* Text Right */}
-          <div className="md:pl-4 md:text-right flex flex-col items-start md:items-end gap-6">
-            <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">How We Score the Slate</h2>
           </div>
         </div>
       </div>

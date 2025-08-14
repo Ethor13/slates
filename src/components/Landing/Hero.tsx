@@ -25,42 +25,62 @@ const Gauge = ({ score }: { score: number | null }) => {
     return () => cancelAnimationFrame(rafRef.current);
   }, [score]);
   return (
-    <div className="relative w-full max-w-[520px] mx-auto flex flex-col items-center">
-      <h2 className="mb-4 text-4xl tracking-wide text-slate-deep font-bold">
-        Slate&apos;s Pick of the Day
-      </h2>
-      <div className="relative w-full aspect-square">
-        <svg viewBox="0 0 220 220" className="w-full h-full">
-          <defs>
-            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#6a86d1" />
-              <stop offset="100%" stopColor="#244396" />
-            </linearGradient>
-          </defs>
-          <motion.circle
-            cx={110}
-            cy={110}
-            r={90}
-            stroke="url(#gaugeGradient)"
-            strokeWidth={14}
-            strokeLinecap="round"
-            fill="none"
-            strokeDasharray={circumference}
-            strokeDashoffset={circumference - strokeDash}
-            initial={{ strokeDashoffset: circumference }}
-            animate={{ strokeDashoffset: circumference - strokeDash }}
-            transition={{ duration: 1, ease: 'easeOut' }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 8 }}
-            transition={{ duration: 1 }}
-            className="text-slate-deep font-bold tracking-tight"
-          >
-            {displayScore}
-          </motion.div>
+    <div className="relative w-full max-w-[500px] mx-auto flex flex-col items-center py-8">
+      <div className="mb-4 w-full flex items-center gap-2">
+        <img src="/assets/logos/slates_white_outline.svg" alt="Slates Logo" className="h-8 w-8"/>
+        <h2 className="text-xl tracking-wide text-slate-deep font-bold">
+          Tonight&apos;s Top Game
+        </h2>
+      </div>
+      <div className="flex flex-row w-full">
+        <div className="relative aspect-square">
+          <svg viewBox="0 0 220 220" className="w-full h-full">
+            <defs>
+              <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#6a86d1" />
+                <stop offset="100%" stopColor="#244396" />
+              </linearGradient>
+            </defs>
+            <motion.circle
+              cx={110}
+              cy={110}
+              r={90}
+              stroke="url(#gaugeGradient)"
+              strokeWidth={14}
+              strokeLinecap="round"
+              fill="none"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference - strokeDash}
+              initial={{ strokeDashoffset: circumference }}
+              animate={{ strokeDashoffset: circumference - strokeDash }}
+              transition={{ duration: 1, ease: 'easeOut' }}
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 6 }}
+              transition={{ duration: 1 }}
+              className="text-slate-deep font-bold tracking-tight"
+            >
+              {displayScore}
+            </motion.div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-6 justify-center items-center flex-1">
+          <div className="flex flex-col items-center">
+            <span className="uppercase tracking-wide text-sm font-semibold text-slate-500">NFL | 8:15 PM ET</span>
+          </div>
+          <div className="flex flex-col items-center gap-8">
+            <div className="flex flex-col items-center">
+              <h3 className="text-3xl font-bold text-purple-600">Vikings</h3>
+              <p className="text-sm font-medium text-slate-600">5-2-0</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <h3 className="text-3xl font-bold text-green-600">Packers</h3>
+              <p className="text-sm font-medium text-slate-600">4-3-0</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -69,10 +89,10 @@ const Gauge = ({ score }: { score: number | null }) => {
 
 export const Hero = () => {
   return (
-    <section role="banner" aria-label="Slates Hero" className="relative min-h-[90vh] flex items-center">
+    <section role="banner" aria-label="Slates Hero" className="relative min-h-[calc(100vh-5rem)] flex items-center">
       <div className="absolute inset-0 pointer-events-none" />
       <div className="relative mx-auto w-full max-w-7xl px-6">
-        <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-12 items-center">
+        <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-20 items-center">
           {/* Text Block */}
           <div className="" data-loc="hero-text">
             <h1 className="text-5xl font-bold text-slate-deep">Make Gamedays Simple</h1>
@@ -84,7 +104,7 @@ export const Hero = () => {
             </div>
           </div>
           {/* Visualization */}
-          <div className="relative" data-loc="hero-visual">
+          <div className="relative flex items-center justify-center h-full rounded-[2rem] bg-white" data-loc="hero-visual">
             <Gauge score={STATIC_SLATE_SCORE} />
           </div>
         </div>
