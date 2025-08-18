@@ -1,68 +1,12 @@
+import React, { useState, useMemo } from 'react';
 import { Check, X } from 'lucide-react';
-import React, { useState } from 'react';
 
-interface Tier {
-  key: string;
-  name: string;
-  // For static/contact tiers, leave priceMonthly undefined and use `price` fallback
-  price: string; // fallback (e.g. "Talk to Us") or legacy usage
-  priceMonthly?: number; // numeric monthly USD amount
-  priceAnnual?: number;  // numeric annual USD amount (after discount)
-  tagline: string;
-  cta: string;
-  features: { label: string; included: boolean }[];
-}
-
-const TIERS: Tier[] = [
-  {
-    key: 'pro',
-    name: '',
-    price: '$19', // fallback monthly text
-    priceMonthly: 20,
-    priceAnnual: 200, // e.g. ~2 months free vs 19*12=228
-    tagline: 'Everything you need for one location',
-    cta: 'Start Pro Trial',
-    features: [
-      { label: 'Unlimited ranked slates', included: true },
-      { label: 'Full matchup insights & narratives', included: true },
-      { label: 'Auto daily + gameday emails', included: true },
-      { label: 'Market-tailored recommendations', included: true },
-      { label: 'Slate performance analytics (beta)', included: true },
-      { label: 'Priority support', included: true },
-    ],
-  },
-  {
-    key: 'pro',
-    name: 'Pro',
-    price: '$19', // fallback monthly text
-    priceMonthly: 20,
-    priceAnnual: 200, // e.g. ~2 months free vs 19*12=228
-    tagline: 'Everything you need for one location',
-    cta: 'Start Pro Trial',
-    features: [
-      { label: 'Unlimited ranked slates', included: true },
-      { label: 'Full matchup insights & narratives', included: true },
-      { label: 'Auto daily + gameday emails', included: true },
-      { label: 'Market-tailored recommendations', included: true },
-      { label: 'Slate performance analytics (beta)', included: true },
-      { label: 'Priority support', included: true },
-    ],
-  },
-  {
-    key: 'multi',
-    name: 'Multi‑Location',
-    price: 'Talk to Us',
-    tagline: 'Custom pricing for groups & chains',
-    cta: 'Contact Sales',
-    features: [
-      { label: 'All Pro features', included: true },
-      { label: 'Multi‑location management', included: true },
-      { label: 'Centralized preference templates', included: true },
-      { label: 'API / data export access', included: true },
-      { label: 'Dedicated success manager', included: true },
-      { label: 'Custom integrations', included: true },
-    ],
-  },
+const FEATURES: { label: string; included: boolean }[] = [
+  { label: 'Tailored Daily Slates Dashboard', included: true },
+  { label: 'Printable Slate with TV Channel Guide', included: true },
+  { label: 'Daily emails to 5 members of your organization', included: true },
+  { label: 'Slates Summaries and Analytics', included: true },
+  { label: 'Priority support', included: true }
 ];
 
 const Feature = ({ included, children }: { included: boolean; children: React.ReactNode }) => (
@@ -75,85 +19,92 @@ const Feature = ({ included, children }: { included: boolean; children: React.Re
 );
 
 export const Pricing = () => {
-  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
-
-  const renderPrice = (tier: Tier) => {
-    if (tier.priceMonthly === undefined || tier.priceAnnual === undefined) {
-      return (
-        <div className="flex items-end gap-1">
-          <span className="text-4xl font-bold text-white">{tier.price}</span>
-        </div>
-      );
-    }
-    const amount = billing === 'monthly' ? tier.priceMonthly : tier.priceAnnual;
-    const isFree = amount === 0;
-    const main = isFree ? 'Free' : `$${amount}`;
-    const suffix = billing === 'monthly' ? '/mo' : '/yr';
-    return (
-      <div className="flex flex-col gap-1">
-        <div className="flex items-end gap-1">
-          <span className="text-4xl font-bold text-white">{main}</span>
-          {!isFree && <span className="text-slate-400 mb-1 text-xs">{suffix}</span>}
-        </div>
-      </div>
-    );
-  };
+  const [venues, setVenues] = useState(1);
+  const BASE_PRICE = 20;
+  const computedPrice = useMemo(() => {
+    if (venues >= 10) return null; // contact sales threshold
+    const p = BASE_PRICE - (venues - 1); // decrement $1 per additional venue
+    return p < 1 ? 1 : p;
+  }, [venues]);
 
   return (
     <section className="relative py-28 overflow-hidden" aria-labelledby="pricing-heading">
       <div className="absolute inset-0 bg-gradient-to-b from-slate-light via-slate-medium to-slate-900 pointer-events-none" />
-      <div className="relative z-10 mx-auto max-w-7xl px-6 flex flex-col gap-16">
-        <header className="text-center max-w-4xl mx-auto flex flex-col gap-5">
-          <h2 id="pricing-heading" className="text-4xl md:text-5xl font-bold text-white leading-tight">Simple, Transparent Pricing</h2>
-          <p className="text-lg text-slate-200">Start free for one month. Upgrade when you're ready to automate and scale your gameday operations.</p>
-          {/* Billing Toggle */}
-          <div className="mt-4 flex items-center justify-center">
-            <div role="radiogroup" aria-label="Billing Period" className="inline-flex rounded-full p-1 bg-slate-800/70 backdrop-blur border border-slate-600/50 shadow-inner">
-              {(['monthly','annual'] as const).map(opt => {
-                const active = billing === opt;
-                return (
-                  <button
-                    key={opt}
-                    role="radio"
-                    aria-checked={active}
-                    onClick={() => setBilling(opt)}
-                    className={`relative px-5 py-2 text-sm font-medium rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${active ? 'text-white' : 'text-slate-300 hover:text-white'}`}
-                  >
-                    <span className="relative z-10 flex items-center gap-1">
-                      {opt === 'monthly' ? 'Monthly' : 'Annual'}
-                      {opt === 'annual' && <span className="text-[10px] font-semibold text-green-300 bg-green-500/10 px-1.5 py-0.5 rounded">Save</span>}
-                    </span>
-                    {active && <span className="absolute inset-0 rounded-full slate-gradient shadow" />}
-                  </button>
-                );
-              })}
+      <div className="relative z-10 mx-auto max-w-4xl px-6 flex flex-col gap-16">
+        <header className="text-center flex flex-col gap-5">
+          <h2 id="pricing-heading" className="text-4xl md:text-5xl font-bold text-white leading-tight">Simple Pricing that Scales</h2>
+          <p className="text-lg text-slate-200">Same powerful feature set, sized to your operation's needs</p>
+        </header>
+        <div className="w-full flex flex-col gap-6">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div className="flex flex-col gap-2">
+              {/* <label htmlFor="venue-slider" className="text-sm font-medium tracking-wide text-slate-300 uppercase">Number of Venues</label> */}
+              <div className="flex items-baseline gap-3">
+                <span className="text-xl font-bold text-white tabular-nums">Venues</span>
+              </div>
             </div>
           </div>
-        </header>
-        <div className="grid gap-8 md:grid-cols-3">
-          {TIERS.map(tier => (
-            <div
-              key={tier.key}
-              className="relative flex flex-col rounded-2xl border bg-slate-800/60 border-slate-600/40 shadow-lg"
-            >
-              <div className="p-6 flex flex-col gap-4 flex-1">
-                <div>
-                  <h3 className="text-xl font-semibold text-white tracking-tight">{tier.name}</h3>
-                  <p className="text-sm text-slate-300 mt-1">{tier.tagline}</p>
-                </div>
-                {renderPrice(tier)}
-                <ul className="flex flex-col gap-3 mt-4">
-                  {tier.features.map(f => <Feature key={f.label} included={f.included}>{f.label}</Feature>)}
-                </ul>
-                <div className="flex-1" />
-              </div>
-              <div className="p-6 pt-0">
-                <button className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition shadow bg-white text-slate-deep hover:bg-slate-medium hover:text-white`}>
-                  {tier.cta}
-                </button>
+          <div className="pt-2">
+            <div className="relative w-full">
+              <input
+                id="venue-slider"
+                type="range"
+                min={1}
+                max={10}
+                value={venues}
+                onChange={e => setVenues(Number(e.target.value))}
+                className="w-full appearance-none bg-transparent cursor-pointer"
+                aria-valuemin={1}
+                aria-valuemax={10}
+                aria-valuenow={venues}
+                aria-label="Number of venues"
+              />
+              <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 rounded-full bg-slate-700 overflow-hidden">
+                <div
+                  className="h-full rounded-full slate-gradient transition-all"
+                  style={{ width: `${(Math.min(venues,10)-1)/9 * 100}%` }}
+                />
               </div>
             </div>
-          ))}
+            <div className="mt-3 flex justify-between text-[10px] font-medium tracking-wider">
+              {[1,2,3,4,5,6,7,8,9,'10+'].map(mark => (
+                <span key={mark as string | number} className={`text-xl ${mark===venues || (mark==='10+' && venues===10) ? 'text-white' : 'text-slate-400'}`}>{mark}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="relative flex flex-col rounded-2xl border bg-slate-800/60 border-slate-600/40 shadow-xl overflow-hidden">
+          <div className="p-8 flex flex-col md:flex-row gap-10 md:gap-16">
+            <div className="flex-1 flex flex-col gap-3">
+                <h3 className="text-2xl font-semibold text-white tracking-tight">What's Included</h3>
+                <ul className="flex flex-col gap-2">
+                    {FEATURES.map(f => (
+                    <Feature key={f.label} included={f.included}>{f.label}</Feature>
+                    ))}
+                </ul>
+            </div>
+            <div className="w-px bg-slate-700 hidden md:block" />
+            <div className="flex flex-col gap-6 md:w-60">
+              <div className="flex flex-col gap-2">
+                <span className="text-sm font-medium tracking-wide text-slate-300 uppercase">Your Plan</span>
+                {computedPrice !== null ? (
+                  <>
+                    <div className="flex items-end gap-2">
+                      <span className="text-4xl font-bold text-white tabular-nums">${computedPrice}</span>
+                      <span className="text-slate-400 mb-1 text-xs">/mo</span>
+                    </div>
+                  </>
+                ) : (
+                  <span className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">Contact Sales</span>
+                )}
+              </div>
+              <button
+                className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition shadow ${computedPrice === null ? 'slate-gradient text-white hover:brightness-110' : 'bg-white text-slate-deep hover:bg-slate-medium hover:text-white'}`}
+              >
+                {computedPrice === null ? 'Talk to Us' : 'Start Free Trial'}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
