@@ -37,7 +37,7 @@ const BENEFITS: BenefitItem[] = [
 
 export const BenefitsForBars = () => {
   return (
-    <section className="relative py-24 bg-gradient-to-b from-slate-900 via-70% via-slate-medium to-slate-light" aria-labelledby="benefits-heading">
+    <section className="relative py-24 bg-gradient-to-b from-slate-900 via-70% via-slate-medium to-slate-light to-100%" aria-labelledby="benefits-heading">
       <div className="relative mx-auto max-w-7xl px-6 flex flex-col gap-16">
         <header className="text-center max-w-5xl mx-auto flex flex-col gap-5">
             <h2 id="benefits-heading" className="text-4xl md:text-5xl font-bold text-white leading-tight">

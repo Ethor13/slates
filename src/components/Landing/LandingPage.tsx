@@ -3,6 +3,7 @@ import Footer from '../General/Footer';
 import Hero from './Hero';
 import Funnel from './Funnel';
 import BenefitsForBars from './BenefitsForBars';
+import Pricing from './Pricing';
 
 const LandingPage = () => {
     return (
@@ -12,6 +13,7 @@ const LandingPage = () => {
                 <Hero />
                 <Funnel />
                 <BenefitsForBars />
+                <Pricing />
             </main>
             <Footer />
         </div>
