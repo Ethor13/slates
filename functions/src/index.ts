@@ -559,3 +559,71 @@ export const generateDashboardLink = onRequest(
     }
   }
 );
+
+// Public contact form submission endpoint
+// POST http://127.0.0.1:5001/slates-59840/us-central1/contactUs
+// Body JSON: { name: string, email: string, message: string, company?: string }
+export const contactUs = onRequest(
+  {
+    cors: true,
+    secrets: ["MAILGUN_API_KEY", "MAILGUN_DOMAIN"],
+    timeoutSeconds: 15,
+  },
+  async (req, res) => {
+    try {
+      if (req.method !== "POST") {
+        res.status(405).json({ error: "Method not allowed" });
+        return;
+      }
+
+      const { name, email, message, company, honeypot } = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
+
+      // Simple bot prevention (honeypot)
+      if (honeypot) {
+        logger.warn("Honeypot field filled, likely bot submission", { email, name });
+        res.status(200).json({ status: "ok" });
+        return;
+      }
+
+      if (!name || !email || !message || !company) {
+        res.status(400).json({ error: "Missing required fields" });
+        return;
+      }
+
+      // rudimentary email validation
+      const emailValid = /.+@.+\..+/.test(email);
+      if (!emailValid) {
+        res.status(400).json({ error: "Invalid email" });
+        return;
+      }
+
+      const apiKey = process.env.MAILGUN_API_KEY;
+      const domain = process.env.MAILGUN_DOMAIN;
+      if (!apiKey || !domain) {
+        logger.error("Mailgun config missing for contact form", { hasApiKey: !!apiKey, hasDomain: !!domain });
+        res.status(500).json({ error: "Email service not configured" });
+        return;
+      }
+
+      const mg = mailgun.client({ username: "api", key: apiKey });
+
+      const subject = `New Slates Contact: ${name}${company ? ` (${company})` : ""}`;
+      const textBody = `Name: ${name}\nEmail: ${email}\nCompany: ${company || "-"}\nTime: ${new Date().toISOString()}\n\nMessage:\n${message}`;
+
+      // Primary destination(s)
+      const toList = ["info@slates.co"]; // adjust if needed
+
+      await mg.messages.create(domain, {
+        from: "Slates Contact Form <no-reply@slates.co>",
+        to: toList,
+        subject,
+        text: textBody,
+      });
+
+      res.status(200).json({ status: "sent" });
+    } catch (error) {
+      logger.error("Error handling contact form submission", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  }
+);

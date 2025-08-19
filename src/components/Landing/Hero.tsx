@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Static score implementation (hardcoded for now)
 const STATIC_SLATE_SCORE = 92;
@@ -88,6 +89,7 @@ const Gauge = ({ score }: { score: number | null }) => {
 };
 
 export const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section role="banner" aria-label="Slates Hero" className="relative min-h-[calc(100vh-5rem)] flex items-center">
       <div className="absolute inset-0 pointer-events-none" />
@@ -99,8 +101,32 @@ export const Hero = () => {
             <h1 className="text-5xl font-bold text-white">with Slates Sports Guides</h1>
             <p className="mt-5 text-lg text-slate-200">Use data-driven insights to show the right games at the right time. Increase customer engagement and boost your revenue with our advanced sports game ranking algorithm</p>
             <div className="mt-8 flex flex-wrap items-center gap-4" data-loc="hero-ctas">
-              <button className="px-6 py-3 rounded-md bg-white text-black font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow" data-cta="view-today-slate">View Today’s Slate</button>
-              <button className="px-6 py-3 rounded-md bg-slate-deep text-white font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow" data-cta="view-today-slate">Request a Demo</button>
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="px-6 py-3 rounded-md bg-white text-black font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow"
+                data-cta="view-today-slate"
+              >
+                View Today’s Slate
+              </button>
+              <button
+                onClick={() => {
+                  const el = document.getElementById('contact');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    // fallback: navigate home then attempt scroll after paint
+                    navigate('/', { replace: false });
+                    setTimeout(() => {
+                      const contactEl = document.getElementById('contact');
+                      if (contactEl) contactEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                  }
+                }}
+                className="px-6 py-3 rounded-md bg-slate-deep text-white font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow"
+                data-cta="request-demo"
+              >
+                Request a Demo
+              </button>
             </div>
           </div>
           {/* Visualization */}

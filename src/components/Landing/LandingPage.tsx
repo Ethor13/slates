@@ -4,6 +4,7 @@ import Hero from './Hero';
 import Funnel from './Funnel';
 import BenefitsForBars from './BenefitsForBars';
 import Pricing from './Pricing';
+import Contact from './Contact';
 
 const LandingPage = () => {
     return (
@@ -14,6 +15,7 @@ const LandingPage = () => {
                 <Funnel />
                 <BenefitsForBars />
                 <Pricing />
+                <Contact />
             </main>
             <Footer />
         </div>

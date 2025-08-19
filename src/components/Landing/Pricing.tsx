@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Check, X } from 'lucide-react';
 
 const FEATURES: { label: string; included: boolean }[] = [
@@ -23,6 +24,7 @@ interface PricingProps { maxVenues?: number }
 export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
   const [venues, setVenues] = useState(1);
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
+  const navigate = useNavigate();
   const BASE_PRICE = 20;
   const monthlyPrice = useMemo(() => {
     if (venues >= maxVenues) return null; // contact sales threshold
@@ -32,11 +34,11 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
   const annualTotal = monthlyPrice !== null ? monthlyPrice * 10 : null; // simple annual total (no discount) adjust as needed
 
   return (
-    <section className="relative py-28 overflow-hidden" aria-labelledby="pricing-heading">
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-light via-slate-medium to-slate-900 pointer-events-none" />
+    <section id="pricing" className="relative py-28 overflow-hidden" aria-labelledby="pricing-heading">
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-light to-slate-medium pointer-events-none" />
       <div className="relative z-10 mx-auto max-w-4xl px-6 flex flex-col gap-16">
         <header className="text-center flex flex-col gap-5">
-          <h2 id="pricing-heading" className="text-4xl md:text-5xl font-bold text-white leading-tight">Simple Pricing that Scales</h2>
+          <h2 id="pricing-heading" className="text-5xl font-bold text-white leading-tight">Simple Pricing that Scales</h2>
           <p className="text-lg text-slate-200">Same powerful feature set, sized to your operation's needs</p>
         </header>
         <div className="w-full flex flex-col">
@@ -121,9 +123,19 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
                 </div>
               </div>
               <button
+                onClick={() => {
+                  if (monthlyPrice === null) {
+                    const el = document.getElementById('contact');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  } else {
+                    navigate('/auth?mode=signup');
+                  }
+                }}
                 className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition shadow ${monthlyPrice === null ? 'slate-gradient text-white hover:brightness-110' : 'bg-white text-slate-deep hover:bg-slate-medium hover:text-white'}`}
               >
-                {monthlyPrice === null ? 'Talk to Us' : 'Start Free Trial'}
+                {monthlyPrice === null ? 'Get in Touch' : 'Start Free Trial'}
               </button>
             </div>
           </div>
