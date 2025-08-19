@@ -20,8 +20,6 @@
 
 - add ids for team popularities, and team zipcodes
 
-- Update landing page
-
 - Add subscription options
     - free trial option
     - manage in settings
