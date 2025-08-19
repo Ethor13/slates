@@ -55,7 +55,7 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="relative py-24 w-full bg-gradient-to-b from-slate-medium to-slate-deep">
+        <section id="contact" className="relative py-24 w-full bg-gradient-to-b from-slate-medium to-slate-light">
             <div className='flex flex-row max-w-6xl mx-auto'>
                 <div className='flex-1 mr-20'>
                     <h2 className="text-5xl font-bold text-white">
@@ -80,14 +80,14 @@ const Contact = () => {
                             {[
                                 "We'll schedule a call to understand your needs",
                                 "Our team will provide a personalized demo",
-                                "We'll help you set up and optimize the system",
-                                "Ongoing support and optimization"
+                                "We'll walk you through setting up your dashboard",
+                                "Ongoing support"
                             ].map((step, index) => (
                                 <div key={index} className="flex items-center">
                                     <div className="h-8 w-8 rounded-full bg-blue-100 text-slate-deep flex items-center justify-center font-semibold">
                                         {index + 1}
                                     </div>
-                                    <span className="ml-4 text-slate-300">{step}</span>
+                                    <span className="ml-4 text-slate-200">{step}</span>
                                 </div>
                             ))}
                         </div>

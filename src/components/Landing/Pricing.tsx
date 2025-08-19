@@ -23,7 +23,7 @@ interface PricingProps { maxVenues?: number }
 
 export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
   const [venues, setVenues] = useState(1);
-  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
+  const [billing, setBilling] = useState<'monthly' | 'annual'>('annual');
   const navigate = useNavigate();
   const BASE_PRICE = 20;
   const monthlyPrice = useMemo(() => {
@@ -64,7 +64,7 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
                 const label: string | number = isLast ? `${maxVenues}+` : v;
                 const active = (isLast && venues === maxVenues) || venues === v;
                 return (
-                  <span key={label} className={`w-10 text-center min text-2xl ${active ? 'text-white' : 'text-slate-400'}`}>{label}</span>
+                  <span key={label} className={`w-10 text-center min text-2xl ${active ? 'text-white' : 'text-slate-300'}`}>{label}</span>
                 );
               })}
             </div>
@@ -118,7 +118,7 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
                         </div>
                     </>
                     ) : (
-                    <span className="text-xl font-semibold text-slate-light">Contact Sales</span>
+                    <span className="text-4xl font-bold text-white">Contact Sales</span>
                     )}
                 </div>
               </div>
@@ -133,7 +133,7 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
                     navigate('/auth?mode=signup');
                   }
                 }}
-                className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition shadow ${monthlyPrice === null ? 'slate-gradient text-white hover:brightness-110' : 'bg-white text-slate-deep hover:bg-slate-medium hover:text-white'}`}
+                className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition shadow bg-white text-slate-deep hover:bg-slate-medium hover:text-white`}
               >
                 {monthlyPrice === null ? 'Get in Touch' : 'Start Free Trial'}
               </button>
