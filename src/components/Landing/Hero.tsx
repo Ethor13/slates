@@ -191,7 +191,7 @@ export const Hero = () => {
               {/* Title */}
               <div className="w-full flex items-center gap-2">
                 <img src="/assets/logos/slates_white_outline.svg" alt="Slates Logo" className="h-8 w-8" />
-                <h2 className="text-xl tracking-wide text-slate-deep font-bold">Tonight&apos;s Top Game</h2>
+                <h2 className="text-xl tracking-wide text-slate-deep font-bold">Today&apos;s Top Game</h2>
               </div>
               {noGames && !loading ? (
                 <div className="flex flex-col items-center justify-center h-64 w-full">
