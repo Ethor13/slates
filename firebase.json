@@ -24,6 +24,10 @@
         "function": "signInWithJWT"
       },
       {
+        "source": "/contactUs",
+        "function": "contactUs"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

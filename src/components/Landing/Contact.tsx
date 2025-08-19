@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 interface FormState {
     name: string;
@@ -39,8 +39,7 @@ const Contact = () => {
             return;
         }
         try {
-            const base = import.meta.env.DEV ? 'http://localhost:5001/slates-59840/us-central1' : 'https://us-central1-slates-59840.cloudfunctions.net';
-            const res = await fetch(`${base}/contactUs`, {
+            const res = await fetch("/contactUs", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)
