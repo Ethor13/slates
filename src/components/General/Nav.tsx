@@ -72,44 +72,20 @@ const Nav = () => {
                         </div>
                         <div className="flex flex-row items-center justify-between w-full">
                             {!currentUser ? (
-                                <>
-                                    <div className='text-white hidden md:flex items-center space-x-2'>
-                                        <a
-                                            href="#technology"
-                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
-                                            onClick={(e) => scrollToSection(e, 'technology')}
-                                        >Technology</a>
-                                        <a
-                                            href="#benefits"
-                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
-                                            onClick={(e) => scrollToSection(e, 'benefits')}
-                                        >Benefits</a>
-                                        <a
-                                            href="#demo"
-                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
-                                            onClick={(e) => scrollToSection(e, 'demo')}
-                                        >Live Demo</a>
-                                        <a
-                                            href="#pricing"
-                                            className="font-semibold text-lg rounded-full hover:bg-slate-light hover:bg-opacity-20 px-4 py-2"
-                                            onClick={(e) => scrollToSection(e, 'pricing')}
-                                        >Pricing</a>
-                                    </div>
-                                    <div className="flex space-x-4">
-                                        <Link
-                                            to="/auth?mode=signin"
-                                            className="border-2 font-semibold border-slate-deep text-slate-deep px-6 py-2 rounded-full hover:bg-slate-light hover:border-slate-light hover:text-white transition-all duration-200"
-                                        >
-                                            Log In
-                                        </Link>
-                                        <Link
-                                            to="/auth?mode=signup"
-                                            className="border-2 font-semibold border-slate-deep bg-slate-deep text-white px-6 py-2 rounded-full hover:bg-slate-medium hover:border-slate-medium transition-colors duration-200"
-                                        >
-                                            Sign Up
-                                        </Link>
-                                    </div>
-                                </>
+                                <div className="flex space-x-4 justify-end w-full">
+                                    <Link
+                                        to="/auth?mode=signin"
+                                        className="border-2 font-semibold border-slate-deep text-slate-deep px-6 py-2 rounded-full hover:bg-slate-light hover:border-slate-light hover:text-white transition-all duration-200"
+                                    >
+                                        Log In
+                                    </Link>
+                                    <Link
+                                        to="/auth?mode=signup"
+                                        className="border-2 font-semibold border-slate-deep bg-slate-deep text-white px-6 py-2 rounded-full hover:bg-slate-medium hover:border-slate-medium transition-colors duration-200"
+                                    >
+                                        Sign Up
+                                    </Link>
+                                </div>
                             ) : (
                                 <>
                                     <div className="flex-1">
