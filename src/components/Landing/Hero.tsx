@@ -77,6 +77,7 @@ const Gauge = ({ game }: { game: any }) => {
             >
               {displayScore}
             </motion.div>
+            <div className='relative top-8 font-semibold text-lg'>Slate Score</div>
           </div>
         </div>
 

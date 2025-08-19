@@ -51,7 +51,7 @@ const PathArrow = ({ d, color = '#fff', progress, lengthPortion = [0, 1], orbSiz
   return (
     <g>
       {/* Faint full path for constant connection visual */}
-  <path
+      <path
         d={d}
         fill="none"
         stroke={color}
@@ -81,18 +81,18 @@ const PathArrow = ({ d, color = '#fff', progress, lengthPortion = [0, 1], orbSiz
 
 interface InputBoxProps { title: string; description?: string; Icon?: LucideIcon }
 const InputBox = ({ title, description, Icon }: InputBoxProps) => (
-  <div className="relative bg-slate-deep text-white rounded-xl px-5 py-4 shadow-xl max-w-[250px] text-center border-2 border-white flex flex-col items-center gap-2">
+  <div className="z-50 relative h-full bg-slate-deep text-white rounded-xl px-5 py-4 shadow-xl max-w-[250px] text-center border-2 border-white flex flex-col items-center gap-2">
     {Icon && <Icon className="h-6 w-6 " strokeWidth={1.5} />}
-    <h4 className="font-semibold tracking-wide text-sm md:text-base">{title}</h4>
-    {description && <p className="text-xs leading-snug hidden md:block">{description}</p>}
+    <h4 className="font-semibold text-sm md:text-base md:leading-none">{title}</h4>
+    {description && <p className="text-xs leading-snug">{description}</p>}
   </div>
 );
 
 const OutputBox = ({ boxRef }: { boxRef: React.RefObject<HTMLDivElement> }) => (
-  <div ref={boxRef} className="relative slate-gradient text-white rounded-xl px-5 py-4 shadow-xl max-w-[300px] text-center border-2 border-white flex flex-col items-center gap-2">
+  <div ref={boxRef} className="slate-gradient text-white rounded-xl px-5 py-4 shadow-xl max-w-[300px] text-center border-2 border-white flex flex-col items-center gap-2">
     <TrendingUp className="h-8 w-8 text-white" strokeWidth={1.5} />
     <h3 className="font-semibold tracking-wide text-2xl">Slate Score</h3>
-    <p className="text-sm leading-snug hidden md:block">The number that guarantees you're always showing the right games</p>
+    <p className="text-sm leading-snug">The number that guarantees you're always showing the right games</p>
   </div>
 );
 
@@ -100,7 +100,7 @@ export const Funnel = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   // Original progress spans entire section; we remap so animation finishes halfway (orbs reach output mid screen)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const midProgress = useTransform(scrollYProgress, [0.3, 0.6], [0, 1]);
+  const midProgress = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
 
   // Dynamic refs matching FUNNEL_INPUTS length
   const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -133,8 +133,8 @@ export const Funnel = () => {
       const containerRect = svgWrapRef.current.getBoundingClientRect();
       const outRect = outputRef.current.getBoundingClientRect();
       // Determine desired center: midpoint between first and last input centers
-  const first = inputRefs.current[0]?.getBoundingClientRect();
-  const last = inputRefs.current[inputRefs.current.length - 1]?.getBoundingClientRect();
+      const first = inputRefs.current[0]?.getBoundingClientRect();
+      const last = inputRefs.current[inputRefs.current.length - 1]?.getBoundingClientRect();
       let shift = 0;
       if (first && last) {
         const desiredCenter = (first.left + first.width / 2 + last.left + last.width / 2) / 2 - containerRect.left;
@@ -154,19 +154,19 @@ export const Funnel = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-16 bg-slate-900 min-h-screen" aria-label="Data Funnel Visualization">
+    <section ref={sectionRef} className="relative py-16 bg-slate-900" aria-label="Data Funnel Visualization">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col gap-20 items-center">
-          <div className="flex flex-col items-center justify-center text-center px-[15rem]">
-            <h1 className="text-5xl font-bold text-white">How We Score the Slate</h1>
-            <h1 className="text-5xl font-bold text-slate-medium pb-5">Leveraging Advanced Analytics</h1>
+        <div className="flex flex-col gap-10 items-center">
+          <div className="flex flex-col items-center justify-center text-center">
+            <h1 className="text-3xl sm:text-5xl font-bold text-white">How We Score the Slate</h1>
+            <h1 className="text-3xl sm:text-5xl font-bold text-slate-medium pb-2 sm:pb-5">Leveraging Advanced Analytics</h1>
             <p className="text-lg text-slate-200">A diverse range of heuristics is unified into a single number using models that understand the drivers behind customer engagement and retention</p>
           </div>
           <div className="relative" ref={svgWrapRef}>
             {/* Inputs Row */}
-            <div className="flex flex-row items-stretch md:items-start justify-start gap-10 mb-40 flex-wrap">
+            <div className="grid grid-cols-2 sm:grid-cols-4 items-stretch md:items-start justify-start gap-10 mb-40 flex-wrap">
               {FUNNEL_INPUTS.map((cfg, i) => (
-                <div key={cfg.key} ref={(el) => (inputRefs.current[i] = el)}>
+                <div className="h-full" key={cfg.key} ref={(el) => (inputRefs.current[i] = el)}>
                   <InputBox title={cfg.label} description={cfg.description} Icon={cfg.icon} />
                 </div>
               ))}
@@ -185,7 +185,7 @@ export const Funnel = () => {
               ))}
             </svg>
             {/* Output */}
-            <div className="flex justify-center pt-8">
+            <div className="flex justify-center items-center pt-8">
               <div style={{ transform: `translateX(${outputShift}px)` }}>
                 <OutputBox boxRef={outputRef} />
               </div>
