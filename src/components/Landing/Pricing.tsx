@@ -18,14 +18,18 @@ const Feature = ({ included, children }: { included: boolean; children: React.Re
   </li>
 );
 
-export const Pricing = () => {
+interface PricingProps { maxVenues?: number }
+
+export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
   const [venues, setVenues] = useState(1);
+  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
   const BASE_PRICE = 20;
-  const computedPrice = useMemo(() => {
-    if (venues >= 10) return null; // contact sales threshold
+  const monthlyPrice = useMemo(() => {
+    if (venues >= maxVenues) return null; // contact sales threshold
     const p = BASE_PRICE - (venues - 1); // decrement $1 per additional venue
     return p < 1 ? 1 : p;
-  }, [venues]);
+  }, [venues, maxVenues]);
+  const annualTotal = monthlyPrice !== null ? monthlyPrice * 10 : null; // simple annual total (no discount) adjust as needed
 
   return (
     <section className="relative py-28 overflow-hidden" aria-labelledby="pricing-heading">
@@ -35,41 +39,32 @@ export const Pricing = () => {
           <h2 id="pricing-heading" className="text-4xl md:text-5xl font-bold text-white leading-tight">Simple Pricing that Scales</h2>
           <p className="text-lg text-slate-200">Same powerful feature set, sized to your operation's needs</p>
         </header>
-        <div className="w-full flex flex-col gap-6">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div className="flex flex-col gap-2">
-              {/* <label htmlFor="venue-slider" className="text-sm font-medium tracking-wide text-slate-300 uppercase">Number of Venues</label> */}
-              <div className="flex items-baseline gap-3">
-                <span className="text-xl font-bold text-white tabular-nums">Venues</span>
-              </div>
-            </div>
-          </div>
-          <div className="pt-2">
+        <div className="w-full flex flex-col">
+            <span className="text-xl font-semibold text-white tabular-nums">Venues</span>
+          <div>
             <div className="relative w-full">
               <input
-                id="venue-slider"
                 type="range"
                 min={1}
-                max={10}
+                max={maxVenues}
                 value={venues}
                 onChange={e => setVenues(Number(e.target.value))}
-                className="w-full appearance-none bg-transparent cursor-pointer"
+                className="px-3 h-2 w-full appearance-none cursor-pointer accent-slate-deep bg-slate-300/20 rounded-full"
                 aria-valuemin={1}
-                aria-valuemax={10}
+                aria-valuemax={maxVenues}
                 aria-valuenow={venues}
                 aria-label="Number of venues"
               />
-              <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 h-2 rounded-full bg-slate-700 overflow-hidden">
-                <div
-                  className="h-full rounded-full slate-gradient transition-all"
-                  style={{ width: `${(Math.min(venues,10)-1)/9 * 100}%` }}
-                />
-              </div>
             </div>
-            <div className="mt-3 flex justify-between text-[10px] font-medium tracking-wider">
-              {[1,2,3,4,5,6,7,8,9,'10+'].map(mark => (
-                <span key={mark as string | number} className={`text-xl ${mark===venues || (mark==='10+' && venues===10) ? 'text-white' : 'text-slate-400'}`}>{mark}</span>
-              ))}
+            <div className="mt-2 flex justify-between text-[10px] font-medium tracking-wider">
+              {Array.from({ length: maxVenues }, (_, i) => i + 1).map(v => {
+                const isLast = v === maxVenues;
+                const label: string | number = isLast ? `${maxVenues}+` : v;
+                const active = (isLast && venues === maxVenues) || venues === v;
+                return (
+                  <span key={label} className={`w-10 text-center min text-2xl ${active ? 'text-white' : 'text-slate-400'}`}>{label}</span>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -86,22 +81,49 @@ export const Pricing = () => {
             <div className="w-px bg-slate-700 hidden md:block" />
             <div className="flex flex-col gap-6 md:w-60">
               <div className="flex flex-col gap-2">
+                {/* Billing Toggle */}
+                <div className="self-start mb-1">
+                  <div role="radiogroup" aria-label="Billing Period" className="inline-flex rounded-full p-1 bg-slate-700/60 border border-slate-600/60 shadow-inner">
+                    {(['monthly','annual'] as const).map(opt => {
+                      const active = billing === opt;
+                      return (
+                        <button
+                          key={opt}
+                          role="radio"
+                          aria-checked={active}
+                          onClick={() => setBilling(opt)}
+                          className={`relative px-3 py-1.5 text-xs font-medium rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 ${active ? 'text-white' : 'text-slate-300 hover:text-white'}`}
+                        >
+                          <span className="relative z-10 flex items-center gap-1">
+                            {opt === 'monthly' ? 'Monthly' : 'Annual'}
+                            {opt === 'annual' && <span className="hidden md:inline text-[9px] font-semibold text-green-300 bg-green-500/10 px-1 py-0.5 rounded">2 months free</span>}
+                          </span>
+                          {active && <span className="absolute inset-0 rounded-full slate-gradient" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
                 <span className="text-sm font-medium tracking-wide text-slate-300 uppercase">Your Plan</span>
-                {computedPrice !== null ? (
-                  <>
-                    <div className="flex items-end gap-2">
-                      <span className="text-4xl font-bold text-white tabular-nums">${computedPrice}</span>
-                      <span className="text-slate-400 mb-1 text-xs">/mo</span>
-                    </div>
-                  </>
-                ) : (
-                  <span className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">Contact Sales</span>
-                )}
+                <div className='h-10 flex flex-col justify-center'>
+                    {monthlyPrice !== null ? (
+                    <>
+                        <div className="flex items-end gap-2">
+                        <span className="text-4xl font-bold text-white tabular-nums">
+                            {billing === 'monthly' ? `$${monthlyPrice}` : `$${annualTotal}`}
+                        </span>
+                        <span className="text-slate-400 mb-1 text-xs">per {billing === 'monthly' ? 'month' : 'year'} per venue</span>
+                        </div>
+                    </>
+                    ) : (
+                    <span className="text-xl font-semibold text-slate-light">Contact Sales</span>
+                    )}
+                </div>
               </div>
               <button
-                className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition shadow ${computedPrice === null ? 'slate-gradient text-white hover:brightness-110' : 'bg-white text-slate-deep hover:bg-slate-medium hover:text-white'}`}
+                className={`w-full py-3 px-4 rounded-lg font-semibold text-sm transition shadow ${monthlyPrice === null ? 'slate-gradient text-white hover:brightness-110' : 'bg-white text-slate-deep hover:bg-slate-medium hover:text-white'}`}
               >
-                {computedPrice === null ? 'Talk to Us' : 'Start Free Trial'}
+                {monthlyPrice === null ? 'Talk to Us' : 'Start Free Trial'}
               </button>
             </div>
           </div>
