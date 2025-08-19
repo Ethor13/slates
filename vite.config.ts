@@ -23,6 +23,10 @@ export default defineConfig({
         target: 'http://localhost:5001/slates-59840/us-central1/signInWithJWT',
         changeOrigin: true,
       },
+      '/contactUs': {
+        target: 'http://localhost:5001/slates-59840/us-central1/contactUs',
+        changeOrigin: true,
+      },
     },
   },
   build: {

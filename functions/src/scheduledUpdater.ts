@@ -11,7 +11,7 @@ import { updateScheduleInFirestore } from "./sports-scrapers/scrape_schedule.js"
 import { updateGameMetrics, updateTeamMetrics } from "./sports-scrapers/scrape_game_metrics.js";
 import { scoreSportsGames } from "./sports-scrapers/calculate_slate_scores.js";
 import { logger } from "firebase-functions";
-import { Sports, GamesData, TeamsData, ParsedTeams } from "./types.js";
+import { Sports, GamesData, TeamsData, ParsedTeams, ParsedGame } from "./types.js";
 import { datesToUpdate } from "./helpers.js";
 
 export const updateDatesData = async (db: Firestore, updateSize: number) => {
@@ -68,6 +68,23 @@ const updateDateData = async (db: Firestore, date: string, teamsData: TeamsData)
     // Write games data to Firestore
     const allGamesRef = db.collection("sports").doc("all").collection("schedule").doc(date);
     batch.set(allGamesRef, gamesData);
+
+    const today = datesToUpdate(1)[0];
+
+    if (date == today) {
+      // get best game from gamesData
+      let bestGame: ParsedGame | undefined = undefined;
+
+      Object.values(gamesData).forEach(sportGames => {
+        Object.values(sportGames).forEach(game => {
+          bestGame = bestGame && game.slateScore < bestGame.slateScore ? bestGame : game;
+        });
+      }
+      );
+
+      const bestGameRef = db.collection("sports").doc("today");
+      batch.set(bestGameRef, bestGame);
+    }
 
     // Add networks to networks master list
     // need to manually add a mapper item on firestore
