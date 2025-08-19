@@ -12,7 +12,7 @@ const FEATURES: { label: string; included: boolean }[] = [
 
 const Feature = ({ included, children }: { included: boolean; children: React.ReactNode }) => (
   <li className="flex items-start gap-2 text-sm">
-    <span className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border ${included ? 'bg-green-500/10 border-green-400 text-green-300' : 'bg-slate-700/40 border-slate-600 text-slate-400'}`}> 
+    <span className={`mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border ${included ? 'bg-green-500/10 border-green-400 text-green-300' : 'bg-slate-700/40 border-slate-600 text-slate-400'}`}>
       {included ? <Check className="h-3.5 w-3.5" /> : <X className="h-3.5 w-3.5" />}
     </span>
     <span className={`leading-snug ${included ? 'text-slate-100' : 'text-slate-400 line-through decoration-slate-600'} `}>{children}</span>
@@ -34,15 +34,15 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
   const annualTotal = monthlyPrice !== null ? monthlyPrice * 10 : null; // simple annual total (no discount) adjust as needed
 
   return (
-    <section id="pricing" className="relative py-28 overflow-hidden" aria-labelledby="pricing-heading">
+    <section id="pricing" className="relative pt-28 pb-14 overflow-hidden" aria-labelledby="pricing-heading">
       <div className="absolute inset-0 bg-gradient-to-b from-slate-light to-slate-medium pointer-events-none" />
       <div className="relative z-10 mx-auto max-w-4xl px-6 flex flex-col gap-16">
-        <header className="text-center flex flex-col gap-5">
-          <h2 id="pricing-heading" className="text-5xl font-bold text-white leading-tight">Simple Pricing that Scales</h2>
+        <header className="text-center flex flex-col gap-0 sm:gap-5">
+          <h2 id="pricing-heading" className="text-3xl sm:text-5xl font-bold text-white leading-tight">Simple Pricing that Scales</h2>
           <p className="text-lg text-slate-200">Same powerful feature set, sized to your operation's needs</p>
         </header>
         <div className="w-full flex flex-col">
-            <span className="text-xl font-semibold text-white tabular-nums">Venues</span>
+          <span className="text-xl font-semibold text-white tabular-nums">Venues</span>
           <div>
             <div className="relative w-full">
               <input
@@ -71,22 +71,22 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
           </div>
         </div>
         <div className="relative flex flex-col rounded-2xl border bg-slate-800/60 border-slate-600/40 shadow-xl overflow-hidden">
-          <div className="p-8 flex flex-col md:flex-row gap-10 md:gap-16">
+          <div className="p-8 flex flex-col md:flex-row gap-5 md:gap-16">
             <div className="flex-1 flex flex-col gap-3">
-                <h3 className="text-2xl font-semibold text-white tracking-tight">What's Included</h3>
-                <ul className="flex flex-col gap-2">
-                    {FEATURES.map(f => (
-                    <Feature key={f.label} included={f.included}>{f.label}</Feature>
-                    ))}
-                </ul>
+              <h3 className="text-2xl font-semibold text-white tracking-tight">What's Included</h3>
+              <ul className="flex flex-col gap-2">
+                {FEATURES.map(f => (
+                  <Feature key={f.label} included={f.included}>{f.label}</Feature>
+                ))}
+              </ul>
             </div>
             <div className="w-px bg-slate-700 hidden md:block" />
             <div className="flex flex-col gap-6 md:w-60">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col">
                 {/* Billing Toggle */}
-                <div className="self-start mb-1">
+                <div className="self-start w-full flex justify-center">
                   <div role="radiogroup" aria-label="Billing Period" className="inline-flex rounded-full p-1 bg-slate-700/60 border border-slate-600/60 shadow-inner">
-                    {(['monthly','annual'] as const).map(opt => {
+                    {(['monthly', 'annual'] as const).map(opt => {
                       const active = billing === opt;
                       return (
                         <button
@@ -98,7 +98,7 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
                         >
                           <span className="relative z-10 flex items-center gap-1">
                             {opt === 'monthly' ? 'Monthly' : 'Annual'}
-                            {opt === 'annual' && <span className="hidden md:inline text-[9px] font-semibold text-green-300 bg-green-500/10 px-1 py-0.5 rounded">2 months free</span>}
+                            {opt === 'annual' && <span className="inline text-[9px] font-semibold text-green-300 bg-green-500/10 px-1 py-0.5 rounded">2 months free</span>}
                           </span>
                           {active && <span className="absolute inset-0 rounded-full slate-gradient" />}
                         </button>
@@ -106,20 +106,20 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
                     })}
                   </div>
                 </div>
-                <span className="text-sm font-medium tracking-wide text-slate-300 uppercase">Your Plan</span>
+                <span className="mt-5 text-sm font-medium tracking-wide text-slate-300 uppercase">Your Plan</span>
                 <div className='h-10 flex flex-col justify-center'>
-                    {monthlyPrice !== null ? (
+                  {monthlyPrice !== null ? (
                     <>
-                        <div className="flex items-end gap-2">
+                      <div className="flex items-end gap-2">
                         <span className="text-4xl font-bold text-white tabular-nums">
-                            {billing === 'monthly' ? `$${monthlyPrice}` : `$${annualTotal}`}
+                          {billing === 'monthly' ? `$${monthlyPrice}` : `$${annualTotal}`}
                         </span>
                         <span className="text-slate-400 mb-1 text-xs">per {billing === 'monthly' ? 'month' : 'year'} per venue</span>
-                        </div>
+                      </div>
                     </>
-                    ) : (
+                  ) : (
                     <span className="text-4xl font-bold text-white">Contact Sales</span>
-                    )}
+                  )}
                 </div>
               </div>
               <button
