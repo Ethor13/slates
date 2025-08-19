@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-const Gauge = ({game}: {game: any}) => {
+const Gauge = ({ game }: { game: any }) => {
   const circumference = 2 * Math.PI * 90;
   const score = game?.slateScore ? game?.slateScore * 100 : 0;
   const pct = Math.max(0, Math.min(100, score)) / 100;
   const strokeDash = circumference * pct;
   const [displayScore, setDisplayScore] = useState<number | null>(null);
   const rafRef = useRef(0);
-  
+
   useEffect(() => {
     const start = performance.now();
     const from = 0;
@@ -30,10 +30,10 @@ const Gauge = ({game}: {game: any}) => {
     const formattedDate = (new Date(game.date)).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
 
     return (
-      <div className="w-full h-[20rem] flex flex-row">
+      <div className="w-full h-auto md:h-[20rem] flex flex-col md:flex-row">
         <div className='relative aspect-square flex items-center justify-center'>
           {/* Slate Score Circle */}
-          <svg viewBox="0 0 220 220" className="w-[17rem] h-[17rem]">
+          <svg viewBox="0 0 220 220" className="w-[18rem] h-[18rem] sm:w-[15rem] sm:h-[15rem] md:w-[17rem] md:h-[17rem]">
             <defs>
               <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#6a86d1" />
@@ -69,29 +69,29 @@ const Gauge = ({game}: {game: any}) => {
 
           {/* Slate Score Number */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 6 }}
-                transition={{ duration: 1 }}
-                className="text-slate-deep font-bold tracking-tight"
-              >
-                {displayScore}
-              </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 6 }}
+              transition={{ duration: 1 }}
+              className="text-slate-deep font-bold tracking-tight"
+            >
+              {displayScore}
+            </motion.div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 justify-center items-center flex-1 px-2">
-            {/* Away Team */}
-            <div className="flex flex-col items-center gap-6 w-full">
-              <div className="flex flex-col items-center w-full">
-                <h3
-                  style={{ backgroundColor: `#${game.away.colors.primary}`, color: `#${game.away.colors.alternate}` }}
-                  className="text-3xl font-bold rounded-full px-5 py-3 flex flex-col items-center justify-center w-full"
-                >
-                  <div>{game.away.shortName}</div>
-                  <p className="text-sm font-medium">{game.away.record}</p>
-                </h3>
-              </div>
+        <div className="flex flex-col justify-center items-center flex-1 px-2 mt-0">
+          {/* Away Team */}
+          <div className="flex flex-col items-center gap-2 md:gap-6 w-full">
+            <div className="flex flex-col items-center w-full">
+              <h3
+                style={{ backgroundColor: `#${game.away.colors.primary}`, color: `#${game.away.colors.alternate}` }}
+                className="text-2xl sm:text-3xl font-bold rounded-full px-5 py-3 flex flex-col items-center justify-center w-full"
+              >
+                <div>{game.away.shortName}</div>
+                <p className="text-sm font-medium">{game.away.record}</p>
+              </h3>
+            </div>
 
             {/* Game Info */}
             <div className="flex flex-col items-center justify-center">
@@ -102,14 +102,14 @@ const Gauge = ({game}: {game: any}) => {
             <div className="flex flex-col items-center w-full">
               <h3
                 style={{ backgroundColor: `#${game.home.colors.primary}`, color: `#${game.home.colors.alternate}` }}
-                className="text-3xl font-bold rounded-full px-5 py-3 flex flex-col items-center justify-center w-full"
+                className="text-2xl sm:text-3xl font-bold rounded-full px-5 py-3 flex flex-col items-center justify-center w-full"
               >
                 <div>{game.home.shortName}</div>
                 <p className="text-sm font-medium">{game.home.record}</p>
               </h3>
             </div>
-            </div>
           </div>
+        </div>
       </div>
     );
   } else {
@@ -146,19 +146,19 @@ export const Hero = () => {
   }, []);
 
   return (
-    <section role="banner" aria-label="Slates Hero" className="relative min-h-[calc(100vh-5rem)] flex items-center">
+    <section role="banner" aria-label="Slates Hero" className="relative min-h-[calc(100vh-5rem)] flex items-center px-4 sm:px-6">
       <div className="absolute inset-0 pointer-events-none" />
       <div className="relative mx-auto w-full max-w-7xl">
-        <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-20 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-0 lg:gap-20 items-center">
           {/* Text Block */}
-          <div className="" data-loc="hero-text">
-            <h1 className="text-5xl font-bold text-slate-deep">Make Gamedays Simple</h1>
-            <h1 className="text-5xl font-bold text-white">with Slates Sports Guides</h1>
-            <p className="mt-5 text-lg text-slate-200">Use data-driven insights to show the right games at the right time. Increase customer engagement and boost your revenue with our advanced sports game ranking algorithm</p>
-            <div className="mt-8 flex flex-wrap items-center gap-4" data-loc="hero-ctas">
+          <div className="text-center min-h-[25rem] flex flex-col justify-center md:text-left" data-loc="hero-text">
+            <h1 className="text-3xl sm:text-5xl font-bold text-white leading-tight">Make Gamedays Simple</h1>
+            <h1 className="text-3xl sm:text-5xl font-bold text-slate-deep leading-tight">with Slates Sports Guides</h1>
+            <p className="mt-3 sm:mt-5 text-base sm:text-lg text-slate-200 max-w-xl mx-auto md:mx-0">Use data-driven insights to show the right games at the right time. Increase customer engagement and boost your revenue with our advanced sports game ranking algorithm</p>
+            <div className="mt-8 flex justify-center lg:justify-start items-center gap-4" data-loc="hero-ctas">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="px-6 py-3 rounded-md bg-white text-black font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow"
+                className="px-2 lg:px-6 py-3 rounded-md bg-white text-black font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow"
                 data-cta="view-today-slate"
               >
                 View Today’s Slate
@@ -177,7 +177,7 @@ export const Hero = () => {
                     }, 100);
                   }
                 }}
-                className="px-6 py-3 rounded-md bg-slate-deep text-white font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow"
+                className="px-2 lg:px-6 py-3 rounded-md bg-slate-deep text-white font-semibold text-lg hover:bg-slate-medium hover:text-white border-2 border-transparent hover:border-white transition shadow"
                 data-cta="request-demo"
               >
                 Request a Demo
@@ -185,7 +185,7 @@ export const Hero = () => {
             </div>
           </div>
           {/* Visualization */}
-          <div className="relative flex items-center justify-center h-full rounded-[2rem] bg-white p-4" data-loc="hero-visual">
+          <div className="mb-8 relative flex items-center justify-center h-full rounded-[1.5rem] md:rounded-[2rem] bg-white p-4 w-full max-w-3xl" data-loc="hero-visual">
             <div className="flex flex-col items-center w-full">
               {/* Title */}
               <div className="w-full flex items-center gap-2">
