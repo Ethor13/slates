@@ -54,24 +54,24 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="relative py-24 w-full bg-gradient-to-b from-slate-medium to-slate-light">
-            <div className='flex flex-row max-w-6xl mx-auto'>
-                <div className='flex-1 mr-20'>
-                    <h2 className="text-5xl font-bold text-white">
+        <section id="contact" className="relative pt-12 sm:pt-24 pb-12 w-full bg-gradient-to-b from-slate-medium to-slate-light">
+            <div className='flex flex-col mx-5 sm:mx-10 lg:mx-auto sm:flex-row max-w-6xl'>
+                <div className='flex-1 sm:mr-5 lg:mr-20 text-center sm:text-left'>
+                    <h2 className="text-3xl sm:text-5xl font-bold text-white">
                         Get in Touch
                     </h2>
-                    <p className="mt-4 text-lg text-slate-200">
+                    <p className="sm:mt-4 text-md sm:text-lg text-slate-200">
                         Ready to optimize your sports programming? Contact us for a personalized demo and consultation.
                     </p>
 
-                    <div className="mt-8 space-y-6">
-                        <div className="flex items-center text-xl">
+                    <div className="mt-8 space-y-6 w-full hidden sm:block">
+                        <div className="flex items-center text-xl w-full">
                             <Mail className="h-6 w-6 text-slate-light" />
                             <span className="ml-4 text-white">info@slates.co</span>
                         </div>
                     </div>
 
-                    <div className="mt-12">
+                    <div className="mt-12 hidden sm:block">
                         <h3 className="text-3xl font-bold text-white">
                             What happens next?
                         </h3>
@@ -92,7 +92,7 @@ const Contact = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex-1'>
+                <div className='flex-1 mt-6 sm:mt-0'>
                     <form onSubmit={submit} className="grid gap-4 bg-slate-800/60 backdrop-blur rounded-xl p-8 border border-slate-700">
                         {/* Honeypot */}
                         <input type="text" name="honeypot" value={form.honeypot} onChange={update} className="hidden" tabIndex={-1} autoComplete="off" />
