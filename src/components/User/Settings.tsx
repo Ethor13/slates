@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../General/Nav';
-import { ZipcodeInput, TimezoneSelector, TvProviders, FavoriteTeams, NotificationEmails } from './Preferences';
-import { MapPin, Tv, Star, User, Bell, Shield, HelpCircle } from 'lucide-react';
+import { ZipcodeInput, TimezoneSelector, TvProviders, FavoriteTeams, NotificationEmails, Subscription } from './Preferences';
+import { MapPin, Tv, Star, User, Bell, Trophy } from 'lucide-react';
 
 interface SettingsSectionProps {
     id: string;
@@ -12,16 +12,16 @@ interface SettingsSectionProps {
     children: React.ReactNode;
 }
 
-const SettingsSection: React.FC<SettingsSectionProps> = ({ 
-    id, 
-    title, 
-    description, 
-    icon, 
+const SettingsSection: React.FC<SettingsSectionProps> = ({
+    id,
+    title,
+    description,
+    icon,
     children
 }) => {
     return (
-        <section 
-            id={id} 
+        <section
+            id={id}
             className={`scroll-mt-20 py-4 xl:py-5 border-b border-gray-200`}
         >
             <div className="flex flex-row mb-3 xl:mb-4 items-start gap-2">
@@ -50,7 +50,7 @@ const Settings = () => {
     const [availableProviders, setAvailableProviders] = useState<Record<string, any>>({});
     const [activeSection, setActiveSection] = useState('location');
     const sectionsRef = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
         // Setup intersection observer for section scrolling
         const observer = new IntersectionObserver(
@@ -102,18 +102,18 @@ const Settings = () => {
 
     const fetchProviders = async (zipcode: string) => {
         if (!isValidZipcode(zipcode)) return;
-        
+
         setProvidersLoading(true);
         try {
             // This is an HTTP-only function, not a Callable function
             const response = await fetch(`/service-providers?zipcode=${zipcode}`);
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const providersData = await response.json();
-            
+
             setAvailableProviders(providersData || {});
         } catch (error) {
             console.error('Error fetching TV providers:', error);
@@ -128,7 +128,7 @@ const Settings = () => {
             setZipcode(zipcode);
             if (isValidZipcode(zipcode)) {
                 fetchProviders(zipcode);
-                await updateUserPreferences({ tvProviders: '' , zipcode });
+                await updateUserPreferences({ tvProviders: '', zipcode });
             } else {
                 setAvailableProviders({});
             }
@@ -159,11 +159,11 @@ const Settings = () => {
             const isAlreadyFavorite = userPreferences.favoriteTeams.some(
                 favoriteTeam => favoriteTeam.id === team.id && favoriteTeam.sport === team.sport
             );
-            
+
             const newFavoriteTeams = isAlreadyFavorite
                 ? userPreferences.favoriteTeams.filter(t => !(t.id === team.id && t.sport === team.sport))
                 : [...userPreferences.favoriteTeams, team];
-            
+
             await updateUserPreferences({ favoriteTeams: newFavoriteTeams });
         } catch (error) {
             console.error('Error saving favorite teams:', error);
@@ -180,18 +180,17 @@ const Settings = () => {
 
     const settingsSections = [
         { id: 'account', title: 'Account', description: 'Manage your account information', icon: <User size={20} /> },
+        { id: 'subscription', title: 'Subscription', description: 'View and manage your plan', icon: <Trophy size={20} /> },
         { id: 'location', title: 'Location', description: 'Set your location for regional sports', icon: <MapPin size={20} /> },
         { id: 'providers', title: 'TV Providers', description: 'Choose your TV providers for channel recommendations', icon: <Tv size={20} /> },
         { id: 'notifications', title: 'Notifications', description: 'Configure daily email notifications with your personalized dashboard', icon: <Bell size={20} /> },
         { id: 'teams', title: 'Favorite Teams', description: 'Select your favorite teams to prioritize their games', icon: <Star size={20} /> },
-        { id: 'privacy', title: 'Privacy', description: 'Control your privacy settings', icon: <Shield size={20} />, disabled: true },
-        { id: 'help', title: 'Help & Support', description: 'Get assistance with Slates', icon: <HelpCircle size={20} />, disabled: true }
     ];
 
     return (
         <div className="h-screen overflow-hidden relative slate-gradient">
             <Nav />
-            
+
             <div className="h-screen bg-transparent overflow-hidden">
                 <main className="h-full">
                     <div className="flex flex-row h-full">
@@ -206,15 +205,11 @@ const Settings = () => {
                                                 {settingsSections.map((section) => (
                                                     <button
                                                         key={section.id}
-                                                        onClick={() => !section.disabled && scrollToSection(section.id)}
-                                                        className={`flex items-center px-3 py-1.5 text-left transition-colors rounded-lg ${
-                                                            section.disabled 
-                                                                ? 'text-white/40 cursor-not-allowed' 
-                                                                : activeSection === section.id
-                                                                    ? 'bg-white/20 text-white'
-                                                                    : 'text-white/80 hover:bg-white/10 hover:text-white'
-                                                        }`}
-                                                        disabled={section.disabled}
+                                                        onClick={() => scrollToSection(section.id)}
+                                                        className={`flex items-center px-3 py-1.5 text-left transition-colors rounded-lg ${activeSection === section.id
+                                                            ? 'bg-white/20 text-white'
+                                                            : 'text-white/80 hover:bg-white/10 hover:text-white'
+                                                            }`}
                                                     >
                                                         <div className="mr-2.5">
                                                             {section.icon}
@@ -240,8 +235,8 @@ const Settings = () => {
                             ) : (
                                 <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 mt-3 mb-6" ref={sectionsRef}>
                                     <SettingsSection
-                                        id="account" 
-                                        title="Account" 
+                                        id="account"
+                                        title="Account"
                                         description="Manage your account information"
                                         icon={<User size={20} />}
                                     >
@@ -250,60 +245,69 @@ const Settings = () => {
                                         </div>
                                     </SettingsSection>
 
-                                    <SettingsSection 
-                                        id="location" 
-                                        title="Location" 
+                                    <SettingsSection
+                                        id="subscription"
+                                        title="Subscription"
+                                        description="View your current plan and manage billing"
+                                        icon={<Trophy size={20} />}
+                                    >
+                                        <Subscription />
+                                    </SettingsSection>
+
+                                    <SettingsSection
+                                        id="location"
+                                        title="Location"
                                         description="Set your location for regional sports information"
                                         icon={<MapPin size={20} />}
                                     >
                                         <div className="space-y-4">
-                                            <ZipcodeInput 
-                                                zipcode={zipcode} 
+                                            <ZipcodeInput
+                                                zipcode={zipcode}
                                                 onChange={handleZipcodeChange}
                                             />
-                                            <TimezoneSelector 
-                                                timezone={timezone} 
+                                            <TimezoneSelector
+                                                timezone={timezone}
                                                 onChange={handleTimezoneChange}
                                             />
                                         </div>
                                     </SettingsSection>
-                                    
-                                    <SettingsSection 
-                                        id="providers" 
-                                        title="TV Provider" 
+
+                                    <SettingsSection
+                                        id="providers"
+                                        title="TV Provider"
                                         description="Select your TV provider to see available channels"
                                         icon={<Tv size={20} />}
                                     >
-                                        <TvProviders 
-                                            selectedProviders={userPreferences.tvProviders} 
+                                        <TvProviders
+                                            selectedProviders={userPreferences.tvProviders}
                                             onSelect={handleTvProviderSelect}
                                             availableProviders={availableProviders}
                                             loading={providersLoading}
                                             hasValidZipcode={isValidZipcode(userPreferences.zipcode)}
                                         />
                                     </SettingsSection>
-                                    
-                                    <SettingsSection 
-                                        id="notifications" 
-                                        title="Notification Emails" 
+
+                                    <SettingsSection
+                                        id="notifications"
+                                        title="Notification Emails"
                                         description="Manage your notification email preferences"
                                         icon={<Bell size={20} />}
                                     >
-                                        <NotificationEmails 
-                                            notificationEmails={userPreferences.notificationEmails} 
-                                            onChange={handleNotificationEmailsChange} 
+                                        <NotificationEmails
+                                            notificationEmails={userPreferences.notificationEmails}
+                                            onChange={handleNotificationEmailsChange}
                                         />
                                     </SettingsSection>
 
-                                    <SettingsSection 
-                                        id="teams" 
-                                        title="Favorite Teams" 
+                                    <SettingsSection
+                                        id="teams"
+                                        title="Favorite Teams"
                                         description="Select your favorite teams to get personalized recommendations"
                                         icon={<Star size={20} />}
                                     >
-                                        <FavoriteTeams 
-                                            selectedTeams={userPreferences.favoriteTeams} 
-                                            onToggle={handleTeamToggle} 
+                                        <FavoriteTeams
+                                            selectedTeams={userPreferences.favoriteTeams}
+                                            onToggle={handleTeamToggle}
                                         />
                                     </SettingsSection>
                                 </div>
