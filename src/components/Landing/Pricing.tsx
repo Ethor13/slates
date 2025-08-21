@@ -27,10 +27,11 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
   const navigate = useNavigate();
   const BASE_PRICE = 20;
   const monthlyPrice = useMemo(() => {
+    if (venues >= maxVenues) return null;
     const p = BASE_PRICE - (venues - 1); // decrement $1 per additional venue
     return p < 1 ? 1 : p;
   }, [venues]);
-  const annualTotal = monthlyPrice * 10; // simple annual total (no discount) adjust as needed
+  const annualTotal = monthlyPrice ? monthlyPrice * 10 : null; // simple annual total (no discount) adjust as needed
 
   return (
     <section id="pricing" className="relative pt-28 pb-14 overflow-hidden" aria-labelledby="pricing-heading">
