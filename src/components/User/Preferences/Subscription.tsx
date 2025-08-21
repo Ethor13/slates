@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { collection, query, where, getDocs, addDoc, onSnapshot } from 'firebase/firestore';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { db } from '../../../lib/firebase';
 
 type Interval = 'month' | 'year';
@@ -14,7 +15,7 @@ interface ProductWithPrices {
         id: string;
         unit_amount: number; // cents
         currency: string;
-    active?: boolean;
+        active?: boolean;
         recurring?: { interval?: Interval };
     }>;
 }
@@ -115,7 +116,7 @@ const Subscription: React.FC = () => {
 
     const startCheckout = async (priceId: string) => {
         if (!currentUser || !priceId) return;
-        
+
         try {
             setCreatingCheckout(priceId);
             const docRef = await addDoc(
@@ -143,6 +144,13 @@ const Subscription: React.FC = () => {
         }
     };
 
+    const manageSub = async () => {
+        const functions = getFunctions();
+        const createPortalLink = httpsCallable(functions, 'ext-firestore-stripe-payments-createPortalLink');
+        const { data } = await createPortalLink({ returnUrl: window.location.href });
+        window.location.assign((data as any).url);
+    };
+
     if (hasSub) {
         return (
             <div className="flex flex-col gap-4 border border-gray-300 px-4 py-4 rounded-lg">
@@ -152,12 +160,12 @@ const Subscription: React.FC = () => {
                         <div className="text-sm text-slate-600">
                             {subCancel
                                 ? `Your subscription will expire on ${subExpiry}`
-                                : `Renews on ${subExpiry} for $${subPrice} + tax`}
+                                : `Renews on ${subExpiry}`}
                         </div>
                     </div>
                     <button
                         type="button"
-                        onClick={() => window.location.href = 'https://billing.stripe.com/p/login/test_9B68wP2xjb5C7XT4teak000'}
+                        onClick={manageSub}
                         className="h-min group flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-slate-900"
                     >
                         <span>Manage</span>
