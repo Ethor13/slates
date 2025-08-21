@@ -8,6 +8,7 @@
  */
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { onRequest } from "firebase-functions/v2/https";
+import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import admin from "firebase-admin";
 import { logger } from "firebase-functions";
 import { updateDatesData } from "./scheduledUpdater.js";
@@ -17,6 +18,7 @@ import { combine_maps } from "./helpers.js";
 import Mailgun from "mailgun.js";
 import formData from "form-data";
 import jwt from "jsonwebtoken";
+import Stripe from "stripe";
 
 
 admin.initializeApp();
@@ -30,6 +32,8 @@ db.settings({
 const storage = admin.storage();
 const auth = admin.auth();
 const mailgun = new Mailgun(formData);
+const stripeApiKey = process.env["firestore-stripe-payments-STRIPE_API_KEY"];
+const stripe = stripeApiKey ? new Stripe(stripeApiKey, { apiVersion: "2024-06-20" }) : undefined;
 
 const UPDATE_SIZE = 14;
 
@@ -251,11 +255,11 @@ const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promi
   // Get Mailgun configuration from environment variables
   const apiKey = process.env.MAILGUN_API_KEY;
   const domain = process.env.MAILGUN_DOMAIN;
-  
+
   if (!apiKey || !domain) {
-    logger.error("Mailgun configuration missing", { 
-      hasApiKey: !!apiKey, 
-      hasDomain: !!domain 
+    logger.error("Mailgun configuration missing", {
+      hasApiKey: !!apiKey,
+      hasDomain: !!domain
     });
     throw new Error("Mailgun API key or domain not configured!");
   }
@@ -263,10 +267,10 @@ const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promi
   const mg = mailgun.client({ username: "api", key: apiKey });
 
   // Get today"s date for template variables
-  const today = new Date().toLocaleDateString("en-US", { 
-    weekday: "long", 
-    month: "long", 
-    day: "numeric" 
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
   });
 
   // Customize template variables
@@ -286,8 +290,8 @@ const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promi
 
 // Internal function to generate shareable dashboard token for a specific user
 const generateDashboardTokenForUser = async (
-  userId: string, 
-  owner: boolean, 
+  userId: string,
+  owner: boolean,
   expiresIn: string = "7d"
 ): Promise<string> => {
   try {
@@ -312,13 +316,13 @@ const generateDashboardTokenForUser = async (
         preferences: userPreferences,
         type: "owner"
       };
-      
-      const token = jwt.sign(payload, jwtSecret, { 
+
+      const token = jwt.sign(payload, jwtSecret, {
         expiresIn: expiresIn,
         issuer: "slates-dashboard",
         audience: "slates-users"
       } as jwt.SignOptions);
-      
+
       const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
       const baseUrl = isEmulator ? "http://localhost:5173" : "https://slates.co";
       return `${baseUrl}/shared/${token}`;
@@ -347,8 +351,8 @@ const generateDashboardTokenForUser = async (
         preferences: userPreferencesWithoutEmails,
         type: "guest"
       };
-      
-      const token = jwt.sign(payload, jwtSecret, { 
+
+      const token = jwt.sign(payload, jwtSecret, {
         expiresIn: expiresIn,
         issuer: "slates-dashboard",
         audience: "slates-users"
@@ -386,7 +390,7 @@ const verifyDashboardToken = async (token: string): Promise<any> => {
 
 // Scheduled daily email sending at 8am Eastern Time
 export const scheduledDailyEmail = onSchedule(
-  { 
+  {
     schedule: "0 8 * * *",
     timeZone: "America/New_York",
     secrets: ["MAILGUN_API_KEY", "MAILGUN_DOMAIN", "JWT_SECRET"]
@@ -395,7 +399,7 @@ export const scheduledDailyEmail = onSchedule(
     try {
       // Get all users from the database
       const usersSnapshot = await db.collection("users").get();
-      
+
       let successCount = 0;
       let errorCount = 0;
       const errors: any[] = [];
@@ -448,7 +452,7 @@ export const scheduledDailyEmail = onSchedule(
 
 // http://127.0.0.1:5001/slates-59840/us-central1/verifyDashboardToken
 export const verifyDashboardTokenEndpoint = onRequest(
-  { 
+  {
     cors: true,
     secrets: ["JWT_SECRET"]
   },
@@ -462,15 +466,15 @@ export const verifyDashboardTokenEndpoint = onRequest(
       }
 
       const decoded = await verifyDashboardToken(token);
-      
-      res.status(200).json({ 
-        message: "Token is valid", 
+
+      res.status(200).json({
+        message: "Token is valid",
         payload: decoded,
         isExpired: false
       });
     } catch (error) {
       logger.error("Error in verifyDashboardToken:", error);
-      res.status(401).json({ 
+      res.status(401).json({
         error: "Invalid or expired token",
         isExpired: true
       });
@@ -480,7 +484,7 @@ export const verifyDashboardTokenEndpoint = onRequest(
 
 // http://127.0.0.1:5001/slates-59840/us-central1/signInWithJWT
 export const signInWithJWT = onRequest(
-  { 
+  {
     cors: true,
     secrets: ["JWT_SECRET"]
   },
@@ -495,12 +499,12 @@ export const signInWithJWT = onRequest(
 
       // Verify the JWT token
       const jwtPayload = await verifyDashboardToken(token);
-      
+
       // Create a Firebase custom token for the user
       const firebaseToken = await auth.createCustomToken(jwtPayload.userId);
-      
-      res.status(200).json({ 
-        message: "Firebase token created successfully", 
+
+      res.status(200).json({
+        message: "Firebase token created successfully",
         firebaseToken,
         userInfo: {
           userId: jwtPayload.userId,
@@ -511,7 +515,7 @@ export const signInWithJWT = onRequest(
       });
     } catch (error) {
       logger.error("Error in signInWithJWT:", error);
-      res.status(401).json({ 
+      res.status(401).json({
         error: "Failed to create Firebase token from JWT"
       });
     }
@@ -522,7 +526,7 @@ export const signInWithJWT = onRequest(
 // This could be called internally when sending daily emails to include a personalized link
 // http://127.0.0.1:5001/slates-59840/us-central1/generateDashboardLink?userid=WnFGZ9lVutaARiPUw4OFAOxWfECj
 export const generateDashboardLink = onRequest(
-  { 
+  {
     cors: true,
     secrets: ["JWT_SECRET"]
   },
@@ -546,12 +550,12 @@ export const generateDashboardLink = onRequest(
       }
 
       const shareableUrl = await generateDashboardTokenForUser(userId, false, expiresIn);
-      
+
       // This could be used to send the link via email or return it for other internal processes
-      res.status(200).json({ 
-        message: "Dashboard link generated successfully", 
+      res.status(200).json({
+        message: "Dashboard link generated successfully",
         shareableUrl,
-        expiresIn 
+        expiresIn
       });
     } catch (error) {
       logger.error("Error in generateDashboardLink:", error);
@@ -624,6 +628,56 @@ export const contactUs = onRequest(
     } catch (error) {
       logger.error("Error handling contact form submission", error);
       res.status(500).json({ error: "Failed to send message" });
+    }
+  }
+);
+
+// Firestore trigger: when a new customer doc is created -> create Stripe customer + start 30 day trial subscription
+// Expects collection path: customers/{customerId}
+export const onCustomerCreated = onDocumentCreated(
+  {
+    document: "customers/{customerId}",
+    secrets: ["firestore-stripe-payments-STRIPE_API_KEY"],
+    retry: false,
+  },
+  async (event) => {
+    const snap = event.data;
+    if (!snap) return;
+    const data = snap.data() as any;
+    if (!stripe) {
+      logger.error("Stripe not initialized. Missing firestore-stripe-payments-STRIPE_API_KEY secret.");
+      return;
+    }
+    try {
+      const { stripeId } = data || {};
+
+      if (!stripeId) {
+        logger.error("New customer document missing required stripeId field", { id: snap.id });
+        return;
+      }
+
+      // Create subscription with 30 day trial
+      const priceId = "price_1RyOQgFagUxb9Siv1hTr375a";
+
+      await stripe.subscriptions.create({
+        customer: stripeId,
+        items: [{ price: priceId }],
+        trial_period_days: 30,
+        metadata: { firebaseCustomerId: snap.id },
+        payment_behavior: "default_incomplete",
+        payment_settings: {
+          save_default_payment_method: "on_subscription",
+        },
+        trial_settings: {
+          end_behavior: {
+            missing_payment_method: "cancel",
+          },
+        },
+      });
+
+    } catch (error) {
+      logger.error("Error creating Stripe subscription for new customer", { customerId: snap.id, error });
+      await snap.ref.set({ stripeError: (error as any)?.message || String(error) }, { merge: true });
     }
   }
 );
