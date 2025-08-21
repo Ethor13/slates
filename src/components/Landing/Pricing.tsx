@@ -27,11 +27,10 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
   const navigate = useNavigate();
   const BASE_PRICE = 20;
   const monthlyPrice = useMemo(() => {
-    if (venues >= maxVenues) return null; // contact sales threshold
     const p = BASE_PRICE - (venues - 1); // decrement $1 per additional venue
     return p < 1 ? 1 : p;
-  }, [venues, maxVenues]);
-  const annualTotal = monthlyPrice !== null ? monthlyPrice * 10 : null; // simple annual total (no discount) adjust as needed
+  }, [venues]);
+  const annualTotal = monthlyPrice * 10; // simple annual total (no discount) adjust as needed
 
   return (
     <section id="pricing" className="relative pt-28 pb-14 overflow-hidden" aria-labelledby="pricing-heading">
@@ -112,9 +111,12 @@ export const Pricing = ({ maxVenues = 6 }: PricingProps) => {
                     <>
                       <div className="flex items-end gap-2">
                         <span className="text-4xl font-bold text-white tabular-nums">
-                          {billing === 'monthly' ? `$${monthlyPrice}` : `$${annualTotal}`}
+                          {billing === 'monthly' ? `$${monthlyPrice - 0.01}` : `$${annualTotal! - 0.01}`}
                         </span>
-                        <span className="text-slate-400 mb-1 text-xs">per {billing === 'monthly' ? 'month' : 'year'} per venue</span>
+                        <div className='h-full flex flex-col justify-center'>
+                          <span className="text-slate-400 text-xs leading-none">per {billing === 'monthly' ? 'month' : 'year'}</span>
+                          <span className="text-slate-400 text-xs leading-none">per venue</span>
+                        </div>
                       </div>
                     </>
                   ) : (

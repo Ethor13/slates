@@ -14,6 +14,7 @@ interface ProductWithPrices {
         id: string;
         unit_amount: number; // cents
         currency: string;
+    active?: boolean;
         recurring?: { interval?: Interval };
     }>;
 }
@@ -76,12 +77,16 @@ const Subscription: React.FC = () => {
                     const prices: ProductWithPrices['prices'] = [];
                     pricesSnap.forEach(priceDoc => {
                         const price: any = priceDoc.data();
-                        prices.push({
-                            id: priceDoc.id,
-                            unit_amount: price.unit_amount,
-                            currency: price.currency,
-                            recurring: price.recurring
-                        });
+                        // Only include active prices (Stripe extension stores 'active' flag on price docs)
+                        if (price.active) {
+                            prices.push({
+                                id: priceDoc.id,
+                                unit_amount: price.unit_amount,
+                                currency: price.currency,
+                                active: price.active,
+                                recurring: price.recurring
+                            });
+                        }
                     });
                     productResults.push({ id: p.id, name: data.name, description: data.description, prices });
                 }
