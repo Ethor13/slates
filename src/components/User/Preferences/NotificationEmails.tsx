@@ -12,6 +12,7 @@ const NotificationEmails: React.FC<NotificationEmailsProps> = ({
 }) => {
     const [newEmail, setNewEmail] = useState('');
     const [emailError, setEmailError] = useState<string | null>(null);
+    const MAX_EMAILS = 5;
 
     const isValidEmail = (email: string): boolean => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -19,6 +20,10 @@ const NotificationEmails: React.FC<NotificationEmailsProps> = ({
     };
 
     const handleAddEmail = () => {
+        if (notificationEmails.length >= MAX_EMAILS) {
+            setEmailError(`You can add up to ${MAX_EMAILS} emails`);
+            return;
+        }
         if (!newEmail.trim()) {
             setEmailError('Please enter an email address');
             return;
@@ -78,19 +83,26 @@ const NotificationEmails: React.FC<NotificationEmailsProps> = ({
                                         ? 'border-red-300 focus:ring-red-500' 
                                         : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'
                                 }`}
+                                disabled={notificationEmails.length >= MAX_EMAILS}
                             />
                         </div>
                         <button
                             onClick={handleAddEmail}
-                            disabled={!newEmail.trim()}
+                            disabled={!newEmail.trim() || notificationEmails.length >= MAX_EMAILS}
                             className="w-full sm:w-auto px-4 py-2 slate-gradient font-medium text-sm text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                         >
-                            <span>Add Email</span>
+                            <span>{notificationEmails.length >= MAX_EMAILS ? 'Limit Reached' : 'Add Email'}</span>
                         </button>
                     </div>
                     
                     {emailError && (
                         <p className="text-sm text-red-600">{emailError}</p>
+                    )}
+                    {notificationEmails.length < MAX_EMAILS && (
+                        <p className="text-xs text-gray-500">{MAX_EMAILS - notificationEmails.length} remaining</p>
+                    )}
+                    {notificationEmails.length >= MAX_EMAILS && !emailError && (
+                        <p className="text-xs text-gray-500">Maximum of {MAX_EMAILS} emails added.</p>
                     )}
                 </div>
             </div>

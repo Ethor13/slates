@@ -122,6 +122,7 @@ const Subscription: React.FC = () => {
                 collection(db, 'customers', currentUser.uid, 'checkout_sessions'),
                 {
                     price: priceId,
+                    allow_promotion_codes: true,
                     success_url: window.location.href,
                     cancel_url: window.location.href
                 }
@@ -212,7 +213,7 @@ const Subscription: React.FC = () => {
                                     type="button"
                                     disabled={creatingCheckout === price.id}
                                     onClick={() => startCheckout(price.id)}
-                                    className="px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    className="px-4 py-2 rounded-md slate-gradient text-white text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     {creatingCheckout === price.id ? 'Redirecting…' : 'Subscribe'}
                                 </button>
