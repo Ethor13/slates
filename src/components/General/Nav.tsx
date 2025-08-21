@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Menu, GalleryVertical, LogOut, Mail, Settings, X } from 'lucide-react';
@@ -16,7 +16,11 @@ const getDisplayName = (user: User) => {
     }
 };
 
-const Nav = () => {
+interface NavProps {
+    fixed?: boolean; // when true, position nav fixed at top (used on pages like Settings)
+}
+
+const Nav = ({ fixed = false }: NavProps) => {
     const { currentUser, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -48,21 +52,9 @@ const Nav = () => {
         };
     }, [isMenuOpen]);
 
-    // Function to handle smooth scrolling on landing page
-    const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
-        e.preventDefault();
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    };
-
     return (
         <>
-            <nav className="relative top-0 w-full z-40 bg-transparent h-20">
+            <nav className={`${fixed ? 'fixed top-0 left-0' : 'relative top-0'} w-full z-40 bg-transparent h-20`}> 
                 <div className="mx-auto px-4 sm:px-6">
                     <div className="flex flex-row gap-4 h-[5rem] items-center">
                         <div className="flex items-center space-x-2">
