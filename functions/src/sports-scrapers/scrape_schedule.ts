@@ -57,6 +57,7 @@ interface Link {
 
 interface Event {
     id: string;
+    season: Record<any, any>;
     date: string;
     competitions: Competition[];
     links: Link[];
@@ -124,7 +125,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
       away: teamData.away,
       date: event.competitions[0].timeValid ? event.date : "TBD",
       link: event.links?.find((link) => link.text === "Gamecast")?.href || "",
-      season: events.leagues[0].season.type.name || "",
+      season: event.season.slug === "regular-season" ? "Regular Season" : events.leagues[0].season.type.name || "",
       broadcasts: combine_maps(
         event.competitions[0].geoBroadcasts.map((broadcast) => ({
           [broadcast.media.shortName]: {

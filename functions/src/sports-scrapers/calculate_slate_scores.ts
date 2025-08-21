@@ -2,6 +2,7 @@ import { logger } from "firebase-functions";
 import { GameScores, ParsedGames, ParsedTeams } from "../types.js";
 import { ParsedGame, GameTeams } from "../types.js";
 import teamPopularityData from "../data/team_popularity.json" with { type: "json" };
+import conferenceData from "../data/conferences.json" with { type: "json" };
 
 // Define TypeScript interfaces for team popularity data
 interface TeamPopularityInfo {
@@ -13,6 +14,12 @@ interface TeamPopularityInfo {
 interface TeamPopularityData {
   [sport: string]: {
     [teamId: string]: TeamPopularityInfo;
+  };
+}
+
+interface ConferenceStrengthData {
+  [sport: string]: {
+    [conference: string]: number;
   };
 }
 
@@ -29,6 +36,7 @@ interface Weights {
   powerIndex: number;
   spread: number;
   popularity: number;
+  conference: number;
 }
 
 interface CategoryConfig {
@@ -53,6 +61,7 @@ const CONFIG: ConfigType = {
         powerIndex: 3,
         spread: 1,
         popularity: 1,
+        conference: 1,
       },
       scalingFactors: {
         powerIndex: {
@@ -71,7 +80,7 @@ const CONFIG: ConfigType = {
         ncaambb: 0.50,
         nhl: 0.50,
         nfl: 0.80,
-        ncaaf: 0.60,
+        ncaaf: 0.50,
       },
       getInterestScoreFunc: calculateInterestScoreAllData,
     },
@@ -102,6 +111,25 @@ function calculateWinPercentage(record: string, pseudo: number = 2): number {
 }
 
 const teamPopularityMap = teamPopularityData as TeamPopularityData;
+
+// Normalize conference strengths (per sport) to 0-1 range
+const conferenceStrengthRaw = conferenceData as ConferenceStrengthData;
+const normalizedConferenceStrength: ConferenceStrengthData = {};
+for (const [sport, confMap] of Object.entries(conferenceStrengthRaw)) {
+  const values = Object.values(confMap).filter(v => typeof v === "number");
+  if (values.length === 0) continue;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min;
+  normalizedConferenceStrength[sport] = {} as Record<string, number>;
+  for (const [conf, val] of Object.entries(confMap)) {
+    if (range === 0) {
+      normalizedConferenceStrength[sport][conf] = 0.5; // fallback if all equal
+    } else {
+      normalizedConferenceStrength[sport][conf] = (val - min) / range;
+    }
+  }
+}
 
 // Calculate average popularity for each sport
 const medSportsPopularity = new Map<string, number>();
@@ -162,6 +190,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const { record: awayRecord } = game.away;
     const { matchupQualities: homeMQ = {} } = game.home.metrics;
     const { matchupQualities: awayMQ = {} } = game.away.metrics;
+    const { conference: homeConf } = gameTeams.home;
+    const { conference: awayConf } = gameTeams.away;
     const { powerIndexes: homePI = {} } = gameTeams.home?.metrics || {};
     const { powerIndexes: awayPI = {} } = gameTeams.away?.metrics || {};
 
@@ -223,13 +253,24 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       // Calculate total popularity (Instagram + X followers) for each team
       const homePopularityScore = homePopularity.instagramFollowers + homePopularity.xFollowers;
       const awayPopularityScore = awayPopularity.instagramFollowers + awayPopularity.xFollowers;
-      
+
       const medPopularity = medSportsPopularity.get(sport)!;
       const homeNormalizedScore = sigmoid(homePopularityScore, medPopularity / 2, medPopularity);
       const awayNormalizedScore = sigmoid(awayPopularityScore, medPopularity / 2, medPopularity);
       const averagePopularity = homeNormalizedScore + awayNormalizedScore - 1;
       rawSlateScore += averagePopularity * config.weights.popularity * weightStrength;
       components.popularity = { value: averagePopularity, weight: config.weights.popularity * weightStrength };
+    }
+
+    // NCAA Conference Component
+    if ((sport as string).startsWith("ncaa")) {
+      const sportConferenceStrengths = normalizedConferenceStrength[sport] || {};
+      const homeStrength = sportConferenceStrengths[homeConf as any as string] || 0;
+      const awayStrength = sportConferenceStrengths[awayConf as any as string] || 0;
+
+      const conferenceScore = homeStrength + awayStrength - 1;
+      rawSlateScore += conferenceScore * config.weights.conference * weightStrength;
+      components.conference = { value: conferenceScore, weight: config.weights.conference * weightStrength };
     }
 
     return {
@@ -260,7 +301,7 @@ export async function scoreSportsGames(sport: string, games: ParsedGames, teams:
         away: teams[game.away.id],
       }
       const scoreDetails = sport_config.getInterestScoreFunc(game, gameTeams);
-      res[gameId] = { slateScore: scoreDetails.slateScore || -1, scoreComponents: scoreDetails.components};
+      res[gameId] = { slateScore: scoreDetails.slateScore || -1, scoreComponents: scoreDetails.components };
     });
 
     return res;

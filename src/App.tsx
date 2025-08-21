@@ -5,7 +5,6 @@ import Dashboard from './components/User/Dashboard';
 import Settings from './components/User/Settings';
 import SharedDashboard from './components/User/SharedDashboard';
 import LandingPage from './components/Landing/LandingPage';
-import ManageSubscription from './components/User/ManageSubscription';
 
 function App() {
   return (
@@ -26,14 +25,6 @@ function App() {
         element={
           <ProtectedRoute redirectTemp={true}>
             <Settings />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/manage-subscription"
-        element={
-          <ProtectedRoute redirectTemp={true}>
-            <ManageSubscription />
           </ProtectedRoute>
         }
       />
