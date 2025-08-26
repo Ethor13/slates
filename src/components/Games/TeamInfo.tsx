@@ -20,7 +20,10 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ team, isAway }) => {
         <></>
       }
       <div className="w-full h-full flex flex-col justify-center text-center overflow-hidden">
-        <div className="text-sm print:text-sm md:text-base font-semibold truncate">{team.shortName}</div>
+        <div className="flex flex-row items-center justify-center gap-1">
+          {team.rank && team.rank <= 25 ? <p className="text-slate-400 text-xs">{team.rank}</p> : null}
+          <div className="text-sm print:text-sm md:text-base font-semibold truncate">{team.shortName}</div>
+        </div>
         {!isTBD && (
           <div className="text-xs text-[clamp(0.75rem,1.5rem)] text-gray-600 truncate print:hidden">
             <span>{team.record}</span>

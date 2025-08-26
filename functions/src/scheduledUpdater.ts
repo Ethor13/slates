@@ -201,8 +201,8 @@ async function calculateScores(gamesData: GamesData, teamsData: TeamsData): Prom
 function addColorsToGamesData(gamesData: GamesData, teamsData: TeamsData): void {
   try {
     const tbdColors = {
-      primary: "#000000",
-      alternate: "#000000"
+      primary: "888888",
+      alternate: "888888"
     }
 
     for (const sport of Object.values(Sports)) {

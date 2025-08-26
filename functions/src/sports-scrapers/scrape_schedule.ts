@@ -20,6 +20,7 @@ interface Team {
         logo: string;
     };
     homeAway: "home" | "away";
+    curatedRank: { current: number } | null;
     records: Array<{
         type: string;
         summary: string;
@@ -114,6 +115,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
           abbreviation: team.team.abbreviation,
           logo: team.team.logo?.split(".com/").at(-1) as string,
           record: team.records?.find((record) => record.type === "total")?.summary || "",
+          rank: team.curatedRank?.current || null,
           metrics: {},
         },
       })),

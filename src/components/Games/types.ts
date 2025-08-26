@@ -32,6 +32,7 @@ export interface Team {
   record?: string;
   logo?: string;
   matchupQualities?: Record<string, number>;
+  rank: number | null;
   colors: {
     primary: string;
     alternate: string;
