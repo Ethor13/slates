@@ -37,6 +37,7 @@ interface Weights {
   spread: number;
   popularity: number;
   conference: number;
+  rank: number;
 }
 
 interface CategoryConfig {
@@ -62,6 +63,7 @@ const CONFIG: ConfigType = {
         spread: 1,
         popularity: 1,
         conference: 1,
+        rank: 1,
       },
       scalingFactors: {
         powerIndex: {
@@ -186,8 +188,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const config = CONFIG.categories.allData;
 
     const { sport, season } = game;
-    const { record: homeRecord } = game.home;
-    const { record: awayRecord } = game.away;
+    const { record: homeRecord, rank: homeRank } = game.home;
+    const { record: awayRecord, rank: awayRank } = game.away;
     const { matchupQualities: homeMQ = {} } = game.home.metrics;
     const { matchupQualities: awayMQ = {} } = game.away.metrics;
     const { conference: homeConf = "" as any as TeamMetric } = gameTeams.home || {};
@@ -275,6 +277,12 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       const conferenceScore = homeStrength + awayStrength - 1;
       rawSlateScore += conferenceScore * config.weights.conference * weightStrength;
       components.conference = { value: conferenceScore, weight: config.weights.conference * weightStrength };
+
+      const homeRankAdj = (homeRank && homeRank <= 25) ? (26 - homeRank) / 25 : 0;
+      const awayRankAdj = (awayRank && awayRank <= 25) ? (26 - awayRank) / 25 : 0;
+      const rankScore = homeRankAdj + awayRankAdj - 1;
+      rawSlateScore += rankScore * config.weights.rank * weightStrength;
+      components.rank = { value: rankScore, weight: config.weights.rank * weightStrength };
     }
 
     return {
