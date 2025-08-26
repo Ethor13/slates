@@ -1,5 +1,5 @@
 import { logger } from "firebase-functions";
-import { GameScores, ParsedGames, ParsedTeams } from "../types.js";
+import { GameScores, ParsedGames, ParsedTeams, TeamMetric } from "../types.js";
 import { ParsedGame, GameTeams } from "../types.js";
 import teamPopularityData from "../data/team_popularity.json" with { type: "json" };
 import conferenceData from "../data/conferences.json" with { type: "json" };
@@ -190,8 +190,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const { record: awayRecord } = game.away;
     const { matchupQualities: homeMQ = {} } = game.home.metrics;
     const { matchupQualities: awayMQ = {} } = game.away.metrics;
-    const { conference: homeConf } = gameTeams.home;
-    const { conference: awayConf } = gameTeams.away;
+    const { conference: homeConf = "" as any as TeamMetric } = gameTeams.home || {};
+    const { conference: awayConf = "" as any as TeamMetric } = gameTeams.away || {};
     const { powerIndexes: homePI = {} } = gameTeams.home?.metrics || {};
     const { powerIndexes: awayPI = {} } = gameTeams.away?.metrics || {};
 
@@ -264,9 +264,13 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
 
     // NCAA Conference Component
     if ((sport as string).startsWith("ncaa")) {
+      // change ND conference to ACC
+      const homeConfAdj = (game.home?.shortName as any as string) === "Notre Dame" ? "ACC" : homeConf;
+      const awayConfAdj = (game.away?.shortName as any as string) === "Notre Dame" ? "ACC" : awayConf;
+
       const sportConferenceStrengths = normalizedConferenceStrength[sport] || {};
-      const homeStrength = sportConferenceStrengths[homeConf as any as string] || 0;
-      const awayStrength = sportConferenceStrengths[awayConf as any as string] || 0;
+      const homeStrength = sportConferenceStrengths[homeConfAdj as any as string] || 0;
+      const awayStrength = sportConferenceStrengths[awayConfAdj as any as string] || 0;
 
       const conferenceScore = homeStrength + awayStrength - 1;
       rawSlateScore += conferenceScore * config.weights.conference * weightStrength;
@@ -279,6 +283,8 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     };
   } catch (error) {
     logger.error("Error calculating interest score:", error);
+    logger.info(game);
+    logger.info(gameTeams);
     throw new Error("Error calculating interest score");
   }
 }

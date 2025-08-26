@@ -15,29 +15,42 @@ const Subscription: React.FC = () => {
     const [subExpiry, setSubExpiry] = useState<string | null>(null);
     const [subStatus, setSubStatus] = useState<string | null>(null); // active | trialing | null
     const [creatingCheckout, setCreatingCheckout] = useState<string | null>(null); // priceId in progress
+    const [isLoadingSub, setIsLoadingSub] = useState<boolean>(true);
 
     useEffect(() => {
-        if (!currentUser) return;
+        if (!currentUser) {
+            setIsLoadingSub(false);
+            return;
+        }
         const getSubscription = async () => {
             try {
+                setIsLoadingSub(true);
                 const subscriptionsQuery = query(
                     collection(db, 'customers', currentUser.uid, 'subscriptions'),
                     where('status', 'in', ['active', 'trialing'])
                 );
                 const querySnapshot = await getDocs(subscriptionsQuery);
-                if (querySnapshot.empty) return;
+                if (querySnapshot.empty) {
+                    setSubStatus(null);
+                    return;
+                }
 
                 const subscriptionData: any = querySnapshot.docs[0].data();
                 setSubName(subscriptionData.items[0].price.product.name);
-                setSubStatus(subscriptionData.status);
-                if (subStatus == "trialing") {
+                const status: string = subscriptionData.status;
+                setSubStatus(status);
+                if (status === 'trialing' && subscriptionData.trial_end) {
                     setSubExpiry(subscriptionData.trial_end.toDate().toLocaleDateString());
-                } else {
+                } else if (subscriptionData.current_period_end) {
                     setSubExpiry(subscriptionData.current_period_end.toDate().toLocaleDateString());
+                } else {
+                    setSubExpiry(null);
                 }
                 setSubCancel(subscriptionData.cancel_at_period_end);
             } catch (e) {
                 // If subscription fetch fails, treat as no sub so user can attempt purchase
+            } finally {
+                setIsLoadingSub(false);
             }
         };
         getSubscription();
@@ -84,44 +97,52 @@ const Subscription: React.FC = () => {
 
     return (
         <div className="flex flex-col gap-4 border border-gray-300 px-4 py-4 rounded-lg">
-            <div className="flex flex-row gap-3 justify-between items-center">
-                <div className='flex flex-col'>
-                    <div className="text-xl font-bold text-slate-600 leading-snug">{subStatus === 'active' ? subName : subStatus === "trialing" ? `Free Trial ends on ${subExpiry}` : "No Active Subscription Found"}</div>
-                    <div className="text-sm text-slate-600">
+            {isLoadingSub ? (
+                <div className="flex items-center justify-center py-1">
+                    <div className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-slate-600 animate-spin" aria-label="Loading subscription" />
+                </div>
+            ) : (
+                <div className="flex flex-row gap-3 justify-between items-center">
+                    <div className='flex flex-col'>
+                        <div className="text-xl font-bold text-slate-600 leading-snug">{subStatus === 'active' ? subName : subStatus === "trialing" ? `Free Trial ends on ${subExpiry}` : "No Active Subscription Found"}</div>
+                        <div className="text-sm text-slate-600">
+                            {
+                                subStatus === 'trialing'
+                                    ? "Manage your plan to continue your subscription at the end of the free trial"
+                                    : subCancel
+                                        ? `Your subscription will expire on ${subExpiry}`
+                                        : subStatus === 'active' && subExpiry
+                                            ? `Renews on ${subExpiry}`
+                                            : "Manage your plan to activate your subscription"
+                            }
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <button
+                            type="button"
+                            disabled={isLoadingSub}
+                            onClick={() => { subStatus === 'active' || subStatus === 'trialing' ?  manageSub() : startCheckout(YEARLY_PRICE_ID) }}
+                            className={`h-min group flex justify-center items-center gap-2 text-sm font-medium text-slate-700 hover:bg-slate-light/20 py-1 px-2 rounded-full ${creatingCheckout && creatingCheckout != MONTHLY_PRICE_ID ? "bg-slate-light/50 animate-pulse pointer-events-none" : ""} ${isLoadingSub ? 'opacity-60 pointer-events-none' : ''}`}
+                        >
+                            <span>{creatingCheckout && creatingCheckout != MONTHLY_PRICE_ID ? "Redirecting..." : subStatus === 'active' ? 'Manage' : subStatus === "trialing" ? "Start a Subscription" : 'Start a Yearly Subscription'}</span>
+                            <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+                        </button>
                         {
-                            subStatus === 'trialing'
-                                ? "Manage your plan to continue your subscription at the end of the free trial"
-                                : subCancel
-                                    ? `Your subscription will expire on ${subExpiry}`
-                                    : subExpiry
-                                        ? `Renews on ${subExpiry}`
-                                        : "Manage your plan to activate your subscription"
+                            subStatus !== "active" && subStatus !== "trialing" && (
+                                <button
+                                    type="button"
+                                    disabled={isLoadingSub}
+                                    onClick={() => startCheckout(MONTHLY_PRICE_ID) }
+                                    className={`h-min group flex items-center justify-center gap-2 text-sm font-medium text-slate-700 hover:bg-slate-light/20 py-1 px-2 rounded-full ${creatingCheckout && creatingCheckout == MONTHLY_PRICE_ID ? "bg-slate-light/50 animate-pulse pointer-events-none" : ""} ${isLoadingSub ? 'opacity-60 pointer-events-none' : ''}`}
+                                >
+                                    <span>{creatingCheckout && creatingCheckout == MONTHLY_PRICE_ID ? "Redirecting..." : subStatus === 'active' ? 'Manage' : 'Start a Monthly Subscription'}</span>
+                                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+                                </button>
+                            )
                         }
                     </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <button
-                        type="button"
-                        onClick={() => { subStatus === 'active' || subStatus === 'trialing' ?  manageSub() : startCheckout(YEARLY_PRICE_ID) }}
-                        className={`h-min group flex justify-center items-center gap-2 text-sm font-medium text-slate-700 hover:bg-slate-light/20 py-1 px-2 rounded-full ${creatingCheckout && creatingCheckout != MONTHLY_PRICE_ID ? "bg-slate-light/50 animate-pulse pointer-events-none" : ""}`}
-                    >
-                        <span>{creatingCheckout && creatingCheckout != MONTHLY_PRICE_ID ? "Redirecting..." : subStatus === 'active' ? 'Manage' : subStatus === "trialing" ? "Start a Subscription" : 'Start a Yearly Subscription'}</span>
-                        <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-                    </button>
-                    {
-                        subStatus !== "active" && subStatus !== "trialing" && (
-                            <button
-                                type="button"
-                                onClick={() => startCheckout(MONTHLY_PRICE_ID) }
-                                className={`h-min group flex items-center justify-center gap-2 text-sm font-medium text-slate-700 hover:bg-slate-light/20 py-1 px-2 rounded-full ${creatingCheckout && creatingCheckout == MONTHLY_PRICE_ID ? "bg-slate-light/50 animate-pulse pointer-events-none" : ""}`}
-                            >
-                                <span>{creatingCheckout && creatingCheckout == MONTHLY_PRICE_ID ? "Redirecting..." : subStatus === 'active' ? 'Manage' : 'Start a Monthly Subscription'}</span>
-                                <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-                            </button>
-                        )
-                    }
-                </div>
-            </div>
+            )}
         </div>
     );
 };
