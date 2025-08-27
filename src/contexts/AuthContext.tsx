@@ -84,7 +84,7 @@ const getDefaultPreferences = (): UserPreferences => ({
     tvProviders: '',
     favoriteTeams: [],
     notificationEmails: [],
-    showOnlyAvailableBroadcasts: true,
+    showOnlyAvailableBroadcasts: false,
     initializedAccount: false
 });
 

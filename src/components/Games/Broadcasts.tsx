@@ -145,9 +145,7 @@ const Broadcasts: React.FC<BroadcastsProps> = ({ broadcasts, gameId }) => {
 
 export const BroadcastsHeader: React.FC = () => {
   const { userPreferences } = useAuth();
-  if (!userPreferences.tvProviders) {
-    return null;
-  }
+
   return (
     <div className="w-full grid pl-[3.5rem] print:pl-[3rem] xl:grid-cols-[8fr_4rem_10fr] print:grid-cols-[6fr_2rem_6fr] items-center">
       <div />
@@ -155,11 +153,15 @@ export const BroadcastsHeader: React.FC = () => {
       <div className="print:pl-[2px] flex items-center text-base print:text-sm font-medium text-black divide-x">
         <div className="h-full flex-grow-[2] basis-0 flex divide-x w-full min-w-0">
           <div className="flex-1 w-full h-full flex items-center justify-center">
-            <span>Channel</span>
+            <span>Channels</span>
           </div>
-          <div className="min-w-0 flex-1 h-full flex items-center justify-center">
-            <span className="h-full w-full truncate text-center px-1">Number</span>
-          </div>
+          {
+            userPreferences.tvProviders && (
+              <div className="min-w-0 flex-1 h-full flex items-center justify-center">
+                <span className="h-full w-full truncate text-center px-1">Number</span>
+              </div>
+            )
+          }
           <div className="flex-1 h-full flex items-center justify-center min-w-0"><span className="truncate px-1">Streams</span></div>
         </div>
       </div>
