@@ -93,7 +93,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const setUserPreferencesFromFirestore = async () => {
             setPreferencesLoading(true);
 
-            if (!currentUser || userLoading) {
+            // While auth state is still resolving, don't touch preferences yet.
+            // Resetting to defaults here can trigger child effects that write default values back to Firestore.
+            if (userLoading) {
+                return;
+            }
+
+            // After auth is resolved: if no user, expose defaults in memory and stop.
+            if (!currentUser) {
                 setUserPreferences(getDefaultPreferences());
                 setPreferencesLoading(false);
                 return;
@@ -210,10 +217,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!currentUser) throw new Error('No user is signed in');
 
         try {
-            const newPreferences = { ...userPreferences, ...preferences };
-            setUserPreferences(newPreferences);
+            // Update local state optimistically
+            setUserPreferences((prev) => ({ ...prev, ...preferences }));
             const userDocRef = doc(db, 'users', currentUser.uid);
-            await setDoc(userDocRef, newPreferences);
+            // Write only the changed fields and merge to avoid overwriting existing prefs
+            await setDoc(userDocRef, preferences as any, { merge: true });
         } catch (error) {
             console.error('Error updating user preferences:', error);
             throw error;
