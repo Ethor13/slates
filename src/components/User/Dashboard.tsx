@@ -37,6 +37,10 @@ const addGameMetadata = (games: ScheduleResponse, favoriteTeams: Record<string, 
 const Dashboard = () => {
     const { currentUser, userPreferences, preferencesLoading } = useAuth();
 
+    // Subscription/claims state
+    const [claimsLoading, setClaimsLoading] = useState<boolean>(true);
+    const [hasSubscription, setHasSubscription] = useState<boolean>(false);
+
     const [allGames, setAllGames] = useState<ScheduleResponse>({});
     const [games, setGames] = useState<ScheduleResponse>({});
     const [gamesLoading, setGamesLoading] = useState<boolean>(false);
@@ -60,6 +64,14 @@ const Dashboard = () => {
     // Fetch games data using Cloud Functions
     const fetchAllGamesOnDate = useCallback(async () => {
         if (!currentUser || preferencesLoading) return;
+
+        // If the user doesn't have a valid subscription, don't fetch games
+        if (!hasSubscription) {
+            setAllGames({});
+            setGames({});
+            setHasFetchedGames(false);
+            return;
+        }
 
         // Determine if selectedDate is beyond 14-day window (today + 13 days)
         const today = new Date();
@@ -102,7 +114,7 @@ const Dashboard = () => {
             setGamesLoading(false);
             setHasFetchedGames(true);
         }
-    }, [currentUser, selectedDate, preferencesLoading, userPreferences.favoriteTeams, userPreferences.zipcode]);
+    }, [currentUser, selectedDate, preferencesLoading, userPreferences.favoriteTeams, userPreferences.zipcode, hasSubscription]);
 
     // Clear games on sign out
     useEffect(() => {
@@ -110,6 +122,34 @@ const Dashboard = () => {
             setAllGames({});
             setGames({});
         }
+    }, [currentUser]);
+
+    // Load Firebase custom claims for subscription status
+    useEffect(() => {
+        let isMounted = true;
+        const loadClaims = async () => {
+            // If no user, reset state
+            if (!currentUser) {
+                if (isMounted) {
+                    setHasSubscription(false);
+                    setClaimsLoading(false);
+                }
+                return;
+            }
+            setClaimsLoading(true);
+            try {
+                const tokenResult = await currentUser.getIdTokenResult(true);
+                if (isMounted) setHasSubscription(tokenResult.claims.stripeRole === 'subscribed');
+            } catch (e) {
+                console.error('Error loading user claims:', e);
+                if (isMounted) setHasSubscription(false);
+            } finally {
+                if (isMounted) setClaimsLoading(false);
+            }
+        };
+
+        loadClaims();
+        return () => { isMounted = false; };
     }, [currentUser]);
 
     useEffect(() => {
@@ -332,21 +372,39 @@ const Dashboard = () => {
                                         </div>
                                     </div>
 
-                                    {/* Conditionally render GamePulseChart in print based on toggle */}
-                                    <div className={`hidden mt-6 md:block print:mt-0 print:mb-2 ${includeGamePulseInPrint ? 'print:block' : 'print:hidden'}`}>
-                                        <GamePulseChart games={games} timezone={userPreferences.timezone} />
-                                    </div>
-                                    <GamesList
-                                        games={games}
-                                        sortBy={sortBy}
-                                        setSortBy={handleSetSortBy}
-                                        secondarySort={secondarySort}
-                                        setSecondarySort={setSecondarySort}
-                                        selectedDate={selectedDate}
-                                        timezone={userPreferences.timezone}
-                                        gamesLoading={gamesLoading}
-                                        hasFetchedGames={hasFetchedGames}
-                                    />
+                                    {/* Subscription gate: show message if no active subscription */}
+                                    {claimsLoading ? (
+                                        <div className="flex justify-center py-8">
+                                            <div className="flex w-full h-[calc(100vh-12rem)] items-center justify-center">
+                                                <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-600 border-t-transparent"></div>
+                                            </div>
+                                        </div>
+                                    ) : !hasSubscription ? (
+                                        <div className="flex items-center justify-center h-full">
+                                            <div className="w-full h-40 text-center p-6 text-lg text-gray-600 rounded-lg mx-auto flex flex-col justify-center">
+                                                <p className="font-semibold mb-2">Subscription not found</p>
+                                                <p className="text-sm">An active subscription is required to view the slate. If you believe this is a mistake, try signing out and back in, or contact support.</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {/* Conditionally render GamePulseChart in print based on toggle */}
+                                            <div className={`hidden mt-6 md:block print:mt-0 print:mb-2 ${includeGamePulseInPrint ? 'print:block' : 'print:hidden'}`}>
+                                                <GamePulseChart games={games} timezone={userPreferences.timezone} />
+                                            </div>
+                                            <GamesList
+                                                games={games}
+                                                sortBy={sortBy}
+                                                setSortBy={handleSetSortBy}
+                                                secondarySort={secondarySort}
+                                                setSecondarySort={setSecondarySort}
+                                                selectedDate={selectedDate}
+                                                timezone={userPreferences.timezone}
+                                                gamesLoading={gamesLoading}
+                                                hasFetchedGames={hasFetchedGames}
+                                            />
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
