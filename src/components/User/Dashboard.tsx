@@ -382,8 +382,8 @@ const Dashboard = () => {
                                     ) : !hasSubscription ? (
                                         <div className="flex items-center justify-center h-full">
                                             <div className="w-full h-40 text-center p-6 text-lg text-gray-600 rounded-lg mx-auto flex flex-col justify-center">
-                                                <p className="font-semibold mb-2">Subscription not found</p>
-                                                <p className="text-sm">An active subscription is required to view the slate. If you believe this is a mistake, try signing out and back in, or contact support.</p>
+                                                <p className="font-semibold mb-2">Your Subscription has Expired</p>
+                                                <p className="text-sm">An active subscription is required to view the slate. If you believe this is a mistake, try signing out and back in, or contact support</p>
                                             </div>
                                         </div>
                                     ) : (

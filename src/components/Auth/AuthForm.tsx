@@ -39,7 +39,7 @@ export default function AuthForm() {
         try {
             if (mode === 'signup') {
                 await signUp(email, password);
-                navigate('/dashboard');
+                navigate('/onboarding');
             } else {
                 await signIn(email, password);
                 navigate('/dashboard');

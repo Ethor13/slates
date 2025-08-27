@@ -15,12 +15,22 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 // Define UserPreferences interface
 interface UserPreferences {
+    // Onboarding / user details
+    firstName: string;
+    lastName: string;
+    venueName: string;
+    venueAddress: string;
+    venueState: string;
     zipcode: string;
+    role: string;
+    // Existing preferences
     timezone: string;
     tvProviders: string; // Changed from Record<string, string> to single providerId string
     favoriteTeams: Record<string, string>[];
     notificationEmails: string[];
     showOnlyAvailableBroadcasts: boolean;
+    // Account initialization status
+    initializedAccount: boolean;
 }
 
 export interface Channel {
@@ -63,12 +73,19 @@ export const useAuth = () => {
 };
 
 const getDefaultPreferences = (): UserPreferences => ({
+    firstName: '',
+    lastName: '',
+    venueName: '',
+    venueAddress: '',
+    venueState: '',
     zipcode: '',
+    role: '',
     timezone: '',
     tvProviders: '',
     favoriteTeams: [],
     notificationEmails: [],
-    showOnlyAvailableBroadcasts: true
+    showOnlyAvailableBroadcasts: true,
+    initializedAccount: false
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -124,11 +141,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         const keys = Object.keys(userData.tvProviders);
                         if (keys.length) tvProviders = keys[0];
                     }
-                    setUserPreferences({
+                    const merged = {
                         ...getDefaultPreferences(),
                         ...userData,
                         tvProviders // ensure new single-string field
-                    });
+                    };
+                    // Backfill missing initializedAccount for legacy users
+                    if (typeof (merged as any).initializedAccount !== 'boolean') {
+                        (merged as any).initializedAccount = false;
+                    }
+                    setUserPreferences(merged as any);
                 }
             } catch (error) {
                 console.error(`Error setting up preferences listener for ${currentUser?.email}:`, error);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../General/Nav';
-import { ZipcodeInput, TimezoneSelector, TvProviders, FavoriteTeams, NotificationEmails, Subscription } from './Preferences';
+import { ZipcodeInput, TimezoneSelector, TvProviders, FavoriteTeams, NotificationEmails, Subscription, StateSelector } from './Preferences';
 import { MapPin, Tv, Star, User, Bell, Trophy } from 'lucide-react';
 
 interface SettingsSectionProps {
@@ -47,9 +47,17 @@ const Settings = () => {
     const [providersLoading, setProvidersLoading] = useState(false);
     const [zipcode, setZipcode] = useState(userPreferences.zipcode);
     const [timezone, setTimezone] = useState(userPreferences.timezone);
+    const [firstName, setFirstName] = useState(userPreferences.firstName || '');
+    const [lastName, setLastName] = useState(userPreferences.lastName || '');
+    const [venueName, setVenueName] = useState(userPreferences.venueName || '');
+    const [role, setRole] = useState((userPreferences as any).role || '');
+    const [venueAddress, setVenueAddress] = useState(userPreferences.venueAddress || '');
+    const [venueState, setVenueState] = useState(userPreferences.venueState || '');
     const [availableProviders, setAvailableProviders] = useState<Record<string, any>>({});
     const [activeSection, setActiveSection] = useState('location');
     const sectionsRef = useRef<HTMLDivElement>(null);
+
+    
 
     useEffect(() => {
         // Setup intersection observer for section scrolling
@@ -88,7 +96,20 @@ const Settings = () => {
     useEffect(() => {
         setZipcode(userPreferences.zipcode);
         setTimezone(userPreferences.timezone);
-    }, [userPreferences.zipcode, userPreferences.timezone]);
+        setFirstName(userPreferences.firstName || '');
+        setLastName(userPreferences.lastName || '');
+        setVenueName(userPreferences.venueName || '');
+        setVenueAddress(userPreferences.venueAddress || '');
+        setVenueState(userPreferences.venueState || '');
+    setRole((userPreferences as any).role || '');
+    }, [
+        userPreferences.zipcode,
+        userPreferences.timezone,
+        userPreferences.firstName,
+        userPreferences.lastName,
+        userPreferences.venueName,
+    userPreferences.venueAddress
+    ]);
 
     const scrollToSection = (sectionId: string) => {
         const section = document.getElementById(sectionId);
@@ -145,6 +166,30 @@ const Settings = () => {
             console.error('Error saving timezone:', error);
         }
     }, [updateUserPreferences]);
+
+    const handleAccountFieldBlur = async (field: 'firstName' | 'lastName' | 'venueName' | 'role', value: string) => {
+        try {
+            await updateUserPreferences({ [field]: value } as any);
+        } catch (error) {
+            console.error(`Error saving ${field}:`, error);
+        }
+    };
+
+    const handleVenueAddressBlur = async (value: string) => {
+        try {
+            await updateUserPreferences({ venueAddress: value });
+        } catch (error) {
+            console.error('Error saving venue address:', error);
+        }
+    };
+
+    const handleVenueStateBlur = async (value: string) => {
+        try {
+            await updateUserPreferences({ venueState: value.toUpperCase() });
+        } catch (error) {
+            console.error('Error saving venue state:', error);
+        }
+    };
 
     const handleTvProviderSelect = async (providerId: string) => {
         try {
@@ -240,8 +285,61 @@ const Settings = () => {
                                         description="Manage your account information"
                                         icon={<User size={20} />}
                                     >
-                                        <div className='text-lg'>
-                                            {currentUser?.email}
+                                        <div className='space-y-4'>
+                                            <div>
+                                                <div className='text-sm font-medium'>Email</div>
+                                                <div className='text-sm'>{currentUser?.email}</div>
+                                            </div>
+                                            <div className="flex flex-col gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium">First name</label>
+                                                    <div className="mt-1">
+                                                        <input
+                                                            className="px-3 py-1.5 w-50 text-sm bg-transparent shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block border border-gray-300 rounded-md selection:bg-blue-100"
+                                                            value={firstName}
+                                                            onChange={(e) => setFirstName(e.target.value)}
+                                                            onBlur={(e) => handleAccountFieldBlur('firstName', e.target.value)}
+                                                            placeholder="Jane"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium">Last name</label>
+                                                    <div className="mt-1">
+                                                        <input
+                                                            className="px-3 py-1.5 w-50 text-sm bg-transparent shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block border border-gray-300 rounded-md selection:bg-blue-100"
+                                                            value={lastName}
+                                                            onChange={(e) => setLastName(e.target.value)}
+                                                            onBlur={(e) => handleAccountFieldBlur('lastName', e.target.value)}
+                                                            placeholder="Doe"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium">Venue</label>
+                                                    <div className="mt-1">
+                                                        <input
+                                                            className="px-3 py-1.5 w-50 text-sm bg-transparent shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block border border-gray-300 rounded-md selection:bg-blue-100"
+                                                            value={venueName}
+                                                            onChange={(e) => setVenueName(e.target.value)}
+                                                            onBlur={(e) => handleAccountFieldBlur('venueName', e.target.value)}
+                                                            placeholder="My Sports Bar"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium">Role</label>
+                                                    <div className="mt-1">
+                                                        <input
+                                                            className="px-3 py-1.5 w-50 text-sm bg-transparent shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block border border-gray-300 rounded-md selection:bg-blue-100"
+                                                            value={role}
+                                                            onChange={(e) => setRole(e.target.value)}
+                                                            onBlur={(e) => handleAccountFieldBlur('role', e.target.value)}
+                                                            placeholder="e.g., Owner, Manager"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </SettingsSection>
 
@@ -261,6 +359,23 @@ const Settings = () => {
                                         icon={<MapPin size={20} />}
                                     >
                                         <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-sm font-medium">Street Address</label>
+                                                <div className="mt-1">
+                                                    <input
+                                                        className="px-3 py-1.5 w-[20rem] text-sm bg-transparent shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 block border border-gray-300 rounded-md selection:bg-blue-100"
+                                                        value={venueAddress}
+                                                        onChange={(e) => setVenueAddress(e.target.value)}
+                                                        onBlur={(e) => handleVenueAddressBlur(e.target.value)}
+                                                        placeholder="123 Main St, Suite 100"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <StateSelector
+                                                value={venueState}
+                                                onChange={setVenueState}
+                                                onBlur={(v) => handleVenueStateBlur(v)}
+                                            />
                                             <ZipcodeInput
                                                 zipcode={zipcode}
                                                 onChange={handleZipcodeChange}

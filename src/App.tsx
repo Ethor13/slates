@@ -5,6 +5,7 @@ import Dashboard from './components/User/Dashboard';
 import Settings from './components/User/Settings';
 import SharedDashboard from './components/User/SharedDashboard';
 import LandingPage from './components/Landing/LandingPage';
+import Onboarding from './components/User/Onboarding';
 
 function App() {
   return (
@@ -13,9 +14,17 @@ function App() {
       <Route path="/auth" element={<AuthForm />} />
       <Route path="/shared/:token" element={<SharedDashboard />} />
       <Route
-        path="/dashboard"
+        path="/onboarding"
         element={
           <ProtectedRoute>
+            <Onboarding />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute requireInitialized>
             <Dashboard />
           </ProtectedRoute>
         }
