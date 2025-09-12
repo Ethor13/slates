@@ -416,7 +416,13 @@ export const scheduledDailyEmail = onSchedule(
             continue;
           }
 
-          const recipient_list = userData.notificationEmails || [];
+          // Support both legacy string[] and new structured recipients
+          const recipient_list_raw = userData.notificationEmails || [];
+          const recipient_list: string[] = Array.isArray(recipient_list_raw)
+            ? (typeof recipient_list_raw[0] === 'string'
+                ? (recipient_list_raw as string[])
+                : (recipient_list_raw as Array<{ email?: string }>).map(r => (r?.email || '')).filter(Boolean))
+            : [];
 
           // Generate personalized link
           const guestUrl = await generateDashboardTokenForUser(userId, false);

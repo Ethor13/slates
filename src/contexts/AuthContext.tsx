@@ -13,6 +13,12 @@ import {
 import { auth, db } from '../lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
+export interface NotificationRecipient {
+    email: string;
+    name: string;
+    position: string;
+}
+
 // Define UserPreferences interface
 interface UserPreferences {
     // Onboarding / user details
@@ -27,7 +33,7 @@ interface UserPreferences {
     timezone: string;
     tvProviders: string; // Changed from Record<string, string> to single providerId string
     favoriteTeams: Record<string, string>[];
-    notificationEmails: string[];
+    notificationEmails: NotificationRecipient[];
     showOnlyAvailableBroadcasts: boolean;
     // Account initialization status
     initializedAccount: boolean;
@@ -141,10 +147,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         const keys = Object.keys(userData.tvProviders);
                         if (keys.length) tvProviders = keys[0];
                     }
+                    // Normalize legacy notificationEmails (string[] -> NotificationRecipient[])
+                    let notificationEmails: NotificationRecipient[] = [];
+                    const rawEmails = (userData as any).notificationEmails;
+                    if (Array.isArray(rawEmails)) {
+                        if (rawEmails.length && typeof rawEmails[0] === 'string') {
+                            notificationEmails = (rawEmails as string[]).map(e => ({ email: String(e || '').toLowerCase(), name: '', position: '' }));
+                        } else {
+                            notificationEmails = rawEmails as NotificationRecipient[];
+                        }
+                    }
+
                     const merged = {
                         ...getDefaultPreferences(),
                         ...userData,
-                        tvProviders // ensure new single-string field
+                        tvProviders, // ensure new single-string field
+                        notificationEmails
                     };
                     // Backfill missing initializedAccount for legacy users
                     if (typeof (merged as any).initializedAccount !== 'boolean') {

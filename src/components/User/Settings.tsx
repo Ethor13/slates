@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import type { NotificationRecipient } from '../../contexts/AuthContext';
 import Nav from '../General/Nav';
 import { ZipcodeInput, TimezoneSelector, TvProviders, FavoriteTeams, NotificationEmails, Subscription, StateSelector } from './Preferences';
 import { MapPin, Tv, Star, User, Bell, Trophy } from 'lucide-react';
@@ -215,7 +216,7 @@ const Settings = () => {
         }
     };
 
-    const handleNotificationEmailsChange = async (emails: string[]) => {
+    const handleNotificationEmailsChange = async (emails: NotificationRecipient[]) => {
         try {
             await updateUserPreferences({ notificationEmails: emails });
         } catch (error) {
