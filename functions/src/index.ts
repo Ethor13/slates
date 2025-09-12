@@ -295,6 +295,48 @@ const sendDailyEmailToUser = async (
   });
 };
 
+const transferClaims = async (fromUid: string, toUid: string) => {
+  try {
+    const fromUser = await auth.getUser(fromUid);
+
+    if (!fromUser.customClaims) {
+      logger.info(`No custom claims to transfer from ${fromUid} to ${toUid}`);
+      return;
+    }
+
+    await auth.setCustomUserClaims(toUid, fromUser.customClaims);
+    logger.info(`Transferred claims from ${fromUid} to ${toUid}`);
+  } catch (error) {
+    logger.error(`Error transferring claims from ${fromUid} to ${toUid}:`, error);
+    throw error;
+  }
+}
+
+// expose transferClaims for testing purposes using onRequest
+export const transferUserClaims = onRequest(
+  {
+    cors: true,
+    secrets: [],
+  },
+  async (req, res) => {
+    try {
+      const fromUid = req.query.fromUid as string;
+      const toUid = req.query.toUid as string;
+
+      if (!fromUid || !toUid) {
+        res.status(400).json({ error: "fromUid and toUid are required" });
+        return;
+      }
+
+      await transferClaims(fromUid, toUid);
+      res.status(200).json({ message: `Transferred claims from ${fromUid} to ${toUid}` });
+    } catch (error) {
+      logger.error("Error in transferUserClaims:", error);
+      res.status(500).json({ error: `Failed to transfer claims: ${error}` });
+    }
+  }
+);
+
 // Internal function to generate shareable dashboard token for a specific user
 const generateDashboardTokenForUser = async (
   userId: string,
@@ -305,7 +347,8 @@ const generateDashboardTokenForUser = async (
     // Get user preferences to include in the token
     const userDoc = await db.collection("users").doc(userId).get();
     const userPreferences = userDoc.exists ? userDoc.data() : {};
-    const userEmail = await auth.getUser(userId).then(user => user.email);
+    const user = await auth.getUser(userId);
+    const userEmail = user.email;
 
     // Get JWT secret from environment variables
     const jwtSecret = process.env.JWT_SECRET;
@@ -333,42 +376,45 @@ const generateDashboardTokenForUser = async (
       const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
       const baseUrl = isEmulator ? "http://localhost:5173" : "https://slates.co";
       return `${baseUrl}/shared/${token}`;
-    } else {
-      const tempUserId = `${userId}:${userEmail}:Guest`;
-
-      try {
-        // User already exists, no need to create
-        await auth.getUser(tempUserId);
-      } catch (error) {
-        // User doesn't exist, create it
-        logger.log(error);
-        await auth.createUser({ uid: tempUserId });
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
-      await db.collection("users").doc(tempUserId).set(userPreferencesWithoutEmails);
-
-      // Generate JWT token for guest with limited preferences
-      const payload = {
-        userId: tempUserId,
-        originalUserId: userId,
-        userEmail,
-        owner: false,
-        preferences: userPreferencesWithoutEmails,
-        type: "guest"
-      };
-
-      const token = jwt.sign(payload, jwtSecret, {
-        expiresIn: expiresIn,
-        issuer: "slates-dashboard",
-        audience: "slates-users"
-      } as jwt.SignOptions);
-
-      const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
-      const baseUrl = isEmulator ? "http://localhost:5173" : "https://slates.co";
-      return `${baseUrl}/shared/${token}`;
     }
+
+    const tempUserId = `${userId}:${userEmail}:Guest`;
+
+    try {
+      // User already exists, no need to create
+      await auth.getUser(tempUserId);
+    } catch (error) {
+      // User doesn't exist, create it
+      logger.log(error);
+      await auth.createUser({ uid: tempUserId });
+    }
+
+    // transfer claims from the owner to the guest
+    await transferClaims(userId, tempUserId);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { notificationEmails, ...userPreferencesWithoutEmails } = userPreferences || {};
+    await db.collection("users").doc(tempUserId).set(userPreferencesWithoutEmails);
+
+    // Generate JWT token for guest with limited preferences
+    const payload = {
+      userId: tempUserId,
+      originalUserId: userId,
+      userEmail,
+      owner: false,
+      preferences: userPreferencesWithoutEmails,
+      type: "guest"
+    };
+
+    const token = jwt.sign(payload, jwtSecret, {
+      expiresIn: expiresIn,
+      issuer: "slates-dashboard",
+      audience: "slates-users"
+    } as jwt.SignOptions);
+
+    const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
+    const baseUrl = isEmulator ? "http://localhost:5173" : "https://slates.co";
+    return `${baseUrl}/shared/${token}`;
   } catch (error) {
     logger.error("Error generating dashboard token for user:", userId, error);
     throw new Error(`Failed to generate shareable link: ${error}`);
