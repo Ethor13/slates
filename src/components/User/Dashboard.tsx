@@ -224,13 +224,35 @@ const Dashboard = () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
             const data = await response.json();
+
+            // Prefer native share sheet on mobile devices when supported
+            const nav: any = navigator as any;
+            const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+            const canNativeShare = typeof nav?.share === 'function' && (!nav?.canShare || nav.canShare({ url: data.shareableUrl }));
+
+            if (isMobile && canNativeShare) {
+                try {
+                    await nav.share({
+                        title: 'Slates',
+                        text: 'Check out my Slates dashboard',
+                        url: data.shareableUrl,
+                    });
+                    setShareLoading(false);
+                    return; // shared successfully via system share sheet
+                } catch (shareErr) {
+                    // If user cancels or share fails, fall back to clipboard copy
+                    // Continue to clipboard flow below
+                }
+            }
+
+            // Fallback: copy to clipboard and show notification
             await navigator.clipboard.writeText(data.shareableUrl);
 
             // Show the "link copied" notification
             setShareLoading(false);
             setShowLinkCopied(true);
 
-            // Hide the notification after 2 seconds
+            // Hide the notification after ~1 second
             setTimeout(() => {
                 setShowLinkCopied(false);
             }, 1000);
