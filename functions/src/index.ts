@@ -426,11 +426,11 @@ export const scheduledDailyEmail = onSchedule(
           // Support both legacy string[] and new structured recipients
           const recipient_list_raw = userData.notificationEmails || [];
           const recipients: Array<{ email: string; name?: string; position?: string }> = Array.isArray(recipient_list_raw)
-            ? (typeof recipient_list_raw[0] === 'string'
-                ? (recipient_list_raw as string[]).map(e => ({ email: e }))
-                : (recipient_list_raw as Array<{ email?: string; name?: string; position?: string }>)
-                    .map(r => ({ email: r?.email || "", name: r?.name, position: r?.position }))
-                    .filter(r => !!r.email))
+            ? (typeof recipient_list_raw[0] === "string"
+              ? (recipient_list_raw as string[]).map(e => ({ email: e }))
+              : (recipient_list_raw as Array<{ email?: string; name?: string; position?: string }>)
+                .map(r => ({ email: r?.email || "", name: r?.name, position: r?.position }))
+                .filter(r => !!r.email))
             : [];
 
           // Generate personalized link

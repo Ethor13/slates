@@ -75,9 +75,9 @@ const Dashboard = () => {
 
         // Determine if selectedDate is beyond 14-day window (today + 13 days)
         const today = new Date();
-        today.setHours(0,0,0,0);
+        today.setHours(0, 0, 0, 0);
         const target = new Date(selectedDate);
-        target.setHours(0,0,0,0);
+        target.setHours(0, 0, 0, 0);
         const diffDays = Math.floor((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
         const isOutOfRange = diffDays > 13; // today + 13 = 14 total days including today
 
@@ -139,6 +139,7 @@ const Dashboard = () => {
             setClaimsLoading(true);
             try {
                 const tokenResult = await currentUser.getIdTokenResult(true);
+                console.log('User claims:', tokenResult.claims);
                 if (isMounted) setHasSubscription(tokenResult.claims.stripeRole === 'subscribed');
             } catch (e) {
                 console.error('Error loading user claims:', e);
@@ -228,15 +229,16 @@ const Dashboard = () => {
             // Prefer native share sheet on mobile devices when supported
             const nav: any = navigator as any;
             const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-            const canNativeShare = typeof nav?.share === 'function' && (!nav?.canShare || nav.canShare({ url: data.shareableUrl }));
+            const shareData = {
+                title: 'Slates Shared Dashboard',
+                text: 'Check out my Slates Dashboard',
+                url: data.shareableUrl,
+            };
+            const canNativeShare = typeof nav?.share === 'function' && (!nav?.canShare || nav.canShare(shareData));
 
             if (isMobile && canNativeShare) {
                 try {
-                    await nav.share({
-                        title: 'Slates',
-                        text: 'Check out my Slates dashboard',
-                        url: data.shareableUrl,
-                    });
+                    await nav.share(shareData);
                     setShareLoading(false);
                     return; // shared successfully via system share sheet
                 } catch (shareErr) {
