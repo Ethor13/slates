@@ -250,8 +250,12 @@ export const getRandomQuery = onRequest(
   }
 );
 
-// Internal utility function to send daily email to a specific user
-const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promise<void> => {
+// Internal utility function to send daily email to a specific user with extra template variables
+const sendDailyEmailToUser = async (
+  recipient: { email: string; name?: string; position?: string },
+  link: string,
+  extra: Record<string, any> = {}
+): Promise<void> => {
   // Get Mailgun configuration from environment variables
   const apiKey = process.env.MAILGUN_API_KEY;
   const domain = process.env.MAILGUN_DOMAIN;
@@ -277,11 +281,14 @@ const sendDailyEmailToUser = async (recipientEmail: string, link: string): Promi
   const templateVariables = {
     date: today,
     link,
-  };
+    recipientName: recipient.name || "",
+    recipientRole: recipient.position || "",
+    ...extra,
+  } as Record<string, any>;
 
   await mg.messages.create(domain, {
     from: "Slates <no-reply@slates.co>",
-    to: [recipientEmail],
+    to: [recipient.email],
     subject: `Slates Summary for ${today}`,
     template: "slates daily email",
     "h:X-Mailgun-Variables": JSON.stringify(templateVariables),
@@ -418,29 +425,39 @@ export const scheduledDailyEmail = onSchedule(
 
           // Support both legacy string[] and new structured recipients
           const recipient_list_raw = userData.notificationEmails || [];
-          const recipient_list: string[] = Array.isArray(recipient_list_raw)
+          const recipients: Array<{ email: string; name?: string; position?: string }> = Array.isArray(recipient_list_raw)
             ? (typeof recipient_list_raw[0] === 'string'
-                ? (recipient_list_raw as string[])
-                : (recipient_list_raw as Array<{ email?: string }>).map(r => (r?.email || '')).filter(Boolean))
+                ? (recipient_list_raw as string[]).map(e => ({ email: e }))
+                : (recipient_list_raw as Array<{ email?: string; name?: string; position?: string }>)
+                    .map(r => ({ email: r?.email || "", name: r?.name, position: r?.position }))
+                    .filter(r => !!r.email))
             : [];
 
           // Generate personalized link
           const guestUrl = await generateDashboardTokenForUser(userId, false);
 
           // Use the existing sendDailyEmailToUser function
-          for (const recipientEmail of recipient_list) {
+          for (const recipient of recipients) {
             try {
-              await sendDailyEmailToUser(recipientEmail, guestUrl);
+              await sendDailyEmailToUser(recipient, guestUrl, {
+                companyName: userData.venueName || "",
+                ownerFirstName: userData.firstName || "",
+                ownerLastName: userData.lastName || "",
+                ownerRole: userData.role || "",
+                venueAddress: userData.venueAddress || "",
+                venueState: userData.venueState || "",
+                timezone: userData.timezone || "",
+              });
               successCount++;
             } catch (error) {
               errorCount++;
               const errorInfo = {
                 userId: userId,
-                email: recipientEmail,
+                email: recipient.email,
                 error: error instanceof Error ? error.message : String(error)
               };
               errors.push(errorInfo);
-              logger.error(`Failed to send email to ${recipientEmail}:`, error);
+              logger.error(`Failed to send email to ${recipient.email}:`, error);
             }
           }
 
