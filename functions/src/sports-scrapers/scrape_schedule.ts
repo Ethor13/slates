@@ -1,81 +1,81 @@
-import { scrapeUrl, combine_maps} from "../helpers.js";
+import { scrapeUrl, combine_maps } from "../helpers.js";
 import { ParsedGame, ParsedGames } from "../types.js";
 
 interface SportConfig {
-    dateFormat: {
-        timeZone: string;
-        timeZoneName: string;
-    };
-    sports: {
-        [key: string]: (date: string) => string;
-    };
+  dateFormat: {
+    timeZone: string;
+    timeZoneName: string;
+  };
+  sports: {
+    [key: string]: (date: string) => string;
+  };
 }
 
 interface Team {
-    team: {
-        id: string;
-        displayName: string;
-        shortDisplayName: string;
-        abbreviation: string;
-        logo: string;
-    };
-    homeAway: "home" | "away";
-    curatedRank: { current: number } | null;
-    records: Array<{
-        type: string;
-        summary: string;
-    }>;
+  team: {
+    id: string;
+    displayName: string;
+    shortDisplayName: string;
+    abbreviation: string;
+    logo: string;
+  };
+  homeAway: "home" | "away";
+  curatedRank: { current: number } | null;
+  records: Array<{
+    type: string;
+    summary: string;
+  }>;
 }
 
 interface Broadcast {
-    media: {
-        shortName: string;
-    };
-    market: {
-        type: string;
-    };
-    type: {
-        shortName: string;
-    };
+  media: {
+    shortName: string;
+  };
+  market: {
+    type: string;
+  };
+  type: {
+    shortName: string;
+  };
 }
 
 interface Notes {
-    type: string;
-    headline: string;
+  type: string;
+  headline: string;
 }
 
 interface Competition {
-    competitors: Team[];
-    geoBroadcasts: Broadcast[];
-    notes: Notes[];
-    timeValid: boolean;
+  competitors: Team[];
+  geoBroadcasts: Broadcast[];
+  notes: Notes[];
+  timeValid: boolean;
 }
 
 interface Link {
-    text: string;
-    href: string;
+  text: string;
+  href: string;
 }
 
 interface Event {
-    id: string;
-    season: Record<any, any>;
-    date: string;
-    competitions: Competition[];
-    links: Link[];
+  id: string;
+  season: Record<any, any>;
+  date: string;
+  competitions: Competition[];
+  links: Link[];
 }
 
 interface ScheduleResponse {
-    events: Event[];
-    leagues: any;
+  events: Event[];
+  leagues: any;
 }
 
 interface TeamData {
-    id: string;
-    name: string;
-    shortName: string;
-    abbreviation: string;
-    logo: string;
-    record: string;
+  id: string;
+  name: string;
+  shortName: string;
+  abbreviation: string;
+  logo: string;
+  record: string;
 }
 
 const CONFIG: SportConfig = {
@@ -128,18 +128,21 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
       date: event.competitions[0].timeValid ? event.date : "TBD",
       link: event.links?.find((link) => link.text === "Gamecast")?.href || "",
       season: event.season.slug === "regular-season" ? "Regular Season" : events.leagues[0].season.type.name || "",
-      broadcasts: combine_maps(
-        event.competitions[0].geoBroadcasts.map((broadcast) => ({
-          [broadcast.media.shortName]: {
-            market: broadcast.market.type,
-            type: broadcast.type.shortName,
-          },
-        })),
-      ),
+      broadcasts: {
+        ...combine_maps(
+          event.competitions[0].geoBroadcasts.map((broadcast) => ({
+            [broadcast.media.shortName]: {
+              market: broadcast.market.type,
+              type: broadcast.type.shortName,
+            },
+          })),
+        ),
+        ...(sport === "mlb" ? { "MLB.TV": { market: "National", type: "Streaming" } } : {}),
+      },
       notes: event.competitions[0].notes,
     };
 
-    return {[event.id]: eventData};
+    return { [event.id]: eventData };
   }));
 }
 
