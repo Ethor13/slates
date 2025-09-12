@@ -139,7 +139,6 @@ const Dashboard = () => {
             setClaimsLoading(true);
             try {
                 const tokenResult = await currentUser.getIdTokenResult(true);
-                console.log('User claims:', tokenResult.claims);
                 if (isMounted) setHasSubscription(tokenResult.claims.stripeRole === 'subscribed');
             } catch (e) {
                 console.error('Error loading user claims:', e);

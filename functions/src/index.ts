@@ -312,6 +312,8 @@ const transferClaims = async (fromUid: string, toUid: string) => {
   }
 }
 
+// https://transferuserclaims-weyckee6wa-uc.a.run.app?fromUid=uid&toUid=uid
+// https://transferuserclaims-weyckee6wa-uc.a.run.app?fromUid=h86pCycDUjXiA5K2zgJMrZxTZyn2&toUid=h86pCycDUjXiA5K2zgJMrZxTZyn2:ethaniorlowsky@gmail.com:Guest
 // expose transferClaims for testing purposes using onRequest
 export const transferUserClaims = onRequest(
   {

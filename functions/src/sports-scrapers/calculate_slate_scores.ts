@@ -43,7 +43,7 @@ interface Weights {
 interface CategoryConfig {
   weights: Weights;
   scalingFactors: ScalingFactors;
-  baselines: Record<string, number>;
+  baselines: Record<string, number[]>;
   getInterestScoreFunc: (game: ParsedGame, gameTeams: GameTeams) => Record<string, any>;
 }
 
@@ -77,12 +77,12 @@ const CONFIG: ConfigType = {
         spread: 50,
       },
       baselines: {
-        nba: 0.75,
-        mlb: 0.65,
-        ncaambb: 0.50,
-        nhl: 0.50,
-        nfl: 0.80,
-        ncaaf: 0.50,
+        nba: [0.5, 0.75, 0.95],
+        mlb: [0.3, 0.65, 0.90],
+        ncaambb: [0.1, 0.50, 0.90],
+        nhl: [0.3, 0.5, 0.90],
+        nfl: [0.6, 0.80, 1],
+        ncaaf: [0.1, 0.50, 1],
       },
       getInterestScoreFunc: calculateInterestScoreAllData,
     },
@@ -177,6 +177,14 @@ function neg_exp(x: number, scale: number): number {
   return Math.exp(-Math.pow(x, 2) / scale);
 }
 
+function baselineSlateScore(rawScore: number, low: number, baseline: number, high: number): number {
+  if (rawScore < baseline) {
+    return (rawScore / baseline) * (baseline - low) + low;
+  } else {
+    return ((rawScore - baseline) / (1 - baseline)) * (high - baseline) + baseline;
+  }
+}
+
 /**
  * Calculates game interest score
  * @param {GameInfo} game - Game information
@@ -201,7 +209,10 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const homePopularity = sportPopularityMap?.[game.home.id];
     const awayPopularity = sportPopularityMap?.[game.away.id];
 
-    const baseline = season === "Preseason" ? config.baselines[sport] / 3 : season === "Postseason" ? (config.baselines[sport] + 1) / 2 : config.baselines[sport];
+    let [baselineLow, baseline, baselineHigh] = config.baselines[sport];
+    baselineLow = season === "Preseason" ? 0 : season === "Postseason" ? baseline : baselineLow;
+    baselineHigh = season === "Preseason" ? baseline : season === "Postseason" ? 1 : baselineHigh;
+    baseline = season === "Preseason" ? baseline / 2 : season === "Postseason" ? (baseline + 1) / 2 : baseline;
     const weightStrength = season === "Preseason" ? 0.2 : 1;
 
     const components: Record<string, Record<string, number>> = {};
@@ -285,9 +296,13 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
       components.rank = { value: rankScore, weight: config.weights.rank * weightStrength };
     }
 
+    const unbaselinedSlateScore = sigmoid(rawSlateScore, 1, 0);
+    const slateScore = baselineSlateScore(unbaselinedSlateScore, baselineLow, baseline, baselineHigh);
+
     return {
       components,
-      slateScore: sigmoid(rawSlateScore, 1, 0)
+      unbaselinedSlateScore,
+      slateScore
     };
   } catch (error) {
     logger.error("Error calculating interest score:", error);
