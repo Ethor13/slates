@@ -183,9 +183,10 @@ async function calculateScores(gamesData: GamesData, teamsData: TeamsData): Prom
     for (const sport of Object.values(Sports)) {
       await scoreSportsGames(sport, gamesData[sport], teamsData[sport].teams).then((gameScores) => {
         // gameScores = gameId -> score
-        Object.entries(gameScores).forEach(([gameId, { slateScore, scoreComponents }]) => {
+        Object.entries(gameScores).forEach(([gameId, { slateScore, scoreComponents, unbaselinedSlateScore }]) => {
           gamesData[sport][gameId].slateScore = slateScore;
           gamesData[sport][gameId].scoreComponents = scoreComponents;
+          gamesData[sport][gameId].unbaselinedSlateScore = unbaselinedSlateScore;
         });
       }).catch((error: any) => {
         logger.error("Error scoring games in Firestore:", error);

@@ -330,7 +330,11 @@ export async function scoreSportsGames(sport: string, games: ParsedGames, teams:
         away: teams[game.away.id],
       }
       const scoreDetails = sport_config.getInterestScoreFunc(game, gameTeams);
-      res[gameId] = { slateScore: scoreDetails.slateScore || -1, scoreComponents: scoreDetails.components };
+      res[gameId] = {
+        slateScore: scoreDetails.slateScore || -1,
+        scoreComponents: scoreDetails.components,
+        unbaselinedSlateScore: scoreDetails.unbaselinedSlateScore || -1
+      };
     });
 
     return res;
