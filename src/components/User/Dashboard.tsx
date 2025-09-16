@@ -274,7 +274,7 @@ const Dashboard = () => {
                 <div className="flex items-center justify-between w-full">
                     <div className="flex items-center space-x-2">
                         <img
-                            src="/assets/logos/slates_white_outline.svg"
+                            src="/assets/logos/slates_white_outline.png"
                             alt="Slates Logo"
                             className="h-8 sm:h-10 xl:h-12 w-auto"
                         />
