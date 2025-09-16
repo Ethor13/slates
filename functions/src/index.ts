@@ -282,6 +282,7 @@ const sendDailyEmailToUser = async (
     date: today,
     link,
     recipientName: recipient.name || "",
+    recipientFirstName: (recipient.name || "").split(" ")[0],
     recipientRole: recipient.position || "",
     ...extra,
   } as Record<string, any>;
