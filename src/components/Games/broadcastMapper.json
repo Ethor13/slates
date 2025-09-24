@@ -280,6 +280,7 @@
     "FanDuel SN DET Ext": {
         "market": "Home",
         "type": "TV",
+        "notes": "Not sure what actually gets mapped to this",
         "tvGuideName": null
     },
     "KUNP 16": {
@@ -505,6 +506,7 @@
     "Rangers Sports Network": {
         "type": "TV",
         "market": "Away",
+        "notes": "Can't find a sensible mapping for this",
         "tvGuideName": null
     },
     "Sportsnet LA": {
@@ -631,5 +633,341 @@
         "type": "TV",
         "market": "Away",
         "tvGuideName": "WFOR-DT Miami, Fla. (CBS)"
+    },
+    "Hulu": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Disney+": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "NHL Net": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "NHL Network"
+    },
+    "Sportsnet 360": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Sportsnet 360 (Canada)"
+    },
+    "Sportsnet East": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Sportsnet East (Canada)"
+    },
+    "Sportsnet Ontario": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Sportsnet Ontario (Canada)"
+    },
+    "SportsNet PIT+": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "SportsNet Pittsburgh Alt"
+    },
+    "Tele": {
+        "market": "National",
+        "type": "TV",
+        "notes": "TODO",
+        "tvGuideName": null
+    },
+    "Sportsnet Pacific": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "Sportsnet Pacific (Canada)"
+    },
+    "MS2": {
+        "market": "Home",
+        "type": "TV",
+        "notes": "TODO",
+        "tvGuideName": null
+    },
+    "NBCSCA+": {
+        "type": "Streaming",
+        "market": "Home",
+        "tvGuideName": null
+    },
+    "FanDuel Sports TB": {
+        "type": "Streaming",
+        "market": "Home",
+        "tvGuideName": null
+    },
+    "The U": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WCIU-DT Chicago, Ill. (The U)"
+    },
+    "FanDuel Sports MIA": {
+        "type": "Streaming",
+        "market": "Home",
+        "tvGuideName": null
+    },
+    "KCAL": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KCAL-DT Los Angeles, Calif. (IND)"
+    },
+    "WFOR": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WFOR-DT Miami, Fla. (CBS)"
+    },
+    "WJBK": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "WJBK-DT Detroit, Mich. (FOX)"
+    },
+    "Bengals Preseason TV Network": {
+        "market": "Home",
+        "type": "TV",
+        "notes": "This is a collection of stations so can't map to just one",
+        "tvGuideName": null
+    },
+    "Lions TV Network": {
+        "market": "Home",
+        "type": "TV",
+        "notes": "This is a collection of stations so can't map to just one",
+        "tvGuideName": null
+    },
+    "Fox 9 MN": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KMSP-DT Minneapolis, Minn. (FOX)"
+    },
+    "Patriots Preseason Network": {
+        "market": "Away",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Fox 8": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "WJW-DT Cleveland, Ohio (FOX)"
+    },
+    "CBSSN": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "CBS Sports Network"
+    },
+    "SEC Network": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "SEC Network"
+    },
+    "BTN": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "Big Ten Network"
+    },
+    "ACC Network": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "ACC Network"
+    },
+    "ACC Extra": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "KING 5": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "KING-DT Seattle, Wash. (NBC)"
+    },
+    "FOX 5 Atlanta": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "WAGA-DT Atlanta, Ga. (FOX)"
+    },
+    "Peacock": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "WCBS 2": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "WCBS-DT New York, N.Y. (CBS)"
+    },
+    "Fox 5 Vegas": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "KVVU-DT Henderson, Nev. (FOX)"
+    },
+    "KPIX": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "KPIX-DT San Francisco, Calif. (CBS)"
+    },
+    "KDKA-TV": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "KDKA-DT Pittsburgh, Pa. (CBS)"
+    },
+    "SECN+": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Paramount+": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "NBC": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "\\(NBC\\)$"
+    },
+    "The CW Network": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "\\(CW\\)$"
+    },
+    "HBO Max": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "WFLA-TV": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "WFLA-DT Tampa, Fla. (NBC)"
+    },
+    "MWN": {
+        "market": "Home",
+        "type": "TV",
+        "notes": "Defunct?",
+        "tvGuideName": null
+    },
+    "Silver State SEN": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KVVU-DT2 Henderson, Nev. (Silver State Sports)"
+    },
+    "KUSI-TV": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KUSI-DT San Diego, Calif. (IND)"
+    },
+    "CBS4": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "WBZ-DT Boston, Mass. (CBS)"
+    },
+    "ESPN unlmtd": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "KTRK (ABC)": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "KTRK-DT Houston, Texas (ABC)"
+    },
+    "WBAL-TV": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "WBAL-DT Baltimore, Md. (NBC)"
+    },
+    "ESPN Unlmtd": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "YouTube": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "MWN App": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "ESPNEWS": {
+        "market": "National",
+        "type": "TV",
+        "tvGuideName": "ESPN News"
+    },
+    "Altitude+": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "NSN": {
+        "market": "Home",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "CBS47": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "KGPE-DT Fresno, Calif. (CBS)"
+    },
+    "My Utah": {
+        "market": "Home",
+        "type": "TV",
+        "tvGuideName": "KMYU-DT Saint George, Utah (MyNet)"
+    },
+    "Marquee +": {
+        "market": "Away",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "MSG2": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "MSG 2"
+    },
+    "NFL+": {
+        "market": "National",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "Sportsnet+": {
+        "market": "Away",
+        "type": "Streaming",
+        "tvGuideName": null
+    },
+    "ABC7": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "KABC-DT Los Angeles, Calif. (ABC)"
+    },
+    "NESN+": {
+        "type": "Streaming",
+        "market": "Away",
+        "tvGuideName": null
+    },
+    "KCOP": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "KCOP-DT Los Angeles, Calif. (MyNet)"
+    },
+    "KHN": {
+        "type": "TV",
+        "market": "Away",
+        "notes": "Kraken Hockey Network, but can't find anything to map to",
+        "tvGuideName": null
+    },
+    "KONG": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": "KONG-DT Everett, Wash. (IND)"
+    },
+    "MSGB": {
+        "type": "TV",
+        "market": "Away",
+        "tvGuideName": null
+    },
+    "Utah 16": {
+        "type": "TV",
+        "market": "Home",
+        "tvGuideName": "KUPX-DT Provo, Utah (Utah 16)"
     }
 }

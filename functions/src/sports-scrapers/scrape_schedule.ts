@@ -27,7 +27,7 @@ interface Team {
   }>;
 }
 
-interface Broadcast {
+interface GeoBroadcast {
   media: {
     shortName: string;
   };
@@ -39,6 +39,11 @@ interface Broadcast {
   };
 }
 
+interface Broadcast {
+  names: string[];
+  market: string;
+}
+
 interface Notes {
   type: string;
   headline: string;
@@ -46,7 +51,8 @@ interface Notes {
 
 interface Competition {
   competitors: Team[];
-  geoBroadcasts: Broadcast[];
+  geoBroadcasts: GeoBroadcast[];
+  broadcasts: Broadcast[];
   notes: Notes[];
   timeValid: boolean;
 }
@@ -99,6 +105,32 @@ const CONFIG: SportConfig = {
   },
 };
 
+function getBroadcasts(competition: Competition): Record<string, any> {
+  const broadcasts = combine_maps(
+    competition.broadcasts.map((marketBroadcasts) =>
+      combine_maps(
+        marketBroadcasts.names.map((name) => ({
+          [name]: {
+            market: marketBroadcasts.market,
+            type: null,
+          }
+        }))
+      )
+    )
+  );
+
+  const geoBroadcasts = combine_maps(
+    competition.geoBroadcasts.map((broadcast) => ({
+      [broadcast.media.shortName]: {
+        market: broadcast.market.type,
+        type: broadcast.type.shortName,
+      },
+    })),
+  );
+
+  return { ...broadcasts, ...geoBroadcasts };
+}
+
 /**
  * Extracts game details from event data
  * @param events - Event data from ESPN config
@@ -128,17 +160,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
       date: event.competitions[0].timeValid ? event.date : "TBD",
       link: event.links?.find((link) => link.text === "Gamecast")?.href || "",
       season: event.season.slug === "regular-season" ? "Regular Season" : events.leagues[0].season.type.name || "",
-      broadcasts: {
-        ...combine_maps(
-          event.competitions[0].geoBroadcasts.map((broadcast) => ({
-            [broadcast.media.shortName]: {
-              market: broadcast.market.type,
-              type: broadcast.type.shortName,
-            },
-          })),
-        ),
-        ...(sport === "mlb" ? { "MLB.TV": { market: "National", type: "Streaming" } } : {}),
-      },
+      broadcasts: getBroadcasts(event.competitions[0]),
       notes: event.competitions[0].notes,
     };
 
