@@ -121,15 +121,15 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
       <div className="flex flex-col h-full top-4 bottom-0">
         {/* Close button - only visible on mobile */}
         {setSidebarOpen && (
-          <button 
-            className="md:hidden absolute top-4 right-4 p-2 rounded-full bg-slate-light hover:bg-slate-deep transition-colors duration-200" 
+          <button
+            className="md:hidden absolute top-4 right-4 p-2 rounded-full bg-slate-light hover:bg-slate-deep transition-colors duration-200"
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
           >
             <X size={20} className="text-white" />
           </button>
         )}
-        
+
         <div className="flex-1 overflow-y-auto text-white hide-scrollbar">
           <div className="px-4 flex flex-col gap-4">
             {/* Calendar month selector */}
@@ -218,20 +218,41 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
 
             {/* Print settings section */}
             <div className="flex flex-col gap-4">
-              <h2 className="text-xl sm:text-lg font-semibold">Print Settings</h2>
-              <div className="flex flex-row items-center gap-1">
-                <button
-                  onClick={() => props.setIncludeGamePulseInPrint(!props.includeGamePulseInPrint)}
-                  className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
-                >
-                  <div className={`w-5 h-5 flex items-center justify-center rounded border ${props.includeGamePulseInPrint
-                    ? 'bg-slate-light border-slate-light'
-                    : 'border-gray-300'
-                    }`}>
-                    {props.includeGamePulseInPrint && (<Check size={14} className="text-white" />)}
-                  </div>
-                </button>
-                <span className="text-lg sm:text-base">Include Game Pulse</span>
+              <h2 className="text-xl sm:text-lg font-semibold">Display Settings</h2>
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row items-center gap-1">
+                  <button
+                    onClick={() => props.setIncludeGamePulseInPrint(!props.includeGamePulseInPrint)}
+                    className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
+                  >
+                    <div className={`w-5 h-5 flex items-center justify-center rounded border ${props.includeGamePulseInPrint
+                      ? 'bg-slate-light border-slate-light'
+                      : 'border-gray-300'
+                      }`}>
+                      {props.includeGamePulseInPrint && (<Check size={14} className="text-white" />)}
+                    </div>
+                  </button>
+                  <span className="text-lg sm:text-base">Include Game Pulse</span>
+                </div>
+                {/* Minimum Slate Score Input (checkbox style) */}
+                <div className="flex flex-row items-center gap-1">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    value={userPreferences.minSlateScore}
+                    onChange={(e) => {
+                      let val = parseInt(e.target.value, 10);
+                      if (isNaN(val)) val = 0;
+                      if (val < 0) val = 0;
+                      if (val > 100) val = 100;
+                      updateUserPreferences({ minSlateScore: val });
+                    }}
+                    className="flex items-center gap-2 cursor-pointer rounded mx-1 w-[22px] text-center text-sm font-semibold bg-transparent outline-none border border-gray-300 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    aria-label="Minimum slate score filter (0-100)"
+                  />
+                  <span className="text-lg sm:text-base">Min. Slate Score</span>
+                </div>
               </div>
             </div>
 
@@ -247,11 +268,10 @@ const SportSelector: React.FC<SportSelectorProps> = ({ props }) => {
                       onClick={() => { handleSportChange(sport); }}
                       className="flex items-center gap-2 cursor-pointer px-1 rounded-md"
                     >
-                      <div className={`w-5 h-5 flex items-center justify-center rounded border ${
-                        selectedSports.includes(sport)
-                          ? 'bg-slate-light border-slate-light'
-                          : 'border-gray-300'
-                      }`}>
+                      <div className={`w-5 h-5 flex items-center justify-center rounded border ${selectedSports.includes(sport)
+                        ? 'bg-slate-light border-slate-light'
+                        : 'border-gray-300'
+                        }`}>
                         {selectedSports.includes(sport) && (<Check size={14} className="text-white" />)}
                       </div>
                     </button>

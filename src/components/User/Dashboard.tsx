@@ -56,8 +56,9 @@ const Dashboard = () => {
     // Game state for SportSelector and GamesList
     const [selectedSports, setSelectedSports] = useState<Sports[]>(Object.values(Sports));
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-    const [sortBy, setSortBy] = useState<Sort>(Sort.SCORE);
-    const [secondarySort, setSecondarySort] = useState<Sort>(Sort.TIME); // Default to TIME
+    // Initialize from user preferences (defaults managed in AuthContext)
+    const [sortBy, setSortBy] = useState<Sort>(Sort.TIME);
+    const [secondarySort, setSecondarySort] = useState<Sort>(Sort.SCORE);
     const [hasFetchedGames, setHasFetchedGames] = useState<boolean>(false);
     const [outOfRange, setOutOfRange] = useState<boolean>(false); // selected date beyond available window
 
@@ -164,23 +165,54 @@ const Dashboard = () => {
     // Derive displayed games from allGames + selectedSports
     useEffect(() => {
         // Do not touch loading state here; only reflect fetch state
+        const minPct = userPreferences.minSlateScore || 0;
         const filteredGames = selectedSports.reduce((acc, sport) => {
             if (allGames[sport]) {
-                Object.assign(acc, allGames[sport]);
+                Object.entries(allGames[sport]).forEach(([id, game]: [string, any]) => {
+                    const scorePct = (game.slateScore !== undefined && game.slateScore !== null) ? game.slateScore * 100 : -1;
+                    // Include if favorite OR scorePct >= minPct OR score unavailable (-1)
+                    if (game.isFavorite || scorePct === -1 || scorePct >= minPct) {
+                        (acc as any)[id] = game;
+                    }
+                });
             }
             return acc;
         }, {} as ScheduleResponse);
         setGames(filteredGames);
-    }, [allGames, selectedSports]);
+    }, [allGames, selectedSports, userPreferences.minSlateScore]);
 
     // Helper to ensure secondary sort is always different from primary
+    const { updateUserPreferences } = useAuth();
+
+    // Sync local sort state with userPreferences when preferences load/ change
+    useEffect(() => {
+        if (preferencesLoading) return;
+        // Validate incoming values against Sort enum; fall back if invalid
+        const validPrimary = Object.values(Sort).includes(userPreferences.primarySort as Sort) ? userPreferences.primarySort as Sort : Sort.TIME;
+        const validSecondary = Object.values(Sort).includes(userPreferences.secondarySort as Sort) ? userPreferences.secondarySort as Sort : (validPrimary === Sort.TIME ? Sort.SCORE : Sort.TIME);
+        setSortBy(validPrimary);
+        setSecondarySort(validSecondary === validPrimary ? (Object.values(Sort).filter(s => s !== validPrimary)[0]) : validSecondary);
+    }, [userPreferences.primarySort, userPreferences.secondarySort, preferencesLoading]);
+
+    const persistSortPreferences = (primary: Sort, secondary: Sort) => {
+        updateUserPreferences({ primarySort: primary, secondarySort: secondary });
+    };
+
     const handleSetSortBy = (newSort: Sort) => {
-        setSortBy(newSort);
+        let nextSecondary = secondarySort;
         if (secondarySort === newSort) {
-            // Pick the first available sort that isn't the new primary
             const available = Object.values(Sort).filter(s => s !== newSort);
-            setSecondarySort(available[0]);
+            nextSecondary = available[0];
+            setSecondarySort(nextSecondary);
         }
+        setSortBy(newSort);
+        persistSortPreferences(newSort, nextSecondary);
+    };
+
+    const handleSetSecondarySort = (newSort: Sort) => {
+        if (newSort === sortBy) return; // guard
+        setSecondarySort(newSort);
+        persistSortPreferences(sortBy, newSort);
     };
 
     // Handle scroll event to show/hide scroll-to-top button
@@ -223,31 +255,42 @@ const Dashboard = () => {
             const response = await fetch(`/generateDashboardLink?userid=${currentUser!.uid.split(":").at(0)}`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-            const data = await response.json();
+            const { shareableUrl } = await response.json();
 
             // Prefer native share sheet on mobile devices when supported
-            const nav: any = navigator as any;
             const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
             const shareData = {
                 title: 'Slates Shared Dashboard',
                 text: 'Check out my Slates Dashboard',
-                url: data.shareableUrl,
+                url: shareableUrl,
             };
-            const canNativeShare = typeof nav?.share === 'function' && (!nav?.canShare || nav.canShare(shareData));
+            const canNativeShare = typeof navigator.share === 'function' && (!navigator.canShare || navigator.canShare(shareData));
 
-            if (isMobile && canNativeShare) {
-                try {
-                    await nav.share(shareData);
-                    setShareLoading(false);
-                    return; // shared successfully via system share sheet
-                } catch (shareErr) {
-                    // If user cancels or share fails, fall back to clipboard copy
-                    // Continue to clipboard flow below
+            if (canNativeShare) {
+                if (isMobile) {
+                    try {
+                        await navigator.share(shareData);
+                        setShareLoading(false);
+                        return; // shared successfully via system share sheet
+                    } catch (shareErr) {
+                        // If user cancels or share fails, fall back to clipboard copy
+                        // Continue to clipboard flow below
+                    }
+                } else {
+                    // On non-mobile devices, use native share if available
+                    try {
+                        await navigator.share(shareData);
+                        setShareLoading(false);
+                        return; // shared successfully via system share sheet
+                    } catch (shareErr) {
+                        // If share fails, fall back to clipboard copy
+                        // Continue to clipboard flow below
+                    }
                 }
             }
 
             // Fallback: copy to clipboard and show notification
-            await navigator.clipboard.writeText(data.shareableUrl);
+            await navigator.clipboard.writeText(shareableUrl);
 
             // Show the "link copied" notification
             setShareLoading(false);
@@ -412,7 +455,7 @@ const Dashboard = () => {
                                     ) : (
                                         <>
                                             {/* Conditionally render GamePulseChart in print based on toggle */}
-                                            <div className={`hidden mt-6 md:block print:mt-0 print:mb-2 ${includeGamePulseInPrint ? 'print:block' : 'print:hidden'}`}>
+                                            <div className={`hidden mt-6 print:mt-0 print:mb-2 ${includeGamePulseInPrint ? 'md:block print:block' : 'hidden'}`}>
                                                 <GamePulseChart games={games} timezone={userPreferences.timezone} />
                                             </div>
                                             <GamesList
@@ -420,7 +463,7 @@ const Dashboard = () => {
                                                 sortBy={sortBy}
                                                 setSortBy={handleSetSortBy}
                                                 secondarySort={secondarySort}
-                                                setSecondarySort={setSecondarySort}
+                                                setSecondarySort={handleSetSecondarySort}
                                                 selectedDate={selectedDate}
                                                 timezone={userPreferences.timezone}
                                                 gamesLoading={gamesLoading}

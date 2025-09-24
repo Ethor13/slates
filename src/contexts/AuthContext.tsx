@@ -35,6 +35,11 @@ interface UserPreferences {
     favoriteTeams: Record<string, string>[];
     notificationEmails: NotificationRecipient[];
     showOnlyAvailableBroadcasts: boolean;
+    // Minimum slate score (integer 0-100) to display a game
+    minSlateScore: number;
+    // Sort preferences (store string labels matching Sort enum values)
+    primarySort: string;
+    secondarySort: string;
     // Account initialization status
     initializedAccount: boolean;
 }
@@ -91,6 +96,9 @@ const getDefaultPreferences = (): UserPreferences => ({
     favoriteTeams: [],
     notificationEmails: [],
     showOnlyAvailableBroadcasts: false,
+    minSlateScore: 0,
+    primarySort: 'Time',
+    secondarySort: 'Slate Score',
     initializedAccount: false
 });
 
@@ -158,9 +166,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         }
                     }
 
+                    // Support legacy field name minSlateScorePercent
+                    const legacyMin = typeof (userData as any).minSlateScorePercent === 'number'
+                        ? (userData as any).minSlateScorePercent
+                        : undefined;
+
                     const merged = {
                         ...getDefaultPreferences(),
                         ...userData,
+                        // If new field missing but legacy exists, map it
+                        minSlateScore: typeof (userData as any).minSlateScore === 'number'
+                            ? (userData as any).minSlateScore
+                            : (legacyMin !== undefined ? legacyMin : getDefaultPreferences().minSlateScore),
+                        primarySort: typeof (userData as any).primarySort === 'string'
+                            ? (userData as any).primarySort
+                            : getDefaultPreferences().primarySort,
+                        secondarySort: typeof (userData as any).secondarySort === 'string'
+                            ? (userData as any).secondarySort
+                            : getDefaultPreferences().secondarySort,
                         tvProviders, // ensure new single-string field
                         notificationEmails
                     };
