@@ -729,7 +729,7 @@ export const onCustomerCreated = onDocumentCreated(
       }
 
       // Create subscription with 30 day trial
-      const priceId = "price_1RyOQgFagUxb9Siv1hTr375a";
+      const priceId = "price_1SBpmVFYjw2gC7t1ugzx5Ykg";
 
       await stripe.subscriptions.create({
         customer: stripeId,

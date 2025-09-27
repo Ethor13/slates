@@ -5,8 +5,8 @@ import { collection, query, where, getDocs, addDoc, onSnapshot } from 'firebase/
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { db } from '../../../lib/firebase';
 
-const MONTHLY_PRICE_ID = 'price_1RyOQgFagUxb9SivZJuqRrO0';
-const YEARLY_PRICE_ID = 'price_1RyOQgFagUxb9Siv1hTr375a';
+const MONTHLY_PRICE_ID = 'price_1SBpmVFYjw2gC7t1uzrTZc5s';
+const YEARLY_PRICE_ID = 'price_1SBpmVFYjw2gC7t1ugzx5Ykg';
 
 const Subscription: React.FC = () => {
     const { currentUser } = useAuth();
