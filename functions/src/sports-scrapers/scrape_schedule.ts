@@ -131,6 +131,13 @@ function getBroadcasts(competition: Competition): Record<string, any> {
   return { ...broadcasts, ...geoBroadcasts };
 }
 
+function parseSeason(leagueSeason: Record<string, any> | null, gameSeason: Record<string, any> | null): string | null {
+  const seasonTypeRaw = gameSeason?.slug || leagueSeason?.type?.name;
+
+  // make it lower case and replace spaces with hyphens
+  return seasonTypeRaw ? seasonTypeRaw.toLowerCase().replace(/\s+/g, '-') : null;
+}
+
 /**
  * Extracts game details from event data
  * @param events - Event data from ESPN config
@@ -159,7 +166,7 @@ function parseEvents(events: ScheduleResponse, sport: string): ParsedGames {
       away: teamData.away,
       date: event.competitions[0].timeValid ? event.date : "TBD",
       link: event.links?.find((link) => link.text === "Gamecast")?.href || "",
-      season: event.season.slug === "regular-season" ? "Regular Season" : events.leagues[0].season.type.name || "",
+      season: parseSeason(events.leagues[0].season, event.season),
       broadcasts: getBroadcasts(event.competitions[0]),
       notes: event.competitions[0].notes,
     };

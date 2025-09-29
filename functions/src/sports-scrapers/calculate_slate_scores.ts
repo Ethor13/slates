@@ -210,10 +210,10 @@ function calculateInterestScoreAllData(game: ParsedGame, gameTeams: GameTeams): 
     const awayPopularity = sportPopularityMap?.[game.away.id];
 
     let [baselineLow, baseline, baselineHigh] = config.baselines[sport];
-    baselineLow = season === "Preseason" ? 0 : season === "Postseason" ? baseline : baselineLow;
-    baselineHigh = season === "Preseason" ? baseline : season === "Postseason" ? 1 : baselineHigh;
-    baseline = season === "Preseason" ? baseline / 2 : season === "Postseason" ? (baseline + 1) / 2 : baseline;
-    const weightStrength = season === "Preseason" ? 0.2 : 1;
+    baselineLow = season === "preseason" ? 0 : season === "post-season" ? baseline : baselineLow;
+    baselineHigh = season === "preseason" ? baseline : season === "post-season" ? 1 : baselineHigh;
+    baseline = season === "preseason" ? baseline / 2 : season === "post-season" ? (baseline + 1) / 2 : baseline;
+    const weightStrength = season === "preseason" ? 0.2 : 1;
 
     const components: Record<string, Record<string, number>> = {};
     let rawSlateScore = inverseSigmoid(baseline, 1, 0);
