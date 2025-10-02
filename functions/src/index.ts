@@ -766,19 +766,12 @@ export const trackRedirect = onRequest(async (req, res) => {
 
   const dest = decodeURIComponent(target);
 
-  const clickData = {
+  await db.collection("clicks").doc(id).collection("events").add({
     dest,
     ts: admin.firestore.FieldValue.serverTimestamp(),
     userAgent: req.get("User-Agent") || null,
     referer: req.get("Referer") || null,
-  };
-
-  await db.collection("clicks").doc(id).set(
-    {
-      clicks: admin.firestore.FieldValue.arrayUnion(clickData)
-    },
-    { merge: true }
-  );
+  });
 
   return res.redirect(302, dest);
 });
