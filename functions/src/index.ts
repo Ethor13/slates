@@ -753,3 +753,32 @@ export const onCustomerCreated = onDocumentCreated(
     }
   }
 );
+
+export const trackRedirect = onRequest(async (req, res) => {
+  // Require both id and target query params
+  const id = req.query.id as string;
+  const target = req.query.target as string;
+
+  if (!id || !target) {
+    res.redirect(302, "https://slates.co");
+    return;
+  }
+
+  const dest = decodeURIComponent(target);
+
+  const clickData = {
+    dest,
+    ts: admin.firestore.FieldValue.serverTimestamp(),
+    userAgent: req.get("User-Agent") || null,
+    referer: req.get("Referer") || null,
+  };
+
+  await db.collection("clicks").doc(id).set(
+    {
+      clicks: admin.firestore.FieldValue.arrayUnion(clickData)
+    },
+    { merge: true }
+  );
+
+  return res.redirect(302, dest);
+});

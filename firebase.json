@@ -28,6 +28,10 @@
         "function": "contactUs"
       },
       {
+        "source": "/redirect",
+        "function": "trackRedirect"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

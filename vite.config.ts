@@ -27,6 +27,10 @@ export default defineConfig({
         target: 'http://localhost:5001/slates-59840/us-central1/contactUs',
         changeOrigin: true,
       },
+      '/redirect': {
+        target: 'http://localhost:5001/slates-59840/us-central1/redirect',
+        changeOrigin: true,
+      },
     },
   },
   build: {

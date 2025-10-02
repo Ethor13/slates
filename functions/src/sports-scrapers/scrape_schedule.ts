@@ -135,7 +135,7 @@ function parseSeason(leagueSeason: Record<string, any> | null, gameSeason: Recor
   const seasonTypeRaw = gameSeason?.slug || leagueSeason?.type?.name;
 
   // make it lower case and replace spaces with hyphens
-  return seasonTypeRaw ? seasonTypeRaw.toLowerCase().replace(/\s+/g, '-') : null;
+  return seasonTypeRaw ? seasonTypeRaw.toLowerCase().replace(/\s+/g, "-") : null;
 }
 
 /**
